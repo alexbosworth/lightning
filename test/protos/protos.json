@@ -1,0 +1,17 @@
+{
+  "overrides": [
+    ["invoices", 2],
+    ["walletkit", 3]
+  ],
+  "protos": [
+    ["autopilotrpc", "autopilot"],
+    ["chainrpc", "chainnotifier"],
+    ["invoicesrpc", "invoices"],
+    ["routerrpc", "router"],
+    ["rpc"],
+    ["signrpc", "signer"],
+    ["walletrpc", "walletkit"],
+    ["watchtowerrpc", "watchtower"],
+    ["wtclientrpc", "wtclient"]
+  ]
+}
