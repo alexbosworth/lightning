@@ -10,7 +10,7 @@ const {Metadata} = grpc;
 const generate = macaroon => {
   const metadata = new Metadata();
 
-  try { metadata.add('macaroon', macaroon); } catch (err) {}
+  try { metadata.add('macaroon', macaroon.toString('hex')); } catch (err) {}
 
   return metadata;
 };

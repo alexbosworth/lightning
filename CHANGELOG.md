@@ -1,5 +1,9 @@
 # Versions
 
+## 1.0.2
+
+- `authenticatedLndGrpc`: Fix macaroon attachment
+
 ## 1.0.1
 
 - Add typescript support
