@@ -3,13 +3,13 @@ const {join} = require('path');
 const grpc = require('grpc');
 const {loadSync} = require('@grpc/proto-loader');
 
-const {defaultSocket} = require('./grpc_services');
+const {defaultSocket} = require('./../grpc');
 const grpcOptions = require('./grpc_options');
 const grpcSsl = require('./grpc_ssl');
-const {grpcSslCipherSuites} = require('./grpc_services');
-const {packageTypes} = require('./grpc_services');
-const {protoFiles} = require('./grpc_services');
-const {protosDir} = require('./grpc_services');
+const {grpcSslCipherSuites} = require('./../grpc');
+const {packageTypes} = require('./../grpc');
+const {protoFiles} = require('./../grpc');
+const {protosDir} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
 const service = 'WalletUnlocker';

@@ -24,7 +24,7 @@ You can then use these to interact with your LND node directly:
 ```node
 const {authenticatedLndGrpc} = require('lightning');
 
-const {lnd} = lnService.authenticatedLndGrpc({
+const {lnd} = authenticatedLndGrpc({
   cert: 'base64 encoded tls.cert file',
   macaroon: 'base64 encoded admin.macaroon file',
   socket: '127.0.0.1:10009',
@@ -65,12 +65,70 @@ Initiate an gRPC API Methods Object for LND authenticated methods.
 Example:
 
 ```node
-const lnService = require('lightning');
-const {lnd} = lnService.authenticatedLndGrpc({
+const authenticatedLndGrpc = require('lightning');
+
+const {lnd} = authenticatedLndGrpc({
   cert: 'base64 encoded tls.cert',
   macaroon: 'base64 encoded admin.macaroon',
   socket: '127.0.0.1:10009',
 });
+```
+
+### grpcRouter
+
+Get a gRPC gateway router
+
+    {
+      [cert]: <Base64 or Hex Serialized LND TLS Cert String>
+      [socket]: <Host:Port Network Address String>
+    }
+
+    @returns
+    <Router Object>
+
+Example:
+
+```node
+const {grpcRouter, lndGateway} = require('lightning');
+
+const app = express();
+
+// Start an Express server
+app.listen(port);
+
+// Attach grpc as a router
+app.use('/grpc/', grpcRouter({}));
+```
+
+### lndGateway
+
+Interface to an LND gateway server.
+
+    {
+      [cert]: <Base64 or Hex Serialized Gateway TLS Cert String>
+      [macaroon]: <Use Base 64 Encoded Macaroon String>
+      request: <Request Function>
+      url: <LND Gateway URL String>
+    }
+
+    @throws
+    <Error>
+
+    @returns
+    {
+      lnd: <LND gRPC Gateway Object>
+    }
+
+Example:
+
+```node
+const {lndGateway} = require('lightning');
+const request = require('request');
+
+// Set request to npm request package, macaroon to base64, url to Express server
+const {lnd} = lndGateway({request, macaroon, url});
+
+// Use lnd to make API calls proxied through the grpcRouter gateway server
 ```
 
 ### unauthenticatedLndGrpc

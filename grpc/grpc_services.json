@@ -26,7 +26,7 @@
     "Watchtower": "watchtower.proto",
     "WatchtowerClient": "wtclient.proto"
   },
-  "protosDir": "protos",
+  "protosDir": "../grpc/protos",
   "serviceTypes": {
     "autopilot": "Autopilot",
     "chain": "ChainNotifier",
@@ -37,5 +37,11 @@
     "tower_client": "WatchtowerClient",
     "tower_server": "Watchtower",
     "wallet": "WalletKit"
+  },
+  "unauthenticatedPackageTypes": {
+    "WalletUnlocker": "lnrpc"
+  },
+  "unauthenticatedServiceTypes": {
+    "unlocker": "WalletUnlocker"
   }
 }
