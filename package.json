@@ -42,5 +42,5 @@
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "1.0.2"
+  "version": "1.1.0"
 }

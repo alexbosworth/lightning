@@ -1,5 +1,10 @@
 # Versions
 
+## 1.1.0
+
+- `grpcRouter`: Add method to create a gateway proxy for Express servers
+- `lndGateway`: Add method to create object that can use a gateway proxy
+
 ## 1.0.2
 
 - `authenticatedLndGrpc`: Fix macaroon attachment
