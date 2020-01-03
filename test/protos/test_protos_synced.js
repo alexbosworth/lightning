@@ -7,7 +7,7 @@ const {test} = require('tap');
 
 const {overrides} = require('./protos');
 const {protos} = require('./protos');
-const protosDir = join(__dirname, '/../../lnd_grpc/protos/');
+const protosDir = join(__dirname, '/../../grpc/protos/');
 const rpcApi = 'https://raw.githubusercontent.com/lightningnetwork/lnd/master/lnrpc';
 
 test('Check proto files are in-sync with LND master', async ({end, equal}) => {
