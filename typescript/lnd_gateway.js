@@ -8,6 +8,7 @@ const { lndGateway } = require('./../lnd_gateway');
     [macaroon]: <Use Base 64 Encoded Macaroon String>
     request: <Request Function>
     url: <LND Gateway URL String>
+    websocket: <Websocket Constructor Function>
   }
 
   @throws
@@ -24,6 +25,7 @@ function default_1(server) {
         macaroon: server.macaroon,
         request: server.request,
         url: server.url,
+        websocket: server.websocket,
     });
 }
 exports.default = default_1;

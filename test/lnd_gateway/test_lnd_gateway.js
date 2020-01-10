@@ -1,4 +1,5 @@
 const {test} = require('tap');
+const websocket = require('ws');
 
 const {lndGateway} = require('./../../');
 
@@ -14,7 +15,12 @@ const tests = [
     error: 'ExpectedUrlForLndGateway',
   },
   {
-    args: {request: (args, cbk) => cbk(args), url: 'url'},
+    args: {request: () => {}, url: 'url'},
+    description: 'A websocket constructor is required',
+    error: 'ExpectedWebSocketConstructorForLndGateway',
+  },
+  {
+    args: {websocket, request: (args, cbk) => cbk(args), url: 'url'},
     description: 'A LND gateway is returned',
     expected: {
       err: [

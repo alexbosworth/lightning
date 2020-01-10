@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const authenticated_lnd_grpc_1 = require("./typescript/authenticated_lnd_grpc");
 exports.authenticatedLndGrpc = authenticated_lnd_grpc_1.default;
+const emit_grpc_events_1 = require("./typescript/emit_grpc_events");
+exports.emitGrpcEvents = emit_grpc_events_1.default;
 const grpc_router_1 = require("./typescript/grpc_router");
 exports.grpcRouter = grpc_router_1.default;
 const lnd_gateway_1 = require("./typescript/lnd_gateway");

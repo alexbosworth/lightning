@@ -4,6 +4,7 @@ const {loadPackageDefinition} = require('grpc');
 const {loadSync} = require('@grpc/proto-loader');
 
 const gatewayRequest = require('./gateway_request');
+const gatewaySubscribe = require('./gateway_subscribe');
 const {packageTypes} = require('./../grpc');
 const {protoFiles} = require('./../grpc');
 const {protosDir} = require('./../grpc');
@@ -20,6 +21,7 @@ const {keys} = Object;
     [macaroon]: <Use Base 64 Encoded Macaroon String>
     request: <Request Function>
     url: <LND Gateway URL String>
+    websocket: <Websocket Constructor Object>
   }
 
   @throws
@@ -30,13 +32,17 @@ const {keys} = Object;
     lnd: <LND gRPC Gateway Object>
   }
 */
-module.exports = ({cert, macaroon, request, url}) => {
+module.exports = ({cert, macaroon, request, url, websocket}) => {
   if (!(request instanceof Function)) {
     throw new Error('ExpectedRequestMethodForLndGateway');
   }
 
   if (!url) {
     throw new Error('ExpectedUrlForLndGateway');
+  }
+
+  if (!websocket) {
+    throw new Error('ExpectedWebSocketConstructorForLndGateway');
   }
 
   const {services, types} = (() => {
@@ -65,9 +71,31 @@ module.exports = ({cert, macaroon, request, url}) => {
 
     const definitions = packageService.prototype['$method_definitions'];
 
-    const methods = keys(definitions).map(n => definitions[n].originalName);
+    const directResponseMethods = keys(definitions)
+      .filter(n => !definitions[n].requestStream)
+      .filter(n => !definitions[n].responseStream)
+      .map(n => definitions[n].originalName);
 
-    clients[server] = methods.reduce((client, method) => {
+    const streamingResponseMethods = keys(definitions)
+      .filter(n => !definitions[n].requestStream)
+      .filter(n => definitions[n].responseStream)
+      .map(n => definitions[n].originalName);
+
+    const streaming = streamingResponseMethods.reduce((client, method) => {
+      client[method] = (arguments, cbk) => {
+        return gatewaySubscribe({
+          url,
+          websocket,
+          bearer: macaroon,
+          call: {arguments, method, server},
+        });
+      }
+
+      return client;
+    },
+    {});
+
+    clients[server] = directResponseMethods.reduce((client, method) => {
       client[method] = (arguments, cbk) => {
         return gatewayRequest({
           request,
@@ -80,7 +108,7 @@ module.exports = ({cert, macaroon, request, url}) => {
 
       return client;
     },
-    {});
+    streaming);
 
     return clients;
   },

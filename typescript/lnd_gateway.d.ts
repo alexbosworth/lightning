@@ -3,6 +3,7 @@ interface Server {
     macaroon?: string;
     request: Function;
     url: string;
+    websocket: Function;
 }
 /** Interface to an LND gateway server.
 
@@ -11,6 +12,7 @@ interface Server {
     [macaroon]: <Use Base 64 Encoded Macaroon String>
     request: <Request Function>
     url: <LND Gateway URL String>
+    websocket: <Websocket Constructor Function>
   }
 
   @throws

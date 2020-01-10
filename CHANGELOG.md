@@ -1,5 +1,9 @@
 # Versions
 
+## 1.2.0
+
+- `emitGrpcEvents`: Add method to create a gateway websocket emitter
+
 ## 1.1.0
 
 - `grpcRouter`: Add method to create a gateway proxy for Express servers

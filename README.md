@@ -78,6 +78,35 @@ const {lnd} = authenticatedLndGrpc({
 });
 ```
 
+### emitGrpcEvents
+
+Emit events from a gRPC call
+
+    {
+      [cert]: <Base64 or Hex Serialized LND TLS Cert String>
+      [socket]: <Host:Port Network Address String>
+      ws: {
+        on: <Add Event Listener Function>
+        send: <Send Data Function>
+      }
+    }
+
+Example:
+
+```node
+const {emitGrpcEvents} = require('lightning');
+const {Server} = require('ws');
+
+const app = express();
+
+const server = app.listen(port);
+
+const wss = new Server({server});
+
+wss.on('listening', () => {});
+wss.on('connection', ws => emitGrpcEvents({cert, socket, ws}));
+```
+
 ### grpcRouter
 
 Get a gRPC gateway router
