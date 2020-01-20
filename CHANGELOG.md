@@ -1,6 +1,6 @@
 # Versions
 
-## 1.2.0
+## 1.2.1
 
 - `emitGrpcEvents`: Add method to create a gateway websocket emitter
 
