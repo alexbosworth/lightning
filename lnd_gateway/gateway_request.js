@@ -1,6 +1,6 @@
 const asyncAuto = require('async/auto');
 const {decodeFirst} = require('cbor');
-const {encode} = require('cbor');
+const {encodeAsync} = require('cbor');
 const {returnResult} = require('asyncjs-util');
 
 const cborContentType = 'application/cbor';
@@ -63,15 +63,17 @@ module.exports = ({bearer, call, request, url}, cbk) => {
 
       // Request body CBOR encoded
       encoded: ['validate', ({}, cbk) => {
-        let encoded;
+        return (async () => {
+          let encoded;
 
-        try { encoded = encode(call.arguments); } catch (err) {}
+          try { encoded = await encodeAsync(call.arguments); } catch (err) {}
 
-        if (!encoded) {
-          return cbk([400, 'FailedToEncodeCborForGatewayRequest']);
-        }
+          if (!encoded) {
+            return cbk([400, 'FailedToEncodeCborForGatewayRequest']);
+          }
 
-        return cbk(null, encoded);
+          return cbk(null, encoded);
+        })();
       }],
 
       // Make request

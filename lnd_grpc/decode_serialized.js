@@ -1,7 +1,7 @@
 const isBase64 = require('is-base64');
-const isHex = require('is-hex');
 
 const {from} = Buffer;
+const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
 /** Get decoded Base64 or Hex encoded data
 
@@ -19,7 +19,7 @@ module.exports = ({serialized}) => {
     return {decoded: from(serialized, 'base64')};
   }
 
-  if (isHex(serialized)) {
+  if (!!serialized && isHex(serialized)) {
     return {decoded: from(serialized, 'hex')};
   }
 

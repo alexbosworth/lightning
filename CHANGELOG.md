@@ -1,5 +1,9 @@
 # Versions
 
+## 1.2.3
+
+- `emitGrpcEvents`: Support large responses
+
 ## 1.2.2
 
 - `emitGrpcEvents`: Add method to create a gateway websocket emitter

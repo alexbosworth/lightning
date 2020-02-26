@@ -1,5 +1,4 @@
 const {raw} = require('body-parser');
-const {encode} = require('cbor');
 const {Router} = require('express');
 
 const bearerToken = require('./bearer_token');

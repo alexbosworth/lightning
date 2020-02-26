@@ -36,7 +36,9 @@ tests.forEach(({args, description, expected}) => {
       emitter.close = () => {};
 
       emitter.send = n => {
-        return equal(Buffer.from(n).toString('hex'), expected.message, 'Msg');
+        equal(Buffer.from(n).toString('hex'), expected.message, 'Msg');
+
+        return end();
       };
 
       return emitter;
@@ -78,7 +80,5 @@ tests.forEach(({args, description, expected}) => {
     emitter.emit('close');
 
     eventEmitter.cancel();
-
-    return end();
   });
 });

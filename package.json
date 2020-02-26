@@ -7,19 +7,21 @@
     "@grpc/proto-loader": "0.5.3",
     "async": "3.1.1",
     "asyncjs-util": "1.1.3",
+    "bolt07": "1.4.4",
+    "bolt09": "0.0.1",
     "body-parser": "1.19.0",
+    "bn.js": "5.1.1",
     "cbor": "5.0.1",
     "express": "4.17.1",
     "grpc": "1.24.2",
-    "is-base64": "1.0.0",
-    "is-hex": "1.1.3",
-    "request": "2.88.0"
+    "invoices": "1.0.0",
+    "is-base64": "1.0.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
     "request-promise-native": "1.0.8",
     "tap": "14.10.6",
-    "typescript": "3.7.5",
+    "typescript": "3.8.2",
     "ws": "7.2.1"
   },
   "engines": {
@@ -39,9 +41,9 @@
   },
   "scripts": {
     "prepare": "npm run tsc",
-    "test": "npm run tsc && tap test/lnd_gateway/*.js test/lnd_grpc/*.js test/lnd_methods/*.js",
+    "test": "npm run tsc && tap test/bolt00/*.js test/bolt02/*.js test/lnd_gateway/*.js test/lnd_grpc/*.js test/lnd_methods/address/*.js test/lnd_methods/info/*.js test/lnd_methods/invoices/*.js test/lnd_methods/offchain/*.js test/lnd_methods/onchain/*.js test/lnd_requests/*.js test/lnd_responses/*.js",
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "1.2.2"
+  "version": "1.2.3"
 }

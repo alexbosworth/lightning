@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 
-const {encode} = require('cbor');
+const {encodeAsync} = require('cbor');
 
 const emitEvent = require('./emit_event');
 const wsUrl = require('./ws_url');
@@ -30,19 +30,22 @@ const wsUrl = require('./ws_url');
 module.exports = ({bearer, call, websocket, url}) => {
   const emitter = new EventEmitter();
 
-  const bytes = encode({
-    arguments: call.arguments,
-    macaroon: bearer,
-    method: call.method,
-    server: call.server,
-  });
-
   const ws = new websocket(wsUrl({url}).url);
 
   ws.on('close', () => {});
   ws.on('error', err => emitter.emit('error', err));
   ws.on('message', message => emitEvent({emitter, message}))
-  ws.on('open', () => ws.send(new Uint8Array(bytes)));
+
+  ws.on('open', async () => {
+    const bytes = await encodeAsync({
+      arguments: call.arguments,
+      macaroon: bearer,
+      method: call.method,
+      server: call.server,
+    });
+
+    return ws.send(new Uint8Array(bytes));
+  });
 
   emitter.cancel = () => ws.close();
 

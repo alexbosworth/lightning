@@ -1,6 +1,4 @@
-const {encode} = require('cbor');
-
-const sendResponse = (ws, event, data) => ws.send(encode({data, event}));
+const {encodeAsync} = require('cbor');
 
 /** Make a request to LND that returns subscription events
 
@@ -22,6 +20,10 @@ const sendResponse = (ws, event, data) => ws.send(encode({data, event}));
 */
 module.exports = ({arguments, lnd, method, server, ws}) => {
   const sub = lnd[server][method](arguments);
+
+  const sendResponse = async (ws, event, data) => {
+    return ws.send(await encodeAsync({data, event}));
+  };
 
   sub.on('data', data => sendResponse(ws, 'data', data));
   sub.on('end', () => sendResponse(ws, 'end'));

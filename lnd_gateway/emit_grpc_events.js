@@ -1,10 +1,9 @@
 const {decodeFirst} = require('cbor');
-const {encode} = require('cbor');
 
 const {authenticatedLndGrpc} = require('./../lnd_grpc');
+const encodeResponse = require('./encode_response');
 const subscribeToResponse = require('./subscribe_to_response');
 
-const encodeResponse = (event, data) => encode({data, event});
 const encodeType = 'blob';
 const invalidMessageErr = 'ExpectedValidCborWsMessage';
 
@@ -27,9 +26,14 @@ module.exports = ({cert, socket, ws}) => {
   ws.on('close', () => cancel());
 
   ws.on('message', message => {
-    return decodeFirst(message, (err, decoded) => {
+    return decodeFirst(message, async (err, decoded) => {
       if (!!err) {
-        return ws.send(encodeResponse('error', {details: invalidMessageErr}));
+        const {response} = await encodeResponse({
+          data: {details: invalidMessageErr},
+          event: 'error',
+        });
+
+        return ws.send(response);
       }
 
       const {arguments, macaroon, method, server} = decoded;
