@@ -69,7 +69,7 @@ Initiate an gRPC API Methods Object for LND authenticated methods.
 Example:
 
 ```node
-const authenticatedLndGrpc = require('lightning');
+const {authenticatedLndGrpc} = require('lightning');
 
 const {lnd} = authenticatedLndGrpc({
   cert: 'base64 encoded tls.cert',
