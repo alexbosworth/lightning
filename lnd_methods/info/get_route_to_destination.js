@@ -137,7 +137,13 @@ module.exports = (args, cbk) => {
 
       // Get destination messages
       destinationCustomRecords: ['validate', ({}, cbk) => {
-        return cbk(null, destinationCustomRecords.tlv);
+        const {tlv} = destinationCustomRecords({
+          messages: args.messages,
+          payment: args.payment,
+          total_mtokens: args.total_mtokens,
+        });
+
+        return cbk(null, tlv);
       }],
 
       // Final hop expected features
@@ -235,7 +241,7 @@ module.exports = (args, cbk) => {
         return args.lnd.default.queryRoutes({
           amt_msat: amountMillitokens,
           cltv_limit: cltvLimit,
-          dest_custom_records: destinationCustomRecords || undefined,
+          dest_custom_records: destinationCustomRecords,
           dest_features: destinationFeatures || undefined,
           fee_limit: {fixed_msat: feeLimitMillitokens},
           final_cltv_delta: (args.cltv_delta || defaultCltv) + blocksBuffer,
