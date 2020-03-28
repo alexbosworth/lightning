@@ -23,6 +23,8 @@ const type = 'invoices';
 /** Create HODL invoice. This invoice will not settle automatically when an
     HTLC arrives. It must be settled separately with the secret preimage.
 
+  Warning: make sure to cancel the created invoice before its CLTV timeout.
+
   Requires LND built with `invoicesrpc` tag
 
   Setting `mtokens` will not work on LND versions 0.8.2 and below

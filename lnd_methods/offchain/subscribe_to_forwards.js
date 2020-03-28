@@ -13,6 +13,8 @@ const type = 'router';
 
   Requires LND built with `routerrpc` build tag
 
+  This method is not supported on LND 0.9.2 and below
+
   {
     lnd: <Authenticated LND API Object>
   }

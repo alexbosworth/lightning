@@ -15,7 +15,7 @@ const expectedChannel = {
   is_private: true,
   is_static_remote_key: undefined,
   local_balance: 1,
-  local_pushed: 0,
+  local_given: 0,
   local_reserve: 1,
   partner_public_key: 'b',
   pending_payments: [{
@@ -26,7 +26,7 @@ const expectedChannel = {
   }],
   received: 1,
   remote_balance: 1,
-  remote_pushed: 0,
+  remote_given: 0,
   remote_reserve: 1,
   sent: 1,
   time_offline: undefined,

@@ -15,13 +15,15 @@ const type = 'default';
   `cooperative_close_address` is not supported on LND 0.8.2 and below
   `time_offline` and `time_online` will be undefined on 0.8.2 and below
 
+  `local_given` and `remote_given` are not supported on LND 0.9.2 and below
+
   {
     [is_active]: <Limit Results To Only Active Channels Bool> // false
     [is_offline]: <Limit Results To Only Offline Channels Bool> // false
     [is_private]: <Limit Results To Only Private Channels Bool> // false
     [is_public]: <Limit Results To Only Public Channels Bool> // false
     lnd: <Authenticated LND gRPC API Object>
-    [partner_public_key]: <Public Key Hex String>
+    [partner_public_key]: <Only Channels With Public Key Hex String>
   }
 
   @returns via cbk or Promise
@@ -39,7 +41,7 @@ const type = 'default';
       is_private: <Channel Is Private Bool>
       [is_static_remote_key]: <Remote Key Is Static Bool>
       local_balance: <Local Balance Tokens Number>
-      [local_pushed]: <Local Initially Pushed Tokens Number>
+      [local_given]: <Local Initially Pushed Tokens Number>
       local_reserve: <Local Reserved Tokens Number>
       partner_public_key: <Channel Partner Public Key String>
       pending_payments: [{
@@ -50,7 +52,7 @@ const type = 'default';
       }]
       received: <Received Tokens Number>
       remote_balance: <Remote Balance Tokens Number>
-      [remote_pushed]: <Remote Initially Pushed Tokens Number>
+      [remote_given]: <Remote Initially Pushed Tokens Number>
       remote_reserve: <Remote Reserved Tokens Number>
       sent: <Sent Tokens Number>
       [time_offline]: <Monitoring Uptime Channel Down Milliseconds Number>
