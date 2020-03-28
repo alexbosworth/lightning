@@ -29,7 +29,8 @@ const sha256 = preimage => createHash('sha256').update(preimage).digest();
 
   @event 'confirmed'
   {
-    fee_mtokens: <Total Fee Millitokens To Pay String>
+    fee: <Total Fees Paid Rounded Down Number>
+    fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{
       channel: <Standard Format Channel Id String>
       channel_capacity: <Channel Capacity Tokens Number>

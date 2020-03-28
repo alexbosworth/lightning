@@ -48,7 +48,6 @@ const updateEvent = 'invoice_updated';
     id: <Invoice Payment Hash Hex String>
     index: <Invoice Index Number>
     is_confirmed: <Invoice is Confirmed Bool>
-    is_outgoing: <Invoice is Outgoing Bool>
     [is_push]: <Invoice is Push Payment Bool>
     payments: [{
       [confirmed_at]: <Payment Settled At ISO 8601 Date String>

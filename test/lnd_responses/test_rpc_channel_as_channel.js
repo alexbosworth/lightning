@@ -27,6 +27,7 @@ const tests = [
         incoming: true,
       }],
       private: true,
+      push_amount_sat: '0',
       remote_balance: '1',
       remote_chan_reserve_sat: '0',
       remote_pubkey: '00',
@@ -50,6 +51,7 @@ const tests = [
       is_private: true,
       is_static_remote_key: undefined,
       local_balance: 1,
+      local_pushed: 0,
       local_reserve: undefined,
       partner_public_key: '00',
       pending_payments: [{
@@ -60,6 +62,7 @@ const tests = [
       }],
       received: 1,
       remote_balance: 1,
+      remote_pushed: 0,
       remote_reserve: undefined,
       sent: 1,
       time_offline: undefined,

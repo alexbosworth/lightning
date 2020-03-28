@@ -27,7 +27,8 @@ const paymentNotInitiatedErr = `payment isn't initiated`;
     [is_failed]: <Payment Is Failed Bool>
     [is_pending]: <Payment Is Pending Bool>
     [payment]: {
-      fee_mtokens: <Total Fee Millitokens To Pay String>
+      fee: <Total Fees Paid Rounded Down Number>
+      fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <Standard Format Channel Id String>
         channel_capacity: <Channel Capacity Tokens Number>

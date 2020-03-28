@@ -3,5 +3,14 @@
     "accepted": "ACCEPTED",
     "canceled": "CANCELED",
     "received": "SETTLED"
+  },
+  "htlcTypes": {
+    "forward": "FORWARD",
+    "receive": "RECEIVE",
+    "send": "SEND"
+  },
+  "syncTypes": {
+    "active": "ACTIVE_SYNC",
+    "passive": "PASSIVE_SYNC"
   }
 }

@@ -5,6 +5,8 @@ const {isLnd} = require('./../../lnd_requests');
 const {rpcChannelAsChannel} = require('./../../lnd_responses');
 
 const {isArray} = Array;
+const method = 'listChannels';
+const type = 'default';
 
 /** Get channels
 
@@ -19,6 +21,7 @@ const {isArray} = Array;
     [is_private]: <Limit Results To Only Private Channels Bool> // false
     [is_public]: <Limit Results To Only Public Channels Bool> // false
     lnd: <Authenticated LND gRPC API Object>
+    [partner_public_key]: <Public Key Hex String>
   }
 
   @returns via cbk or Promise
@@ -36,6 +39,7 @@ const {isArray} = Array;
       is_private: <Channel Is Private Bool>
       [is_static_remote_key]: <Remote Key Is Static Bool>
       local_balance: <Local Balance Tokens Number>
+      [local_pushed]: <Local Initially Pushed Tokens Number>
       local_reserve: <Local Reserved Tokens Number>
       partner_public_key: <Channel Partner Public Key String>
       pending_payments: [{
@@ -46,6 +50,7 @@ const {isArray} = Array;
       }]
       received: <Received Tokens Number>
       remote_balance: <Remote Balance Tokens Number>
+      [remote_pushed]: <Remote Initially Pushed Tokens Number>
       remote_reserve: <Remote Reserved Tokens Number>
       sent: <Sent Tokens Number>
       [time_offline]: <Monitoring Uptime Channel Down Milliseconds Number>
@@ -61,7 +66,7 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!isLnd({lnd: args.lnd, method: 'listChannels', type: 'default'})) {
+        if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndToGetChannels']);
         }
 
@@ -70,9 +75,12 @@ module.exports = (args, cbk) => {
 
       // Get channels
       getChannels: ['validate', ({}, cbk) => {
-        return args.lnd.default.listChannels({
+        const peer = args.partner_public_key;
+
+        return args.lnd[type][method]({
           active_only: !!args.is_active ? true : undefined,
           inactive_only: !!args.is_offline ? true : undefined,
+          peer: !peer ? undefined : Buffer.from(peer, 'hex'),
           private_only: !!args.is_private ? true : undefined,
           public_only: !!args.is_public ? true : undefined,
         },
@@ -86,7 +94,16 @@ module.exports = (args, cbk) => {
           }
 
           try {
-            const channels = res.channels.map(rpcChannelAsChannel);
+            const channels = res.channels
+              .map(rpcChannelAsChannel)
+              .filter(channel => {
+                // Exit early when a partner public key is not specified
+                if (!args.partner_public_key) {
+                  return true;
+                }
+
+                return channel.partner_public_key === args.partner_public_key
+              });
 
             return cbk(null, {channels});
           } catch (err) {

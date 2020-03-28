@@ -44,7 +44,7 @@ const policyFromChannelUpdate = require('./policy_from_channel_update');
         cltv_delta: <Locktime Delta Number>
         fee_rate: <Fees Charged Per Million Tokens Number>
         [is_disabled]: <Channel is Disabled Bool>
-        max_htlc_mtokens: <Maximum HLTC Millitokens value String>
+        max_htlc_mtokens: <Maximum HLTC Millitokens Value String>
         min_htlc_mtokens: <Minimum HTLC Millitokens Value String>
         updated_at: <Updated At ISO 8601 Date String>
       }
