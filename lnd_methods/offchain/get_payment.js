@@ -32,7 +32,9 @@ const paymentNotInitiatedErr = `payment isn't initiated`;
       hops: [{
         channel: <Standard Format Channel Id String>
         channel_capacity: <Channel Capacity Tokens Number>
+        fee: <Routing Fee Tokens Number>
         fee_mtokens: <Fee Millitokens String>
+        forward: <Forwarded Tokens Number>
         forward_mtokens: <Forward Millitokens String>
         public_key: <Public Key Hex String>
         timeout: <Timeout Block Height Number>

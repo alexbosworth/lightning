@@ -93,6 +93,7 @@ const tests = [
               chan_id: '1',
               expiry: 1,
               fee_msat: '1',
+              pub_key: 'b',
             }];
 
             process.nextTick(() => emitter.emit('data', {
@@ -119,8 +120,11 @@ const tests = [
           hops: [{
             channel: '0x0x1',
             channel_capacity: 1,
+            fee: 0,
             fee_mtokens: '1',
+            forward: 0,
             forward_mtokens: '1',
+            public_key: 'b',
             timeout: 1,
           }],
           id: '66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925',

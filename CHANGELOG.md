@@ -1,6 +1,6 @@
 # Versions
 
-## 1.2.5
+## 1.2.9
 
 - `emitGrpcEvents`: Support large responses
 

@@ -34,7 +34,9 @@ const sha256 = preimage => createHash('sha256').update(preimage).digest();
     hops: [{
       channel: <Standard Format Channel Id String>
       channel_capacity: <Channel Capacity Tokens Number>
+      fee: <Routing Fee Tokens Number>
       fee_mtokens: <Fee Millitokens String>
+      forward: <Forwarded Tokens Number>
       forward_mtokens: <Forward Millitokens String>
       public_key: <Public Key Hex String>
       timeout: <Timeout Block Height Number>
@@ -79,8 +81,11 @@ module.exports = args => {
         hops: data.route.hops.map(hop => ({
           channel: chanFormat({number: hop.chan_id}).channel,
           channel_capacity: Number(hop.chan_capacity),
+          fee: safeTokens({mtokens: hop.fee_msat}).tokens,
           fee_mtokens: hop.fee_msat,
+          forward: safeTokens({mtokens: hop.amt_to_forward_msat}).tokens,
           forward_mtokens: hop.amt_to_forward_msat,
+          public_key: hop.pub_key,
           timeout: hop.expiry,
         })),
         id: sha256(data.preimage).toString('hex'),
