@@ -147,10 +147,10 @@ module.exports = (args, cbk) => {
           created_at: getInvoice.created_at,
           description: addInvoice.description,
           id: addInvoice.id,
-          mtokens: getInvoice.mtokens,
+          mtokens: getInvoice.mtokens || Number().toString(),
           request: addInvoice.request,
           secret: getInvoice.secret,
-          tokens: addInvoice.tokens,
+          tokens: addInvoice.tokens || Number(),
         });
       }],
     },
