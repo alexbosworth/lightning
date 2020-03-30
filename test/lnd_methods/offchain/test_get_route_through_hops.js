@@ -106,6 +106,21 @@ const tests = [
   },
   {
     args: {
+      lnd: {
+        router: {
+          buildRoute: ({}, cbk) => cbk({
+            details: 'no matching outgoing channel available for node xyz',
+          }),
+        },
+      },
+      mtokens: '1',
+      public_keys: ['a'],
+    },
+    description: 'A lookup error is returned',
+    error: [503, 'CannotFindOutboundChannel'],
+  },
+  {
+    args: {
       lnd: {router: {buildRoute: ({}, cbk) => cbk()}},
       mtokens: '1',
       public_keys: ['a'],

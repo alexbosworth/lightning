@@ -7,6 +7,7 @@ const {routesFromQueryRoutes} = require('../../lnd_responses');
 const defaultFinalCltvDelta = 40;
 const defaultMtokens = '1000000';
 const {isArray} = Array;
+const noChannelMsg = 'no matching outgoing channel available for node';
 const tokAsMtok = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
 const unknownServiceMessage = 'unknown service routerrpc.Router';
 
@@ -89,6 +90,10 @@ module.exports = (args, cbk) => {
         (err, res) => {
           if (!!err && err.details === unknownServiceMessage) {
             return cbk([501, 'ExpectedRouterRpcWithGetRouteMethod']);
+          }
+
+          if (!!err && !!err.details && err.details.startsWith(noChannelMsg)) {
+            return cbk([503, 'CannotFindOutboundChannel', {err}]);
           }
 
           if (!!err) {

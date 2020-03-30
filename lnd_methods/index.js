@@ -17,6 +17,7 @@ const {settleHodlInvoice} = require('./invoices');
 const {subscribeToForwards} = require('./offchain');
 const {subscribeToInvoice} = require('./invoices');
 const {subscribeToInvoices} = require('./invoices');
+const {subscribeToPastPayment} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
 const {subscribeToProbeForRoute} = require('./offchain');
 
@@ -40,6 +41,7 @@ module.exports = {
   subscribeToForwards,
   subscribeToInvoice,
   subscribeToInvoices,
+  subscribeToPastPayment,
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
 };
