@@ -10,6 +10,8 @@ const type = 'default';
 
 /** Get channels
 
+  Requires `offchain:read` permission
+
   `is_static_remote_key` will be undefined on LND 0.7.1 and below
 
   `cooperative_close_address` is not supported on LND 0.8.2 and below

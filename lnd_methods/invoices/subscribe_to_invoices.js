@@ -13,13 +13,15 @@ const updateEvent = 'invoice_updated';
 
 /** Subscribe to invoices
 
+  Requires `invoices:read` permission
+
   The `payments` array of HTLCs is only populated on LND versions after 0.7.1
   `features`, `messages` arrays aren't populated on LND version 0.8.2 and below
 
   {
     [added_after]: <Invoice Added After Index Number>
     [confirmed_after]: <Invoice Confirmed After Index Number>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [restart_delay_ms]: <Restart Subscription Delay Milliseconds Number>
   }
 

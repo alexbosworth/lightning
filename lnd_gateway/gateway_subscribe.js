@@ -10,8 +10,8 @@ const wsUrl = require('./ws_url');
   {
     bearer: <Bearer Authentication Token String>
     call: {
-      arguments: <Call Arguments Object>
       method: <Call Method String>
+      params: <Call Arguments Object>
       server: <Call Server String>
     }
     websocket: <WebSocket Constructor Function>
@@ -38,9 +38,9 @@ module.exports = ({bearer, call, websocket, url}) => {
 
   ws.on('open', async () => {
     const bytes = await encodeAsync({
-      arguments: call.arguments,
       macaroon: bearer,
       method: call.method,
+      params: call.params,
       server: call.server,
     });
 

@@ -36,11 +36,11 @@ module.exports = ({cert, socket, ws}) => {
         return ws.send(response);
       }
 
-      const {arguments, macaroon, method, server} = decoded;
+      const {macaroon, method, params, server} = decoded;
 
       const {lnd} = authenticatedLndGrpc({cert, macaroon, socket});
 
-      const sub = subscribeToResponse({arguments, lnd, method, server, ws});
+      const sub = subscribeToResponse({lnd, method, params, server, ws});
 
       cancel = sub.cancel;
 

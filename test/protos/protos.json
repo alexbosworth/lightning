@@ -1,6 +1,8 @@
 {
   "overrides": [
     ["invoices", 2],
+    ["router", 171],
+    ["rpc", 3102],
     ["walletkit", 3]
   ],
   "protos": [
@@ -10,6 +12,7 @@
     ["routerrpc", "router"],
     ["rpc"],
     ["signrpc", "signer"],
+    ["verrpc", "verrpc"],
     ["walletrpc", "walletkit"],
     ["watchtowerrpc", "watchtower"],
     ["wtclientrpc", "wtclient"]

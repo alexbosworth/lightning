@@ -33,6 +33,8 @@ const trimByte = 0;
 
   Call this iteratively after failed route attempts to get new routes
 
+  Requires `info:read` permission
+
   Do not use this method on LND 0.8.2 and below
 
   {
@@ -47,7 +49,7 @@ const trimByte = 0;
     }]
     [incoming_peer]: <Incoming Peer Public Key Hex String>
     [is_ignoring_past_failures]: <Ignore Past Failures Bool>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Fee Tokens Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens String>
     [max_timeout_height]: <Max CLTV Timeout Number>

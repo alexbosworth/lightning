@@ -1,3 +1,4 @@
+const addPeer = require('./add_peer');
 const getPeers = require('./get_peers');
 
-module.exports = {getPeers};
+module.exports = {addPeer, getPeers};

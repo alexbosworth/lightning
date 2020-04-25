@@ -3,6 +3,8 @@ const {join} = require('path');
 const grpc = require('grpc');
 const {loadSync} = require('@grpc/proto-loader');
 
+const {alternativeProtos} = require('./../grpc')
+const apiForProto = require('./api_for_proto');
 const {defaultSocket} = require('./../grpc');
 const grpcCredentials = require('./grpc_credentials');
 const grpcOptions = require('./grpc_options');
@@ -15,11 +17,12 @@ const {serviceTypes} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
 const {keys} = Object;
-const rpcParams = {'grpc.max_receive_message_length': maxReceiveMessageLength};
+const params = {'grpc.max_receive_message_length': maxReceiveMessageLength};
+const pathForProto = proto => join(__dirname, protosDir, proto);
 
-/** Initiate an gRPC API Methods Object for authenticated methods
+/** Initiate a gRPC API Methods Object for authenticated methods
 
-  Both the cert and macaroon expect the entire serialized lnd generated file
+  Both the cert and macaroon expect the entire serialized LND generated file
 
   {
     [cert]: <Base64 or Hex Serialized LND TLS Cert>
@@ -33,13 +36,17 @@ const rpcParams = {'grpc.max_receive_message_length': maxReceiveMessageLength};
   @returns
   {
     lnd: {
-      autopilot: <Autopilot gRPC Methods Object>
-      chain: <ChainNotifier gRPC Methods Object>
-      default: <Default gRPC Methods Object>
-      invoices: <Invoices gRPC Methods Object>
-      router: <Router gRPC Methods Object>
-      signer: <Signer gRPC Methods Object>
-      wallet: <WalletKit gRPC Methods Object>
+      autopilot: <Autopilot API Methods Object>
+      chain: <ChainNotifier API Methods Object>
+      default: <Default API Methods Object>
+      invoices: <Invoices API Methods Object>
+      router: <Router API Methods Object>
+      router_legacy: <Legacy Router API Methods Object>
+      signer: <Signer Methods API Object>
+      tower_client: <Watchtower Client Methods Object>
+      tower_server: <Watchtower Server Methods API Object>
+      wallet: <WalletKit gRPC Methods API Object>
+      version: <Version Methods API Object>
     }
   }
 */
@@ -56,15 +63,30 @@ module.exports = ({cert, macaroon, socket}) => {
     lnd: keys(serviceTypes).reduce((services, type) => {
       const service = serviceTypes[type];
 
-      const protoPath = join(__dirname, protosDir, protoFiles[service]);
+      services[type] = apiForProto({
+        credentials,
+        params,
+        service,
+        path: pathForProto(protoFiles[service]),
+        socket: lndSocket,
+        type: packageTypes[service],
+      });
 
-      const rpc = grpc.loadPackageDefinition(loadSync(protoPath, grpcOptions));
+      // Exit early when there are no alternative protos to add
+      if (!alternativeProtos[type]) {
+        return services;
+      }
 
-      const rpcType = packageTypes[service];
-
-      const api = new rpc[rpcType][service](lndSocket, credentials, rpcParams);
-
-      services[type] = api;
+      alternativeProtos[type].forEach(alternative => {
+        return services[alternative.type] = apiForProto({
+          credentials,
+          params,
+          service,
+          path: pathForProto(alternative.proto),
+          socket: lndSocket,
+          type: packageTypes[service],
+        });
+      });
 
       return services;
     },

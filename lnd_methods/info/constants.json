@@ -2,6 +2,8 @@
   "blocksBuffer": 6,
   "defaultCltv": 40,
   "defaultTokens": 0,
+  "externalType": "externalscore",
+  "maxScore": 100000000,
   "pathNotFoundErrors": [
     "ErrNoPathFound",
     "ErrNoRouteFound",
@@ -13,5 +15,8 @@
     "ErrRejected",
     "ErrPaymentAttemptTimeout",
     "ErrFeeLimitExceeded"
-  ]
+  ],
+  "prefAttachType": "preferential",
+  "weightedType": "weightedcomb",
+  "wrongLnd": "12 UNIMPLEMENTED: unknown service autopilotrpc.Autopilot"
 }

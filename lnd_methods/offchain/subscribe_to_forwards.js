@@ -11,7 +11,7 @@ const type = 'router';
 
 /** Subscribe to HTLC events
 
-  Requires LND built with `routerrpc` build tag
+  Requires `offchain:read` permission
 
   This method is not supported on LND 0.9.2 and below
 

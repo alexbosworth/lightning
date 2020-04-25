@@ -11,6 +11,8 @@ const isHash = n => /^[0-9A-F]{64}$/i.test(n);
   The received value and the invoiced value may differ as invoices may be
   over-paid.
 
+  Requires `invoices:read` permission
+
   The `features` array is not populated on LND 0.8.2 and below
   The `payments` array of HTLCs is only populated on LND versions after 0.7.1
 

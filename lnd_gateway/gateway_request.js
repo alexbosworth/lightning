@@ -18,8 +18,8 @@ const timeoutCode = 'ETIMEDOUT';
   {
     [bearer]: <Bearer Authentication Token String>
     call: {
-      arguments: <Call Arguments Object>
       method: <Call Method String>
+      params: <Call Arguments Object>
       server: <Call Server String>
     }
     request: <Request Function>
@@ -38,7 +38,7 @@ module.exports = ({bearer, call, request, url}, cbk) => {
           return cbk([400, 'ExpectedCallToMakeGatewayRequest']);
         }
 
-        if (!call.arguments) {
+        if (!call.params) {
           return cbk([400, 'ExpectedCallArgumentsToMakeGatewayRequest']);
         }
 
@@ -66,7 +66,7 @@ module.exports = ({bearer, call, request, url}, cbk) => {
         return (async () => {
           let encoded;
 
-          try { encoded = await encodeAsync(call.arguments); } catch (err) {}
+          try { encoded = await encodeAsync(call.params); } catch (err) {}
 
           if (!encoded) {
             return cbk([400, 'FailedToEncodeCborForGatewayRequest']);

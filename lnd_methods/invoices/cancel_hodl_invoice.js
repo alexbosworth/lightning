@@ -10,11 +10,13 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
   This call can cancel both HODL invoices and also void regular invoices
 
-  Requires lnd built with invoicesrpc
+  Requires LND built with `invoicesrpc`
+
+  Requires `invoices:write` permission
 
   {
     id: <Payment Preimage Hash Hex String>
-    lnd: <Authenticated RPC LND gRPC API Object>
+    lnd: <Authenticated RPC LND API Object>
   }
 
   @returns via cbk or Promise

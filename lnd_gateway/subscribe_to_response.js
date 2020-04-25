@@ -3,9 +3,9 @@ const {encodeAsync} = require('cbor');
 /** Make a request to LND that returns subscription events
 
   {
-    arguments: <Method Arguments Object>
     lnd: <LND gRPC API Object>
     method: <LND Method Name String>
+    params: <Method Arguments Object>
     server: <LND RPC Server Name String>
     ws: {
       on: <Websocket Attach Listener Function>
@@ -18,8 +18,8 @@ const {encodeAsync} = require('cbor');
     cancel: <Cancel Request Function>
   }
 */
-module.exports = ({arguments, lnd, method, server, ws}) => {
-  const sub = lnd[server][method](arguments);
+module.exports = ({lnd, method, params, server, ws}) => {
+  const sub = lnd[server][method](params);
 
   const sendResponse = async (ws, event, data) => {
     return ws.send(await encodeAsync({data, event}));

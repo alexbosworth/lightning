@@ -1,10 +1,17 @@
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
+const {isLnd} = require('./../../lnd_requests');
+
+const method = 'walletBalance';
+const type = 'default';
+
 /** Get balance on the chain.
 
+  Requires `onchain:read` permission
+
   {
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise
@@ -17,7 +24,7 @@ module.exports = ({lnd}, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!lnd) {
+        if (!isLnd({lnd, method, type})) {
           return cbk([400, 'ExpectedAuthenticatedLndToRetrieveChainBalance']);
         }
 
@@ -26,7 +33,7 @@ module.exports = ({lnd}, cbk) => {
 
       // Get wallet chain balance
       getBalance: ['validate', ({}, cbk) => {
-        return lnd.default.walletBalance({}, (err, res) => {
+        return lnd[type][method]({}, (err, res) => {
           if (!!err) {
             return cbk([503, 'UnexpectedErrorWhenGettingChainBalance', {err}]);
           }
@@ -39,9 +46,7 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'ExpectedConfirmedBalanceInBalanceResponse']);
           }
 
-          return cbk(null, {
-            chain_balance: Number(res.confirmed_balance),
-          });
+          return cbk(null, {chain_balance: Number(res.confirmed_balance)});
         });
       }],
     },

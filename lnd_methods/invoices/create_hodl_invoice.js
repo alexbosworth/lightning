@@ -27,6 +27,8 @@ const type = 'invoices';
 
   Requires LND built with `invoicesrpc` tag
 
+  Requires `address:write`, `invoices:write` permission
+
   Setting `mtokens` will not work on LND versions 0.8.2 and below
 
   {
@@ -37,7 +39,7 @@ const type = 'invoices';
     [is_fallback_included]: <Is Fallback Address Included Bool>
     [is_fallback_nested]: <Is Fallback Address Nested Bool>
     [is_including_private_channels]: <Invoice Includes Private Channels Bool>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [mtokens]: <Millitokens String>
     [tokens]: <Tokens Number>
   }

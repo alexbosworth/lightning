@@ -1,3 +1,4 @@
+const {alternativeProtos} = require('./grpc_services');
 const {defaultSocket} = require('./grpc_services');
 const {grpcSslCipherSuites} = require('./grpc_services');
 const {maxReceiveMessageLength} = require('./grpc_services');
@@ -9,6 +10,7 @@ const {unauthenticatedPackageTypes} = require('./grpc_services');
 const {unauthenticatedServiceTypes} = require('./grpc_services');
 
 module.exports = {
+  alternativeProtos,
   defaultSocket,
   grpcSslCipherSuites,
   maxReceiveMessageLength,

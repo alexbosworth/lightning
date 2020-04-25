@@ -10,10 +10,12 @@ const type = 'default';
 
 /** Get connected peers.
 
+  Requires `peers:read` permission
+
   LND 0.8.2 and below do not return `features`
 
   {
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise

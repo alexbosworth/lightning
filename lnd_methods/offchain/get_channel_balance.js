@@ -1,10 +1,17 @@
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
+const {isLnd} = require('./../../lnd_requests');
+
+const method = 'channelBalance';
+const type = 'default';
+
 /** Get balance across channels.
 
+  Requires `offchain:read` permission
+
   {
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise
@@ -18,7 +25,7 @@ module.exports = ({lnd}, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!lnd) {
+        if (!isLnd({lnd, method, type})) {
           return cbk([400, 'ExpectedLndGrpcApiForChannelBalanceQuery']);
         }
 
@@ -27,7 +34,7 @@ module.exports = ({lnd}, cbk) => {
 
       // Get channel balance
       getChannelBalance: ['validate', ({}, cbk) => {
-        return lnd.default.channelBalance({}, (err, res) => {
+        return lnd[type][method]({}, (err, res) => {
           if (!!err) {
             return cbk([503, 'UnexpectedGetChannelBalanceError', {err}]);
           }

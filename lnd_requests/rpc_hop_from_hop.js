@@ -27,7 +27,7 @@ const millitokensAsTokens = n => Number(BigInt(n) / BigInt(1e3));
     chan_capacity: <Channel Capacity Number>
     expiry: <Timeout Chain Height Number>
     fee: <Fee in Tokens Number>
-    fee_msat: <Fee in Millitokens Number>
+    fee_msat: <Fee in Millitokens String>
     [pub_key]: <Next Hop Public Key Hex String>
   }
 */

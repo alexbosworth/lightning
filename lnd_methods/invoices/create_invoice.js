@@ -16,6 +16,8 @@ const {round} = Math;
 
 /** Create a Lightning invoice.
 
+  Requires `address:write`, `invoices:write` permission
+
   {
     [cltv_delta]: <CLTV Delta Number>
     [description]: <Invoice Description String>

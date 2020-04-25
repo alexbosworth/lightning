@@ -503,12 +503,15 @@ service Lightning {
     }
 
     /** lncli: `sendpayment`
-    SendPayment dispatches a bi-directional streaming RPC for sending payments
-    through the Lightning Network. A single RPC invocation creates a persistent
-    bi-directional stream allowing clients to rapidly send payments through the
-    Lightning Network with a single persistent connection.
+    Deprecated, use routerrpc.SendPayment. SendPayment dispatches a
+    bi-directional streaming RPC for sending payments through the Lightning
+    Network. A single RPC invocation creates a persistent bi-directional
+    stream allowing clients to rapidly send payments through the Lightning
+    Network with a single persistent connection.
     */
-    rpc SendPayment (stream SendRequest) returns (stream SendResponse);
+    rpc SendPayment (stream SendRequest) returns (stream SendResponse) {
+        option deprecated = true;
+    }
 
     /**
     SendPaymentSync is the synchronous non-streaming version of SendPayment.
@@ -650,7 +653,6 @@ service Lightning {
             get: "/v1/graph/nodemetrics"
         };
     }
-
 
     /** lncli: `getchaninfo`
     GetChanInfo returns the latest authenticated network announcement for the
@@ -1315,6 +1317,11 @@ enum CommitmentType {
     been broadcast.
     */
     ANCHORS = 2;
+
+    /**
+    Returned when the commitment type isn't known or unavailable.
+    */
+    UNKNOWN_COMMITMENT_TYPE = 999;
 }
 
 message Channel {
@@ -1476,6 +1483,13 @@ message ListChannelsResponse {
     repeated Channel channels = 11;
 }
 
+enum Initiator {
+    INITIATOR_UNKNOWN = 0;
+    INITIATOR_LOCAL = 1;
+    INITIATOR_REMOTE = 2;
+    INITIATOR_BOTH = 3;
+}
+
 message ChannelCloseSummary {
     /// The outpoint (txid:index) of the funding transaction.
     string channel_point = 1;
@@ -1515,13 +1529,6 @@ message ChannelCloseSummary {
 
     /// Details on how the channel was closed.
     ClosureType close_type = 10;
-
-    enum Initiator {
-        UNKNOWN = 0;
-        LOCAL = 1;
-        REMOTE = 2;
-        BOTH = 3;
-    }
 
     /**
     Open initiator is the party that initiated opening the channel. Note that
@@ -1653,6 +1660,9 @@ message GetInfoResponse {
     /// The version of the LND software that the node is running.
     string version = 14;
 
+    /// The SHA1 commit hash that the daemon is compiled with.
+    string commit_hash = 20;
+
     /// The identity pubkey of the current node.
     string identity_pubkey = 1;
 
@@ -1776,6 +1786,28 @@ message PendingUpdate {
     uint32 output_index = 2;
 }
 
+message ReadyForPsbtFunding {
+    /**
+    The P2WSH address of the channel funding multisig address that the below
+    specified amount in satoshis needs to be sent to.
+    */
+    string funding_address = 1;
+
+    /**
+    The exact amount in satoshis that needs to be sent to the above address to
+    fund the pending channel.
+    */
+    int64 funding_amount = 2;
+
+    /**
+    A raw PSBT that contains the pending channel output. If a base PSBT was
+    provided in the PsbtShim, this is the base PSBT with one additional output.
+    If no base PSBT was specified, this is an otherwise empty PSBT with exactly
+    one output.
+    */
+    bytes psbt = 3;
+}
+
 message OpenChannelRequest {
     /**
     The pubkey of the node to open a channel with. When using REST, this field
@@ -1847,8 +1879,23 @@ message OpenChannelRequest {
 }
 message OpenStatusUpdate {
     oneof update {
+        /**
+        Signals that the channel is now fully negotiated and the funding
+        transaction published.
+        */
         PendingUpdate chan_pending = 1;
+
+        /**
+        Signals that the channel's funding transaction has now reached the
+        required number of confirmations on chain and can be used.
+        */
         ChannelOpenUpdate chan_open = 3;
+
+        /**
+        Signals that the funding process has been suspended and the construction
+        of a PSBT that funds the channel PK script is now required.
+        */
+        ReadyForPsbtFunding psbt_fund = 5;
     }
 
     /**
@@ -1911,9 +1958,34 @@ message ChanPointShim {
     uint32 thaw_height = 6;
 }
 
+message PsbtShim {
+    /**
+    A unique identifier of 32 random bytes that will be used as the pending
+    channel ID to identify the PSBT state machine when interacting with it and
+    on the wire protocol to initiate the funding request.
+    */
+    bytes pending_chan_id = 1;
+
+    /**
+    An optional base PSBT the new channel output will be added to. If this is
+    non-empty, it must be a binary serialized PSBT.
+    */
+    bytes base_psbt = 2;
+}
+
 message FundingShim {
     oneof shim {
+        /**
+        A channel shim where the channel point was fully constructed outside
+        of lnd's wallet and the transaction might already be published.
+        */
         ChanPointShim chan_point_shim = 1;
+
+        /**
+        A channel shim that uses a PSBT to fund and sign the channel funding
+        transaction.
+        */
+        PsbtShim psbt_shim = 2;
     }
 }
 
@@ -1922,17 +1994,56 @@ message FundingShimCancel {
     bytes pending_chan_id = 1;
 }
 
+message FundingPsbtVerify {
+    /**
+    The funded but not yet signed PSBT that sends the exact channel capacity
+    amount to the PK script returned in the open channel message in a previous
+    step.
+    */
+    bytes funded_psbt = 1;
+
+    /// The pending channel ID of the channel to get the PSBT for.
+    bytes pending_chan_id = 2;
+}
+
+message FundingPsbtFinalize {
+    /**
+    The funded PSBT that contains all witness data to send the exact channel
+    capacity amount to the PK script returned in the open channel message in a
+    previous step.
+    */
+    bytes signed_psbt = 1;
+
+    /// The pending channel ID of the channel to get the PSBT for.
+    bytes pending_chan_id = 2;
+}
+
 message FundingTransitionMsg {
     oneof trigger {
         /**
-        The funding shim to regsiter. This should be used before any
+        The funding shim to register. This should be used before any
         channel funding has began by the remote party, as it is intended as a
-        prepatory step for the full channel funding.
+        preparatory step for the full channel funding.
         */
         FundingShim shim_register = 1;
 
         /// Used to cancel an existing registered funding shim.
         FundingShimCancel shim_cancel = 2;
+
+        /**
+        Used to continue a funding flow that was initiated to be executed
+        through a PSBT. This step verifies that the PSBT contains the correct
+        outputs to fund the channel.
+        */
+        FundingPsbtVerify psbt_verify = 3;
+
+        /**
+        Used to continue a funding flow that was initiated to be executed
+        through a PSBT. This step finalizes the funded and signed PSBT, finishes
+        negotiation with the peer and finally publishes the resulting funding
+        transaction.
+        */
+        FundingPsbtFinalize psbt_finalize = 4;
     }
 }
 
@@ -1985,8 +2096,11 @@ message PendingChannelsResponse {
         */
         int64 remote_chan_reserve_sat = 7;
 
-        // True if we initiated opening the channel.
-        bool initiator = 8;
+        // The party that initiated opening the channel.
+        Initiator initiator = 8;
+
+        /// The commitment type used by this channel.
+        CommitmentType commitment_type = 9;
     }
 
     message PendingOpenChannel {
@@ -2344,7 +2458,7 @@ message Hop {
     bool tlv_payload = 9;
 
     /**
-    An optional TLV record tha singals the use of an MPP payment. If present,
+    An optional TLV record that signals the use of an MPP payment. If present,
     the receiver will enforce that that the same mpp_record is included in the
     final hop payload of all non-zero payments in the HTLC set. If empty, a
     regular single-shot payment is or was attempted.
@@ -2528,12 +2642,13 @@ message ChannelGraph {
 }
 
 enum NodeMetricType {
-    BETWEENNESS_CENTRALITY = 0;
+    UNKNOWN = 0;
+    BETWEENNESS_CENTRALITY = 1;
 }
 
 message NodeMetricsRequest {
-  /// The requesteded node metrics.
-  repeated NodeMetricType types = 1;
+    /// The requested node metrics.
+    repeated NodeMetricType types = 1;
 }
 
 message NodeMetricsResponse {
@@ -2544,15 +2659,15 @@ message NodeMetricsResponse {
     Map of node pubkey to betweenness centrality of the node. Normalized
     values are in the [0,1] closed interval.
     */
-    map<string, FloatValue> betweenness_centrality = 1;
+    map<string, FloatMetric> betweenness_centrality = 1;
 }
 
-message FloatValue {
-  /// Arbitrary float value.
-  double value = 1;
+message FloatMetric {
+    /// Arbitrary float value.
+    double value = 1;
 
-  /// The value normalized to [0,1] or [-1,1].
-  double normalized_value = 2;
+    /// The value normalized to [0,1] or [-1,1].
+    double normalized_value = 2;
 }
 
 message ChanInfoRequest {
@@ -2941,6 +3056,40 @@ message InvoiceSubscription {
     uint64 settle_index = 2;
 }
 
+enum PaymentFailureReason {
+    /**
+    Payment isn't failed (yet).
+    */
+    FAILURE_REASON_NONE = 0;
+
+    /**
+    There are more routes to try, but the payment timeout was exceeded.
+    */
+    FAILURE_REASON_TIMEOUT = 1;
+
+    /**
+    All possible routes were tried and failed permanently. Or were no
+    routes to the destination at all.
+    */
+    FAILURE_REASON_NO_ROUTE = 2;
+
+    /**
+    A non-recoverable error has occured.
+    */
+    FAILURE_REASON_ERROR = 3;
+
+    /**
+    Payment details incorrect (unknown hash, invalid amt or
+    invalid final cltv delta)
+    */
+    FAILURE_REASON_INCORRECT_PAYMENT_DETAILS = 4;
+
+    /**
+    Insufficient local balance.
+    */
+    FAILURE_REASON_INSUFFICIENT_BALANCE = 5;
+}
+
 message Payment {
     /// The payment hash
     string payment_hash = 1;
@@ -2951,7 +3100,6 @@ message Payment {
     /// Deprecated, use creation_time_ns
     int64 creation_date = 3 [deprecated = true];
 
-    /// The path this payment took.
     repeated string path = 4 [deprecated = true];
 
     /// Deprecated, use fee_sat or fee_msat.
@@ -2988,8 +3136,17 @@ message Payment {
     /// The time in UNIX nanoseconds at which the payment was created.
     int64 creation_time_ns = 13;
 
-    /// The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+    /// The HTLCs made in attempt to settle the payment.
     repeated HTLCAttempt htlcs = 14;
+
+    /**
+    The creation index of this payment. Each payment can be uniquely identified
+    by this index, which may not strictly increment by 1 for payments made in
+    older versions of lnd.
+    */
+    uint64 payment_index = 15;
+
+    PaymentFailureReason failure_reason = 16;
 }
 
 message HTLCAttempt {
@@ -3022,14 +3179,46 @@ message ListPaymentsRequest {
     /**
     If true, then return payments that have not yet fully completed. This means
     that pending payments, as well as failed payments will show up if this
-    field is set to True.
+    field is set to true. This flag doesn't change the meaning of the indices,
+    which are tied to individual payments.
     */
     bool include_incomplete = 1;
+
+    /**
+    The index of a payment that will be used as either the start or end of a
+    query to determine which payments should be returned in the response. The
+    index_offset is exclusive. In the case of a zero index_offset, the query
+    will start with the oldest payment when paginating forwards, or will end
+    with the most recent payment when paginating backwards.
+    */
+    uint64 index_offset = 2;
+
+    /// The maximal number of payments returned in the response to this query.
+    uint64 max_payments = 3;
+
+    /**
+    If set, the payments returned will result from seeking backwards from the
+    specified index offset. This can be used to paginate backwards. The order
+    of the returned payments is always oldest first (ascending index order).
+    */
+    bool reversed = 4;
 }
 
 message ListPaymentsResponse {
     /// The list of payments
     repeated Payment payments = 1;
+
+    /**
+    The index of the first item in the set of returned payments. This can be
+    used as the index_offset to continue seeking backwards in the next request.
+    */
+    uint64 first_index_offset = 2;
+
+    /**
+    The index of the last item in the set of returned payments. This can be used
+    as the index_offset to continue seeking forwards in the next request.
+    */
+    uint64 last_index_offset = 3;
 }
 
 message DeleteAllPaymentsRequest {

@@ -1,5 +1,16 @@
 # Versions
 
+## 2.0.0
+
+- `authenticatedLndGrpc`: Add support for version RPC server
+
+### Breaking Changes
+
+- `authenticatedLndGrpc`: LND 0.9.2 and below: `router` is now `router_legacy`
+- `emitGrpcEvents`: `arguments` renamed to `params`
+- `grpcRouter`: `arguments` renamed to `params`
+- `lndGateway`: `arguments` renamed to `params`
+
 ## 1.2.10
 
 - `emitGrpcEvents`: Support large responses

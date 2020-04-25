@@ -19,6 +19,8 @@ const {nextTick} = process;
 
   Requires LND built with `routerrpc` build tag
 
+  Requires `offchain:write` permission
+
   This method is not supported on LND 0.8.2 or below.
 
   {

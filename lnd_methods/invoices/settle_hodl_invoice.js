@@ -11,10 +11,12 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
 /** Settle HODL invoice
 
-  requires LND built with `invoicesrpc` build tag
+  Requires LND built with `invoicesrpc` build tag
+
+  Requires `invoices:write` permission
 
   {
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     secret: <Payment Preimage Hex String>
   }
 

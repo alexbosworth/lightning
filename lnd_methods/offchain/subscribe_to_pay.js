@@ -1,28 +1,39 @@
 const {createHash} = require('crypto');
 const EventEmitter = require('events');
 
+const asyncAuto = require('async/auto');
 const {chanFormat} = require('bolt07');
 const {chanNumber} = require('bolt07');
 
+const {confirmedFromPayment} = require('./../../lnd_responses');
+const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
+const emitLegacyPayment = require('./emit_legacy_payment');
+const emitPayment = require('./emit_payment');
+const {failureFromPayment} = require('./../../lnd_responses');
 const {getWalletInfo} = require('./../info');
+const {isLnd} = require('./../../lnd_requests');
 const {paymentAmounts} = require('./../../bolt00');
 const {routeHintFromRoute} = require('./../../lnd_requests');
 const {safeTokens} = require('./../../bolt00');
+const {stateAsFailure} = require('./../../lnd_responses');
 const {states} = require('./payment_states');
 
 const cltvBuf = 3;
 const cltvLimit = (limit, height) => !limit ? undefined : limit - height;
-const decBase = 10;
 const defaultCltvDelta = 43;
 const defaultTimeoutSeconds = 25;
 const hexToBuf = hex => !hex ? undefined : Buffer.from(hex, 'hex');
 const {isArray} = Array;
-const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
+const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const maxTokens = '4294967296';
+const method = 'sendPaymentV2';
 const msPerSec = 1000;
 const mtokensPerToken = BigInt(1e3);
+const {nextTick} = process;
 const {round} = Math;
 const sha256 = preimage => createHash('sha256').update(preimage).digest();
+const type = 'router';
+const unknownServiceErr = 'unknown service verrpc.Versioner';
 
 /** Initiate and subscribe to the outcome of a payment
 
@@ -47,6 +58,7 @@ const sha256 = preimage => createHash('sha256').update(preimage).digest();
     lnd: <Authenticated LND gRPC API Object>
     [max_fee]: <Maximum Fee Tokens To Pay Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens to Pay String>
+    [max_paths]: <Maximum Simultaneous Paths Number>
     [max_timeout_height]: <Maximum Height of Payment Timeout Number>
     [messages]: [{
       type: <Message Type Number String>
@@ -77,16 +89,29 @@ const sha256 = preimage => createHash('sha256').update(preimage).digest();
     fee: <Total Fee Tokens Paid Rounded Down Number>
     fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{
-      channel: <Standard Format Channel Id String>
-      channel_capacity: <Channel Capacity Tokens Number>
-      fee: <Fee Tokens Rounded Down Number>
-      fee_mtokens: <Fee Millitokens String>
-      forward_mtokens: <Forward Millitokens String>
-      public_key: <Public Key Hex String>
-      timeout: <Timeout Block Height Number>
+      channel: <First Route Standard Format Channel Id String>
+      channel_capacity: <First Route Channel Capacity Tokens Number>
+      fee: <First Route Fee Tokens Rounded Down Number>
+      fee_mtokens: <First Route Fee Millitokens String>
+      forward_mtokens: <First Route Forward Millitokens String>
+      public_key: <First Route Public Key Hex String>
+      timeout: <First Route Timeout Block Height Number>
     }]
     id: <Payment Hash Hex String>
     mtokens: <Total Millitokens Paid String>
+    paths: [{
+      fee_mtokens: <Total Fee Millitokens Paid String>
+      hops: [{
+        channel: <First Route Standard Format Channel Id String>
+        channel_capacity: <First Route Channel Capacity Tokens Number>
+        fee: <First Route Fee Tokens Rounded Down Number>
+        fee_mtokens: <First Route Fee Millitokens String>
+        forward_mtokens: <First Route Forward Millitokens String>
+        public_key: <First Route Public Key Hex String>
+        timeout: <First Route Timeout Block Height Number>
+      }]
+      mtokens: <Total Millitokens Paid String>
+    }]
     safe_fee: <Total Fee Tokens Paid Rounded Up Number>
     safe_tokens: <Total Tokens Paid, Rounded Up Number>
     secret: <Payment Preimage Hex String>
@@ -96,6 +121,7 @@ const sha256 = preimage => createHash('sha256').update(preimage).digest();
 
   @event 'failed'
   {
+    is_insufficient_balance: <Failed Due To Lack of Balance Bool>
     is_invalid_payment: <Failed Due to Invalid Payment Bool>
     is_pathfinding_timeout: <Failed Due to Pathfinding Timeout Bool>
     is_route_not_found: <Failed Due to Route Not Found Bool>
@@ -136,7 +162,7 @@ module.exports = args => {
     throw new Error('ExpectedPaymentHashWhenPaymentRequestNotSpecified');
   }
 
-  if (!args.lnd || !args.lnd.router) {
+  if (!isLnd({method, type, lnd: args.lnd})) {
     throw new Error('ExpectedAuthenticatedLndToSubscribeToPayment');
   }
 
@@ -158,7 +184,7 @@ module.exports = args => {
     }
   }
 
-  if (!args.mtokens && !args.tokens && !args.request){
+  if (!args.mtokens && !args.tokens && !args.request) {
     throw new Error('ExpectedTokenAmountToPayWhenPaymentRequestNotSpecified');
   }
 
@@ -174,137 +200,160 @@ module.exports = args => {
     }
   }
 
-  const amounts = paymentAmounts({
-    max_fee: args.max_fee,
-    max_fee_mtokens: args.max_fee_mtokens,
-    mtokens: args.mtokens,
-    request: args.request,
-    tokens: args.tokens,
-  });
-
+  const channel = !!args.outgoing_channel ? args.outgoing_channel : null;
   const emitter = new EventEmitter();
   const features = !args.features ? undefined : args.features.map(n => n.bit);
   const maxFee = args.max_fee !== undefined ? args.max_fee : maxTokens;
-  const channel = !!args.outgoing_channel ? args.outgoing_channel : null;
+  const messages = args.messages || [];
   const routes = (args.routes || []);
-  const timeoutSeconds = round((args.pathfinding_timeout || 0) / msPerSec);
+  const timeoutSecs = round((args.pathfinding_timeout || Number()) / msPerSec);
 
-  const hints = routes
-    .map(route => ({hop_hints: routeHintFromRoute({route}).hops}));
-
-  const finalCltv = !args.cltv_delta ? defaultCltvDelta : args.cltv_delta;
-
-  (async () => {
-    let maxCltvDelta;
-
-    // Go get the block height when a max timeout height is specified
-    if (!!args.max_timeout_height) {
-      const blockchainInfo = await getWalletInfo({lnd: args.lnd});
-
-      const currentHeight = blockchainInfo.current_block_height;
-
-      maxCltvDelta = cltvLimit(args.max_timeout_height, currentHeight);
-    }
-
-    // The max cltv delta cannot be lower than the final cltv delta + buffer
-    if (!!maxCltvDelta && !!finalCltv && maxCltvDelta < finalCltv + cltvBuf) {
-      emitter.emit('err', new Error('MaxTimeoutHeightTooNearToPay'));
-
-      emitter.emit('end');
-
+  const emitError = err => {
+    if (!emitter.listenerCount('error')) {
       return;
     }
 
-    const destTlv = (args.messages || []).reduce((tlv, n) => {
-      tlv[n.type] = Buffer.from(n.value, 'hex');
+    if (!!isArray(err)) {
+      return emitter.emit('error', err);
+    }
 
-      return tlv;
-    },
-    {});
+    return emitter.emit('error', [503, 'UnexpectedPaymentError', {err}]);
+  };
 
-    const sub = args.lnd.router.sendPayment({
-      allow_self_payment: true,
-      amt: amounts.tokens,
-      amt_msat: amounts.mtokens,
-      cltv_limit: !!args.max_timeout_height ? maxCltvDelta : undefined,
-      dest: !args.destination ? undefined : hexToBuf(args.destination),
-      dest_features: features,
-      dest_tlv: !!(args.messages || []).length ? destTlv : undefined,
-      fee_limit_msat: amounts.max_fee_mtokens,
-      fee_limit_sat: amounts.max_fee,
-      final_cltv_delta: !args.request ? finalCltv : undefined,
-      last_hop_pubkey: hexToBuf(args.incoming_peer),
-      outgoing_chan_id: !channel ? undefined : chanNumber({channel}).number,
-      payment_hash: !args.id ? undefined : hexToBuf(args.id),
-      payment_request: !args.request ? undefined : args.request,
-      route_hints: !hints.length ? undefined : hints,
-      timeout_seconds: timeoutSeconds || defaultTimeoutSeconds,
-    });
+  const hints = routes.map(route => {
+    return {hop_hints: routeHintFromRoute({route}).hops};
+  });
 
-    sub.on('data', data => {
-      switch (data.state) {
-      case states.confirmed:
-        return emitter.emit('confirmed', {
-          fee: safeTokens({mtokens: data.route.total_fees_msat}).tokens,
-          fee_mtokens: data.route.total_fees_msat,
-          hops: data.route.hops.map(hop => ({
-            channel: chanFormat({number: hop.chan_id}).channel,
-            channel_capacity: Number(hop.chan_capacity),
-            fee: safeTokens({mtokens: hop.fee_msat}).tokens,
-            fee_mtokens: hop.fee_msat,
-            forward_mtokens: hop.amt_to_forward_msat,
-            timeout: hop.expiry,
-          })),
-          id: sha256(data.preimage).toString('hex'),
-          mtokens: data.route.total_amt_msat,
-          safe_fee: safeTokens({mtokens: data.route.total_fees_msat}).safe,
-          safe_tokens: safeTokens({mtokens: data.route.total_amt_msat}).safe,
-          secret: data.preimage.toString('hex'),
-          timeout: data.route.total_time_lock,
-          tokens: safeTokens({mtokens: data.route.total_amt_msat}).tokens,
-        });
+  const finalCltv = !args.cltv_delta ? defaultCltvDelta : args.cltv_delta;
 
-      case states.errored:
-      case states.invalid_payment:
-      case states.pathfinding_routes_failed:
-      case states.pathfinding_timeout_failed:
-        return emitter.emit('failed', ({
-          is_invalid_payment: data.state === states.invalid_payment,
-          is_pathfinding_timeout: data.state === states.pathfinding_timeout,
-          is_route_not_found: data.state === states.pathfinding_routes_failed,
-          route: !data.route ? undefined : {
-            fee: safeTokens({mtokens: data.route.total_fees_msat}).tokens,
-            fee_mtokens: data.route.total_fees_msat,
-            hops: data.route.hops.map(hop => ({
-              channel: chanFormat({number: hop.chan_id}).channel,
-              channel_capacity: Number(hop.chan_capacity),
-              fee: safeTokens({mtokens: hop.fee_msat}).tokens,
-              fee_mtokens: hop.fee_msat,
-              forward: safeTokens({mtokens: hop.amt_to_forward_msat}).tokens,
-              forward_mtokens: hop.amt_to_forward_msat,
-              public_key: hop.pub_key,
-              timeout: hop.expiry,
-            })),
-            mtokens: data.route.total_amt_msat,
-            safe_fee: safeTokens({mtokens: data.route.total_fees_msat}).safe,
-            safe_tokens: safeTokens({mtokens: data.route.total_amt_msat}).safe,
-            timeout: data.route.total_time_lock,
-            tokens: safeTokens({mtokens: data.route.total_amt_msat}).tokens,
-          },
-        }));
-
-      case states.paying:
-        return emitter.emit('paying', {});
-
-      default:
-        return;
+  asyncAuto({
+    // Determine the block height to figure out the height delta
+    getHeight: cbk => {
+      // Exit early when there is no max timeout restriction
+      if (!args.max_timeout_height) {
+        return cbk();
       }
-    });
 
-    sub.on('end', () => emitter.emit('end'));
-    sub.on('error', err => emitter.emit('error', err));
-    sub.on('status', n => emitter.emit('status', n));
-  })();
+      return getWalletInfo({lnd: args.lnd}, cbk);
+    },
+
+    // Determine the wallet version to support LND 0.9.2 and below
+    getVersion: cbk => {
+      return args.lnd.version.getVersion({}, err => {
+        if (!!err && err.details === unknownServiceErr) {
+          return cbk(null, {is_legacy: true});
+        }
+
+        if (!!err) {
+          return cbk([503, 'UnexpectedVersionErrorForPaymentInit', {err}]);
+        }
+
+        return cbk(null, {is_legacy: false});
+      });
+    },
+
+    // Determine the maximum CLTV delta
+    maxCltvDelta: ['getHeight', ({getHeight}, cbk) => {
+      if (!args.max_timeout_height) {
+        return cbk();
+      }
+
+      const currentHeight = getHeight.current_block_height;
+
+      const maxDelta = cltvLimit(args.max_timeout_height, currentHeight);
+
+      // The max cltv delta cannot be lower than the final cltv delta + buffer
+      if (!!maxDelta && !!finalCltv && maxDelta < finalCltv + cltvBuf) {
+        return cbk([400, 'MaxTimeoutTooNearCurrentHeightToMakePayment']);
+      }
+
+      return cbk(null, maxDelta);
+    }],
+
+    // Final payment parameters
+    params: [
+      'getVersion',
+      'maxCltvDelta',
+      ({getVersion, maxCltvDelta}, cbk) =>
+    {
+      const amounts = paymentAmounts({
+        max_fee: args.max_fee,
+        max_fee_mtokens: args.max_fee_mtokens,
+        mtokens: args.mtokens,
+        request: args.request,
+        tokens: args.tokens,
+      });
+
+      const destTlv = messages.reduce((tlv, n) => {
+        tlv[n.type] = Buffer.from(n.value, 'hex');
+
+        return tlv;
+      },
+      {});
+
+      return cbk(null, {
+        allow_self_payment: true,
+        amt: amounts.tokens,
+        amt_msat: amounts.mtokens,
+        cltv_limit: !!args.max_timeout_height ? maxCltvDelta : undefined,
+        dest: !args.destination ? undefined : hexToBuf(args.destination),
+        dest_custom_records: !messages.length ? undefined : destTlv,
+        dest_features: features,
+        fee_limit_msat: amounts.max_fee_mtokens,
+        fee_limit_sat: amounts.max_fee,
+        final_cltv_delta: !args.request ? finalCltv : undefined,
+        last_hop_pubkey: hexToBuf(args.incoming_peer),
+        max_shards: args.max_paths || undefined,
+        no_inflight_updates: true,
+        outgoing_chan_id: !channel ? undefined : chanNumber({channel}).number,
+        payment_hash: !args.id ? undefined : hexToBuf(args.id),
+        payment_request: !args.request ? undefined : args.request,
+        route_hints: !hints.length ? undefined : hints,
+        timeout_seconds: timeoutSecs || defaultTimeoutSeconds,
+      });
+    }],
+
+    // Send payment with legacy router rpc, before 0.9.2 LND
+    sendLegacy: ['getVersion', 'params', ({getVersion, params}, cbk) => {
+      // Exit early when using the current routerrpc
+      if (!getVersion.is_legacy) {
+        return cbk();
+      }
+
+      const sub = args.lnd.router_legacy.sendPayment(params);
+
+      sub.on('data', data => emitLegacyPayment({data, emitter}));
+      sub.on('end', () => cbk());
+      sub.on('error', err => cbk(err));
+
+      return;
+    }],
+
+    // Send payment
+    send: ['getVersion', 'params', ({getVersion, params}, cbk) => {
+      // Exit early when the wallet version is a legacy version
+      if (!!getVersion.is_legacy) {
+        return cbk();
+      }
+
+      const sub = args.lnd.router.sendPaymentV2(params);
+
+      sub.on('data', data => emitPayment({data, emitter}));
+      sub.on('end', () => cbk());
+      sub.on('error', err => cbk(err));
+
+      return;
+    }],
+  },
+  err => {
+    return nextTick(() => {
+      if (!!err) {
+        return emitError(err);
+      }
+
+      return;
+    });
+  });
 
   return emitter;
 };

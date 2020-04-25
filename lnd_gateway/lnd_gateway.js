@@ -82,12 +82,12 @@ module.exports = ({cert, macaroon, request, url, websocket}) => {
       .map(n => definitions[n].originalName);
 
     const streaming = streamingResponseMethods.reduce((client, method) => {
-      client[method] = (arguments, cbk) => {
+      client[method] = (params, cbk) => {
         return gatewaySubscribe({
           url,
           websocket,
           bearer: macaroon,
-          call: {arguments, method, server},
+          call: {method, params, server},
         });
       }
 
@@ -96,12 +96,12 @@ module.exports = ({cert, macaroon, request, url, websocket}) => {
     {});
 
     clients[server] = directResponseMethods.reduce((client, method) => {
-      client[method] = (arguments, cbk) => {
+      client[method] = (params, cbk) => {
         return gatewayRequest({
           request,
           url,
           bearer: macaroon,
-          call: {arguments, method, server},
+          call: {method, params, server},
         },
         cbk);
       };

@@ -10,9 +10,11 @@ const edgeNotFoundErrorMessage = 'edge not found';
 
 /** Get graph information about a channel on the network
 
+  Requires `info:read` permission
+
   {
     id: <Standard Format Channel Id String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise

@@ -2,15 +2,20 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const addressFormats = require('./address_formats');
+const {isLnd} = require('./../../lnd_requests');
 
 const connectFailMessage = '14 UNAVAILABLE: Connect Failed';
+const method = 'newAddress';
+const type = 'default';
 
 /** Create a new receive address.
+
+  Requires `address:write` permission
 
   {
     format: <Receive Address Type String> // "np2wpkh" || "p2wpkh"
     [is_unused]: <Get As-Yet Unused Address Bool>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise
@@ -27,7 +32,7 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedKnownAddressFormat']);
         }
 
-        if (!args.lnd || !args.lnd.default || !args.lnd.default.newAddress) {
+        if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndForAddressCreation']);
         }
 

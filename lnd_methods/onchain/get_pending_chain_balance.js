@@ -3,10 +3,17 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
-/** Get pending chain balance in unconfirmed outputs and in channel limbo.
+const method = 'walletBalance';
+const type = 'default';
+
+/** Get pending chain balance in simple unconfirmed outputs.
+
+  Pending channels limbo balance is not included
+
+  Requires `onchain:read` permission
 
   {
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise
@@ -19,31 +26,16 @@ module.exports = ({lnd}, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!isLnd({lnd, method: 'pendingChannels', type: 'default'})) {
+        if (!isLnd({lnd, method, type})) {
           return cbk([400, 'ExpectedLndForPendingChainBalance']);
         }
 
         return cbk();
       },
 
-      // Determine the balance that is still in timelocks
-      channelsLimboBalance: ['validate', ({}, cbk) => {
-        return lnd.default.pendingChannels({}, (err, res) => {
-          if (!!err) {
-            return cbk([503, 'GetPendingChannelsErr', {err}]);
-          }
-
-          if (!res || res.total_limbo_balance === undefined) {
-            return cbk([503, 'ExpectedTotalLimboBalance']);
-          }
-
-          return cbk(null, Number(res.total_limbo_balance));
-        });
-      }],
-
       // Determine the balance that is in unconfirmed chain outputs
-      unconfirmedChainBalance: ['validate', ({}, cbk) => {
-        return lnd.default.walletBalance({}, (err, res) => {
+      getUnconfirmed: ['validate', ({}, cbk) => {
+        return lnd[type][method]({}, (err, res) => {
           if (!!err) {
             return cbk([503, 'GetChainBalanceError', {err}]);
           }
@@ -57,14 +49,8 @@ module.exports = ({lnd}, cbk) => {
       }],
 
       // Sum the chain balance with the timelocked balance
-      pendingChainBalance: [
-        'channelsLimboBalance',
-        'unconfirmedChainBalance',
-        ({channelsLimboBalance, unconfirmedChainBalance}, cbk) =>
-      {
-        const balance = channelsLimboBalance + unconfirmedChainBalance;
-
-        return cbk(null, {pending_chain_balance: balance});
+      pendingChainBalance: ['getUnconfirmed', ({getUnconfirmed}, cbk) => {
+        return cbk(null, {pending_chain_balance: getUnconfirmed});
       }],
     },
     returnResult({reject, resolve, of: 'pendingChainBalance'}, cbk));

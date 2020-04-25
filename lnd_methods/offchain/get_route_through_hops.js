@@ -15,11 +15,13 @@ const unknownServiceMessage = 'unknown service routerrpc.Router';
 
   Requires LND built with `routerrpc` build tag
 
+  Requires `offchain:read` permission
+
   This method is not supported by LND v0.7.1 or below LNDs
 
   {
     [cltv_delta]: <Final CLTV Delta Number>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [mtokens]: <Millitokens to Send String>
     [outgoing_channel]: <Outgoing Channel Id String>
     public_keys: [<Public Key Hex String>]

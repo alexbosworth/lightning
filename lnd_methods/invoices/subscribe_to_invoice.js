@@ -10,6 +10,8 @@ const updateEvent = 'invoice_updated';
 
   LND built with `invoicesrpc` tag is required
 
+  Requires `invoices:read` permission
+
   The `payments` array of HTLCs is only populated on LND versions after 0.7.1
 
   The `features` and `messages` arrays are not populated on LND 0.8.2 and below
@@ -17,7 +19,7 @@ const updateEvent = 'invoice_updated';
 
   {
     id: <Invoice Payment Preimage Hash Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @throws

@@ -4,21 +4,25 @@ const {returnResult} = require('asyncjs-util');
 const {isLnd} = require('./../../lnd_requests');
 const subscribeToPastPayment = require('./subscribe_to_past_payment');
 
-const isHash = n => /^[0-9A-F]{64}$/i.test(n);
-const paymentNotInitiatedErr = `payment isn't initiated`;
+const isHash = n => !!n && /^[0-9A-F]{64}$/i.test(n);
+const method = 'trackPaymentV2';
+const type = 'router';
 
 /** Get the status of a past payment
 
   Requires LND compiled with `routerrpc` build tag
 
+  Requires `offchain:read` permission
+
   {
     id: <Payment Preimage Hash Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise
   {
     [failed]: {
+      is_insufficient_balance: <Failed Due To Lack of Balance Bool>
       is_invalid_payment: <Failed Due to Payment Rejected At Destination Bool>
       is_pathfinding_timeout: <Failed Due to Pathfinding Timeout Bool>
       is_route_not_found: <Failed Due to Absence of Path Through Graph Bool>
@@ -58,7 +62,7 @@ module.exports = ({id, lnd}, cbk) => {
           return cbk([400, 'ExpectedPaymentHashToLookupPastPaymentStatus']);
         }
 
-        if (!isLnd({lnd, method: 'trackPayment', type: 'router'})) {
+        if (!isLnd({lnd, method, type})) {
           return cbk([400, 'ExpectedLndGrpcApiObjectToLookupPayment']);
         }
 
@@ -72,12 +76,8 @@ module.exports = ({id, lnd}, cbk) => {
         const finished = (err, res) => {
           sub.removeAllListeners();
 
-          if (!!err && err.details === paymentNotInitiatedErr) {
-            return cbk([404, 'SentPaymentNotFound']);
-          }
-
           if (!!err) {
-            return cbk([503, 'UnexpectedErrorGettingPaymentStatus', {err}]);
+            return cbk(err);
           }
 
           return cbk(null, {
@@ -90,6 +90,7 @@ module.exports = ({id, lnd}, cbk) => {
         };
 
         sub.once('confirmed', payment => finished(null, {payment}));
+        sub.once('end', () => cbk([503, 'UnknownStatusOfPayment']));
         sub.once('error', err => finished(err));
         sub.once('failed', failed => finished(null, {failed}));
         sub.once('paying', () => finished(null, {}));

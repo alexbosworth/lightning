@@ -114,70 +114,29 @@ message SendPaymentRequest {
     fallback.
     */
     repeated lnrpc.FeatureBit dest_features = 16;
+
+    /**
+    The maximum number of partial payments that may be use to complete the full
+    amount.
+    */
+    uint32 max_parts = 17;
+
+    /**
+    If set, only the final payment update is streamed back. Intermediate updates
+    that show which htlcs are still in flight are suppressed.
+    */
+    bool no_inflight_updates = 18;
 }
 
 message TrackPaymentRequest {
     /// The hash of the payment to look up.
     bytes payment_hash = 1;
-}
-
-enum PaymentState {
-    /**
-    Payment is still in flight.
-    */
-    IN_FLIGHT = 0;
 
     /**
-    Payment completed successfully.
+    If set, only the final payment update is streamed back. Intermediate updates
+    that show which htlcs are still in flight are suppressed.
     */
-    SUCCEEDED = 1;
-
-    /**
-    There are more routes to try, but the payment timeout was exceeded.
-    */
-    FAILED_TIMEOUT = 2;
-
-    /**
-    All possible routes were tried and failed permanently. Or were no
-    routes to the destination at all.
-    */
-    FAILED_NO_ROUTE = 3;
-
-    /**
-    A non-recoverable error has occured.
-    */
-    FAILED_ERROR = 4;
-
-    /**
-    Payment details incorrect (unknown hash, invalid amt or
-    invalid final cltv delta)
-    */
-    FAILED_INCORRECT_PAYMENT_DETAILS = 5;
-
-    /**
-    Insufficient local balance.
-    */
-    FAILED_INSUFFICIENT_BALANCE = 6;
-}
-
-message PaymentStatus {
-    /// Current state the payment is in.
-    PaymentState state = 1;
-
-    /**
-    The pre-image of the payment when state is SUCCEEDED.
-    */
-    bytes preimage = 2;
-
-    /**
-    The taken route when state is SUCCEEDED.
-    */
-    lnrpc.Route route = 3;
-
-    /**
-    The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
-    */
-    repeated lnrpc.HTLCAttempt htlcs = 4;
+    bool no_inflight_updates = 2;
 }
 
 message RouteFeeRequest {
@@ -464,19 +423,75 @@ enum FailureDetail {
     CIRCULAR_ROUTE = 22;
 }
 
-service Router {
+enum PaymentState {
     /**
-    SendPayment attempts to route a payment described by the passed
-    PaymentRequest to the final destination. The call returns a stream of
-    payment status updates.
+    Payment is still in flight.
     */
-    rpc SendPayment (SendPaymentRequest) returns (stream PaymentStatus);
+    IN_FLIGHT = 0;
 
     /**
-    TrackPayment returns an update stream for the payment identified by the
+    Payment completed successfully.
+    */
+    SUCCEEDED = 1;
+
+    /**
+    There are more routes to try, but the payment timeout was exceeded.
+    */
+    FAILED_TIMEOUT = 2;
+    
+    /**
+    All possible routes were tried and failed permanently. Or were no
+    routes to the destination at all.
+    */
+    FAILED_NO_ROUTE = 3;
+
+    /**
+    A non-recoverable error has occured.
+    */
+    FAILED_ERROR = 4;
+
+    /**
+    Payment details incorrect (unknown hash, invalid amt or
+    invalid final cltv delta)
+    */
+    FAILED_INCORRECT_PAYMENT_DETAILS = 5;
+
+    /**
+    Insufficient local balance.
+    */
+    FAILED_INSUFFICIENT_BALANCE = 6;
+}
+
+message PaymentStatus {
+    /// Current state the payment is in.
+    PaymentState state = 1;
+
+    /**
+    The pre-image of the payment when state is SUCCEEDED.
+    */
+    bytes preimage = 2;
+
+    reserved 3;
+
+    /**
+    The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+    */
+    repeated lnrpc.HTLCAttempt htlcs = 4;
+}
+
+service Router {
+    /**
+    SendPaymentV2 attempts to route a payment described by the passed
+    PaymentRequest to the final destination. The call returns a stream of
+    payment updates.
+    */
+    rpc SendPaymentV2 (SendPaymentRequest) returns (stream lnrpc.Payment);
+
+    /**
+    TrackPaymentV2 returns an update stream for the payment identified by the
     payment hash.
     */
-    rpc TrackPayment (TrackPaymentRequest) returns (stream PaymentStatus);
+    rpc TrackPaymentV2 (TrackPaymentRequest) returns (stream lnrpc.Payment);
 
     /**
     EstimateRouteFee allows callers to obtain a lower bound w.r.t how much it
@@ -525,4 +540,21 @@ service Router {
     */
     rpc SubscribeHtlcEvents (SubscribeHtlcEventsRequest)
         returns (stream HtlcEvent);
+
+    /**
+    Deprecated, use SendPaymentV2. SendPayment attempts to route a payment 
+    described by the passed PaymentRequest to the final destination. The call
+    returns a stream of payment status updates.
+    */
+    rpc SendPayment(SendPaymentRequest) returns (stream PaymentStatus) {
+        option deprecated = true;
+    }
+
+    /**
+    Deprecated, use TrackPaymentV2. TrackPayment returns an update stream for
+    the payment identified by the payment hash.
+    */
+    rpc TrackPayment(TrackPaymentRequest) returns (stream PaymentStatus) {
+        option deprecated = true;
+    }
 }

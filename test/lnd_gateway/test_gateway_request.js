@@ -6,7 +6,7 @@ const gatewayRequest = require('./../../lnd_gateway/gateway_request');
 const {keys} = Object;
 
 const makeCall = override => {
-  const call = {arguments: {}, method: 'method', server: 'server'};
+  const call = {method: 'method', params: {}, server: 'server'};
 
   keys(override).forEach(attr => call[attr] = override[attr]);
 
@@ -38,8 +38,8 @@ const tests = [
     error: [400, 'ExpectedCallToMakeGatewayRequest'],
   },
   {
-    args: makeArgs({call: makeCall({arguments: undefined})}),
-    description: 'Call arguments are required',
+    args: makeArgs({call: makeCall({params: undefined})}),
+    description: 'Call params are required',
     error: [400, 'ExpectedCallArgumentsToMakeGatewayRequest'],
   },
   {
@@ -63,8 +63,8 @@ const tests = [
     error: [400, 'ExpectedUrlToMakeGatewayRequest'],
   },
   {
-    args: makeArgs({call: makeCall({arguments: {symbol: Symbol('foo')}})}),
-    description: 'An error encoding arguments is not expected',
+    args: makeArgs({call: makeCall({params: {symbol: Symbol('foo')}})}),
+    description: 'An error encoding params is not expected',
     error: [400, 'FailedToEncodeCborForGatewayRequest'],
   },
   {

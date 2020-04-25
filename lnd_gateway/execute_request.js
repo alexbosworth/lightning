@@ -4,9 +4,9 @@ const {returnResult} = require('asyncjs-util');
 /** Execute an LND request and get the CBOR encoded result
 
   {
-    arguments: <gRPC API Arguments Object>
     lnd: <gRPC LND Object>
     method: <Method Name String>
+    params: <gRPC API Arguments Object>
     service: <Service Name String>
   }
 
@@ -19,21 +19,21 @@ const {returnResult} = require('asyncjs-util');
     [res]: <Response Object>
   }
 */
-module.exports = ({arguments, lnd, method, service}, cbk) => {
+module.exports = ({lnd, method, params, service}, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!arguments) {
-          return cbk([400, 'ExpectedArgumentsToExecuteGatewayRequest']);
-        }
-
         if (!lnd) {
           return cbk([400, 'ExpectedLndToExecuteGatewayRequest']);
         }
 
         if (!method) {
           return cbk([400, 'ExpectedMethodToExecuteGatewayRequest']);
+        }
+
+        if (!params) {
+          return cbk([400, 'ExpectedArgumentsToExecuteGatewayRequest']);
         }
 
         if (!service) {
@@ -46,7 +46,7 @@ module.exports = ({arguments, lnd, method, service}, cbk) => {
       // Execute request
       execute: ['validate', ({}, cbk) => {
         try {
-          return lnd[service][method](arguments, (err, res) => {
+          return lnd[service][method](params, (err, res) => {
             if (!!err) {
               return cbk(null, {err});
             }

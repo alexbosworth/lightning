@@ -25,7 +25,7 @@ const successDenominator = 1e6;
           fee_msat: <Fee Millitokens String>
           pub_key: <Public Key Hex String>
         }]
-        total_amt: <Total Tokens Number>
+        total_amt: <Total Tokens String>
         total_amt_msat: <Route Total Millitokens String>
         total_fees: <Route Fee Tokens String>
         total_fees_msat: <Route Total Fees Millitokens String>

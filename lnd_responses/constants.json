@@ -1,4 +1,15 @@
 {
+  "attemptStates": {
+    "confirmed": "SUCCEEDED",
+    "failed": "FAILED",
+    "pending": "IN_FLIGHT"
+  },
+  "failureReason": {
+    "invalid_payment": "FAILURE_REASON_INCORRECT_PAYMENT_DETAILS",
+    "insufficient_balance": "FAILURE_REASON_INSUFFICIENT_BALANCE",
+    "pathfinding_timeout_failed": "FAILURE_REASON_TIMEOUT",
+    "pathfinding_routes_failed": "FAILURE_REASON_NO_ROUTE"
+  },
   "htlcStates": {
     "accepted": "ACCEPTED",
     "canceled": "CANCELED",
@@ -8,6 +19,12 @@
     "forward": "FORWARD",
     "receive": "RECEIVE",
     "send": "SEND"
+  },
+  "paymentStates": {
+    "insufficient_balance": "FAILED_INSUFFICIENT_BALANCE",
+    "invalid_payment": "FAILED_INCORRECT_PAYMENT_DETAILS",
+    "pathfinding_routes_failed": "FAILED_NO_ROUTE",
+    "pathfinding_timeout_failed": "FAILED_TIMEOUT"
   },
   "syncTypes": {
     "active": "ACTIVE_SYNC",

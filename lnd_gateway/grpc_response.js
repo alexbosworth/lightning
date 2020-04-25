@@ -31,8 +31,8 @@ module.exports = ({credentials}) => {
 
     return executeRequest({
       lnd,
-      arguments: body,
       method: params.method,
+      params: body,
       service: params.service,
     },
     returnResponse({res}).responder);
