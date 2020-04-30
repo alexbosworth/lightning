@@ -1,12 +1,15 @@
 const {randomBytes} = require('crypto');
 
 const asyncAuto = require('async/auto');
+const asyncEach = require('async/each');
 const asyncMap = require('async/map');
 const {returnResult} = require('asyncjs-util');
 
+const cancelPendingChannel = require('./cancel_pending_channel');
 const {isLnd} = require('./../../lnd_requests');
 
 const bufferFromHex = hex => Buffer.from(hex, 'hex');
+const defaultMinHtlcMtokens = '1';
 const fundEvent = 'psbt_fund';
 const hexFromBuffer = buffer => buffer.toString('hex');
 const {isArray} = Array;
@@ -80,16 +83,33 @@ module.exports = ({channels, lnd}, cbk) => {
         return cbk();
       },
 
+      // Channels to open
+      toOpen: ['validate', ({}, cbk) => {
+        return cbk(null, channels.map(channel => ({
+          capacity: channel.capacity,
+          id: makeId(),
+          cooperative_close_address: channel.cooperative_close_address,
+          give_tokens: channel.give_tokens,
+          is_private: channel.is_private,
+          min_htlc_mtokens: channel.min_htlc_mtokens,
+          partner_public_key: channel.partner_public_key,
+          partner_csv_delay: channel.partner_csv_delay,
+          partner_socket: channel.partner_socket,
+        })));
+      }],
+
       // Open channels
-      openChannels: ['validate', ({}, cbk) => {
-        return asyncMap(channels, (channel, cbk) => {
-          const id = makeId();
+      openChannels: ['toOpen', ({toOpen}, cbk) => {
+        return asyncMap(toOpen, (channel, cbk) => {
           let isDone = false;
 
           const channelOpen = lnd[type][method]({
-            funding_shim: {psbt_shim: {pending_chan_id: id}},
+            funding_shim: {psbt_shim: {pending_chan_id: channel.id}},
             local_funding_amount: channel.capacity,
+            min_htlc_msat: channel.min_htlc_mtokens || defaultMinHtlcMtokens,
             node_pubkey: bufferFromHex(channel.partner_public_key),
+            private: !!channel.is_private,
+            remote_csv_delay: channel.partner_csv_delay || undefined,
           });
 
           const done = (err, res) => {
@@ -109,7 +129,7 @@ module.exports = ({channels, lnd}, cbk) => {
               return done([503, 'InsufficientBalanceToOpenChannels', {err}]);
             }
 
-            return done([503, 'UnexpectedErrorOpeningChannels', {err}]);
+            return done(null, {err});
           });
 
           channelOpen.on('data', data => {
@@ -134,18 +154,45 @@ module.exports = ({channels, lnd}, cbk) => {
             }
 
             return done(null, {
-              address: data.psbt_fund.funding_address,
-              id: hexFromBuffer(id),
-              tokens: Number(data.psbt_fund.funding_amount),
+              pending: {
+                address: data.psbt_fund.funding_address,
+                id: hexFromBuffer(channel.id),
+                tokens: Number(data.psbt_fund.funding_amount),
+              },
             });
           });
         },
         cbk);
       }],
 
+      // Cancel all pending channels on failure
+      cancelFailures: [
+        'openChannels',
+        'toOpen',
+        ({openChannels, toOpen}, cbk) =>
+      {
+        const failedOpen = openChannels.find(n => !!n.err);
+
+        // Exit early when there is no error opening channels
+        if (!failedOpen) {
+          return cbk();
+        }
+
+        const {err} = failedOpen;
+
+        return asyncEach(toOpen, (channel, cbk) => {
+          const id = hexFromBuffer(channel.id);
+
+          return cancelPendingChannel({id, lnd}, () => cbk());
+        },
+        () => {
+          return cbk([503, 'UnexpectedErrorOpeningChannels', {err}]);
+        });
+      }],
+
       // Fund addresses with tokens
       fund: ['openChannels', ({openChannels}, cbk) => {
-        return cbk(null, {pending: openChannels});
+        return cbk(null, {pending: openChannels.map(n => n.pending)});
       }],
     },
     returnResult({reject, resolve, of: 'fund'}, cbk));

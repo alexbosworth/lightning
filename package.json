@@ -15,7 +15,7 @@
     "cbor": "5.0.2",
     "express": "4.17.1",
     "grpc": "1.24.2",
-    "invoices": "1.0.1",
+    "invoices": "1.0.2",
     "is-base64": "1.1.0"
   },
   "description": "Lightning Network client library",
@@ -46,5 +46,5 @@
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "2.0.0"
+  "version": "2.0.1"
 }

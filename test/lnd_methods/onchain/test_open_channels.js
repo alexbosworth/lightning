@@ -16,6 +16,7 @@ const makeChannels = ({}) => {
 const makeLnd = ({data, error}) => {
   return {
     default: {
+      fundingStateStep: ({}, cbk) => cbk(),
       openChannel: ({}) => {
         const eventEmitter = new EventEmitter();
 
