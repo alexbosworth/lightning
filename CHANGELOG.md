@@ -1,5 +1,9 @@
 # Versions
 
+## 2.0.1
+
+- `authenticatedLndGrpc`: Fix support for hex encoded macaroons
+
 ## 2.0.0
 
 - `authenticatedLndGrpc`: Add support for version RPC server
