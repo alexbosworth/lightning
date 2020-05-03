@@ -134,6 +134,7 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
     fee_mtokens: <Paid Routing Fee in Millitokens String>
     hops: [<First Route Hop Public Key Hex String>]
     id: <Payment Preimage Hash String>
+    [index]: <Payment Add Index Number>
     is_confirmed: <Payment is Confirmed Bool>
     is_outgoing: <Transaction Is Outgoing Bool>
     mtokens: <Millitokens Sent to Destination String>
@@ -215,6 +216,7 @@ module.exports = payment => {
     fee_mtokens: payment.fee_msat,
     hops: hops.reverse(),
     id: payment.payment_hash,
+    index: Number(payment.payment_index) || undefined,
     is_confirmed: payment.value_msat !== Number().toString(),
     is_outgoing: true,
     mtokens: payment.value_msat,

@@ -1,6 +1,6 @@
 # Versions
 
-## 2.0.2
+## 2.0.3
 
 - `authenticatedLndGrpc`: Fix support for hex encoded macaroons
 
