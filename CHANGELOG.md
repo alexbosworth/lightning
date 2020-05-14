@@ -1,5 +1,10 @@
 # Versions
 
+## 2.0.4
+
+- `authenticatedLndGrpc`: Adjust for changes to LND proto files
+- `unauthenticatedLndGrpc`: Adjust for changes to LND proto files
+
 ## 2.0.3
 
 - `authenticatedLndGrpc`: Fix support for hex encoded macaroons

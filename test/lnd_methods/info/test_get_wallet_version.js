@@ -79,6 +79,7 @@ const tests = [
       is_walletrpc_enabled: false,
       is_watchtowerrpc_enabled: false,
       is_wtclientrpc_enabled: false,
+      version: undefined,
     },
   },
 ];

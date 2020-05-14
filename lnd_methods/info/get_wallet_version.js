@@ -11,6 +11,7 @@ const isNumber = n => !isNaN(n);
 const method = 'getVersion';
 const type = 'version';
 const unknownServiceErr = 'unknown service verrpc.Versioner';
+const versions = {'1a3194d302f33bb52823297d9d7f75cd37516053': '0.10.0-beta'};
 
 /** Get wallet version
 
@@ -35,6 +36,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
     is_walletrpc_enabled: <Is Wallet RPC Enabled Bool>
     is_watchtowerrpc_enabled: <Is Watchtower Server RPC Enabled Bool>
     is_wtclientrpc_enabled: <Is Watchtower Client RPC Enabled Bool>
+    [version]: <Recognized LND Version String>
   }
 */
 module.exports = ({lnd}, cbk) => {
@@ -90,6 +92,7 @@ module.exports = ({lnd}, cbk) => {
             is_walletrpc_enabled: hasTag(res, packageTypes.WalletKit),
             is_watchtowerrpc_enabled: hasTag(res, packageTypes.Watchtower),
             is_wtclientrpc_enabled: hasTag(res, packageTypes.WatchtowerClient),
+            version: versions[res.commit_hash] || undefined,
           });
         });
       }],

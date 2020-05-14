@@ -30,8 +30,10 @@ const method = 'sendPaymentV2';
 const msPerSec = 1000;
 const mtokensPerToken = BigInt(1e3);
 const {nextTick} = process;
+const numberFromChannel = channel => chanNumber({channel}).number;
 const {round} = Math;
 const sha256 = preimage => createHash('sha256').update(preimage).digest();
+const singleChanIdsCommitHash = '1a3194d302f33bb52823297d9d7f75cd37516053';
 const type = 'router';
 const unknownServiceErr = 'unknown service verrpc.Versioner';
 
@@ -46,6 +48,10 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
   Specifying `features` is not supported on LND 0.8.2 and below
   Specifying `incoming_peer` is not supported on LND 0.8.2 and below
   Specifying `messages` is not supported on LND 0.8.2 and below
+
+  Specifying `max_paths` is not suppoorted on LND 0.9.2 and below
+
+  Specifying `outgoing_channels` is not supported on LND 0.10.0 and below
 
   {
     [cltv_delta]: <Final CLTV Delta Number>
@@ -66,6 +72,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
     }]
     [mtokens]: <Millitokens to Pay String>
     [outgoing_channel]: <Pay Out of Outgoing Channel Id String>
+    [outgoing_channels]: [<Pay Out of Outgoing Channel Ids String>]
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
     [request]: <BOLT 11 Payment Request String>
     [routes]: [[{
@@ -239,7 +246,7 @@ module.exports = args => {
 
     // Determine the wallet version to support LND 0.9.2 and below
     getVersion: cbk => {
-      return args.lnd.version.getVersion({}, err => {
+      return args.lnd.version.getVersion({}, (err, res) => {
         if (!!err && err.details === unknownServiceErr) {
           return cbk(null, {is_legacy: true});
         }
@@ -248,7 +255,7 @@ module.exports = args => {
           return cbk([503, 'UnexpectedVersionErrorForPaymentInit', {err}]);
         }
 
-        return cbk(null, {is_legacy: false});
+        return cbk(null, {commit_hash: res.commit_hash, is_legacy: false});
       });
     },
 
@@ -270,11 +277,39 @@ module.exports = args => {
       return cbk(null, maxDelta);
     }],
 
+    // Determine channel id restrictions if applicable, check compatibility
+    outgoingChannelIds: ['getVersion', ({getVersion}, cbk) => {
+      if (!!args.outgoing_channel && !args.outgoing_channels) {
+        return cbk(null, [numberFromChannel(args.outgoing_channel)]);
+      }
+
+      if (!args.outgoing_channels) {
+        return cbk();
+      }
+
+      if (!isArray(args.outgoing_channels)) {
+        return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay']);
+      }
+
+      if (!!getVersion.is_legacy) {
+        return cbk([501, 'BackingLndVersionDoesNotSupportManyChannelOuts']);
+      }
+
+      if (getVersion.commit_hash === singleChanIdsCommitHash) {
+        return cbk([501, 'BackingLndVersionDoesNotSupportMultipleChannelIds']);
+      }
+
+      return cbk(null, args.outgoing_channels.map(channel => {
+        return chanNumber({channel}).number;
+      }));
+    }],
+
     // Final payment parameters
     params: [
       'getVersion',
       'maxCltvDelta',
-      ({getVersion, maxCltvDelta}, cbk) =>
+      'outgoingChannelIds',
+      ({getVersion, maxCltvDelta, outgoingChannelIds}, cbk) =>
     {
       const amounts = paymentAmounts({
         max_fee: args.max_fee,
@@ -303,9 +338,10 @@ module.exports = args => {
         fee_limit_sat: amounts.max_fee,
         final_cltv_delta: !args.request ? finalCltv : undefined,
         last_hop_pubkey: hexToBuf(args.incoming_peer),
-        max_shards: args.max_paths || undefined,
+        max_parts: args.max_paths || undefined,
         no_inflight_updates: true,
         outgoing_chan_id: !channel ? undefined : chanNumber({channel}).number,
+        outgoing_chan_ids: outgoingChannelIds,
         payment_hash: !args.id ? undefined : hexToBuf(args.id),
         payment_request: !args.request ? undefined : args.request,
         route_hints: !hints.length ? undefined : hints,

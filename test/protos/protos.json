@@ -2,8 +2,9 @@
   "overrides": [
     ["invoices", 2],
     ["router", 171],
-    ["rpc", 3102],
-    ["walletkit", 3]
+    ["rpc", 2930],
+    ["walletkit", 3],
+    ["walletunlocker", 2]
   ],
   "protos": [
     ["autopilotrpc", "autopilot"],
@@ -14,6 +15,7 @@
     ["signrpc", "signer"],
     ["verrpc", "verrpc"],
     ["walletrpc", "walletkit"],
+    ["walletunlocker"],
     ["watchtowerrpc", "watchtower"],
     ["wtclientrpc", "wtclient"]
   ]

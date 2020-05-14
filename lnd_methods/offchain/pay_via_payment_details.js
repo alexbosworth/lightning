@@ -23,6 +23,10 @@ const type = 'router';
 
   `incoming_peer` is not supported on LND 0.8.2 and below
 
+  Specifying `max_paths` is not suppoorted on LND 0.9.2 and below
+
+  Specifying `outgoing_channels` is not supported on LND 0.10.0 and below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
     destination: <Destination Public Key String>
@@ -34,6 +38,7 @@ const type = 'router';
     lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Fee Tokens To Pay Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens to Pay String>
+    [max_paths]: <Maximum Simultaneous Paths Number>
     [max_timeout_height]: <Maximum Height of Payment Timeout Number>
     [messages]: [{
       type: <Message Type Number String>
@@ -41,6 +46,7 @@ const type = 'router';
     }]
     [mtokens]: <Millitokens to Pay String>
     [outgoing_channel]: <Pay Out of Outgoing Channel Id String>
+    [outgoing_channels]: [<Pay Out of Outgoing Channel Ids String>]
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
     routes: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
@@ -115,6 +121,7 @@ module.exports = (args, cbk) => {
             lnd: args.lnd,
             max_fee: args.max_fee,
             max_fee_mtokens: args.max_fee_mtokens,
+            max_paths: args.max_paths,
             max_timeout_height: args.max_timeout_height,
             messages: args.messages,
             mtokens: args.mtokens,

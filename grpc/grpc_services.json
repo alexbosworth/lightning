@@ -26,7 +26,7 @@
     "Signer": "signer.proto",
     "Router": "router.proto",
     "Versioner": "verrpc.proto",
-    "WalletUnlocker": "rpc.proto",
+    "WalletUnlocker": "walletunlocker.proto",
     "WalletKit": "walletkit.proto",
     "Watchtower": "watchtower.proto",
     "WatchtowerClient": "wtclient.proto"

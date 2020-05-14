@@ -19,6 +19,7 @@ const {getPeers} = require('./peers');
 const {getPendingChainBalance} = require('./onchain');
 const {getRouteThroughHops} = require('./offchain');
 const {getRouteToDestination} = require('./info');
+const {getSweepTransactions} = require('./onchain');
 const {getWalletInfo} = require('./info');
 const {getWalletVersion} = require('./info');
 const {openChannels} = require('./onchain');
@@ -59,6 +60,7 @@ module.exports = {
   getPendingChainBalance,
   getRouteThroughHops,
   getRouteToDestination,
+  getSweepTransactions,
   getWalletInfo,
   getWalletVersion,
   openChannels,
