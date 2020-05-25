@@ -11,6 +11,7 @@ const policyFromChannelUpdate = require('./policy_from_channel_update');
 const routesFromQueryRoutes = require('./routes_from_query_routes');
 const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
 const rpcChannelAsChannel = require('./rpc_channel_as_channel');
+const rpcForwardAsForward = require('./rpc_forward_as_forward');
 const rpcHopAsHop = require('./rpc_hop_as_hop');
 const rpcInvoiceAsInvoice = require('./rpc_invoice_as_invoice');
 const rpcPaymentAsPayment = require('./rpc_payment_as_payment');
@@ -33,6 +34,7 @@ module.exports = {
   routesFromQueryRoutes,
   rpcAttemptHtlcAsAttempt,
   rpcChannelAsChannel,
+  rpcForwardAsForward,
   rpcHopAsHop,
   rpcInvoiceAsInvoice,
   rpcPaymentAsPayment,

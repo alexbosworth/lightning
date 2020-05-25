@@ -21,7 +21,7 @@ const type = 'router';
 
   {
     [incoming_peer]: <Pay Through Specific Final Hop Public Key Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Fee Tokens To Pay Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens to Pay String>
     [max_paths]: <Maximum Simultaneous Paths Number>

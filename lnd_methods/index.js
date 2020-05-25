@@ -11,6 +11,7 @@ const {getChainBalance} = require('./onchain');
 const {getChannel} = require('./info');
 const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
+const {getForwards} = require('./offchain');
 const {getInvoice} = require('./invoices');
 const {getNetworkCentrality} = require('./info');
 const {getNode} = require('./info');
@@ -52,6 +53,7 @@ module.exports = {
   getChannel,
   getChannelBalance,
   getChannels,
+  getForwards,
   getInvoice,
   getNetworkCentrality,
   getNode,

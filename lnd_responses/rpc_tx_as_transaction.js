@@ -11,6 +11,7 @@ const notFound = -1;
     block_hash: <Included In Block Hash Hex String>
     block_height: <Block Hash In Best Chain At Block Height Number>
     dest_addresses: [<Output Address String>]
+    label: <Label String>
     num_confirmations: <Confirmation Count Number>
     raw_tx_hex: <Raw Transaction Serialized Hex String>
     time_stamp: <Transaction Created At Epoch Time String>
@@ -27,6 +28,7 @@ const notFound = -1;
     [confirmation_count]: <Confirmation Count Number>
     [confirmation_height]: <Confirmation Block Height Number>
     created_at: <Created ISO 8601 Date String>
+    [description]: <Transaction Label String>
     [fee]: <Fees Paid Tokens Number>
     id: <Transaction Id String>
     is_confirmed: <Is Confirmed Bool>
@@ -82,6 +84,7 @@ module.exports = tx => {
     confirmation_count: tx.num_confirmations || undefined,
     confirmation_height: tx.block_height || undefined,
     created_at: new Date(Number(tx.time_stamp) * msPerSec).toISOString(),
+    description: tx.label || undefined,
     fee: Number(tx.total_fees) || undefined,
     id: tx.tx_hash,
     is_confirmed: !!tx.num_confirmations,

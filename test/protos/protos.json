@@ -2,7 +2,7 @@
   "overrides": [
     ["invoices", 2],
     ["router", 171],
-    ["rpc", 2930],
+    ["rpc", 2939],
     ["walletkit", 3],
     ["walletunlocker", 2]
   ],

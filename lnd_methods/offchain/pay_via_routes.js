@@ -7,6 +7,7 @@ const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 const maxHopsCount = 20;
+const notFound = -1;
 
 /** Make a payment via a specified route
 
@@ -101,6 +102,10 @@ module.exports = (args, cbk) => {
 
         if (!isArray(args.routes) || !args.routes.length) {
           return cbk([400, 'ExpectedArrayOfRoutesToPayViaRoutes']);
+        }
+
+        if (args.routes.findIndex(n => !isArray(n.hops)) !== notFound) {
+          return cbk([400, 'ExpectedArrayOfHopsForPayViaRoute']);
         }
 
         if (!!args.routes.find(n => n.hops.find(hop => !hop.public_key))) {
