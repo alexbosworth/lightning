@@ -38,6 +38,7 @@ const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
 const {subscribeToProbeForRoute} = require('./offchain');
+const {updateChainTransaction} = require('./onchain');
 
 module.exports = {
   addPeer,
@@ -80,4 +81,5 @@ module.exports = {
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
+  updateChainTransaction,
 };

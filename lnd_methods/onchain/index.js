@@ -5,6 +5,7 @@ const getPendingChainBalance = require('./get_pending_chain_balance');
 const getSweepTransactions = require('./get_sweep_transactions');
 const openChannels = require('./open_channels');
 const setAutopilot = require('./set_autopilot');
+const updateChainTransaction = require('./update_chain_transaction');
 
 module.exports = {
   cancelPendingChannel,
@@ -14,4 +15,5 @@ module.exports = {
   getSweepTransactions,
   openChannels,
   setAutopilot,
+  updateChainTransaction,
 };
