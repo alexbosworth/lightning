@@ -25,6 +25,7 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const mtokensByteLength = 8;
 const noRouteErrorDetails = 'unable to find a path to destination';
 const paymentFromMppRecord = n => n.value.slice(0, 64);
+const paymentTooLargeError = /is.too.large/;
 const targetNotFoundError = 'target not found';
 const tokensAsMtokens = n => (BigInt(n) * BigInt(1e3)).toString();
 const trimByte = 0;
@@ -264,6 +265,10 @@ module.exports = (args, cbk) => {
 
           if (!!err && err.details === targetNotFoundError) {
             return cbk([503, 'TargetNotFoundError']);
+          }
+
+          if (!!err && paymentTooLargeError.test(err.details)) {
+            return cbk([400, 'PaymentTooLargeToFindRoute', {err}]);
           }
 
           if (!!err) {

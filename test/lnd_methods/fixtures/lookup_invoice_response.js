@@ -44,7 +44,7 @@
         chan_id: <Numeric Channel Id String>
         cltv_expiry_delta: <CLTV Delta Number>
         fee_base_msat: <Base Fee Number>
-        fee_proportional_millionths: <Fee Parts Per Million Number>
+        fee_proportional_millionths: <Fee Parts Millitokens Per Million Number>
         node_id: <Node Public Key Hex String>
       }]
     }]

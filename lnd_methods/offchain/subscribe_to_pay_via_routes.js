@@ -77,7 +77,7 @@ const unknownWireError = 'unknown wire error';
         [policy]: {
           base_fee_mtokens: <Base Fee Millitokens String>
           cltv_delta: <Locktime Delta Number>
-          fee_rate: <Fees Charged Per Million Tokens Number>
+          fee_rate: <Fees Charged in Millitokens Per Million Number>
           [is_disabled]: <Channel is Disabled Bool>
           max_htlc_mtokens: <Maximum HLTC Millitokens value String>
           min_htlc_mtokens: <Minimum HTLC Millitokens Value String>
@@ -124,7 +124,7 @@ const unknownWireError = 'unknown wire error';
     [policy]: {
       base_fee_mtokens: <Base Fee Millitokens String>
       cltv_delta: <Locktime Delta Number>
-      fee_rate: <Fees Charged Per Million Tokens Number>
+      fee_rate: <Fees Charged in Millitokens Per Million Number>
       [is_disabled]: <Channel is Disabled Bool>
       max_htlc_mtokens: <Maximum HLTC Millitokens value String>
       min_htlc_mtokens: <Minimum HTLC Millitokens Value String>
