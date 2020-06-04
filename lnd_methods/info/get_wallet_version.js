@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 const {packageTypes} = require('./../../grpc');
+const {versions} = require('./constants');
 
 const hasTag = (res, tag) => res.build_tags.includes(tag);
 const {isArray} = Array;
@@ -11,7 +12,6 @@ const isNumber = n => !isNaN(n);
 const method = 'getVersion';
 const type = 'version';
 const unknownServiceErr = 'unknown service verrpc.Versioner';
-const versions = {'1a3194d302f33bb52823297d9d7f75cd37516053': '0.10.0-beta'};
 
 /** Get wallet version
 
