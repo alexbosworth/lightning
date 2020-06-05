@@ -24,6 +24,7 @@ const {getSweepTransactions} = require('./onchain');
 const {getUtxos} = require('./onchain');
 const {getWalletInfo} = require('./info');
 const {getWalletVersion} = require('./info');
+const {lockUtxo} = require('./onchain');
 const {openChannels} = require('./onchain');
 const {payViaPaymentDetails} = require('./offchain');
 const {payViaPaymentRequest} = require('./offchain');
@@ -39,6 +40,7 @@ const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
 const {subscribeToProbeForRoute} = require('./offchain');
+const {unlockUtxo} = require('./onchain');
 const {updateChainTransaction} = require('./onchain');
 
 module.exports = {
@@ -68,6 +70,7 @@ module.exports = {
   getUtxos,
   getWalletInfo,
   getWalletVersion,
+  lockUtxo,
   openChannels,
   payViaPaymentDetails,
   payViaPaymentRequest,
@@ -83,5 +86,6 @@ module.exports = {
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
+  unlockUtxo,
   updateChainTransaction,
 };
