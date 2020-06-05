@@ -21,6 +21,7 @@ const {getPendingChainBalance} = require('./onchain');
 const {getRouteThroughHops} = require('./offchain');
 const {getRouteToDestination} = require('./info');
 const {getSweepTransactions} = require('./onchain');
+const {getUtxos} = require('./onchain');
 const {getWalletInfo} = require('./info');
 const {getWalletVersion} = require('./info');
 const {openChannels} = require('./onchain');
@@ -64,6 +65,7 @@ module.exports = {
   getRouteThroughHops,
   getRouteToDestination,
   getSweepTransactions,
+  getUtxos,
   getWalletInfo,
   getWalletVersion,
   openChannels,

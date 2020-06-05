@@ -14,14 +14,14 @@
     "bn.js": "5.1.2",
     "cbor": "5.0.2",
     "express": "4.17.1",
-    "grpc": "1.24.2",
+    "grpc": "1.24.3",
     "invoices": "1.0.2"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
     "request-promise-native": "1.0.8",
     "tap": "14.10.7",
-    "typescript": "3.9.3",
+    "typescript": "3.9.5",
     "ws": "7.3.0"
   },
   "engines": {
@@ -45,5 +45,5 @@
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "2.0.8"
+  "version": "2.0.9"
 }
