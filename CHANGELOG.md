@@ -1,6 +1,6 @@
 # Versions
 
-## 2.0.11
+## 2.0.12
 
 - `authenticatedLndGrpc`: Adjust for changes to LND proto files
 - `unauthenticatedLndGrpc`: Adjust for changes to LND proto files
