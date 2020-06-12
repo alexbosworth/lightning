@@ -232,8 +232,11 @@ const tests = [
       internal_failure: 'failure_detail',
       is_failed: true,
       is_receive: true,
+      mtokens: undefined,
       out_channel: undefined,
       out_payment: undefined,
+      timeout: undefined,
+      tokens: undefined,
     }),
   },
   {

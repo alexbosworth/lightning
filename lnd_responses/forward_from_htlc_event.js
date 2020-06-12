@@ -183,6 +183,8 @@ module.exports = htlc => {
   const cltvDelta = Number(info.incoming_timelock) - outgoingCltvHeight;
   const feeMtok = (BigInt(info.incoming_amt_msat) - outgoingAmount).toString();
 
+  const {tokens} = safeTokens({mtokens: info.outgoing_amt_msat});
+
   return {
     at: createdAt.toISOString(),
     cltv_delta: !isForward ? undefined : cltvDelta,
@@ -196,10 +198,10 @@ module.exports = htlc => {
     is_failed: !!htlc.link_fail_event,
     is_receive: isReceive,
     is_send: isSend,
-    mtokens: info.outgoing_amt_msat,
+    mtokens: !!isReceive ? undefined : info.outgoing_amt_msat,
     out_channel: !!isReceive ? undefined : outgoing.channel,
     out_payment: !!isReceive ? undefined : outgoingId,
-    timeout: outgoingCltvHeight,
-    tokens: safeTokens({mtokens: info.outgoing_amt_msat}).tokens,
+    timeout: !!isReceive ? undefined : outgoingCltvHeight,
+    tokens: !!isReceive ? undefined : tokens,
   };
 };
