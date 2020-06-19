@@ -279,10 +279,6 @@ module.exports = args => {
 
     // Determine channel id restrictions if applicable, check compatibility
     outgoingChannelIds: ['getVersion', ({getVersion}, cbk) => {
-      if (!!args.outgoing_channel && !args.outgoing_channels) {
-        return cbk(null, [numberFromChannel(args.outgoing_channel)]);
-      }
-
       if (!args.outgoing_channels) {
         return cbk();
       }
@@ -297,6 +293,10 @@ module.exports = args => {
 
       if (getVersion.commit_hash === singleChanIdsCommitHash) {
         return cbk([501, 'BackingLndVersionDoesNotSupportMultipleChannelIds']);
+      }
+
+      if (!!args.outgoing_channel && !args.outgoing_channels) {
+        return cbk(null, [numberFromChannel(args.outgoing_channel)]);
       }
 
       return cbk(null, args.outgoing_channels.map(channel => {
@@ -326,6 +326,9 @@ module.exports = args => {
       },
       {});
 
+      const singleOut = !channel ? undefined : chanNumber({channel}).number;
+      const hasOutIds = !!outgoingChannelIds && !!outgoingChannelIds.length;
+
       return cbk(null, {
         allow_self_payment: true,
         amt: amounts.tokens,
@@ -340,7 +343,7 @@ module.exports = args => {
         last_hop_pubkey: hexToBuf(args.incoming_peer),
         max_parts: args.max_paths || undefined,
         no_inflight_updates: true,
-        outgoing_chan_id: !channel ? undefined : chanNumber({channel}).number,
+        outgoing_chan_id: !hasOutIds ? singleOut : undefined,
         outgoing_chan_ids: outgoingChannelIds,
         payment_hash: !args.id ? undefined : hexToBuf(args.id),
         payment_request: !args.request ? undefined : args.request,
