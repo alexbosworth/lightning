@@ -1,4 +1,9 @@
 {
+  "forwardPaymentActions": {
+    "accept": "RESUME",
+    "reject": "FAIL",
+    "settle": "SETTLE"
+  },
   "states": {
     "confirmed": "SUCCEEDED",
     "errored": "FAILED_ERROR",

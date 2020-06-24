@@ -32,6 +32,7 @@ const {payViaRequest} = require('./offchain');
 const {payViaRoutes} = require('./offchain');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
+const {subscribeToForwardRequests} = require('./offchain');
 const {subscribeToForwards} = require('./offchain');
 const {subscribeToInvoice} = require('./invoices');
 const {subscribeToInvoices} = require('./invoices');
@@ -78,6 +79,7 @@ module.exports = {
   payViaRoutes,
   setAutopilot,
   settleHodlInvoice,
+  subscribeToForwardRequests,
   subscribeToForwards,
   subscribeToInvoice,
   subscribeToInvoices,

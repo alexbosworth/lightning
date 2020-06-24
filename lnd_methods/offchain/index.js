@@ -7,6 +7,7 @@ const getRouteThroughHops = require('./get_route_through_hops');
 const payViaPaymentDetails = require('./pay_via_payment_details');
 const payViaPaymentRequest = require('./pay_via_payment_request');
 const payViaRoutes = require('./pay_via_routes');
+const subscribeToForwardRequests = require('./subscribe_to_forward_requests');
 const subscribeToForwards = require('./subscribe_to_forwards');
 const subscribeToPastPayment = require('./subscribe_to_past_payment');
 const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
@@ -24,6 +25,7 @@ module.exports = {
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,
+  subscribeToForwardRequests,
   subscribeToForwards,
   subscribeToPastPayment,
   subscribeToPayViaDetails,
