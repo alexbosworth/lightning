@@ -11,6 +11,9 @@ const type = 'router';
 
 /** Subscribe to requests to forward payments
 
+  Note that the outbound channel is only the requested channel, another may be
+  selected internally to complete the forward.
+
   Requires `offchain:read`, `offchain:write` permission
 
   This method is not supported on LND 0.10.2 and below
@@ -28,14 +31,22 @@ const type = 'router';
   @event 'forward_request`
   {
     accept: () => {}
+    cltv_delta: <Difference Between Out and In CLTV Height Number>
+    fee: <Routing Fee Tokens Rounded Down Number>
+    fee_mtokens: <Routing Fee Millitokens String>
     hash: <Payment Hash Hex String>
     in_channel: <Inbound Standard Format Channel Id String>
     in_payment: <Inbound Channel Payment Id Number>
+    messages: [{
+      type: <Message Type Number String>
+      value: <Raw Value Hex String>
+    }]
     mtokens: <Millitokens to Forward To Next Peer String>
+    out_channel: <Requested Outbound Channel Standard Format Id String>
     reject: <Reject Forward Function> () => {}
     settle: <Short Circuit Function> ({secret: <Preimage Hex String}) => {}
-    tokens: <Tokens to Forward Rounded Down Number>
     timeout: <CLTV Timeout Height Number>
+    tokens: <Tokens to Forward to Next Peer Rounded Down Number>
   }
 */
 module.exports = ({lnd}) => {
@@ -75,10 +86,15 @@ module.exports = ({lnd}) => {
           action: forwardPaymentActions.accept,
           incoming_circuit_key: data.incoming_circuit_key,
         }),
+        cltv_delta: request.cltv_delta,
+        fee: request.fee,
+        fee_mtokens: request.fee_mtokens,
         hash: request.hash,
         in_channel: request.in_channel,
         in_payment: request.in_payment,
+        messages: request.messages,
         mtokens: request.mtokens,
+        out_channel: request.out_channel,
         reject: () => sub.write({
           action: forwardPaymentActions.reject,
           incoming_circuit_key: data.incoming_circuit_key,
@@ -89,6 +105,7 @@ module.exports = ({lnd}) => {
           preimage: bufferFromHex(secret),
         }),
         timeout: request.timeout,
+        tokens: request.tokens,
       });
     } catch (err) {
       return emitErr([503, err.message]);

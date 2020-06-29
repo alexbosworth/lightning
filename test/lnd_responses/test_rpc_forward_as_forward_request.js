@@ -4,13 +4,16 @@ const {rpcForwardAsForwardRequest} = require('./../../lnd_responses');
 
 const makeForward = override => {
   const forward = {
-    amount_msat: '1',
-    expiry: 1,
-    htlc_payment_hash: Buffer.alloc(32),
-    incoming_circuit_key: {
-      chan_id: '1',
-      htlc_id: '0',
+    custom_records: {
+      '\u0010\u0000\u0000\u0000\u0000\u0000\u0000\u0000': Buffer.alloc(1, 1),
     },
+    incoming_amount_msat: '2',
+    incoming_circuit_key: {chan_id: '1', htlc_id: 0},
+    incoming_expiry: 2,
+    outgoing_amount_msat: '1',
+    outgoing_expiry: 1,
+    outgoing_requested_chan_id: '2',
+    payment_hash: Buffer.alloc(32),
   };
 
   Object.keys(override).forEach(key => forward[key] = override[key]);
@@ -25,19 +28,14 @@ const tests = [
     error: 'ExpectedRpcForwardRequestToMapToForwardRequest',
   },
   {
-    args: makeForward({amount_msat: undefined}),
-    description: 'Amount is expected',
-    error: 'ExpectedAmountMillitokensInRpcForwardRequest',
+    args: makeForward({custom_records: undefined}),
+    description: 'Custom records are expected',
+    error: 'ExpectedCustomRecordsInRpcForwardRequest',
   },
   {
-    args: makeForward({expiry: undefined}),
-    description: 'Expiry is expected',
-    error: 'ExpectedCltvTimeoutHeightInRpcForwardRequest',
-  },
-  {
-    args: makeForward({htlc_payment_hash: undefined}),
-    description: 'A payment preimage hash is expected',
-    error: 'ExpectedPaymentHashBufferInRpcForwardRequest',
+    args: makeForward({incoming_amount_msat: undefined}),
+    description: 'Incoming amount is expected',
+    error: 'ExpectedIncomingAmountMillitokensInRpcForwardRequest',
   },
   {
     args: makeForward({incoming_circuit_key: undefined}),
@@ -55,14 +53,54 @@ const tests = [
     error: 'ExpectedInboundChannelHtlcIndexInRpcForwardRequest',
   },
   {
+    args: makeForward({incoming_expiry: undefined}),
+    description: 'Incoming expiry is expected',
+    error: 'ExpectedCltvTimeoutHeightInRpcForwardRequest',
+  },
+  {
+    args: makeForward({outgoing_amount_msat: undefined}),
+    description: 'An outgoing amount is expected',
+    error: 'ExpectedOutgoingAmountMillitokensInRpcForwardRequest',
+  },
+  {
+    args: makeForward({outgoing_expiry: undefined}),
+    description: 'An outgoing expiry height is expected',
+    error: 'ExpectedOutgoingExpiryHeightInRpcForwardRequest',
+  },
+  {
+    args: makeForward({outgoing_expiry: 3}),
+    description: 'An outgoing expiry height is expected',
+    error: 'ExpectedIncomingForwardExpiryHigherThanOutgoingExpiry',
+  },
+  {
+    args: makeForward({outgoing_requested_chan_id: undefined}),
+    description: 'An outgoing requested channel id is expected',
+    error: 'ExpectedOutgoingRequestedChannelIdInRpcForwardRequest',
+  },
+  {
+    args: makeForward({payment_hash: undefined}),
+    description: 'A payment preimage hash is expected',
+    error: 'ExpectedPaymentHashBufferInRpcForwardRequest',
+  },
+  {
+    args: makeForward({outgoing_amount_msat: '3'}),
+    description: 'Outgoing amount should be equal or less than incoming',
+    error: 'UnexpectedNegativeFeeInRpcForwardRequest',
+  },
+  {
     args: makeForward({}),
     description: 'An RPC forward request is mapped to a request',
     expected: {
+      cltv_delta: 1,
+      fee: 0,
+      fee_mtokens: '1',
       hash: Buffer.alloc(32).toString('hex'),
       in_channel: '0x0x1',
       in_payment: 0,
+      messages: [{type: '16', value: '01'}],
       mtokens: '1',
-      timeout: 1,
+      out_channel: '0x0x2',
+      timeout: 2,
       tokens: 0,
     },
   },
