@@ -23,6 +23,14 @@ const outpointDelimiter = ':';
     lifetime: <Channel Internal Monitoring For Seconds Number>
     local_balance: <Own Balance Tokens String>
     local_chan_reserve_sat: <Local Amount Reserve Minimum Limit Tokens String>
+    [local_constraints]: {
+      chan_reserve_sat: <Reserve Minimum Limit Tokens String>
+      csv_delay: <Required Blocks Wait Time After Force Close Number>
+      dust_limit_sat: <Minimum Output Tokens String>
+      max_accepted_htlcs: <Maximum Number of HTLCS Number>
+      max_pending_amt_msat: <Max Millitokens Pending String>
+      min_htlc_msat: <Minimum Millitokens HTLC String>
+    }
     num_updates: <Updated Channel Count String>
     pending_htlcs: [{
       amount: <HTLC Tokens Amount String>
@@ -34,6 +42,14 @@ const outpointDelimiter = ':';
     push_amount_sat: <Push Amount Tokens Number String>
     remote_balance: <Peer Balance Tokens String>
     remote_chan_reserve_sat: <Peer Amount Reserve Minimum Limit Tokens String>
+    [remote_constraints]: {
+      chan_reserve_sat: <Reserve Minimum Limit Tokens String>
+      csv_delay: <Required Blocks Wait Time After Force Close Number>
+      dust_limit_sat: <Minimum Output Tokens String>
+      max_accepted_htlcs: <Maximum Number of HTLCS Number>
+      max_pending_amt_msat: <Max Millitokens Pending String>
+      min_htlc_msat: <Minimum Millitokens HTLC String>
+    }
     remote_pubkey: <Peer Public Key Hex String>
     static_remote_key: <Channel Uses Seed Recoverable Key Type Bool>
     total_satoshis_received: <Total Tokens Transferred Inbound String>
@@ -59,7 +75,12 @@ const outpointDelimiter = ':';
     is_private: <Channel Is Private Bool>
     [is_static_remote_key]: <Remote Key Is Static Bool>
     local_balance: <Local Balance Tokens Number>
+    [local_csv]: <Local CSV Blocks Delay Number>
+    [local_dust]: <Remote Non-Enforceable Amount Tokens Number>
     [local_given]: <Local Initially Pushed Tokens Number>
+    [local_max_htlcs]: <Local Maximum Attached HTLCs Number>
+    [local_max_pending_mtokens]: <Local Maximum Pending Millitokens String>
+    [local_min_htlc_mtokens]: <Local Minimum HTLC Millitokens String>
     local_reserve: <Local Reserved Tokens Number>
     partner_public_key: <Channel Partner Public Key String>
     pending_payments: [{
@@ -70,7 +91,12 @@ const outpointDelimiter = ':';
     }]
     received: <Received Tokens Number>
     remote_balance: <Remote Balance Tokens Number>
+    [remote_csv]: <Remote CSV Blocks Delay Number>
+    [remote_dust]: <Remote Non-Enforceable Amount Tokens Number>
     [remote_given]: <Remote Initially Pushed Tokens Number>
+    [remote_max_htlcs]: <Remote Maximum Attached HTLCs Number>
+    [remote_max_pending_mtokens]: <Remote Maximum Pending Millitokens String>
+    [remote_min_htlc_mtokens]: <Remote Minimum HTLC Millitokens String>
     remote_reserve: <Remote Reserved Tokens Number>
     sent: <Sent Tokens Number>
     [time_offline]: <Monitoring Uptime Channel Down Milliseconds Number>
@@ -154,13 +180,18 @@ module.exports = args => {
   }
 
   const commitWeight = Number(args.commit_weight);
-  const localReserveTokens = Number(args.local_chan_reserve_sat);
+  const own = args.local_constraints;
+  const peer = args.remote_constraints;
   const pushAmount = Number(args.push_amount_sat) || Number();
-  const remoteReserveTokens = Number(args.remote_chan_reserve_sat);
   const [transactionId, vout] = args.channel_point.split(outpointDelimiter);
   const uptime = Number(args.uptime) * msPerSec;
 
+  const ownReserve = !!own ? own.chan_reserve_sat : null;
+  const peerReserve = !!peer ? peer.chan_reserve_sat : null;
+
   const downtime = Number(args.lifetime) * msPerSec - uptime;
+  const localReserve = Number(ownReserve || args.local_chan_reserve_sat);
+  const remoteReserve = Number(peerReserve || args.remote_chan_reserve_sat);
 
   return {
     capacity: Number(args.capacity),
@@ -175,14 +206,24 @@ module.exports = args => {
     is_private: args.private,
     is_static_remote_key: args.static_remote_key || undefined,
     local_balance: Number(args.local_balance),
+    local_csv: !!own ? own.csv_delay : undefined,
+    local_dust: !!own ? Number(own.dust_limit_sat) : undefined,
     local_given: !!args.initiator ? pushAmount : Number(),
-    local_reserve: localReserveTokens || undefined,
+    local_max_htlcs: !!own ? own.max_accepted_htlcs : undefined,
+    local_max_pending_mtokens: !!own ? own.max_pending_amt_msat : undefined,
+    local_min_htlc_mtokens: !!own ? own.min_htlc_msat : undefined,
+    local_reserve: localReserve || undefined,
     partner_public_key: args.remote_pubkey,
     pending_payments: args.pending_htlcs.map(rpcHtlcAsPayment),
     received: Number(args.total_satoshis_received),
     remote_balance: Number(args.remote_balance),
+    remote_csv: !!peer ? peer.csv_delay : undefined,
+    remote_dust: !!peer ? Number(peer.dust_limit_sat) : undefined,
     remote_given: !args.initiator ? pushAmount : Number(),
-    remote_reserve: remoteReserveTokens || undefined,
+    remote_max_htlcs: !!peer ? peer.max_accepted_htlcs : undefined,
+    remote_max_pending_mtokens: !!peer ? peer.max_pending_amt_msat : undefined,
+    remote_min_htlc_mtokens: !!peer ? peer.min_htlc_msat : undefined,
+    remote_reserve: remoteReserve || undefined,
     sent: Number(args.total_satoshis_sent),
     time_offline: downtime || undefined,
     time_online: uptime || undefined,
