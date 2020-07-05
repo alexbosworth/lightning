@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 
+const asyncDoUntil = require('async/doUntil');
 const {chanFormat} = require('bolt07');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -7,7 +8,9 @@ const {forwardFromHtlcEvent} = require('./../../lnd_responses');
 
 const event = 'forward';
 const method = 'subscribeHtlcEvents';
+const restartForwardListenerDelayMs = 1e3;
 const type = 'router';
+const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
 
 /** Subscribe to HTLC events
 
@@ -52,7 +55,6 @@ module.exports = ({lnd}) => {
   }
 
   const emitter = new EventEmitter();
-  const sub = lnd[type][method]({});
 
   const emitErr = err => {
     if (!emitter.listenerCount('error')) {
@@ -61,6 +63,8 @@ module.exports = ({lnd}) => {
 
     return emitter.emit('error', err);
   };
+
+  const sub = lnd[type][method]({});
 
   sub.on('data', data => {
     try {
@@ -72,9 +76,52 @@ module.exports = ({lnd}) => {
     return;
   });
 
-  sub.on('end', () => emitter.emit('end'));
-  sub.on('error', err => emitErr(err));
-  sub.on('status', n => emitter.emit('status', n));
+  sub.on('error', err => {
+    sub.removeAllListeners();
+
+    return emitErr(err);
+  });
+
+  asyncDoUntil(
+    cbk => {
+      if (!!sub.listenerCount('data')) {
+        return setTimeout(cbk, restartForwardListenerDelayMs);
+      }
+
+      const subscription = lnd[type][method]({});
+
+      subscription.on('data', data => {
+        try {
+          emitter.emit(event, forwardFromHtlcEvent(data));
+        } catch (err) {
+          emitErr([503, err.message]);
+        }
+
+        return;
+      });
+
+      subscription.on('error', err => {
+        subscription.removeAllListeners();
+
+        // The unknown failure message happens sometimes
+        if (err.message !== unknownFailureMessage) {
+          emitErr(err);
+        }
+
+        return setTimeout(cbk, restartForwardListenerDelayMs);
+      });
+    },
+    cbk => cbk(null, !emitter.listenerCount('forward')),
+    err => {
+      if (!!err) {
+        return emitErr(err);
+      }
+
+      emitter.emit('end', {});
+
+      return;
+    }
+  );
 
   return emitter;
 };

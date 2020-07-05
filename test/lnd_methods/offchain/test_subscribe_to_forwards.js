@@ -74,18 +74,13 @@ tests.forEach(({args, description, error, expected}) => {
 
       emitter.emit('end', {});
       emitter.emit('error', new Error('error'));
-      emitter.emit('status', 'status');
 
       sub.removeAllListeners('error');
 
-      emitter.emit('error', new Error('error'));
+      const sub2 = subscribeToForwards(args);
 
-      equal(gotEnd, true, 'Got end event');
-      match(gotErr, new Error('error'), 'Got expected error');
-      equal(gotErr2, null, 'Did not get second error');
-      equal(gotStatus, 'status', 'Got expected status');
-
-      sub.on('error', err => gotErr3 = err);
+      sub2.on('error', err => gotErr3 = err);
+      sub2.on('forward', forward => gotForward = forward);
 
       emitter.emit('data', {});
 
@@ -96,6 +91,8 @@ tests.forEach(({args, description, error, expected}) => {
       emitter.emit('data', makeForwardResponse({}));
 
       deepIs(gotForward, expected.forward, 'Got expected forward');
+
+      [sub, sub2].forEach(n => n.removeAllListeners());
     }
 
     return end();
