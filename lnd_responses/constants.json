@@ -26,6 +26,16 @@
     "pathfinding_routes_failed": "FAILED_NO_ROUTE",
     "pathfinding_timeout_failed": "FAILED_TIMEOUT"
   },
+  "resolutionOutcomes": {
+    "confirmed": "CLAIMED",
+    "pending": "FIRST_STAGE",
+    "refunded": "TIMEOUT"
+  },
+  "resolutionTypes": {
+    "balance": "COMMIT",
+    "incoming_payment": "INCOMING_HTLC",
+    "outgoing_payment": "OUTGOING_HTLC"
+  },
   "syncTypes": {
     "active": "ACTIVE_SYNC",
     "passive": "PASSIVE_SYNC"

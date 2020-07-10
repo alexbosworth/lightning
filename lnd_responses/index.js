@@ -17,6 +17,7 @@ const rpcHopAsHop = require('./rpc_hop_as_hop');
 const rpcInvoiceAsInvoice = require('./rpc_invoice_as_invoice');
 const rpcPaymentAsPayment = require('./rpc_payment_as_payment');
 const rpcPeerAsPeer = require('./rpc_peer_as_peer');
+const rpcResolutionAsResolution = require('./rpc_resolution_as_resolution');
 const rpcRouteAsRoute = require('./rpc_route_as_route');
 const rpcTxAsTransaction = require('./rpc_tx_as_transaction');
 const rpcUtxoAsUtxo = require('./rpc_utxo_as_utxo');
@@ -42,6 +43,7 @@ module.exports = {
   rpcInvoiceAsInvoice,
   rpcPaymentAsPayment,
   rpcPeerAsPeer,
+  rpcResolutionAsResolution,
   rpcRouteAsRoute,
   rpcTxAsTransaction,
   rpcUtxoAsUtxo,

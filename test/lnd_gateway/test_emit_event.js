@@ -32,8 +32,12 @@ tests.forEach(({args, description, error, expected}) => {
       return resolve();
     });
 
+    const waitForError = new Promise((resolve, reject) => {
+      emitter.on('error', err => reject(err));
+    });
+
     if (!!error) {
-      await rejects(all([emit, once(emitter, 'error')]), error, 'Got error');
+      await rejects(all([emit, waitForError]), error, 'Got error');
     } else {
       const [, [emitted]] = await all([emit, once(emitter, expected.event)]);
 

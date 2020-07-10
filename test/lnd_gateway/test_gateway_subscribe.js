@@ -30,13 +30,17 @@ tests.forEach(({args, description, expected}) => {
   return test(description, async ({equal, end}) => {
     const emitter = new EventEmitter();
 
+    let message;
+
     function websocket(url) {
       equal(url, expected.url, 'Got expected url');
 
       emitter.close = () => {};
 
       emitter.send = n => {
-        equal(Buffer.from(n).toString('hex'), expected.message, 'Msg');
+        if (Buffer.from(n).toString('hex') !== expected.message) {
+          throw new Error('GotUnexpectedMessageInWebSocket');
+        }
 
         return end();
       };
@@ -54,7 +58,9 @@ tests.forEach(({args, description, expected}) => {
     emitter.emit('close');
 
     const [gotErr] = await all([
-      once(eventEmitter, 'error'),
+      new Promise((resolve, reject) => {
+        eventEmitter.on('error', err => resolve(err));
+      }),
       new Promise((resolve, reject) => {
         emitter.emit('error', new Error('Error'));
 
@@ -64,8 +70,10 @@ tests.forEach(({args, description, expected}) => {
 
     equal(gotErr.toString(), 'Error: Error', 'Got error event');
 
-    const [[gotMessage]] = await all([
-      once(eventEmitter, 'event'),
+    const [gotMessage] = await all([
+      new Promise((resolve, reject) => {
+        eventEmitter.on('event', data => resolve(data));
+      }),
       new Promise((resolve, reject) => {
         emitter.emit('message', encode({event: 'event', data: 'data'}));
 
