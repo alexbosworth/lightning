@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const {once} = require('events');
 
 const {encode} = require('cbor');
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const all = promise => Promise.all(promise);
 const gatewaySubscribe = require('./../../lnd_gateway/gateway_subscribe');

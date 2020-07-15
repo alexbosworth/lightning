@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const rpcHtlcAsPayment = require('./../../lnd_responses/rpc_htlc_as_payment');
 

@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const {stateAsFailure} = require('./../../lnd_responses');
 
