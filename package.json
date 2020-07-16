@@ -8,14 +8,14 @@
     "async": "3.2.0",
     "asyncjs-util": "1.2.2",
     "bitcoinjs-lib": "5.1.10",
-    "bolt07": "1.5.1",
-    "bolt09": "0.1.0",
+    "bolt07": "1.5.2",
+    "bolt09": "0.1.1",
     "body-parser": "1.19.0",
     "bn.js": "5.1.2",
     "cbor": "5.0.2",
     "express": "4.17.1",
     "grpc": "1.24.3",
-    "invoices": "1.1.0"
+    "invoices": "1.1.1"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -45,5 +45,5 @@
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "2.0.24"
+  "version": "2.0.25"
 }
