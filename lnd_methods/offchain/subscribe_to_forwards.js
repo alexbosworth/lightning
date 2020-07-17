@@ -57,6 +57,7 @@ module.exports = ({lnd}) => {
   const emitter = new EventEmitter();
 
   const emitErr = err => {
+    // Exit early when there are no error listeners
     if (!emitter.listenerCount('error')) {
       return;
     }
