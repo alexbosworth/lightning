@@ -12,6 +12,7 @@ const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
 const defaultPathTimeoutMs = 1000 * 60;
 const defaultProbeTimeoutMs = 1000 * 60 * 60 * 24;
 const {isArray} = Array;
+const isIgnoreFailure = reason => reason === 'TemporaryChannelFailure';
 const isPublicKey = n => /^[0-9A-F]{66}$/i.test(n);
 const {nextTick} = process;
 
@@ -200,6 +201,7 @@ module.exports = args => {
   const ignore = [];
   let isFinal = false;
   let isTimedOut = false;
+  const temporaryChannelFailures = [];
 
   if (!!args.ignore) {
     args.ignore.forEach(n => ignore.push({
@@ -238,11 +240,11 @@ module.exports = args => {
         // Get the next route
         getNextRoute: cbk => {
           return getRouteToDestination({
-            ignore,
             mtokens,
             cltv_delta: args.cltv_delta,
             destination: args.destination,
             features: args.features,
+            ignore: ignore.concat(temporaryChannelFailures),
             incoming_peer: args.incoming_peer,
             lnd: args.lnd,
             max_fee: args.max_fee,
@@ -319,6 +321,16 @@ module.exports = args => {
             // Exit early when the probe found a completed route
             if (!!isFinal) {
               return emitter.emit('probe_success', {route: failure.route});
+            }
+
+            if (!!failure.index && isIgnoreFailure(failure.reason)) {
+              const from = failure.route.hops[failure.index - 1];
+              const to = failure.route.hops[failure.index];
+
+              temporaryChannelFailures.push({
+                from_public_key: from.public_key,
+                to_public_key: to.public_key,
+              });
             }
 
             emitter.emit('routing_failure', {
