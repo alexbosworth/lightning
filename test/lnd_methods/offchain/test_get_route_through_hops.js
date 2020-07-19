@@ -19,10 +19,12 @@ const makeExpected = overrides => {
     }],
     messages: [],
     mtokens: '1',
+    payment: undefined,
     safe_fee: 1,
     safe_tokens: 1,
     timeout: 1,
     tokens: 0,
+    total_mtokens: undefined,
   };
 
   Object.keys(overrides).map(key => expected[key] = overrides[key]);
@@ -227,10 +229,12 @@ const tests = [
         }],
         messages: [],
         mtokens: '1',
+        payment: undefined,
         safe_fee: 1,
         safe_tokens: 1,
         timeout: 1,
         tokens: 0,
+        total_mtokens: undefined,
       },
     },
   },

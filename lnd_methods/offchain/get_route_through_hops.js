@@ -24,8 +24,14 @@ const unknownServiceMessage = 'unknown service routerrpc.Router';
     lnd: <Authenticated LND API Object>
     [mtokens]: <Millitokens to Send String>
     [outgoing_channel]: <Outgoing Channel Id String>
+    [messages]: [{
+      type: <Message Type Number String>
+      value: <Message Raw Value Hex Encoded String>
+    }]
+    [payment]: <Payment Identifier Hex String>
     public_keys: [<Public Key Hex String>]
     [tokens]: <Tokens to Send Number>
+    [total_mtokens]: <Payment Total Millitokens String>
   }
 
   @returns via cbk or Promise
@@ -44,10 +50,12 @@ const unknownServiceMessage = 'unknown service routerrpc.Router';
         timeout: <Timeout Block Height Number>
       }]
       mtokens: <Total Fee-Inclusive Millitokens String>
+      [payment]: <Payment Identifier Hex String>
       safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>
       safe_tokens: <Payment Tokens Rounded Up Number>
       timeout: <Route Timeout Height Number>
       tokens: <Total Fee-Inclusive Tokens Number>
+      [total_mtokens]: <Payment Total Millitokens String>
     }
   }
 */
@@ -114,6 +122,10 @@ module.exports = (args, cbk) => {
 
           try {
             const [route] = routesFromQueryRoutes({response}).routes;
+
+            route.messages = args.messages || [];
+            route.payment = args.payment;
+            route.total_mtokens = args.total_mtokens;
 
             return cbk(null, {route});
           } catch (err) {
