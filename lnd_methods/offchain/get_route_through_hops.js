@@ -49,6 +49,10 @@ const unknownServiceMessage = 'unknown service routerrpc.Router';
         public_key: <Forward Edge Public Key Hex String>
         timeout: <Timeout Block Height Number>
       }]
+      [messages]: [{
+        type: <Message Type Number String>
+        value: <Message Raw Value Hex Encoded String>
+      }]
       mtokens: <Total Fee-Inclusive Millitokens String>
       [payment]: <Payment Identifier Hex String>
       safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>

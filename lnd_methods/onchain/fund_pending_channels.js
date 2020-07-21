@@ -1,5 +1,6 @@
 const asyncAuto = require('async/auto');
 const asyncEach = require('async/each');
+const asyncEachSeries = require('async/eachSeries');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -80,9 +81,12 @@ module.exports = ({channels, funding, lnd}, cbk) => {
 
       // Finalize the psbts
       finalize: ['psbt', 'verify', ({psbt}, cbk) => {
-        return asyncEach(channels, (id, cbk) => {
+        const [lastChannel] = channels.slice().reverse();
+
+        return asyncEachSeries(channels, (id, cbk) => {
           return lnd[type][method]({
             psbt_finalize: {
+              no_publish: id !== lastChannel,
               pending_chan_id: bufferFromHex(id),
               signed_psbt: psbt,
             },
