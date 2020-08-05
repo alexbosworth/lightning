@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const encodeResponse = require('./../../lnd_gateway/encode_response');
 

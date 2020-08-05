@@ -8,7 +8,6 @@ const {isArray} = Array;
 const maxConfs = 0x7FFFFFFF;
 const method = 'listUnspent';
 const type = 'default';
-const unsupportedError = 'unknown service walletrpc.WalletKit';
 
 /** Get unspent transaction outputs
 
@@ -52,12 +51,9 @@ module.exports = (args, cbk) => {
           min_confs: args.min_confirmations || Number(),
         },
         (err, res) => {
-          if (!!err && err.details === unsupportedError) {
-            return cbk();
-          }
-
+          // Ignore errors and fail back to legacy method
           if (!!err) {
-            return cbk([503, 'UnexpectedErrorGettingUtxos', {err}]);
+            return cbk();
           }
 
           return cbk(null, res);

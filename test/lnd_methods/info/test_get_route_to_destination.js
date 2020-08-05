@@ -1,5 +1,5 @@
 const BN = require('bn.js');
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const {getInfoResponse} = require('./../fixtures');
 const {getRouteToDestination} = require('./../../../lnd_methods/info');

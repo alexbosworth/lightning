@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const returnResponse = require('./../../lnd_gateway/return_response');
 

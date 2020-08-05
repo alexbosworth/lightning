@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const {once} = require('events');
 
 const {encode} = require('cbor');
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const emitEvent = require('./../../lnd_gateway/emit_event');
 

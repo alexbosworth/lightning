@@ -3,7 +3,7 @@ const {readFile} = require('fs').promises;
 
 const asyncMap = require('async/map');
 const request = require('request-promise-native');
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const {overrides} = require('./protos');
 const {protos} = require('./protos');

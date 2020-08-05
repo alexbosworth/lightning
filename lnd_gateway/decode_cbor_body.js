@@ -13,7 +13,7 @@ const badArgumentsCode = 400;
 */
 module.exports = ({}) => {
   const middleware = (req, res, next) => {
-    return decodeFirst(req.body, (err, decoded) => {
+    decodeFirst(req.body, (err, decoded) => {
       if (!!err) {
         return next([badArgumentsCode, 'ExpectedCborRequestArgs']);
       }
@@ -22,6 +22,8 @@ module.exports = ({}) => {
 
       return next();
     });
+
+    return;
   };
 
   return {middleware};

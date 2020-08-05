@@ -129,6 +129,7 @@ const {nextTick} = process;
   @event 'routing_failure'
   {
     [channel]: <Standard Format Channel Id String>
+    index: <Failure Index Number>
     [mtokens]: <Millitokens String>
     [policy]: {
       base_fee_mtokens: <Base Fee Millitokens String>
@@ -137,8 +138,10 @@ const {nextTick} = process;
       [is_disabled]: <Channel is Disabled Bool>
       max_htlc_mtokens: <Maximum HLTC Millitokens Value String>
       min_htlc_mtokens: <Minimum HTLC Millitokens Value String>
+      [public_key]: <Public Key Hex String>
+      [updated_at]: <Updated At ISO 8601 Date String>
     }
-    public_key: <Public Key Hex String>
+    [public_key]: <Public Key Hex String>
     reason: <Failure Reason String>
     route: {
       [confidence]: <Route Confidence Score Out Of One Million Number>

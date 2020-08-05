@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const {rpcChannelAsChannel} = require('./../../lnd_responses');
 

@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const {rpcPeerAsPeer} = require('./../../lnd_responses');
 

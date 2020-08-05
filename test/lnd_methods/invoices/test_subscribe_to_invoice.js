@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 
-const {test} = require('@alexbosworth/tap');
+const {test} = require('tap');
 
 const {lookupInvoiceResponse} = require('./../fixtures');
 const {subscribeToInvoice} = require('./../../../lnd_methods');
