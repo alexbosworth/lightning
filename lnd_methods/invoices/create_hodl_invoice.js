@@ -17,6 +17,7 @@ const {parse} = Date;
 const preimageByteLength = 32;
 const {round} = Math;
 const sha256 = preimage => createHash('sha256').update(preimage).digest();
+const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
 const tokensAsMtok = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
 const type = 'invoices';
 
@@ -34,6 +35,7 @@ const type = 'invoices';
   {
     [cltv_delta]: <Final CLTV Delta Number>
     [description]: <Invoice Description String>
+    [description_hash]: <Hashed Description of Payment Hex String>
     [expires_at]: <Expires At ISO 8601 Date String>
     [id]: <Payment Hash Hex String>
     [is_fallback_included]: <Is Fallback Address Included Bool>
@@ -118,6 +120,7 @@ module.exports = (args, cbk) => {
           private: !!args.is_including_private_channels,
           value: args.tokens || undefined,
           value_msat: args.mtokens || undefined,
+          description_hash: hexAsBuffer(args.description_hash),
         },
         (err, response) => {
           if (!!err) {
