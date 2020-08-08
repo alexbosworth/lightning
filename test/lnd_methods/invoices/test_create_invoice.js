@@ -32,6 +32,7 @@ const makeArgs = override => {
   const args = {
     cltv_delta: 1,
     description: 'description',
+    description_hash: Buffer.alloc(32).toString('hex'),
     expires_at: new Date(Date.now() + 1e8).toISOString(),
     is_fallback_included: true,
     is_fallback_nested: true,

@@ -8,6 +8,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const bufferFromHex = hex => !hex ? undefined : Buffer.from(hex, 'hex');
 const defaultExpiryMs = 1000 * 60 * 60 * 3;
+const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
 const invoiceExistsError = 'invoice with payment hash already exists';
 const {isArray} = Array;
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
@@ -22,7 +23,7 @@ const {round} = Math;
   {
     [cltv_delta]: <CLTV Delta Number>
     [description]: <Invoice Description String>
-    [description_hash]: <Invoice Description Hash Hex String>
+    [description_hash]: <Hashed Description of Payment Hex String>
     [expires_at]: <Expires At ISO 8601 Date String>
     [is_fallback_included]: <Is Fallback Address Included Bool>
     [is_fallback_nested]: <Is Fallback Address Nested Bool>
@@ -102,6 +103,7 @@ module.exports = (args, cbk) => {
           private: !!args.is_including_private_channels,
           r_preimage: preimage || undefined,
           value: args.tokens || undefined,
+          description_hash: hexAsBuffer(args.description_hash),
         },
         (err, response) => {
           if (!!err && err.details === invoiceExistsError) {

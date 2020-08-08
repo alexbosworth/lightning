@@ -8,6 +8,7 @@ const {returnResult} = require('asyncjs-util');
 const {createChainAddress} = require('./../address');
 const {isLnd} = require('./../../lnd_requests');
 
+const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
 const {isArray} = Array;
 const method = 'addHoldInvoice';
 const msPerSec = 1e3;
@@ -34,6 +35,7 @@ const type = 'invoices';
   {
     [cltv_delta]: <Final CLTV Delta Number>
     [description]: <Invoice Description String>
+    [description_hash]: <Hashed Description of Payment Hex String>
     [expires_at]: <Expires At ISO 8601 Date String>
     [id]: <Payment Hash Hex String>
     [is_fallback_included]: <Is Fallback Address Included Bool>
@@ -111,6 +113,7 @@ module.exports = (args, cbk) => {
 
         return args.lnd.invoices.addHoldInvoice({
           cltv_expiry: !args.cltv_delta ? undefined : args.cltv_delta,
+          description_hash: hexAsBuffer(args.description_hash),
           expiry: !expiryMs ? undefined : round(expiryMs / msPerSec),
           fallback_addr: fallbackAddress,
           hash: Buffer.from(invoiceId.id, 'hex'),
