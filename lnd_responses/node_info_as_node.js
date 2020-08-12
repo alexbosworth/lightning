@@ -1,11 +1,7 @@
-const {featureFlagDetails} = require('bolt09');
-
 const channelEdgeAsChannel = require('./channel_edge_as_channel');
+const rpcNodeAsNode = require('./rpc_node_as_node');
 
-const colorTemplate = '#000000';
 const {isArray} = Array;
-const {keys} = Object;
-const msPerSec = 1e3;
 
 /** Derive node details from RPC node info
 
@@ -104,40 +100,6 @@ module.exports = args => {
     throw new Error('ExpectedNodeDetailsInNodeInfo');
   }
 
-  if (!isArray(args.node.addresses)) {
-    throw new Error('ExpectedArrayOfNodeAddressForNodeDetails');
-  }
-
-  args.node.addresses.forEach(({addr, network}) => {
-    if (!addr) {
-      throw new Error('ExpectedNodeAddressInNodeDetails');
-    }
-
-    if (!network) {
-      throw new Error('ExpectedNodeNetworkInNodeDetails');
-    }
-  });
-
-  if (args.node.alias === undefined) {
-    throw new Error('ExpectedNodeAliasFromNodeDetails');
-  }
-
-  if (!args.node.color || args.node.color.length !== colorTemplate.length) {
-    throw new Error('ExpectedNodeColorInNodeDetails');
-  }
-
-  if (!args.node.features) {
-    throw new Error('ExpectedFeaturesInNodeDetails');
-  }
-
-  if (args.node.last_update === undefined) {
-    throw new Error('ExpectedNodeLastUpdateTimestamp');
-  }
-
-  if (!args.node.pub_key) {
-    throw new Error('ExpectedNodeDetailsPublicKey');
-  }
-
   if (args.num_channels === undefined) {
     throw new Error('ExpectedNodeDetailsChannelCount');
   }
@@ -146,26 +108,16 @@ module.exports = args => {
     throw new Error('ExpectedTotalCapacityForNode');
   }
 
-  const updatedAt = args.node.last_update * msPerSec;
-
-  const updated = !updatedAt ? undefined : new Date(updatedAt);
+  const node = rpcNodeAsNode(args.node);
 
   return {
-    alias: args.node.alias,
+    alias: node.alias,
     capacity: Number(args.total_capacity),
     channel_count: args.num_channels,
     channels: (args.channels || []).map(n => channelEdgeAsChannel(n)),
-    color: args.node.color,
-    features: keys(args.node.features).map(bit => ({
-      bit: Number(bit),
-      is_known: args.node.features[bit].is_known,
-      is_required: args.node.features[bit].is_required,
-      type: featureFlagDetails({bit: Number(bit)}).type,
-    })),
-    sockets: args.node.addresses.map(({addr, network}) => ({
-      socket: addr,
-      type: network,
-    })),
-    updated_at: !updated ? undefined : updated.toISOString(),
+    color: node.color,
+    features: node.features,
+    sockets: node.sockets,
+    updated_at: node.updated_at,
   };
 };

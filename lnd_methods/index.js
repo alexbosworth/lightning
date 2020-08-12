@@ -16,6 +16,7 @@ const {getChannels} = require('./offchain');
 const {getForwards} = require('./offchain');
 const {getInvoice} = require('./invoices');
 const {getNetworkCentrality} = require('./info');
+const {getNetworkGraph} = require('./info');
 const {getNode} = require('./info');
 const {getPayment} = require('./offchain');
 const {getPeers} = require('./peers');
@@ -37,6 +38,7 @@ const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
 const {subscribeToForwardRequests} = require('./offchain');
 const {subscribeToForwards} = require('./offchain');
+const {subscribeToGraph} = require('./info');
 const {subscribeToInvoice} = require('./invoices');
 const {subscribeToInvoices} = require('./invoices');
 const {subscribeToPastPayment} = require('./offchain');
@@ -66,6 +68,7 @@ module.exports = {
   getForwards,
   getInvoice,
   getNetworkCentrality,
+  getNetworkGraph,
   getNode,
   getPayment,
   getPeers,
@@ -87,6 +90,7 @@ module.exports = {
   settleHodlInvoice,
   subscribeToForwardRequests,
   subscribeToForwards,
+  subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
   subscribeToPastPayment,
