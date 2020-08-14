@@ -4,7 +4,7 @@ const bufferAsHex = buffer => buffer.toString('hex');
 const emptyTxId = Buffer.alloc(32);
 const {isBuffer} = Buffer;
 
-/** Map RPC channel closed to a channel close update
+/** Map RPC graph channel closed to a channel close update
 
   {
     [capacity]: <Channel Capacity Tokens String>

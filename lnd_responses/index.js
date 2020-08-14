@@ -13,11 +13,13 @@ const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
 const rpcChannelAsChannel = require('./rpc_channel_as_channel');
 const rpcChannelClosedAsClosed = require('./rpc_channel_closed_as_closed');
 const rpcChannelUpdateAsUpdate = require('./rpc_channel_update_as_update');
+const rpcClosedChannelAsClosed = require('./rpc_closed_channel_as_closed');
 const rpcForwardAsForward = require('./rpc_forward_as_forward');
 const rpcForwardAsForwardRequest = require('./rpc_forward_as_forward_request');
 const rpcHopAsHop = require('./rpc_hop_as_hop');
 const rpcInvoiceAsInvoice = require('./rpc_invoice_as_invoice');
 const rpcNodeAsNode = require('./rpc_node_as_node');
+const rpcOutpointAsUpdate = require('./rpc_outpoint_as_update');
 const rpcPaymentAsPayment = require('./rpc_payment_as_payment');
 const rpcPeerAsPeer = require('./rpc_peer_as_peer');
 const rpcResolutionAsResolution = require('./rpc_resolution_as_resolution');
@@ -42,11 +44,13 @@ module.exports = {
   rpcChannelAsChannel,
   rpcChannelClosedAsClosed,
   rpcChannelUpdateAsUpdate,
+  rpcClosedChannelAsClosed,
   rpcForwardAsForward,
   rpcForwardAsForwardRequest,
   rpcHopAsHop,
   rpcInvoiceAsInvoice,
   rpcNodeAsNode,
+  rpcOutpointAsUpdate,
   rpcPaymentAsPayment,
   rpcPeerAsPeer,
   rpcResolutionAsResolution,
