@@ -68,7 +68,7 @@ const mtokensPerToken = BigInt(1e3);
 
   @returns
   {
-    chain_address: <Fallback Chain Address String>
+    [chain_address]: <Fallback Chain Address String>
     cltv_delta: <CLTV Delta Number>
     [confirmed_at]: <Settled at ISO 8601 Date String>
     [confirmed_index]: <Confirmed Index Number>

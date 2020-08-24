@@ -6,6 +6,7 @@ const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
 const {fundPendingChannels} = require('./onchain');
+const {getAccessIds} = require('./macaroon');
 const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
 const {getChainBalance} = require('./onchain');
@@ -27,6 +28,7 @@ const {getSweepTransactions} = require('./onchain');
 const {getUtxos} = require('./onchain');
 const {getWalletInfo} = require('./info');
 const {getWalletVersion} = require('./info');
+const {grantAccess} = require('./macaroon');
 const {lockUtxo} = require('./onchain');
 const {openChannel} = require('./onchain');
 const {openChannels} = require('./onchain');
@@ -34,6 +36,7 @@ const {payViaPaymentDetails} = require('./offchain');
 const {payViaPaymentRequest} = require('./offchain');
 const {payViaRequest} = require('./offchain');
 const {payViaRoutes} = require('./offchain');
+const {revokeAccess} = require('./macaroon');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
 const {subscribeToChannels} = require('./offchain');
@@ -59,6 +62,7 @@ module.exports = {
   createHodlInvoice,
   createInvoice,
   fundPendingChannels,
+  getAccessIds,
   getAutopilot,
   getBackup,
   getChainBalance,
@@ -80,6 +84,7 @@ module.exports = {
   getUtxos,
   getWalletInfo,
   getWalletVersion,
+  grantAccess,
   lockUtxo,
   openChannel,
   openChannels,
@@ -87,6 +92,7 @@ module.exports = {
   payViaPaymentRequest,
   payViaRequest,
   payViaRoutes,
+  revokeAccess,
   setAutopilot,
   settleHodlInvoice,
   subscribeToChannels,

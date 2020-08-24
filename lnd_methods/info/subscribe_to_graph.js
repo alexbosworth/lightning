@@ -64,6 +64,7 @@ const type = 'default';
       is_required: <Feature Support is Required Bool>
       type: <Feature Type String>
     }]
+    public_key: <Node Public Key Hex String>
     [sockets]: [<Network Host And Port String>]
     updated_at: <Update Received At ISO 8601 Date String>
   }

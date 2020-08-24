@@ -1,0 +1,21 @@
+{
+  "address:read": "is_ok_to_derive_keys",
+  "address:write": "is_ok_to_create_chain_addresses",
+  "info:read": "is_ok_to_get_wallet_info",
+  "info:write": "is_ok_to_stop_daemon",
+  "invoices:read": "is_ok_to_get_invoices",
+  "invoices:write": "is_ok_to_create_invoices",
+  "macaroon:generate": "is_ok_to_grant_access",
+  "macaroon:read": "is_ok_to_get_access_ids",
+  "macaroon:write": "is_ok_to_revoke_access_ids",
+  "message:read": "is_ok_to_verify_messages",
+  "message:write": "is_ok_to_sign_messages",
+  "offchain:read": "is_ok_to_get_payments",
+  "offchain:write": "is_ok_to_pay",
+  "onchain:read": "is_ok_to_get_chain_transactions",
+  "onchain:write": "is_ok_to_send_to_chain_addresses",
+  "peers:read": "is_ok_to_get_peers",
+  "peers:write": "is_ok_to_adjust_peers",
+  "signer:generate": "is_ok_to_sign_bytes",
+  "signer:read": "is_ok_to_verify_bytes_signatures"
+}

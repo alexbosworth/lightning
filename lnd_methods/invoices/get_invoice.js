@@ -23,7 +23,7 @@ const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 
   @returns via cbk or Promise
   {
-    chain_address: <Fallback Chain Address String>
+    [chain_address]: <Fallback Chain Address String>
     cltv_delta: <CLTV Delta Number>
     [confirmed_at]: <Settled at ISO 8601 Date String>
     created_at: <ISO 8601 Date String>
