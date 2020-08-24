@@ -5,7 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const method = 'deleteMacaroonId';
 const minimumId = 1;
-const notSupported = 'unknown service lnrpc.Lightning';
+const notSupported = 'unknown method DeleteMacaroonID for service lnrpc.Lightning';
 const type = 'default';
 
 /** Revoke an access token given out in the past

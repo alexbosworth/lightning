@@ -5,7 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const {isArray} = Array;
 const method = 'listMacaroonIDs';
-const notSupported = 'unknown service lnrpc.Lightning';
+const notSupported = 'unknown method ListMacaroonIDs for service lnrpc.Lightning';
 const type = 'default';
 
 /** Get outstanding access ids given out

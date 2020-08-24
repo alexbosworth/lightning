@@ -29,7 +29,7 @@ const tests = [
       lnd: {
         default: {
           deleteMacaroonId: ({}, cbk) => cbk({
-            details: 'unknown service lnrpc.Lightning',
+            details: 'unknown method DeleteMacaroonID for service lnrpc.Lightning',
           }),
         },
       },

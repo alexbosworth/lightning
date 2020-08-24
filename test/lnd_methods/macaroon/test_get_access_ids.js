@@ -2,7 +2,9 @@ const {test} = require('tap');
 
 const {getAccessIds} = require('./../../../lnd_methods');
 
-const unknown = {details: 'unknown service lnrpc.Lightning'};
+const unknown = {
+  details: 'unknown method ListMacaroonIDs for service lnrpc.Lightning'
+};
 
 const tests = [
   {
