@@ -5,7 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const {isArray} = Array;
 const method = 'listMacaroonIDs';
-const notSupported = 'unknown method ListMacaroonIDs for service lnrpc.Lightning';
+const notSupported = /unknown/;
 const type = 'default';
 
 /** Get outstanding access ids given out
@@ -38,7 +38,7 @@ module.exports = ({id, lnd}, cbk) => {
       // Get access ids
       getIds: ['validate', ({}, cbk) => {
         return lnd[type][method]({}, (err, res) => {
-          if (!!err && err.details === notSupported) {
+          if (!!err && notSupported.test(err.details)) {
             return cbk([501, 'ListRootMacaroonIdsMethodNotSupported']);
           }
 

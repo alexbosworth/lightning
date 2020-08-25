@@ -5,7 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const method = 'deleteMacaroonId';
 const minimumId = 1;
-const notSupported = 'unknown method DeleteMacaroonID for service lnrpc.Lightning';
+const notSupported = /unknown/;
 const type = 'default';
 
 /** Revoke an access token given out in the past
@@ -40,7 +40,7 @@ module.exports = ({id, lnd}, cbk) => {
       // Revoke access
       revoke: ['validate', ({}, cbk) => {
         return lnd[type][method]({root_key_id: id}, (err, res) => {
-          if (!!err && err.details === notSupported) {
+          if (!!err && notSupported.test(err.details)) {
             return cbk([501, 'RevokeAccessMethodNotSupported']);
           }
 
