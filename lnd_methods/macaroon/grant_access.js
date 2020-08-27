@@ -4,9 +4,10 @@ const {returnResult} = require('asyncjs-util');
 const {isLnd} = require('./../../lnd_requests');
 const permissions = require('./permissions');
 
-const {keys} = Object;
+const accessDenied = 'permission denied';
 const hexAsBase64 = hex => Buffer.from(hex, 'hex').toString('base64');
 const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
+const {keys} = Object;
 const method = 'bakeMacaroon';
 const notSupported = 'unknown service lnrpc.Lightning';
 const permissionSeparator = ':';
@@ -94,6 +95,10 @@ module.exports = (args, cbk) => {
         (err, res) => {
           if (!!err && err.details === notSupported) {
             return cbk([501, 'GrantAccessMethodNotSupported']);
+          }
+
+          if (!!err && err.details === accessDenied) {
+            return cbk([403, 'PermissionDeniedToBakeMacaroon']);
           }
 
           if (!!err) {

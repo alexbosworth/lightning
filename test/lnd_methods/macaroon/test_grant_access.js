@@ -46,6 +46,18 @@ const tests = [
   {
     args: {
       is_ok_to_create_chain_addresses: true,
+      lnd: {
+        default: {
+          bakeMacaroon: ({}, cbk) => cbk({details: 'permission denied'}),
+        },
+      },
+    },
+    description: 'Access denied is returned',
+    error: [403, 'PermissionDeniedToBakeMacaroon'],
+  },
+  {
+    args: {
+      is_ok_to_create_chain_addresses: true,
       lnd: {default: {bakeMacaroon: ({}, cbk) => cbk()}},
     },
     description: 'A response is expected',
