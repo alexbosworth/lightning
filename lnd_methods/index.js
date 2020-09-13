@@ -11,9 +11,11 @@ const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
 const {getChainBalance} = require('./onchain');
 const {getChainFeeRate} = require('./onchain');
+const {getChainTransactions} = require('./onchain');
 const {getChannel} = require('./info');
 const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
+const {getClosedChannels} = require('./offchain');
 const {getForwards} = require('./offchain');
 const {getInvoice} = require('./invoices');
 const {getMethods} = require('./info');
@@ -69,9 +71,11 @@ module.exports = {
   getBackup,
   getChainBalance,
   getChainFeeRate,
+  getChainTransactions,
   getChannel,
   getChannelBalance,
   getChannels,
+  getClosedChannels,
   getForwards,
   getInvoice,
   getMethods,

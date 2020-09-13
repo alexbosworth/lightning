@@ -1,6 +1,7 @@
 const getBackup = require('./get_backup');
 const getChannelBalance = require('./get_channel_balance');
 const getChannels = require('./get_channels');
+const getClosedChannels = require('./get_closed_channels');
 const getForwards = require('./get_forwards');
 const getPayment = require('./get_payment');
 const getPendingChannels = require('./get_pending_channels');
@@ -21,6 +22,7 @@ module.exports = {
   getBackup,
   getChannelBalance,
   getChannels,
+  getClosedChannels,
   getForwards,
   getPayment,
   getPendingChannels,
