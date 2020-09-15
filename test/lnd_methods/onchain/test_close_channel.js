@@ -81,6 +81,8 @@ const makeLnd = ({err, data}) => {
           bytes_recv: '0',
           bytes_sent: '0',
           features: {},
+          flap_count: 0,
+          last_flap_ns: '0',
           inbound: false,
           ping_time: '0',
           pub_key: Buffer.alloc(33).toString('hex'),

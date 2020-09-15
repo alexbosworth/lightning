@@ -14,6 +14,8 @@ const type = 'default';
 
   LND 0.8.2 and below do not return `features`
 
+  LND 0.11.0 and below do not return `last_reconnected` or `reconnection_rate`
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -31,8 +33,10 @@ const type = 'default';
       }]
       is_inbound: <Is Inbound Peer Bool>
       [is_sync_peer]: <Is Syncing Graph Data Bool>
-      ping_time: <Milliseconds Number>
-      public_key: <Public Key String>
+      [last_reconnected]: <Peer Last Reconnected At ISO 8601 Date String>
+      ping_time: <Ping Latency Milliseconds Number>
+      public_key: <Node Identity Public Key String>
+      [reconnection_rate]: <Count of Reconnections Over Time Number>
       socket: <Network Address And Port String>
       tokens_received: <Amount Received Tokens Number>
       tokens_sent: <Amount Sent Tokens Number>
@@ -73,7 +77,7 @@ module.exports = ({lnd}, cbk) => {
       // Check the list of peers and map into final format
       peers: ['listPeers', ({listPeers}, cbk) => {
         try {
-          return cbk(null, listPeers.map(peer => rpcPeerAsPeer(peer)));
+          return cbk(null, listPeers.map(rpcPeerAsPeer));
         } catch (err) {
           return cbk([503, err.message]);
         }

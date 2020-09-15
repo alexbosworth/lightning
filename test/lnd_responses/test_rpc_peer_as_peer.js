@@ -13,7 +13,9 @@ const makePeer = overrides => {
         is_required: false,
       },
     },
+    flap_count: 0,
     inbound: true,
+    last_flap_ns: '0',
     ping_time: '1',
     pub_key: '00',
     sat_recv: '1',
@@ -39,8 +41,10 @@ const makeExpected = overrides => {
     }],
     is_inbound: true,
     is_sync_peer: true,
+    last_reconnection: undefined,
     ping_time: 1,
     public_key: '00',
+    reconnection_rate: undefined,
     socket: 'address',
     tokens_received: 1,
     tokens_sent: 1,
@@ -77,9 +81,19 @@ const tests = [
     error: 'ExpectedPeerFeaturesInRpcPeer',
   },
   {
+    args: makePeer({flap_count: undefined}),
+    description: 'Flat count is expected',
+    error: 'ExpectedPeerFlapCounterInRpcPeer',
+  },
+  {
     args: makePeer({inbound: undefined}),
     description: 'Inbound peer status is expected',
     error: 'ExpectedPeerInboundStatusInRpcPeer',
+  },
+  {
+    args: makePeer({last_flap_ns: undefined}),
+    description: 'Last flap time is expected',
+    error: 'ExpectedPeerLastFlapTimeInRpcPeer',
   },
   {
     args: makePeer({ping_time: undefined}),
@@ -115,6 +129,14 @@ const tests = [
     args: makePeer({sync_type: 'UNKNOWN'}),
     description: 'RPC unknown sync peer is mapped to peer details',
     expected: makeExpected({is_sync_peer: undefined}),
+  },
+  {
+    args: makePeer({flap_count: 1, last_flap_ns: '1'}),
+    description: 'Flapping data is mapped to reconnection details',
+    expected: makeExpected({
+      last_reconnection: '1970-01-01T00:00:00.000Z',
+      reconnection_rate: 1,
+    }),
   },
 ];
 
