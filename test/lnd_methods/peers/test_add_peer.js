@@ -121,7 +121,7 @@ const tests = [
     description: 'Peer is added',
   },
   {
-    args: makeArgs({is_temporary: false, retry_delay: 0}),
+    args: makeArgs({is_temporary: false, retry_delay: 0, timeout: 1}),
     description: 'Peer is added with no retry delay',
   },
   {

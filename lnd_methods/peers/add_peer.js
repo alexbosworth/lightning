@@ -10,6 +10,7 @@ const defaultInterval = retryCount => 50 * Math.pow(2, retryCount);
 const defaultRetries = 10;
 const isPublicKey = n => !!n && /^[0-9A-F]{66}$/i.test(n);
 const method = 'connectPeer';
+const msAsSeconds = ms => Math.ceil(ms / 1e3).toString();
 const notSyncedError = 'chain backend is still syncing, server not active yet';
 const selfKeyErrMsg = /connection.to.self/;
 const type = 'default';
@@ -18,6 +19,8 @@ const type = 'default';
 
   Requires `peers:write` permission
 
+  `timeout` is not supported in LND 0.11.0 and below
+
   {
     [is_temporary]: <Add Peer as Temporary Peer Bool> // Default: false
     lnd: <Authenticated LND API Object>
@@ -25,6 +28,7 @@ const type = 'default';
     [retry_count]: <Retry Count Number>
     [retry_delay]: <Delay Retry By Milliseconds Number>
     socket: <Host Network Address And Optional Port String> // ip:port
+    [timeout]: <Connection Attempt Timeout Milliseconds Number>
   }
 
   @returns via cbk or Promise
@@ -61,6 +65,7 @@ module.exports = (args, cbk) => {
           return args.lnd[type][method]({
             addr: {pubkey, host: args.socket},
             perm: !args.is_temporary,
+            timeout: !!args.timeout ? msAsSeconds(args.timeout) : null,
           },
           err => {
             // Exit early when the peer is already added
