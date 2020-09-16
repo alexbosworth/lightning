@@ -109,6 +109,7 @@ module.exports = ({channels, lnd}, cbk) => {
             min_htlc_msat: channel.min_htlc_mtokens || defaultMinHtlcMtokens,
             node_pubkey: bufferFromHex(channel.partner_public_key),
             private: !!channel.is_private,
+            push_sat: channel.give_tokens || undefined,
             remote_csv_delay: channel.partner_csv_delay || undefined,
           });
 
