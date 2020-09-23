@@ -10,7 +10,7 @@ const type = 'default';
 
 /** Get outstanding access ids given out
 
-  Note: this method is not supported in LND versions 0.11.0 and below
+  Note: this method is not supported in LND versions 0.11.1 and below
 
   Requires `macaroon:read` permission
 

@@ -11,7 +11,7 @@ const type = 'default';
 
 /** Get the list of all methods and their associated requisite permissions
 
-  Note: this method is not supported in LND versions 0.11.0 and below
+  Note: this method is not supported in LND versions 0.11.1 and below
 
   Requires `info:read` permission
 
