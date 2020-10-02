@@ -56,13 +56,17 @@ Initiate an gRPC API Methods Object for LND authenticated methods.
     @returns
     {
       lnd: {
-        autopilot: <Autopilot gRPC Methods Object>
-        chain: <ChainNotifier gRPC Methods Object>
-        default: <Default gRPC Methods Object>
-        invoices: <Invoices gRPC Methods Object>
-        router: <Router gRPC Methods Object>
-        signer: <Signer gRPC Methods Object>
-        wallet: <WalletKit gRPC Methods Object>
+        autopilot: <Autopilot API Methods Object>
+        chain: <ChainNotifier API Methods Object>
+        default: <Default API Methods Object>
+        invoices: <Invoices API Methods Object>
+        router: <Router API Methods Object>
+        router_legacy: <Legacy Router API Methods Object>
+        signer: <Signer Methods API Object>
+        tower_client: <Watchtower Client Methods Object>
+        tower_server: <Watchtower Server Methods API Object>
+        wallet: <WalletKit gRPC Methods API Object>
+        version: <Version Methods API Object>
       }
     }
 
