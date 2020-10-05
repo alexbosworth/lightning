@@ -6,6 +6,7 @@ const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
 const {fundPendingChannels} = require('./onchain');
+const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
 const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
@@ -43,6 +44,7 @@ const {payViaRoutes} = require('./offchain');
 const {revokeAccess} = require('./macaroon');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
+const {signPsbt} = require('./onchain');
 const {subscribeToChannels} = require('./offchain');
 const {subscribeToForwardRequests} = require('./offchain');
 const {subscribeToForwards} = require('./offchain');
@@ -66,6 +68,7 @@ module.exports = {
   createHodlInvoice,
   createInvoice,
   fundPendingChannels,
+  fundPsbt,
   getAccessIds,
   getAutopilot,
   getBackup,
@@ -103,6 +106,7 @@ module.exports = {
   revokeAccess,
   setAutopilot,
   settleHodlInvoice,
+  signPsbt,
   subscribeToChannels,
   subscribeToForwardRequests,
   subscribeToForwards,
