@@ -7,6 +7,7 @@ const bufferAsHex = buffer => buffer.toString('hex');
 const hexAsBuf = hex => Buffer.from(hex, 'hex');
 const {isBuffer} = Buffer;
 const method = 'finalizePsbt';
+const notSupported = /unknown.*walletrpc.WalletKit/;
 const type = 'wallet';
 
 /** Sign a PSBT to produce a finalized PSBT that is ready to broadcast
@@ -47,6 +48,10 @@ module.exports = ({lnd, psbt}, cbk) => {
       // Sign and finalize the funded PSBT
       sign: ['validate', ({}, cbk) => {
         return lnd[type][method]({funded_psbt: hexAsBuf(psbt)}, (err, res) => {
+          if (!!err && notSupported.test(err.details)) {
+            return cbk([501, 'SignPsbtMethodNotSupported']);
+          }
+
           if (!!err) {
             return cbk([503, 'UnexpectedErrorSigningPsbt', {err}]);
           }

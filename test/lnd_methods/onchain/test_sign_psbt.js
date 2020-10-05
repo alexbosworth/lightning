@@ -2,6 +2,8 @@ const {test} = require('tap');
 
 const {signPsbt} = require('./../../../lnd_methods');
 
+const unsupported = {details: 'unknown method for service walletrpc.WalletKit'};
+
 const makeLnd = overrides => {
   const res = {raw_final_tx: Buffer.alloc(1), signed_psbt: Buffer.alloc(2)};
 
@@ -36,6 +38,19 @@ const tests = [
     args: makeArgs({psbt: undefined}),
     description: 'A PSBT is required',
     error: [400, 'ExpectedPsbtToSignAndFinalize'],
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        wallet: {
+          finalizePsbt: ({}, cbk) => cbk({
+            details: 'unknown method for service walletrpc.WalletKit',
+          }),
+        },
+      },
+    }),
+    description: 'Unsupported error is passed back',
+    error: [501, 'SignPsbtMethodNotSupported'],
   },
   {
     args: makeArgs({lnd: {wallet: {finalizePsbt: ({}, cbk) => cbk('err')}}}),

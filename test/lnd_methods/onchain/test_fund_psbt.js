@@ -3,6 +3,7 @@ const {test} = require('tap');
 const {fundPsbt} = require('./../../../lnd_methods');
 
 const psbt = '70736274ff01009a020000000258e87a21b56daf0c23be8e7070456c336f7cbaa5c8757924f545887bb2abdd750000000000ffffffff838d0427d0ec650a68aa46bb0b098aea4422c071b2ca78352a077959d07cea1d0100000000ffffffff0270aaf00800000000160014d85c2b71d0060b09c9886aeb815e50991dda124d00e1f5050000000016001400aea9a2e5f0f876a588df5546e8742d1d87008f000000000000000000';
+const unsupported = {details: 'unknown method for service walletrpc.WalletKit'};
 
 const makeLnd = overrides => {
   const res = {
@@ -95,6 +96,11 @@ const tests = [
     args: makeArgs({lnd: {wallet: {fundPsbt: ({}, cbk) => cbk('err')}}}),
     description: 'Errors funding are passed back',
     error: [503, 'UnexpectedErrorFundingTransaction', {err: 'err'}],
+  },
+  {
+    args: makeArgs({lnd: {wallet: {fundPsbt: ({}, cbk) => cbk(unsupported)}}}),
+    description: 'Unsupported error is passed back',
+    error: [501, 'FundPsbtMethodNotSupported'],
   },
   {
     args: makeArgs({lnd: {wallet: {fundPsbt: ({}, cbk) => cbk()}}}),

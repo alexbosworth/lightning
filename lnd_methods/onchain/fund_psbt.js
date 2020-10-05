@@ -13,6 +13,7 @@ const hexFromBuffer = buffer => buffer.toString('hex');
 const {isArray} = Array;
 const {isBuffer} = Buffer;
 const method = 'fundPsbt';
+const notSupported = /unknown.*walletrpc.WalletKit/;
 const type = 'wallet';
 const txIdFromBuffer = buffer => buffer.slice().reverse().toString('hex');
 const txIdFromHash = hash => hash.reverse().toString('hex');
@@ -145,6 +146,10 @@ module.exports = (args, cbk) => {
           target_conf: fee.target_confirmations || undefined,
         },
         (err, res) => {
+          if (!!err && notSupported.test(err.details)) {
+            return cbk([501, 'FundPsbtMethodNotSupported']);
+          }
+
           if (!!err) {
             return cbk([503, 'UnexpectedErrorFundingTransaction', {err}]);
           }
