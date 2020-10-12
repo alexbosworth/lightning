@@ -40,7 +40,7 @@ const tests = [
   },
   {
     args: makeArgs({}),
-    description: 'Funding state step is executed',
+    description: 'UTXO is unlocked',
   },
 ];
 
