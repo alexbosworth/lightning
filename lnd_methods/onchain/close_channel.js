@@ -17,8 +17,6 @@ const type = 'default';
 
   Requires info:read, offchain:write, onchain:write, peers:write permissions
 
-  `address` is not supported in LND v0.8.2 and below
-
   {
     [address]: <Request Sending Local Channel Funds To Address String>
     [id]: <Standard Format Channel Id String>

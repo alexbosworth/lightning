@@ -22,35 +22,6 @@ const makeLnd = args => {
         return emitter;
       },
     },
-    router_legacy: {
-      trackPayment: ({}) => {
-        const data = args.data || {state: 'IN_FLIGHT'};
-        const emitter = new EventEmitter();
-
-        if (!!args.is_end) {
-          process.nextTick(() => emitter.emit('end'));
-        } else if (!!args.err) {
-          process.nextTick(() => emitter.emit('error', args.err));
-        } else {
-          process.nextTick(() => emitter.emit('data', data));
-        }
-
-        return emitter;
-      },
-    },
-    version: {
-      getVersion: ({}, cbk) => {
-        if (!!args.is_legacy) {
-          return cbk({details: 'unknown service verrpc.Versioner'});
-        }
-
-        if (!!args.get_version_error) {
-          return cbk(args.get_version_error);
-        }
-
-        return cbk(null, {});
-      },
-    },
   };
 };
 
@@ -154,16 +125,6 @@ const tests = [
     error: [404, 'SentPaymentNotFound'],
   },
   {
-    args: makeArgs({
-      lnd: makeLnd({
-        err: {details: `payment isn't initiated`},
-        is_legacy: true,
-      }),
-    }),
-    description: 'A legacy payment not found returns an error',
-    error: [404, 'SentPaymentNotFound'],
-  },
-  {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),
     description: 'Unexpected errors are returned',
     error: [503, 'UnexpectedGetPaymentError', {err: 'err'}],
@@ -174,16 +135,6 @@ const tests = [
     }),
     description: 'Unexpected errors are returned',
     error: [404, 'SentPaymentNotFound'],
-  },
-  {
-    args: makeArgs({lnd: makeLnd({get_version_error: 'err'})}),
-    description: 'Unexpected version errors are returned',
-    error: [503, 'UnexpectedVersionErrorForPastPaymentGet'],
-  },
-  {
-    args: makeArgs({lnd: makeLnd({err: 'err', is_legacy: true})}),
-    description: 'Legacy unexpected errors are returned',
-    error: [503, 'UnexpectedGetPaymentError', {err: 'err'}],
   },
   {
     args: makeArgs({}),
@@ -197,33 +148,6 @@ const tests = [
         payment: undefined,
       },
     },
-  },
-  {
-    args: makeArgs({lnd: makeLnd({is_legacy: true})}),
-    description: 'An in-progress payment is returned',
-    expected: {
-      payment: {
-        failed: undefined,
-        is_confirmed: false,
-        is_failed: false,
-        is_pending: true,
-        payment: undefined,
-      },
-    },
-  },
-  {
-    args: makeArgs({
-      lnd: makeLnd({data: makeLegacyConfirmed({}), is_legacy: true}),
-    }),
-    description: 'A legacy confirmed payment is returned',
-    expected: {payment: makeExpectedPayment({})},
-  },
-  {
-    args: makeArgs({
-      lnd: makeLnd({data: {state: 'SUCCEEDED'}, is_legacy: true}),
-    }),
-    description: 'Unexpected result for confirmed payment',
-    error: [503, 'ExpectedArrayOfHtlcsToDeriveConfirmedFromPaymentStatus'],
   },
   {
     args: makeArgs({lnd: makeLnd({is_end: true})}),

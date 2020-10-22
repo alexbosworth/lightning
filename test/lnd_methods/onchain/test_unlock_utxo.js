@@ -39,6 +39,18 @@ const tests = [
     error: [400, 'ExpectedTransactionOutputIndexToUnlockUtxo'],
   },
   {
+    args: makeArgs({
+      lnd: {wallet: {releaseOutput: ({}, cbk) => cbk({details: 'unknown'})}},
+    }),
+    description: 'LND unknown service errors are returned',
+    error: [501, 'BackingLndDoesNotSupportUnlockingUtxos'],
+  },
+  {
+    args: makeArgs({lnd: {wallet: {releaseOutput: ({}, cbk) => cbk('err')}}}),
+    description: 'LND errors are returned',
+    error: [503, 'UnexpectedErrorUnlockingUtxo', {err: 'err'}],
+  },
+  {
     args: makeArgs({}),
     description: 'UTXO is unlocked',
   },

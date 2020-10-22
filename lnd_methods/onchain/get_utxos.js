@@ -60,7 +60,7 @@ module.exports = (args, cbk) => {
         });
       }],
 
-      // Get UTXOs from the legacy API - LND version 0.10.1 and below
+      // Get UTXOs from the legacy API - LND without the walletrpc build tag
       getLegacyUtxos: ['getWalletUtxos', ({getWalletUtxos}, cbk) => {
         if (!!getWalletUtxos) {
           return cbk();

@@ -110,35 +110,6 @@ const makeLnd = args => {
         return emitter;
       },
     },
-    router_legacy: {
-      sendPayment: ({}) => {
-        const data = args.data || {state: 'FAILED_TIMEOUT'};
-        const emitter = new EventEmitter();
-
-        if (!!args.is_end) {
-          process.nextTick(() => emitter.emit('end'));
-        } else if (!!args.err) {
-          process.nextTick(() => emitter.emit('error', args.err));
-        } else {
-          process.nextTick(() => emitter.emit('data', data));
-        }
-
-        return emitter;
-      },
-    },
-    version: {
-      getVersion: ({}, cbk) => {
-        if (!!args.is_legacy) {
-          return cbk({details: 'unknown service verrpc.Versioner'});
-        }
-
-        if (!!args.get_version_error) {
-          return cbk(args.get_version_error);
-        }
-
-        return cbk(null, {});
-      },
-    },
   };
 };
 
@@ -261,11 +232,6 @@ const tests = [
     error: [503, 'UnexpectedPaymentError', {err: 'err'}],
   },
   {
-    args: makeArgs({lnd: makeLnd({err: 'err', is_legacy: true})}),
-    description: 'Legacy unexpected errors are returned',
-    error: [503, 'UnexpectedPaymentError', {err: 'err'}],
-  },
-  {
     args: makeArgs({messages: 'messages'}),
     description: 'Messages should be an array of messages',
     error: [400, 'ExpectedArrayOfMessagesToSubscribeToPayment'],
@@ -301,11 +267,6 @@ const tests = [
     error: [400, 'ExpectedTokenAmountToPayInPaymentDetails'],
   },
   {
-    args: makeArgs({lnd: makeLnd({get_version_error: 'err'})}),
-    description: 'A payment attempt encounters an unexpected version error',
-    error: [503, 'UnexpectedVersionErrorForPaymentInit'],
-  },
-  {
     args: makeArgs({}),
     description: 'A payment attempt times out',
     error: [503, 'PaymentAttemptsTimedOut'],
@@ -321,11 +282,6 @@ const tests = [
     error: [503, 'PaymentAttemptsTimedOut'],
   },
   {
-    args: makeArgs({lnd: makeLnd({is_legacy: true})}),
-    description: 'A payment attempt on legacy router times out',
-    error: [503, 'PaymentAttemptsTimedOut'],
-  },
-  {
     args: makeArgs({
       lnd: makeLnd({
         data: makePaymentData({
@@ -335,26 +291,6 @@ const tests = [
     }),
     description: 'A payment attempt fails due to insufficient balance',
     error: [503, 'InsufficientBalanceToAttemptPayment'],
-  },
-  {
-    args: makeArgs({
-      lnd: makeLnd({
-        data: {state: 'FAILED_INSUFFICIENT_BALANCE'},
-        is_legacy: true,
-      }),
-    }),
-    description: 'A payment attempt fails due to insufficient balance',
-    error: [503, 'InsufficientBalanceToAttemptPayment'],
-  },
-  {
-    args: makeArgs({
-      lnd: makeLnd({
-        data: {state: 'FAILED_INCORRECT_PAYMENT_DETAILS'},
-        is_legacy: true,
-      }),
-    }),
-    description: 'A payment attempt fails due to insufficient balance',
-    error: [503, 'PaymentRejectedByDestination'],
   },
   {
     args: makeArgs({lnd: makeLnd({data: {status: 'SUCCEEDED'}})}),

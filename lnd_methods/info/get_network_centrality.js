@@ -16,8 +16,6 @@ const unsupportedErrorMessage = 'unknown service lnrpc.Lightning';
 
   Requires `info:read` permission
 
-  This method is not supported in LND 0.9.2 and below
-
   {
     lnd: <Authenticated LND API Object>
   }

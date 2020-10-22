@@ -30,8 +30,6 @@ const type = 'invoices';
 
   Requires `address:write`, `invoices:write` permission
 
-  Setting `mtokens` will not work on LND versions 0.8.2 and below
-
   {
     [cltv_delta]: <Final CLTV Delta Number>
     [description]: <Invoice Description String>

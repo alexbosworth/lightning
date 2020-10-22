@@ -27,7 +27,6 @@ const rpcResolutionAsResolution = require('./rpc_resolution_as_resolution');
 const rpcRouteAsRoute = require('./rpc_route_as_route');
 const rpcTxAsTransaction = require('./rpc_tx_as_transaction');
 const rpcUtxoAsUtxo = require('./rpc_utxo_as_utxo');
-const stateAsFailure = require('./state_as_failure');
 
 module.exports = {
   channelEdgeAsChannel,
@@ -59,5 +58,4 @@ module.exports = {
   rpcRouteAsRoute,
   rpcTxAsTransaction,
   rpcUtxoAsUtxo,
-  stateAsFailure,
 };

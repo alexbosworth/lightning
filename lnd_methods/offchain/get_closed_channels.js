@@ -17,13 +17,6 @@ const outpointSeparator = ':';
 
   Requires `offchain:read` permission
 
-  `is_partner_closed` and `is_partner_initiated` are not supported on LND 0.9.1
-  and below.
-
-  `close_balance_spent_by` is not supported on LND 0.10.4 and below
-  `close_balance_vout` is not supported on LND 0.10.4 and below
-  `close_payments` is not supported on LND 0.10.4 and below
-
   {
     [is_breach_close]: <Only Return Breach Close Channels Bool>
     [is_cooperative_close]: <Only Return Cooperative Close Channels Bool>
@@ -155,16 +148,16 @@ module.exports = (args, cbk) => {
           const isRemoteCooperativeClose = closer === 'INITIATOR_REMOTE';
 
           // Try and determine if the channel was opened by our peer
-          if (chan.open_initiator === 'LOCAL') {
+          if (chan.open_initiator === 'INITIATOR_LOCAL') {
             isPartnerInitiated = false;
-          } else if (chan.open_initiator === 'REMOTE') {
+          } else if (chan.open_initiator === 'INITIATOR_REMOTE') {
             isPartnerInitiated = true;
           }
 
           // Try and determine if the channel was closed by our peer
-          if (chan.close_initiator === 'LOCAL') {
+          if (chan.close_initiator === 'INITIATOR_LOCAL') {
             isPartnerClosed = false;
-          } else if (chan.close_initiator === 'REMOTE') {
+          } else if (chan.close_initiator === 'INITIATOR_REMOTE') {
             isPartnerClosed = true;
           }
 

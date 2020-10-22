@@ -7,7 +7,6 @@ const {chanNumber} = require('bolt07');
 
 const {confirmedFromPayment} = require('./../../lnd_responses');
 const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
-const emitLegacyPayment = require('./emit_legacy_payment');
 const emitPayment = require('./emit_payment');
 const {failureFromPayment} = require('./../../lnd_responses');
 const {getWalletInfo} = require('./../info');
@@ -15,7 +14,6 @@ const {isLnd} = require('./../../lnd_requests');
 const {paymentAmounts} = require('./../../bolt00');
 const {routeHintFromRoute} = require('./../../lnd_requests');
 const {safeTokens} = require('./../../bolt00');
-const {stateAsFailure} = require('./../../lnd_responses');
 const {states} = require('./payment_states');
 
 const cltvBuf = 3;
@@ -33,25 +31,12 @@ const {nextTick} = process;
 const numberFromChannel = channel => chanNumber({channel}).number;
 const {round} = Math;
 const sha256 = preimage => createHash('sha256').update(preimage).digest();
-const singleChanIdsCommitHash = '1a3194d302f33bb52823297d9d7f75cd37516053';
 const type = 'router';
 const unknownServiceErr = 'unknown service verrpc.Versioner';
 
 /** Initiate and subscribe to the outcome of a payment
 
-  LND built with `routerrpc` build tag is required
-
   Either a request or a destination, id, and tokens amount is required
-
-  Failure due to invalid payment will only be registered on LND 0.7.1+
-
-  Specifying `features` is not supported on LND 0.8.2 and below
-  Specifying `incoming_peer` is not supported on LND 0.8.2 and below
-  Specifying `messages` is not supported on LND 0.8.2 and below
-
-  Specifying `max_paths` is not suppoorted on LND 0.9.2 and below
-
-  Specifying `outgoing_channels` is not supported on LND 0.10.0 and below
 
   {
     [cltv_delta]: <Final CLTV Delta Number>
@@ -244,19 +229,23 @@ module.exports = args => {
       return getWalletInfo({lnd: args.lnd}, cbk);
     },
 
-    // Determine the wallet version to support LND 0.9.2 and below
-    getVersion: cbk => {
-      return args.lnd.version.getVersion({}, (err, res) => {
-        if (!!err && err.details === unknownServiceErr) {
-          return cbk(null, {is_legacy: true});
-        }
+    // Determine channel id restrictions if applicable
+    outgoingChannelIds: cbk => {
+      if (!args.outgoing_channels) {
+        return cbk();
+      }
 
-        if (!!err) {
-          return cbk([503, 'UnexpectedVersionErrorForPaymentInit', {err}]);
-        }
+      if (!isArray(args.outgoing_channels)) {
+        return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay']);
+      }
 
-        return cbk(null, {commit_hash: res.commit_hash, is_legacy: false});
-      });
+      if (!!args.outgoing_channel && !args.outgoing_channels) {
+        return cbk(null, [numberFromChannel(args.outgoing_channel)]);
+      }
+
+      return cbk(null, args.outgoing_channels.map(channel => {
+        return chanNumber({channel}).number;
+      }));
     },
 
     // Determine the maximum CLTV delta
@@ -277,39 +266,11 @@ module.exports = args => {
       return cbk(null, maxDelta);
     }],
 
-    // Determine channel id restrictions if applicable, check compatibility
-    outgoingChannelIds: ['getVersion', ({getVersion}, cbk) => {
-      if (!args.outgoing_channels) {
-        return cbk();
-      }
-
-      if (!isArray(args.outgoing_channels)) {
-        return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay']);
-      }
-
-      if (!!getVersion.is_legacy) {
-        return cbk([501, 'BackingLndVersionDoesNotSupportManyChannelOuts']);
-      }
-
-      if (getVersion.commit_hash === singleChanIdsCommitHash) {
-        return cbk([501, 'BackingLndVersionDoesNotSupportMultipleChannelIds']);
-      }
-
-      if (!!args.outgoing_channel && !args.outgoing_channels) {
-        return cbk(null, [numberFromChannel(args.outgoing_channel)]);
-      }
-
-      return cbk(null, args.outgoing_channels.map(channel => {
-        return chanNumber({channel}).number;
-      }));
-    }],
-
     // Final payment parameters
     params: [
-      'getVersion',
       'maxCltvDelta',
       'outgoingChannelIds',
-      ({getVersion, maxCltvDelta, outgoingChannelIds}, cbk) =>
+      ({maxCltvDelta, outgoingChannelIds}, cbk) =>
     {
       const amounts = paymentAmounts({
         max_fee: args.max_fee,
@@ -352,29 +313,8 @@ module.exports = args => {
       });
     }],
 
-    // Send payment with legacy router rpc, before 0.9.2 LND
-    sendLegacy: ['getVersion', 'params', ({getVersion, params}, cbk) => {
-      // Exit early when using the current routerrpc
-      if (!getVersion.is_legacy) {
-        return cbk();
-      }
-
-      const sub = args.lnd.router_legacy.sendPayment(params);
-
-      sub.on('data', data => emitLegacyPayment({data, emitter}));
-      sub.on('end', () => cbk());
-      sub.on('error', err => cbk(err));
-
-      return;
-    }],
-
     // Send payment
-    send: ['getVersion', 'params', ({getVersion, params}, cbk) => {
-      // Exit early when the wallet version is a legacy version
-      if (!!getVersion.is_legacy) {
-        return cbk();
-      }
-
+    send: ['params', ({params}, cbk) => {
       const sub = args.lnd.router.sendPaymentV2(params);
 
       sub.on('data', data => emitPayment({data, emitter}));

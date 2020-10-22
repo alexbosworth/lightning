@@ -6,12 +6,10 @@ const {chanFormat} = require('bolt07');
 
 const {confirmedFromPayment} = require('./../../lnd_responses');
 const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
-const emitLegacyPayment = require('./emit_legacy_payment');
 const emitPayment = require('./emit_payment');
 const {failureFromPayment} = require('./../../lnd_responses');
 const {isLnd} = require('./../../lnd_requests');
 const {safeTokens} = require('./../../bolt00');
-const {stateAsFailure} = require('./../../lnd_responses');
 const {states} = require('./payment_states');
 
 const hexToBuffer = hex => Buffer.from(hex, 'hex');
@@ -26,8 +24,6 @@ const type = 'router';
 const unknownServiceErr = 'unknown service verrpc.Versioner';
 
 /** Subscribe to the status of a past payment
-
-  Requires LND built with `routerrpc` build tag
 
   Requires `offchain:read` permission
 
@@ -122,63 +118,11 @@ module.exports = args => {
     return emitter.emit('error', [503, 'UnexpectedGetPaymentError', {err}]);
   };
 
-  asyncAuto({
-    // Determine which version of LND is backing
-    getVersion: cbk => {
-      return args.lnd.version.getVersion({}, err => {
-        if (!!err && err.details === unknownServiceErr) {
-          return cbk(null, {is_legacy: true});
-        }
+  const sub = args.lnd[type][method]({payment_hash: hash});
 
-        if (!!err) {
-          return cbk([503, 'UnexpectedVersionErrorForPastPaymentGet', {err}]);
-        }
-
-        return cbk(null, {is_legacy: false});
-      });
-    },
-
-    // Start legacy subscription, needed on LND 0.9.2 and below
-    legacyTrackPayment: ['getVersion', ({getVersion}, cbk) => {
-      // Exit early when legacy router is not needed
-      if (!getVersion.is_legacy) {
-        return cbk();
-      }
-
-      const sub = args.lnd.router_legacy.trackPayment({payment_hash: hash});
-
-      sub.on('data', data => emitLegacyPayment({data, emitter}));
-      sub.on('end', () => cbk());
-      sub.on('error', err => cbk(err));
-
-      return;
-    }],
-
-    // Start the regular subscription
-    trackPayment: ['getVersion', ({getVersion}, cbk) => {
-      // Exit early when the legacy router is needed
-      if (!!getVersion.is_legacy) {
-        return cbk();
-      }
-
-      const sub = args.lnd[type][method]({payment_hash: hash});
-
-      sub.on('data', data => emitPayment({data, emitter}));
-      sub.on('end', () => cbk());
-      sub.on('error', err => cbk(err));
-
-      return;
-    }],
-  },
-  err => {
-    return nextTick(() => {
-      if (!!err) {
-        return emitError(err);
-      }
-
-      return emitter.emit('end');
-    });
-  });
+  sub.on('data', data => emitPayment({data, emitter}));
+  sub.on('end', () => emitter.emit('end'));
+  sub.on('error', err => emitError(err));
 
   return emitter;
 };

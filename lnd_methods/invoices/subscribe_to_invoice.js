@@ -12,11 +12,6 @@ const updateEvent = 'invoice_updated';
 
   Requires `invoices:read` permission
 
-  The `payments` array of HTLCs is only populated on LND versions after 0.7.1
-
-  The `features` and `messages` arrays are not populated on LND 0.8.2 and below
-  The `mtokens` value is not supported on LND 0.8.2 and below
-
   {
     id: <Invoice Payment Preimage Hash Hex String>
     lnd: <Authenticated LND API Object>
@@ -49,7 +44,7 @@ const updateEvent = 'invoice_updated';
     is_outgoing: <Invoice is Outgoing Bool>
     is_private: <Invoice is Private Bool>
     mtokens: <Invoiced Millitokens String>
-    [payments]: [{
+    payments: [{
       [confirmed_at]: <Payment Settled At ISO 8601 Date String>
       created_at: <Payment Held Since ISO 860 Date String>
       created_height: <Payment Held Since Block Height Number>

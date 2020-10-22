@@ -19,8 +19,6 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
 
   Requires `info:read` permission
 
-  LND 0.9.2 and below do not return `features`
-
   {
     lnd: <Authenticated LND API Object>
   }

@@ -11,13 +11,9 @@ const notFound = -1;
 
 /** Make a payment via a specified route
 
-  Requires LND built with `routerrpc` build tag
-
   If no id is specified, a random id will be used to send a test payment
 
   Requires `offchain:write`
-
-  LND 0.8.2 and below do not support `messages`, `total_mtokens`, `payment`
 
   {
     [id]: <Payment Hash Hex String>

@@ -15,8 +15,6 @@ const unknownTransactionErr = 'cannot label transaction not known to wallet';
 
   Requires `onchain:write` permission
 
-  This method is not supported in LND 0.10.1 and below
-
   {
     description: <Transaction Label String>
     id: <Transaction Id Hex String>

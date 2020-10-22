@@ -13,14 +13,14 @@ const expectedChannel = {
   is_opening: false,
   is_partner_initiated: false,
   is_private: true,
-  is_static_remote_key: undefined,
+  is_static_remote_key: false,
   local_balance: 1,
-  local_csv: undefined,
-  local_dust: undefined,
+  local_csv: 1,
+  local_dust: 1,
   local_given: 0,
-  local_min_htlc_mtokens: undefined,
-  local_max_htlcs: undefined,
-  local_max_pending_mtokens: undefined,
+  local_min_htlc_mtokens: '1',
+  local_max_htlcs: 1,
+  local_max_pending_mtokens: '1',
   local_reserve: 1,
   partner_public_key: 'b',
   pending_payments: [{
@@ -31,16 +31,16 @@ const expectedChannel = {
   }],
   received: 1,
   remote_balance: 1,
-  remote_csv: undefined,
-  remote_dust: undefined,
+  remote_csv: 1,
+  remote_dust: 1,
   remote_given: 0,
-  remote_max_htlcs: undefined,
-  remote_max_pending_mtokens: undefined,
-  remote_min_htlc_mtokens: undefined,
+  remote_max_htlcs: 1,
+  remote_max_pending_mtokens: '1',
+  remote_min_htlc_mtokens: '1',
   remote_reserve: 1,
   sent: 1,
-  time_offline: undefined,
-  time_online: undefined,
+  time_offline: 0,
+  time_online: 1000,
   transaction_id: '00',
   transaction_vout: 1,
   unsettled_balance: 1,
@@ -57,8 +57,17 @@ const makeLnd = overrides => {
     commit_weight: '1',
     fee_per_kw: '1',
     initiator: true,
+    lifetime: 1,
     local_balance: '1',
     local_chan_reserve_sat: '1',
+    local_constraints: {
+      chan_reserve_sat: '1',
+      csv_delay: 1,
+      dust_limit_sat: '1',
+      max_accepted_htlcs: 1,
+      max_pending_amt_msat: '1',
+      min_htlc_msat: '1',
+    },
     num_updates: 1,
     pending_htlcs: [{
       amount: '1',
@@ -69,10 +78,19 @@ const makeLnd = overrides => {
     private: true,
     remote_balance: 1,
     remote_chan_reserve_sat: '1',
+    remote_constraints: {
+      chan_reserve_sat: '1',
+      csv_delay: 1,
+      dust_limit_sat: '1',
+      max_accepted_htlcs: 1,
+      max_pending_amt_msat: '1',
+      min_htlc_msat: '1',
+    },
     remote_pubkey: 'b',
     total_satoshis_received: 1,
     total_satoshis_sent: 1,
     unsettled_balance: 1,
+    uptime: 1,
   };
 
   Object.keys(overrides).forEach(key => channel[key] = overrides[key]);
@@ -224,7 +242,7 @@ const tests = [
 tests.forEach(({args, description, error, expected}) => {
   return test(description, async ({deepEqual, end, equal, rejects}) => {
     if (!!error) {
-      rejects(() => getChannels(args), error, 'Got expected error');
+      await rejects(() => getChannels(args), error, 'Got expected error');
     } else {
       const {channels} = await getChannels(args);
 

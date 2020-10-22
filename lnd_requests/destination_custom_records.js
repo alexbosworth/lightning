@@ -1,16 +1,6 @@
-const BN = require('bn.js');
-
 const bufferFromHex = hex => Buffer.from(hex, 'hex');
-const {concat} = Buffer;
-const dummyMppType = '5262155';
-const endian = 'be';
-const mtokensByteLength = 8;
-const notFound = -1;
-const trimByte = 0;
 
 /** Destination custom records
-
-  This includes a dummy record due to LND 0.9.0 not supporting payment/total
 
   {
     [messages]: [{
@@ -35,32 +25,6 @@ module.exports = args => {
     return sum;
   },
   {});
-
-  // Exit early when there is no payment identifier
-  if (!args.payment) {
-    return {tlv};
-  }
-
-  const payment = bufferFromHex(args.payment);
-
-  // A dummy MPP record is set to simulate the size of the real record
-
-  // Exit early when there is no total mtokens
-  if (!args.total_mtokens) {
-    tlv[dummyMppType] = payment;
-
-    return {tlv};
-  }
-
-  const mtokens = new BN(args.total_mtokens).toArrayLike(
-    Buffer,
-    endian,
-    mtokensByteLength
-  );
-
-  const trimIndex = mtokens.lastIndexOf(trimByte) + [trimByte].length;
-
-  tlv[dummyMppType] = concat([payment, mtokens.slice(trimIndex)]);
 
   return {tlv};
 };

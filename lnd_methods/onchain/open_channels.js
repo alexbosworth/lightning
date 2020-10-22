@@ -23,13 +23,10 @@ const type = 'default';
 
   Requires `offchain:write`, `onchain:write` permissions
 
-  This method requires external funding of channels, which is not supported in
-  LND versions 0.9.2 and below.
-
-  After getting the addresses and tokens to fund, use fundChannels within ten
+  After getting the addresses and tokens to fund, use `fundChannels` within ten
   minutes to fund the channels.
 
-  If you do not fund the channels, be sure to cancelPendingChannel on each
+  If you do not fund the channels, be sure to `cancelPendingChannel` on each
   channel that was not funded.
 
   {
@@ -125,11 +122,6 @@ module.exports = ({channels, lnd}, cbk) => {
           }
 
           channelOpen.on('error', err => {
-            // On LND 0.9.2 and below, the PSBT shim will not be recognized
-            if (!!err.details && err.details.startsWith(notEnoughOutputs)) {
-              return done([503, 'InsufficientBalanceToOpenChannels', {err}]);
-            }
-
             return done(null, {err});
           });
 

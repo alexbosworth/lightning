@@ -5,10 +5,6 @@ const {getInfoResponse} = require('./../fixtures');
 const {getRouteToDestination} = require('./../../../lnd_methods/info');
 
 const customRecords = {};
-const type = new BN('5262155').toArrayLike(Buffer, 'le', 8).toString('ascii');
-
-customRecords[type] = Buffer.alloc(1);
-customRecords['000001'] = Buffer.alloc(1);
 
 const makeLnd = ({custom, err, res}) => {
   const response = {
@@ -43,7 +39,8 @@ const makeArgs = override => {
   const args = {
     destination: '00',
     lnd: makeLnd({}),
-    payment: 'payment',
+    messages: [],
+    payment: '00',
     routes: [[{
       base_fee_mtokens: '1',
       channel: '0x0x0',
@@ -139,9 +136,11 @@ const tests = [
       features: [{bit: 1}],
       incoming_peer: '00',
       max_timeout_height: 10,
+      payment: undefined,
       lnd: makeLnd({custom: {}}),
       outgoing_channel: '0x0x0',
       routes: undefined,
+      total_mtokens: undefined,
     }),
     description: 'A route is returned when no custom records are given',
     expected: {
@@ -161,10 +160,12 @@ const tests = [
         }],
         messages: [],
         mtokens: '1',
+        payment: undefined,
         safe_fee: 1,
         safe_tokens: 1,
         timeout: 1,
         tokens: 0,
+        total_mtokens: undefined,
       },
     },
   },
@@ -186,9 +187,7 @@ const tests = [
           public_key: '00',
           timeout: 1,
         }],
-        messages: [{
-          type: '54083036655664', value: '00',
-        }],
+        messages: [],
         mtokens: '1',
         payment: '00',
         safe_fee: 1,

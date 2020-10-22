@@ -20,8 +20,6 @@ const type = 'default';
 
   Requires `info:read` permission
 
-  LND 0.8.2 and below do not return `features`
-
   {
     [is_omitting_channels]: <Omit Channels from Node Bool>
     lnd: <Authenticated LND gRPC API Object>

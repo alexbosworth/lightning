@@ -24,17 +24,6 @@ const updateOpening = 'pending_open_channel';
 
   Requires `offchain:read` permission
 
-  - LND 0.9.0 and below do not emit `channel_opening` events.
-
-  - `is_partner_closed` and `is_partner_initiated` are not supported on LND
-      0.9.1 and below.
-
-  - `local_given` and `remote_given` are not supported on LND 0.9.2 and below
-
-  - `close_balance_spent_by` is not supported on LND 0.10.4 and below
-  - `close_balance_vout` is not supported on LND 0.10.4 and below
-  - `close_payments` is not supported on LND 0.10.4 and below
-
   {
     lnd: <Authenticated LND API Object>
   }
@@ -76,8 +65,8 @@ const updateOpening = 'pending_open_channel';
     is_cooperative_close: <Is Cooperative Close Bool>
     is_funding_cancel: <Is Funding Cancelled Close Bool>
     is_local_force_close: <Is Local Force Close Bool>
-    [is_partner_closed]: <Channel Was Closed By Channel Peer Bool>
-    [is_partner_initiated]: <Channel Was Initiated By Channel Peer Bool>
+    is_partner_closed: <Channel Was Closed By Channel Peer Bool>
+    is_partner_initiated: <Channel Was Initiated By Channel Peer Bool>
     is_remote_force_close: <Is Remote Force Close Bool>
     partner_public_key: <Partner Public Key Hex String>
     transaction_id: <Channel Funding Transaction Id Hex String>
@@ -96,9 +85,9 @@ const updateOpening = 'pending_open_channel';
     is_opening: <Channel Is Opening Bool>
     is_partner_initiated: <Channel Partner Opened Channel Bool>
     is_private: <Channel Is Private Bool>
-    [is_static_remote_key]: <Remote Key Is Static Bool>
+    is_static_remote_key: <Remote Key Is Static Bool>
     local_balance: <Local Balance Tokens Number>
-    [local_given]: <Local Initially Pushed Tokens Number>
+    local_given: <Local Initially Pushed Tokens Number>
     local_reserve: <Local Reserved Tokens Number>
     partner_public_key: <Channel Partner Public Key String>
     pending_payments: [{
@@ -109,7 +98,7 @@ const updateOpening = 'pending_open_channel';
     }]
     received: <Received Tokens Number>
     remote_balance: <Remote Balance Tokens Number>
-    [remote_given]: <Remote Initially Pushed Tokens Number>
+    remote_given: <Remote Initially Pushed Tokens Number>
     remote_reserve: <Remote Reserved Tokens Number>
     sent: <Sent Tokens Number>
     transaction_id: <Blockchain Transaction Id String>

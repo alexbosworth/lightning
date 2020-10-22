@@ -11,21 +11,9 @@ const type = 'router';
 
 /** Pay via payment details
 
-  Requires LND built with `routerrpc` build tag on LND 0.9.2 and below
-
   If no id is specified, a random id will be used.
 
   Requires `offchain:write` permission
-
-  Specifying `features` is not supported on LND 0.8.2 and below
-  Specifying `max_fee_mtokens`/`mtokens` is not supported in LND 0.8.2 or below
-  Specifying `messages` is not supported on LND 0.8.2 and below
-
-  `incoming_peer` is not supported on LND 0.8.2 and below
-
-  Specifying `max_paths` is not suppoorted on LND 0.9.2 and below
-
-  Specifying `outgoing_channels` is not supported on LND 0.10.0 and below
 
   {
     [cltv_delta]: <Final CLTV Delta Number>

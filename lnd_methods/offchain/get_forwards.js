@@ -22,8 +22,6 @@ const type = 'default';
 
   Requires `offchain:read` permission
 
-  `mtokens` is not supported on LND v0.8.2 or lower
-
   {
     [after]: <Get Only Payments Forwarded At Or After ISO 8601 Date String>
     [before]: <Get Only Payments Forwarded Before ISO 8601 Date String>
@@ -39,7 +37,7 @@ const type = 'default';
       fee: <Fee Tokens Charged Number>
       fee_mtokens: <Approximated Fee Millitokens Charged String>
       incoming_channel: <Incoming Standard Format Channel Id String>
-      [mtokens]: <Forwarded Millitokens String>
+      mtokens: <Forwarded Millitokens String>
       outgoing_channel: <Outgoing Standard Format Channel Id String>
       tokens: <Forwarded Tokens Number>
     }]

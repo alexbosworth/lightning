@@ -82,7 +82,7 @@ const outpointSeparator = ':';
       is_active: <Channel Is Active Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
-      [is_partner_initiated]: <Channel Partner Initiated Channel Bool>
+      is_partner_initiated: <Channel Partner Initiated Channel Bool>
       local_balance: <Channel Local Tokens Balance Number>
       local_reserve: <Channel Local Reserved Tokens Number>
       partner_public_key: <Channel Peer Public Key String>

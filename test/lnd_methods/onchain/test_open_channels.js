@@ -85,16 +85,6 @@ const tests = [
     error: [400, 'ExpectedAuthenticatedLndToOpenChannels'],
   },
   {
-    args: {
-      channels: makeChannels({}),
-      lnd: makeLnd({
-        error: {details: 'not enough witness outputs to create funding '},
-      }),
-    },
-    description: 'Insufficient balance returns an error',
-    error: [503, 'InsufficientBalanceToOpenChannels'],
-  },
-  {
     args: {channels: makeChannels({}), lnd: makeLnd({error: 'err'})},
     description: 'Random error returns an error',
     error: [503, 'UnexpectedErrorOpeningChannels', {err: 'err'}],

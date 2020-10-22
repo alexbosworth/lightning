@@ -1,5 +1,14 @@
 # Versions
 
+## 3.0.0
+
+Support for versions of LND lower than v0.11.0 is ended due to security issues with those
+releases.
+
+### Breaking Changes
+
+- `authenticatedLndGrpc`: Eliminate `router_legacy`
+
 ## 2.0.55
 
 - `authenticatedLndGrpc`: Adjust for changes to LND proto files

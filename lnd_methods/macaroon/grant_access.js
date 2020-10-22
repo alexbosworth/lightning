@@ -22,8 +22,6 @@ const type = 'default';
   Note: access once given cannot be revoked. Access is defined at the LND level
   and version differences in LND can result in expanded access.
 
-  Note: granting access is not supported in LND versions 0.8.2 and below
-
   Note: `id` is not supported in LND versions 0.11.0 and below
 
   {

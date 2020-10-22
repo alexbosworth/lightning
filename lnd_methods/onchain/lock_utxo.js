@@ -12,7 +12,7 @@ const isNumber = n => !isNaN(n);
 const makeId = () => randomBytes(32);
 const method = 'leaseOutput';
 const type = 'wallet';
-const unsuppportedErr = 'unknown service walletrpc.WalletKit';
+const unsuppportedErr = /unknown/;
 
 /** Lock UTXO
 
@@ -21,7 +21,8 @@ const unsuppportedErr = 'unknown service walletrpc.WalletKit';
   Requires LND built with `walletrpc` build tag
 
   {
-    lnd: <Authenticated LND gRPC API Object>
+    [id]: <Lock Identifier Hex String>
+    lnd: <Authenticated LND API Object>
     transaction_id: <Unspent Transaction Id Hex String>
     transaction_vout: <Unspent Transaction Output Index Number>
   }
@@ -54,7 +55,7 @@ module.exports = (args, cbk) => {
 
       // Lock the UTXO
       lock: ['validate', ({}, cbk) => {
-        const id = makeId();
+        const id = args.id || makeId();
 
         return args.lnd[type][method]({
           id,
@@ -64,7 +65,7 @@ module.exports = (args, cbk) => {
           },
         },
         (err, res) => {
-          if (!!err && err.details === unsuppportedErr) {
+          if (!!err && unsuppportedErr.test(err.details)) {
             return cbk([501, 'BackingLndDoesNotSupportLockingUtxos']);
           }
 

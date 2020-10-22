@@ -18,8 +18,6 @@ const type = 'default';
 
   Requires `offchain:write`, `onchain:write`, `peers:write` permissions
 
-  LND 0.8.2 and below do not support `cooperative_close_address`
-
   External funding requires LND compiled with `walletrpc` build tag
 
   {

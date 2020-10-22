@@ -4,7 +4,7 @@ const asyncAuto = require('async/auto');
 const asyncWhilst = require('async/whilst');
 
 const {getRouteToDestination} = require('./../info');
-const {getWalletInfo} = require('./../info');
+const {getIdentity} = require('./../info');
 const {isLnd} = require('./../../lnd_requests');
 const {mtokensAmount} = require('./../../bolt00');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
@@ -18,11 +18,7 @@ const {nextTick} = process;
 
 /** Subscribe to a probe attempt
 
-  Requires LND built with `routerrpc` build tag
-
   Requires `offchain:write` permission
-
-  This method is not supported on LND 0.8.2 or below.
 
   {
     [cltv_delta]: <Final CLTV Delta Number>
@@ -238,7 +234,7 @@ module.exports = args => {
     cbk => {
       return asyncAuto({
         // Get public key
-        getInfo: cbk => getWalletInfo({lnd: args.lnd}, cbk),
+        getInfo: cbk => getIdentity({lnd: args.lnd}, cbk),
 
         // Get the next route
         getNextRoute: cbk => {
@@ -268,11 +264,6 @@ module.exports = args => {
           'getInfo',
           ({getInfo, getNextRoute}, cbk) =>
         {
-          // Confirm that node is not running LND 0.8.2 or below
-          if (!getInfo.features.length) {
-            return cbk([400, 'ExpectedFeaturesToSubscribeToProbeDestination']);
-          }
-
           const routes = [getNextRoute.route].filter(n => !!n);
 
           if (!routes.length) {

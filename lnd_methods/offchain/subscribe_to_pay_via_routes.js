@@ -24,11 +24,7 @@ const unknownWireError = 'unknown wire error';
 
 /** Subscribe to the attempts of paying via specified routes
 
-  Requires LND built with `routerrpc` build tag
-
   Requires `offchain:write` permission
-
-  LND 0.8.2 and below do not support `messages`, `total_mtokens`, `payment`
 
   {
     [id]: <Payment Hash Hex String>

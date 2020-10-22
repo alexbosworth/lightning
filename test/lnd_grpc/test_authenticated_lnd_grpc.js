@@ -8,7 +8,6 @@ const expectedServices = [
   'default',
   'invoices',
   'router',
-  'router_legacy',
   'signer',
   'tower_client',
   'tower_server',

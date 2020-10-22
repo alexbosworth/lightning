@@ -10,8 +10,6 @@ const type = 'router';
 
 /** Get the status of a past payment
 
-  Requires LND compiled with `routerrpc` build tag
-
   Requires `offchain:read` permission
 
   {

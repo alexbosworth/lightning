@@ -12,8 +12,6 @@ const type = 'default';
 
   Requires `peers:read` permission
 
-  LND 0.8.2 and below do not return `features`
-
   LND 0.11.0 and below do not return `last_reconnected` or `reconnection_rate`
 
   {

@@ -13,11 +13,7 @@ const unknownServiceMessage = 'unknown service routerrpc.Router';
 
 /** Get an outbound route that goes through specific hops
 
-  Requires LND built with `routerrpc` build tag
-
   Requires `offchain:read` permission
-
-  This method is not supported by LND v0.7.1 or below LNDs
 
   {
     [cltv_delta]: <Final CLTV Delta Number>

@@ -19,7 +19,6 @@ const {routesFromQueryRoutes} = require('./../../lnd_responses');
 const bufFromHex = hex => !hex ? null : Buffer.from(hex, 'hex');
 const {concat} = Buffer;
 const defaultMaxFee = Number.MAX_SAFE_INTEGER;
-const dummyMppType = '5262155';
 const {isArray} = Array;
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const mtokensByteLength = 8;
@@ -35,8 +34,6 @@ const trimByte = 0;
   Call this iteratively after failed route attempts to get new routes
 
   Requires `info:read` permission
-
-  Do not use this method on LND 0.8.2 and below
 
   {
     [cltv_delta]: <Final CLTV Delta Number>
@@ -312,17 +309,7 @@ module.exports = (args, cbk) => {
           return cbk(null, {});
         }
 
-        const {messages} = route;
-
-        const dummyMppRecord = messages.find(n => n.type === dummyMppType);
-
-        // Exit early when there is no dummy MPP record
-        if (!dummyMppRecord) {
-          return cbk(null, {route});
-        }
-
-        route.messages = messages.filter(n => n.type !== dummyMppType);
-        route.payment = paymentFromMppRecord(dummyMppRecord);
+        route.payment = args.payment;
         route.total_mtokens = args.total_mtokens;
 
         return cbk(null, {route});

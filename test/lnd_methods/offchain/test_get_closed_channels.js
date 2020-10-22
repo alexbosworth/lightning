@@ -8,9 +8,9 @@ const makeLnd = (err, override, response) => {
     chan_id: '1',
     channel_point: '00:1',
     close_height: 1,
-    close_initiator: 'REMOTE',
+    close_initiator: 'INITIATOR_REMOTE',
     closing_tx_hash: '00',
-    open_initiator: 'LOCAL',
+    open_initiator: 'INITIATOR_LOCAL',
     remote_pubkey: 'b',
     settled_balance: '1',
     time_locked_balance: '1',
@@ -172,7 +172,7 @@ const tests = [
   },
   {
     args: makeArgs({
-      override: {lnd: makeLnd(null, {close_initiator: 'LOCAL'})},
+      override: {lnd: makeLnd(null, {close_initiator: 'INITIATOR_LOCAL'})},
     }),
     description: 'Local close initiator is returned',
     expected: {
@@ -207,7 +207,7 @@ const tests = [
   },
   {
     args: makeArgs({
-      override: {lnd: makeLnd(null, {close_initiator: 'REMOTE'})},
+      override: {lnd: makeLnd(null, {close_initiator: 'INITIATOR_REMOTE'})},
     }),
     description: 'Remote close initiator is returned',
     expected: {
@@ -216,7 +216,7 @@ const tests = [
   },
   {
     args: makeArgs({
-      override: {lnd: makeLnd(null, {open_initiator: 'REMOTE'})},
+      override: {lnd: makeLnd(null, {open_initiator: 'INITIATOR_REMOTE'})},
     }),
     description: 'Open initiator is returned',
     expected: {

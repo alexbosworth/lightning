@@ -8,8 +8,6 @@ const type = 'default';
 
 /** Cancel an external funding pending channel
 
-  PSBT funded channels are not supported in LND 0.9.2 and below
-
   {
     id: <Pending Channel Id Hex String>
     lnd: <Authenticated LND API Object>

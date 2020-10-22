@@ -61,7 +61,6 @@ Initiate an gRPC API Methods Object for LND authenticated methods.
         default: <Default API Methods Object>
         invoices: <Invoices API Methods Object>
         router: <Router API Methods Object>
-        router_legacy: <Legacy Router API Methods Object>
         signer: <Signer Methods API Object>
         tower_client: <Watchtower Client Methods Object>
         tower_server: <Watchtower Server Methods API Object>

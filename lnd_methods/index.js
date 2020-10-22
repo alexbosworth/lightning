@@ -18,6 +18,7 @@ const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
 const {getClosedChannels} = require('./offchain');
 const {getForwards} = require('./offchain');
+const {getIdentity} = require('./info');
 const {getInvoice} = require('./invoices');
 const {getMethods} = require('./info');
 const {getNetworkCentrality} = require('./info');
@@ -27,6 +28,7 @@ const {getPayment} = require('./offchain');
 const {getPeers} = require('./peers');
 const {getPendingChainBalance} = require('./onchain');
 const {getPendingChannels} = require('./offchain');
+const {getPublicKey} = require('./address');
 const {getRouteThroughHops} = require('./offchain');
 const {getRouteToDestination} = require('./info');
 const {getSweepTransactions} = require('./onchain');
@@ -80,6 +82,7 @@ module.exports = {
   getChannels,
   getClosedChannels,
   getForwards,
+  getIdentity,
   getInvoice,
   getMethods,
   getNetworkCentrality,
@@ -89,6 +92,7 @@ module.exports = {
   getPeers,
   getPendingChainBalance,
   getPendingChannels,
+  getPublicKey,
   getRouteThroughHops,
   getRouteToDestination,
   getSweepTransactions,

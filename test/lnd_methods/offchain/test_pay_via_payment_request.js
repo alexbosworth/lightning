@@ -110,35 +110,6 @@ const makeLnd = args => {
         return emitter;
       },
     },
-    router_legacy: {
-      sendPayment: ({}) => {
-        const data = args.data || {state: 'FAILED_TIMEOUT'};
-        const emitter = new EventEmitter();
-
-        if (!!args.is_end) {
-          process.nextTick(() => emitter.emit('end'));
-        } else if (!!args.err) {
-          process.nextTick(() => emitter.emit('error', args.err));
-        } else {
-          process.nextTick(() => emitter.emit('data', data));
-        }
-
-        return emitter;
-      },
-    },
-    version: {
-      getVersion: ({}, cbk) => {
-        if (!!args.is_legacy) {
-          return cbk({details: 'unknown service verrpc.Versioner'});
-        }
-
-        if (!!args.get_version_error) {
-          return cbk(args.get_version_error);
-        }
-
-        return cbk(null, {});
-      },
-    },
   };
 };
 

@@ -11,8 +11,6 @@ const lockedLndErrorMessage = 'unknown service lnrpc.Lightning';
 
 /** Get overall wallet info.
 
-  LND 0.8.2 and below do not return `features`
-
   {
     lnd: <Authenticated LND API Object>
   }

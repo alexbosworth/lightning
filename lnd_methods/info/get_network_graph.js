@@ -16,8 +16,6 @@ const type = 'default';
 
   Requires `info:read` permission
 
-  LND 0.8.2 and below do not return `features`
-
   {
     lnd: <Authenticated LND API Object>
   }

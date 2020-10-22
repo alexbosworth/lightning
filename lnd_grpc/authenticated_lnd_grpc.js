@@ -3,7 +3,6 @@ const {join} = require('path');
 const grpc = require('grpc');
 const {loadSync} = require('@grpc/proto-loader');
 
-const {alternativeProtos} = require('./../grpc')
 const apiForProto = require('./api_for_proto');
 const {defaultSocket} = require('./../grpc');
 const grpcCredentials = require('./grpc_credentials');
@@ -41,7 +40,6 @@ const pathForProto = proto => join(__dirname, protosDir, proto);
       default: <Default API Methods Object>
       invoices: <Invoices API Methods Object>
       router: <Router API Methods Object>
-      router_legacy: <Legacy Router API Methods Object>
       signer: <Signer Methods API Object>
       tower_client: <Watchtower Client Methods Object>
       tower_server: <Watchtower Server Methods API Object>
@@ -70,22 +68,6 @@ module.exports = ({cert, macaroon, socket}) => {
         path: pathForProto(protoFiles[service]),
         socket: lndSocket,
         type: packageTypes[service],
-      });
-
-      // Exit early when there are no alternative protos to add
-      if (!alternativeProtos[type]) {
-        return services;
-      }
-
-      alternativeProtos[type].forEach(alternative => {
-        return services[alternative.type] = apiForProto({
-          credentials,
-          params,
-          service,
-          path: pathForProto(alternative.proto),
-          socket: lndSocket,
-          type: packageTypes[service],
-        });
       });
 
       return services;

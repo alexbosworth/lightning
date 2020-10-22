@@ -17,8 +17,6 @@ const type = 'default';
 
   Requires `offchain:read` permission
 
-  `is_partner_initiated` is not accurate on LND 0.9.2 and below.
-
   {
     lnd: <Authenticated LND API Object>
   }
@@ -30,7 +28,7 @@ const type = 'default';
       is_active: <Channel Is Active Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
-      [is_partner_initiated]: <Channel Partner Initiated Channel Bool>
+      is_partner_initiated: <Channel Partner Initiated Channel Bool>
       local_balance: <Channel Local Tokens Balance Number>
       local_reserve: <Channel Local Reserved Tokens Number>
       partner_public_key: <Channel Peer Public Key String>

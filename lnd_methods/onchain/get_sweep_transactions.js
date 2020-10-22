@@ -13,8 +13,6 @@ const type = 'wallet';
 
   Requires `onchain:read` permission
 
-  This method is not suppoorted on LND 0.10.0 and below
-
   {
     lnd: <Authenticated LND API Object>
   }

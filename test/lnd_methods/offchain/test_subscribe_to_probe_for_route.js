@@ -20,10 +20,12 @@ const expectedRoute = {
   }],
   messages: [],
   mtokens: '1',
+  payment: undefined,
   safe_fee: 1,
   safe_tokens: 1,
   timeout: 1,
   tokens: 0,
+  total_mtokens: undefined,
 };
 
 const sendToRouteFailure = {
@@ -115,34 +117,6 @@ const tests = [
     },
     description: 'Non-listening errors are not emitted',
     expected: {
-      failures: [],
-      routes: [],
-    },
-  },
-  {
-    args: {
-      destination: Buffer.alloc(33).toString('hex'),
-      lnd: makeLnd({getInfo: ({}, cbk) => cbk(null, {
-        alias: '',
-        best_header_timestamp: 1,
-        block_hash: '00',
-        block_height: 1,
-        chains: [{chain: 'bitcoin', network: 'mainnet'}],
-        color: '#000000',
-        features: {},
-        identity_pubkey: '020000000000000000000000000000000000000000000000000000000000000000',
-        num_active_channels: 0,
-        num_peers: 0,
-        num_pending_channels: 0,
-        synced_to_chain: false,
-        uris: [],
-        version: ''
-      })}),
-      tokens: 1,
-    },
-    description: 'A probe encounters an error getting info',
-    expected: {
-      error: [400, 'ExpectedFeaturesToSubscribeToProbeDestination'],
       failures: [],
       routes: [],
     },
