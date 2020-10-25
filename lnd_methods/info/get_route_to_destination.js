@@ -7,7 +7,7 @@ const {blocksBuffer} = require('./constants');
 const {defaultCltv} = require('./constants');
 const {defaultTokens} = require('./constants');
 const {destinationCustomRecords} = require('./../../lnd_requests');
-const getWalletInfo = require('./get_wallet_info');
+const {getHeight} = require('./../generic');
 const {ignoreAsIgnoredNodes} = require('./../../lnd_requests');
 const {ignoreAsIgnoredPairs} = require('./../../lnd_requests');
 const {isLnd} = require('./../../lnd_requests');
@@ -170,14 +170,14 @@ module.exports = (args, cbk) => {
         }
       }],
 
-      // Get wallet info to adjust timeout height to a delta
-      getWalletInfo: ['validate', ({}, cbk) => {
+      // Get the current height to adjust timeout height to a delta
+      getHeight: ['validate', ({}, cbk) => {
         // Exit early when there is no max height specified
         if (!args.max_timeout_height) {
           return cbk();
         }
 
-        return getWalletInfo({lnd: args.lnd}, cbk);
+        return getHeight({lnd: args.lnd}, cbk);
       }],
 
       // Determine the outgoing channel
@@ -205,13 +205,13 @@ module.exports = (args, cbk) => {
       }],
 
       // Derive the CLTV limit
-      cltvLimit: ['getWalletInfo', ({getWalletInfo}, cbk) => {
+      cltvLimit: ['getHeight', ({getHeight}, cbk) => {
         // Exit early when there is no wallet info
-        if (!getWalletInfo) {
+        if (!getHeight) {
           return cbk();
         }
 
-        const currentBlockHeight = getWalletInfo.current_block_height;
+        const currentBlockHeight = getHeight.current_block_height;
 
         return cbk(null, args.max_timeout_height - currentBlockHeight);
       }],

@@ -8,10 +8,9 @@ const {chanNumber} = require('bolt07');
 const nextTick = require('async/nextTick');
 const {returnResult} = require('asyncjs-util');
 
-const {getWalletInfo} = require('./../info');
 const {isLnd} = require('./../../lnd_requests');
 const {paymentFailure} = require('./../../lnd_responses');
-const routeFailureKeys = require('./route_failure_keys');
+const routeFailureKeys = require('./../offchain/route_failure_keys');
 const {rpcRouteFromRoute} = require('./../../lnd_requests');
 
 const {isArray} = Array;

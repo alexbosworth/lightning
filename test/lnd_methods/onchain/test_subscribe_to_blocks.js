@@ -1,0 +1,96 @@
+const EventEmitter = require('events');
+
+const {test} = require('tap');
+
+const {subscribeToBlocks} = require('./../../../lnd_methods');
+
+const makeLnd = overrides => {
+  const data = {hash: Buffer.alloc(32), height: 1};
+
+  Object.keys(overrides).forEach(k => data[k] = overrides[k]);
+
+  return {
+    chain: {
+      registerBlockEpochNtfn: ({}) => {
+        const emitter = new EventEmitter();
+
+        emitter.cancel = () => {};
+
+        process.nextTick(() => emitter.emit('data', data));
+
+        return emitter;
+      },
+    },
+  };
+};
+
+const tests = [
+  {
+    args: {
+      lnd: {
+        chain: {
+          registerBlockEpochNtfn: ({}) => {
+            const emitter = new EventEmitter();
+
+            emitter.cancel = () => {};
+
+            process.nextTick(() => emitter.emit('error', 'err'));
+
+            return emitter;
+          },
+        },
+      },
+    },
+    description: 'Errors are returned',
+    error: [503, 'UnexpectedErrInBlocksSubscription', {err: 'err'}],
+  },
+  {
+    args: {lnd: makeLnd({hash: undefined})},
+    description: 'Block data is expected',
+    error: [503, 'ExpectedBlockHashInAnnouncement'],
+  },
+  {
+    args: {lnd: makeLnd({hash: Buffer.alloc(1)})},
+    description: 'Block hash is expected',
+    error: [503, 'UnexpectedBlockEventHashLength'],
+  },
+  {
+    args: {lnd: makeLnd({height: undefined})},
+    description: 'Height is expected',
+    error: [503, 'ExpectedHeightInBlockEvent'],
+  },
+  {
+    args: {lnd: makeLnd({})},
+    description: 'Block data emitted',
+    expected: {height: 1, id: Buffer.alloc(32).toString('hex')},
+  },
+];
+
+tests.forEach(({args, description, error, expected}) => {
+  return test(description, ({deepIs, end, equal, throws}) => {
+    try {
+      subscribeToBlocks({});
+    } catch (err) {
+      deepIs(err, new Error('ExpectedLndToSubscribeToBlocks'), 'Requires lnd');
+    }
+
+    const sub = subscribeToBlocks(args);
+
+    if (!!error) {
+      sub.once('error', err => {
+        deepIs(err, error, 'Got expected error');
+
+        return end();
+      });
+    } else {
+      sub.once('block', ({height, id}) => {
+        equal(height, expected.height, 'Got height');
+        equal(id, expected.id, 'Got id');
+
+        return end();
+      });
+    }
+
+    return;
+  });
+});

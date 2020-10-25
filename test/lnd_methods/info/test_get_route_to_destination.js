@@ -1,3 +1,5 @@
+const EventEmitter = require('events');
+
 const BN = require('bn.js');
 const {test} = require('tap');
 
@@ -28,6 +30,17 @@ const makeLnd = ({custom, err, res}) => {
   };
 
   return {
+    chain: {
+      registerBlockEpochNtfn: ({}) => {
+        const emitter = new EventEmitter();
+
+        emitter.cancel = () => {};
+
+        process.nextTick(() => emitter.emit('error', 'err'));
+
+        return emitter;
+      },
+    },
     default: {
       getInfo: ({}, cbk) => cbk(null, getInfoResponse),
       queryRoutes: ({}, cbk) => cbk(err, res !== undefined ? res : response),
@@ -111,13 +124,6 @@ const tests = [
     args: makeArgs({lnd: makeLnd({res: {routes: [{}]}})}),
     description: 'Normal routes are expected',
     error: [503, 'UnexpectedResultFromQueryRoutes'],
-  },
-  {
-    args: makeArgs({
-      lnd: makeLnd({err: {details: 'unable to find a path to destination'}}),
-    }),
-    description: 'No route is found',
-    expected: {},
   },
   {
     args: makeArgs({

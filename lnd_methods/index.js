@@ -18,6 +18,7 @@ const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
 const {getClosedChannels} = require('./offchain');
 const {getForwards} = require('./offchain');
+const {getHeight} = require('./generic');
 const {getIdentity} = require('./info');
 const {getInvoice} = require('./invoices');
 const {getMethods} = require('./info');
@@ -47,6 +48,7 @@ const {revokeAccess} = require('./macaroon');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
 const {signPsbt} = require('./onchain');
+const {subscribeToBlocks} = require('./onchain');
 const {subscribeToChannels} = require('./offchain');
 const {subscribeToForwardRequests} = require('./offchain');
 const {subscribeToForwards} = require('./offchain');
@@ -82,6 +84,7 @@ module.exports = {
   getChannels,
   getClosedChannels,
   getForwards,
+  getHeight,
   getIdentity,
   getInvoice,
   getMethods,
@@ -111,6 +114,7 @@ module.exports = {
   setAutopilot,
   settleHodlInvoice,
   signPsbt,
+  subscribeToBlocks,
   subscribeToChannels,
   subscribeToForwardRequests,
   subscribeToForwards,

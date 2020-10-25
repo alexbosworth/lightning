@@ -13,6 +13,7 @@ const openChannel = require('./open_channel');
 const openChannels = require('./open_channels');
 const setAutopilot = require('./set_autopilot');
 const signPsbt = require('./sign_psbt');
+const subscribeToBlocks = require('./subscribe_to_blocks');
 const unlockUtxo = require('./unlock_utxo');
 const updateChainTransaction = require('./update_chain_transaction');
 
@@ -32,6 +33,7 @@ module.exports = {
   openChannels,
   setAutopilot,
   signPsbt,
+  subscribeToBlocks,
   unlockUtxo,
   updateChainTransaction,
 };

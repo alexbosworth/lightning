@@ -74,6 +74,17 @@ const makePaymentData = overrides => {
 
 const makeLnd = args => {
   return {
+    chain: {
+      registerBlockEpochNtfn: ({}) => {
+        const emitter = new EventEmitter();
+
+        emitter.cancel = () => {};
+
+        process.nextTick(() => emitter.emit('error', 'err'));
+
+        return emitter;
+      },
+    },
     default: {
       getInfo: ({}, cbk) => {
         return cbk(null, {

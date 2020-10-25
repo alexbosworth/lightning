@@ -9,7 +9,7 @@ const {confirmedFromPayment} = require('./../../lnd_responses');
 const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
 const emitPayment = require('./emit_payment');
 const {failureFromPayment} = require('./../../lnd_responses');
-const {getWalletInfo} = require('./../info');
+const {getHeight} = require('./../generic');
 const {isLnd} = require('./../../lnd_requests');
 const {paymentAmounts} = require('./../../bolt00');
 const {routeHintFromRoute} = require('./../../lnd_requests');
@@ -226,7 +226,7 @@ module.exports = args => {
         return cbk();
       }
 
-      return getWalletInfo({lnd: args.lnd}, cbk);
+      return getHeight({lnd: args.lnd}, cbk);
     },
 
     // Determine channel id restrictions if applicable
