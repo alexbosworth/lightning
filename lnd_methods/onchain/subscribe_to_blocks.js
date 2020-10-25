@@ -88,7 +88,7 @@ module.exports = ({lnd}) => {
 
     eventEmitter.emit(event, {
       height: data.height,
-      id: data.hash.toString('hex'),
+      id: data.hash.slice().reverse().toString('hex'),
     });
   });
 
