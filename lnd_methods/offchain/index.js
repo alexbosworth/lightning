@@ -6,6 +6,7 @@ const getForwards = require('./get_forwards');
 const getPayment = require('./get_payment');
 const getPendingChannels = require('./get_pending_channels');
 const getRouteThroughHops = require('./get_route_through_hops');
+const pay = require('./pay');
 const payViaPaymentDetails = require('./pay_via_payment_details');
 const payViaPaymentRequest = require('./pay_via_payment_request');
 const payViaRoutes = require('./pay_via_routes');
@@ -27,6 +28,7 @@ module.exports = {
   getPayment,
   getPendingChannels,
   getRouteThroughHops,
+  pay,
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,

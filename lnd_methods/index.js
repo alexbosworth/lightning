@@ -40,6 +40,7 @@ const {grantAccess} = require('./macaroon');
 const {lockUtxo} = require('./onchain');
 const {openChannel} = require('./onchain');
 const {openChannels} = require('./onchain');
+const {pay} = require('./offchain');
 const {payViaPaymentDetails} = require('./offchain');
 const {payViaPaymentRequest} = require('./offchain');
 const {payViaRequest} = require('./offchain');
@@ -106,6 +107,7 @@ module.exports = {
   lockUtxo,
   openChannel,
   openChannels,
+  pay,
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRequest,
