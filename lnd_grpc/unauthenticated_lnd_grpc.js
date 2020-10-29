@@ -1,6 +1,6 @@
 const {join} = require('path');
 
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
 const {loadSync} = require('@grpc/proto-loader');
 
 const {defaultSocket} = require('./../grpc');

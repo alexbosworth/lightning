@@ -1,6 +1,5 @@
 const {join} = require('path');
 
-const grpc = require('grpc');
 const {loadSync} = require('@grpc/proto-loader');
 
 const apiForProto = require('./api_for_proto');

@@ -89,6 +89,10 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedAuthenticatedLndToMakePayment']);
         }
 
+        if (!args.path && !args.request) {
+          return cbk([400, 'ExpectedEitherPathOrRequest']);
+        }
+
         if (!!args.path && !!args.request) {
           return cbk([400, 'ExpectedEitherPathOrRequestNotBoth']);
         }

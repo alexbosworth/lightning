@@ -319,7 +319,12 @@ module.exports = args => {
 
       sub.on('data', data => emitPayment({data, emitter}));
       sub.on('end', () => cbk());
-      sub.on('error', err => cbk(err));
+
+      sub.on('error', err => {
+        sub.removeAllListeners();
+
+        return cbk(err)
+      });
 
       return;
     }],

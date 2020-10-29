@@ -1,4 +1,4 @@
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
 const {loadSync} = require('@grpc/proto-loader');
 
 const grpcOptions = require('./grpc_options');

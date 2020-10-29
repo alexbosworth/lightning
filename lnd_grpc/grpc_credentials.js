@@ -1,4 +1,4 @@
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
 
 const decodeSerialized = require('./decode_serialized');
 const grpcSsl = require('./grpc_ssl');

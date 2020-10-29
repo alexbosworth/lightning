@@ -1,4 +1,5 @@
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
+// const grpc = require('grpc');
 
 /** Make metadata
 

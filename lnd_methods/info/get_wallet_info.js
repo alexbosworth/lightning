@@ -8,6 +8,7 @@ const cannotConnectMessage = 'failed to connect to all addresses';
 const connectFailMessage = '14 UNAVAILABLE: channel is in state TRANSIENT_FAILURE';
 const connectionFailureLndErrorMessage = 'Connect Failed';
 const lockedLndErrorMessage = 'unknown service lnrpc.Lightning';
+const noConnectionMessage = 'No connection established';
 
 /** Get overall wallet info.
 
@@ -67,6 +68,10 @@ module.exports = ({lnd}, cbk) => {
           }
 
           if (!!err && err.message === connectFailMessage) {
+            return cbk([503, 'FailedToConnectToDaemon']);
+          }
+
+          if (!!err && err.details === noConnectionMessage) {
             return cbk([503, 'FailedToConnectToDaemon']);
           }
 

@@ -1,6 +1,6 @@
 const {join} = require('path');
 
-const {loadPackageDefinition} = require('grpc');
+const {loadPackageDefinition} = require('@grpc/grpc-js');
 const {loadSync} = require('@grpc/proto-loader');
 
 const gatewayRequest = require('./gateway_request');
@@ -69,7 +69,7 @@ module.exports = ({cert, macaroon, request, url, websocket}) => {
 
     const packageService = rpc[packageTypes[service]][service];
 
-    const definitions = packageService.prototype['$method_definitions'];
+    const definitions = packageService.service;
 
     const directResponseMethods = keys(definitions)
       .filter(n => !definitions[n].requestStream)
