@@ -32,6 +32,7 @@ const makeLnd = ({err, data}) => {
               },
               update: 'chan_pending',
             });
+            emitter.emit('status', {});
             emitter.emit('data', {
               chan_pending: {
                 output_index: 0,
@@ -39,6 +40,7 @@ const makeLnd = ({err, data}) => {
               },
               update: 'chan_pending',
             });
+            emitter.emit('data', {update: 'chan_open'});
           }
         });
 
@@ -68,7 +70,10 @@ const makeLnd = ({err, data}) => {
 
 const makeArgs = overrides => {
   const args = {
+    chain_fee_tokens_per_vbyte: 1,
+    close_address: 'close_address',
     lnd: makeLnd({}),
+    give_tokens: 1,
     local_tokens: 1e6,
     partner_public_key: Buffer.alloc(33).toString('hex'),
   };
@@ -76,6 +81,22 @@ const makeArgs = overrides => {
   Object.keys(overrides).forEach(k => args[k] = overrides[k]);
 
   return args;
+};
+
+const makeStatus = details => {
+  return makeArgs({
+    lnd: {
+      default: {
+        openChannel: ({}) => {
+          const emitter = new EventEmitter();
+
+          process.nextTick(() => emitter.emit('status', {details}));
+
+          return emitter;
+        },
+      },
+    },
+  });
 };
 
 const tests = [
@@ -111,6 +132,68 @@ const tests = [
     args: makeArgs({}),
     description: 'A channel is opened',
     expected: {transaction_id: '04030201', transaction_vout: 0},
+  },
+  {
+    args: makeStatus(''),
+    description: 'A random error is encountered',
+    error: [503, 'UnknownChannelOpenStatus'],
+  },
+  {
+    args: makeStatus('peer is not online'),
+    description: 'Remote node is not online',
+    error: [503, 'PeerIsNotOnline'],
+  },
+  {
+    args: makeStatus('multiple channels unsupported'),
+    description: 'Detect cl error',
+    error: [503, 'RemoteNodeDoesNotSupportMultipleChannels'],
+  },
+  {
+    args: makeStatus('not enough witness outputs to create funding'),
+    description: 'Need more money error',
+    error: [400, 'InsufficientFundsToCreateChannel'],
+  },
+  {
+    args: makeStatus('disconnected'),
+    description: 'Peer disconnected',
+    error: [503, 'RemotePeerDisconnected'],
+  },
+  {
+    args: makeStatus('pending channels exceed maximum'),
+    description: 'Peer has existing pending requests',
+    error: [503, 'PeerPendingChannelsExceedMaximumAllowable'],
+  },
+  {
+    args: makeStatus('Unknown chain'),
+    description: 'Peer does not recognize this chain',
+    error: [503, 'ChainUnsupported'],
+  },
+  {
+    args: makeStatus('cannot open channel to self'),
+    description: 'You cannot open with yourself',
+    error: [400, 'CannotOpenChannelToOwnNode'],
+  },
+  {
+    args: makeStatus(
+      'channels cannot be created before the wallet is fully synced'
+    ),
+    description: 'The wallet must be in sync',
+    error: [503, 'WalletNotFullySynced'],
+  },
+  {
+    args: makeStatus('unable to send funding request message: peer exiting'),
+    description: 'Peer is messing up somehow',
+    error: [503, 'RemotePeerExited'],
+  },
+  {
+    args: makeStatus('Synchronizing blockchain'),
+    description: 'A synchronizing blockchain error is encountered',
+    error: [503, 'RemoteNodeSyncing'],
+  },
+  {
+    args: makeStatus('err'),
+    description: 'A random error is returned',
+    error: [503, 'FailedToOpenChannel', {err: 'err'}],
   },
 ];
 

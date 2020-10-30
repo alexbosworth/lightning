@@ -180,34 +180,25 @@ module.exports = (args, cbk) => {
             return cbk([503, 'PeerPendingChannelsExceedMaximumAllowable']);
           }
 
-          if (/^Unknown.chain/.test(n.details)) {
+          if (/^unknown.chain/i.test(n.details)) {
             return cbk([503, 'ChainUnsupported']);
           }
 
-          switch (n.details) {
+          switch (n.details.toLowerCase()) {
           case 'cannot open channel to self':
             return cbk([400, 'CannotOpenChannelToOwnNode']);
 
           case 'channels cannot be created before the wallet is fully synced':
             return cbk([503, 'WalletNotFullySynced']);
 
-          case 'multiple channels unsupported':
-          case 'Multiple channels unsupported':
-            return cbk([503, 'RemoteNodeDoesNotSupportMultipleChannels']);
-
-          case 'peer disconnected':
-            return cbk([503, 'RemotePeerDisconnected']);
-
           case 'synchronizing blockchain':
-          case 'Synchronizing blockchain':
             return cbk([503, 'RemoteNodeSyncing']);
 
           case 'unable to send funding request message: peer exiting':
-          case 'Unable to send funding request message: peer exiting':
             return cbk([503, 'RemotePeerExited']);
 
           default:
-            return cbk([503, 'FailedToOpenChannel', n]);
+            return cbk([503, 'FailedToOpenChannel', {err: n.details}]);
           }
         });
 

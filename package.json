@@ -29,7 +29,7 @@
     "ws": "7.3.1"
   },
   "engines": {
-    "node": ">=10.4.0"
+    "node": ">=10.10.0"
   },
   "keywords": [
     "grpc",
@@ -49,5 +49,5 @@
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "3.0.4"
+  "version": "3.0.5"
 }

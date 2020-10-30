@@ -34,7 +34,10 @@ const outpointDelimiter = ':';
     pending_htlcs: [{
       amount: <HTLC Tokens Amount String>
       expiration_height: <CLTV Timeout Block Height Number>
+      forwarding_channel: <Numeric Forward Paired Channel Id String>
+      forwarding_htlc_index: <Forward Channel Pair HTLC Index String>
       hash_lock: <Payment Hash Buffer Object>
+      htlc_index: <HTLC Index String>
       incoming: <HTLC Is Locally Incoming Bool>
     }]
     private: <Channel Is Not Globally Advertised Bool>
@@ -83,7 +86,13 @@ const outpointDelimiter = ':';
     partner_public_key: <Channel Partner Public Key String>
     pending_payments: [{
       id: <Payment Preimage Hash Hex String>
+      [in_channel]: <Forwarding from Channel Id String>
+      [in_payment]: <Forwarding from Channel Payment Id Number>
+      [is_forward]: <Payment is a Forward Bool>
       is_outgoing: <Payment Is Outgoing Bool>
+      [out_channel]: <Forwarding to Channel Id String>
+      [out_payment]: <Forwarding to Channel Payment Id Number>
+      [payment]: <Payment Attempt Id Number>
       timeout: <Chain Height Expiration Number>
       tokens: <Payment Tokens Number>
     }]

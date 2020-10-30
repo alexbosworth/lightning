@@ -19,7 +19,13 @@ const makeInput = overrides => {
 const makeExpected = overrides => {
   const expected = {
     id: Buffer.alloc(32).toString('hex'),
+    in_channel: undefined,
+    in_payment: undefined,
+    is_forward: undefined,
     is_outgoing: false,
+    out_channel: undefined,
+    out_payment: undefined,
+    payment: undefined,
     timeout: 1,
     tokens: 1,
   };
@@ -55,6 +61,11 @@ const tests = [
     error: 'ExpectedBooleanIncomingStateInHtlcMessage',
   },
   {
+    args: makeInput({forwarding_channel: new Date()}),
+    description: 'Channel number is expected',
+    error: 'ExpectedValidChannelIdForHtlcForwardPairChannel',
+  },
+  {
     args: makeInput({}),
     description: 'HTLC is mapped to payment',
     expected: makeExpected({}),
@@ -63,6 +74,36 @@ const tests = [
     args: makeInput({incoming: false}),
     description: 'HTLC is mapped to payment',
     expected: makeExpected({is_outgoing: true}),
+  },
+  {
+    args: makeInput({
+      forwarding_channel: '1',
+      forwarding_htlc_index: '1',
+      htlc_index: '1',
+    }),
+    description: 'Incoming forward HTLC is mapped to payment',
+    expected: makeExpected({
+      is_forward: true,
+      out_channel: '0x0x1',
+      out_payment: 1,
+      payment: 1,
+    }),
+  },
+  {
+    args: makeInput({
+      forwarding_channel: '1',
+      forwarding_htlc_index: '1',
+      htlc_index: '1',
+      incoming: false,
+    }),
+    description: 'Outoing forward HTLC is mapped to payment',
+    expected: makeExpected({
+      in_channel: '0x0x1',
+      in_payment: 1,
+      is_forward: true,
+      is_outgoing: true,
+      payment: 1,
+    }),
   },
 ];
 

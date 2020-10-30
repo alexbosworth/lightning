@@ -25,7 +25,13 @@ const expectedChannel = {
   partner_public_key: 'b',
   pending_payments: [{
     id: '0000000000000000000000000000000000000000000000000000000000000000',
+    in_channel: undefined,
+    in_payment: undefined,
+    is_forward: undefined,
     is_outgoing: false,
+    out_channel: undefined,
+    out_payment: undefined,
+    payment: undefined,
     timeout: 1,
     tokens: 1,
   }],
