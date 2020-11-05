@@ -97,7 +97,7 @@ module.exports = (args, cbk) => {
         return args.lnd.default.addInvoice({
           cltv_expiry: !args.cltv_delta ? undefined : args.cltv_delta,
           description_hash: bufferFromHex(args.description_hash),
-          expiry: !expiryMs ? defaultExpiryMs : round(expiryMs / msPerSec),
+          expiry: !expiryMs ? defaultExpiryMs/msPerSec : round(expiryMs / msPerSec),
           fallback_addr: fallbackAddress,
           memo: args.description,
           private: !!args.is_including_private_channels,
