@@ -7,7 +7,7 @@ const getInvoice = require('./get_invoice');
 const {isLnd} = require('./../../lnd_requests');
 
 const bufferFromHex = hex => !hex ? undefined : Buffer.from(hex, 'hex');
-const defaultExpiryMs = 1000 * 60 * 60 * 3;
+const defaultExpirySec = 60 * 60 * 3;
 const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
 const invoiceExistsError = 'invoice with payment hash already exists';
 const {isArray} = Array;
@@ -97,7 +97,7 @@ module.exports = (args, cbk) => {
         return args.lnd.default.addInvoice({
           cltv_expiry: !args.cltv_delta ? undefined : args.cltv_delta,
           description_hash: bufferFromHex(args.description_hash),
-          expiry: !expiryMs ? defaultExpiryMs/msPerSec : round(expiryMs / msPerSec),
+          expiry: !expiryMs ? defaultExpirySec : round(expiryMs / msPerSec),
           fallback_addr: fallbackAddress,
           memo: args.description,
           private: !!args.is_including_private_channels,

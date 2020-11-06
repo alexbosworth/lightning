@@ -21,6 +21,7 @@ const numberAsChannelId = number => chanFormat({number}).channel;
       htlc_id: <Channel HTLC Index Number String>
     }
     incoming_expiry: <HTLC CLTV Timeout Height Number>
+    onion_blob: <Onion Blob Buffer Object>
     outgoing_amount_msat: <Outgoing Amount Millitokens String>
     outgoing_expiry: <HTLC CLTV Timeout Height Number>
     outgoing_requested_chan_id: <Outgoing Requested Channel Id String>
@@ -43,6 +44,7 @@ const numberAsChannelId = number => chanFormat({number}).channel;
       value: <Raw Value Hex String>
     }]
     mtokens: <Millitokens to Forward To Next Peer String>
+    [onion]: <Hex Serialized Next-Hop Onion Packet To Forward String>
     out_channel: <Requested Outbound Channel Standard Format Id String>
     timeout: <CLTV Timeout Height Number>
     tokens: <Tokens to Forward to Next Peer Rounded Down Number>
@@ -104,6 +106,7 @@ module.exports = forward => {
     throw new Error('UnexpectedNegativeFeeInRpcForwardRequest');
   }
 
+  const hasOnion = !!forward.onion_blob && !!forward.onion_blob.length;
   const totalFeeAmount = incomingAmount - outgoingAmount;
 
   return {
@@ -122,6 +125,7 @@ module.exports = forward => {
       };
     }),
     mtokens: forward.outgoing_amount_msat,
+    onion: hasOnion ? forward.onion_blob.toString('hex') : undefined,
     out_channel: numberAsChannelId(forward.outgoing_requested_chan_id),
     timeout: forward.incoming_expiry,
     tokens: safeTokens({mtokens: forward.outgoing_amount_msat}).tokens,

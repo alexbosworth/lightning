@@ -16,6 +16,8 @@ const type = 'router';
 
   Requires `offchain:read`, `offchain:write` permission
 
+  `onion` is not supported in LND 0.11.1 and below
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -40,6 +42,7 @@ const type = 'router';
       value: <Raw Value Hex String>
     }]
     mtokens: <Millitokens to Forward To Next Peer String>
+    [onion]: <Hex Serialized Next-Hop Onion Packet To Forward String>
     out_channel: <Requested Outbound Channel Standard Format Id String>
     reject: <Reject Forward Function> () => {}
     settle: <Short Circuit Function> ({secret: <Preimage Hex String}) => {}
@@ -92,6 +95,7 @@ module.exports = ({lnd}) => {
         in_payment: request.in_payment,
         messages: request.messages,
         mtokens: request.mtokens,
+        onion: request.onion,
         out_channel: request.out_channel,
         reject: () => sub.write({
           action: forwardPaymentActions.reject,

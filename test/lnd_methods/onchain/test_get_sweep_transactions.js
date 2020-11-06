@@ -1,6 +1,43 @@
 const {test} = require('tap');
+const {Transaction} = require('bitcoinjs-lib');
 
 const {getSweepTransactions} = require('./../../../lnd_methods');
+
+const makeDefault = overrides => {
+  const methods = {
+    getTransactions: ({}, cbk) => {
+      return cbk(null, {
+        transactions: [{
+          amount: '1',
+          block_hash: Buffer.alloc(32).toString('hex'),
+          block_height: 1,
+          dest_addresses: ['address'],
+          num_confirmations: 1,
+          raw_tx_hex: (new Transaction()).toHex(),
+          time_stamp: '1',
+          total_fees: '1',
+          tx_hash: Buffer.alloc(32).toString('hex'),
+        }],
+      });
+    },
+  };
+
+  Object.keys(overrides).forEach(k => methods[k] = overrides[k]);
+
+  return methods;
+};
+
+const makeWallet = overrides => {
+  const wallet = {
+    listSweeps: ({}, cbk) => cbk(null, {
+      transaction_ids: {transaction_ids: [Buffer.alloc(32).toString('hex')]},
+    }),
+  };
+
+  Object.keys(overrides).forEach(k => wallet[k] = overrides[k]);
+
+  return wallet;
+};
 
 const tests = [
   {
@@ -34,54 +71,21 @@ const tests = [
   {
     args: {lnd: {wallet: {listSweeps: ({}, cbk) => cbk(null, {})}}},
     description: 'Transaction details are expected in sweeps response',
-    error: [503, 'ExpectedTransactionDetailsInGetSweepsResponse'],
+    error: [503, 'ExpectedTransactionIdsInSweepTxResponse'],
   },
   {
     args: {
       lnd: {
         wallet: {
-          listSweeps: ({}, cbk) => cbk(null, {transaction_details: {}}),
+          listSweeps: ({}, cbk) => cbk(null, {transaction_ids: {}}),
         },
       },
     },
-    description: 'Transactions are expected in transaction details',
-    error: [503, 'ExpectedArrayOfTransactioonsInSweepsResponse'],
+    description: 'Transaction ids are expected in transaction details',
+    error: [503, 'ExpectedArrayOfTransactionIdsInSweepsResponse'],
   },
   {
-    args: {
-      lnd: {
-        wallet: {
-          listSweeps: ({}, cbk) => cbk(null, {
-            transaction_details: {transactions: [{}]},
-          }),
-        },
-      },
-    },
-    description: 'Sweep transactions must be well formed',
-    error: [503, 'ExpectedTransactionAmountInChainTransaction'],
-  },
-  {
-    args: {
-      lnd: {
-        wallet: {
-          listSweeps: ({}, cbk) => cbk(null, {
-            transaction_details: {
-              transactions: [{
-                amount: '1',
-                block_hash: Buffer.alloc(32).toString('hex'),
-                block_height: 1,
-                dest_addresses: ['address'],
-                num_confirmations: 1,
-                raw_tx_hex: '00',
-                time_stamp: '1',
-                total_fees: '1',
-                tx_hash: Buffer.alloc(32).toString('hex'),
-              }],
-            },
-          }),
-        },
-      },
-    },
+    args: {lnd: {default: makeDefault({}), wallet: makeWallet({})}},
     description: 'Sweep transactions are returned',
     expected: {
       transactions: [{
@@ -95,8 +99,9 @@ const tests = [
         is_confirmed: true,
         is_outgoing: false,
         output_addresses: ['address'],
+        spends: [],
         tokens: 1,
-        transaction: '00',
+        transaction: '01000000000000000000',
       }],
     },
   },
@@ -105,7 +110,7 @@ const tests = [
 tests.forEach(({args, description, error, expected}) => {
   return test(description, async ({deepEqual, end, equal, rejects}) => {
     if (!!error) {
-      rejects(() => getSweepTransactions(args), error, 'Got expected error');
+      await rejects(() => getSweepTransactions(args), error, 'Got error');
     } else {
       const res = await getSweepTransactions(args);
 
