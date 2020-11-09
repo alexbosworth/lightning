@@ -13,9 +13,6 @@ const type = 'wallet';
 
 /** Get self-transfer spend transactions related to channel closes
 
-  Note: the transactions list may not be exhaustive, use the `ids` for a
-  complete list of sweeps.
-
   Requires `onchain:read` permission
 
   {

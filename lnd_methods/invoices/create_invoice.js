@@ -96,14 +96,13 @@ module.exports = (args, cbk) => {
 
         return args.lnd.default.addInvoice({
           cltv_expiry: !args.cltv_delta ? undefined : args.cltv_delta,
-          description_hash: bufferFromHex(args.description_hash),
+          description_hash: hexAsBuffer(args.description_hash),
           expiry: !expiryMs ? defaultExpirySec : round(expiryMs / msPerSec),
           fallback_addr: fallbackAddress,
           memo: args.description,
           private: !!args.is_including_private_channels,
           r_preimage: preimage || undefined,
           value: args.tokens || undefined,
-          description_hash: hexAsBuffer(args.description_hash),
         },
         (err, response) => {
           if (!!err && err.details === invoiceExistsError) {

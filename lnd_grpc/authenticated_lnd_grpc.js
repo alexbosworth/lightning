@@ -15,7 +15,6 @@ const {serviceTypes} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
 const {keys} = Object;
-const params = {'grpc.max_receive_message_length': maxReceiveMessageLength};
 const pathForProto = proto => join(__dirname, protosDir, proto);
 
 /** Initiate a gRPC API Methods Object for authenticated methods
@@ -54,6 +53,11 @@ module.exports = ({cert, macaroon, socket}) => {
   if (!!cert && GRPC_SSL_CIPHER_SUITES !== grpcSslCipherSuites) {
     process.env.GRPC_SSL_CIPHER_SUITES = grpcSslCipherSuites;
   }
+
+  const params = {
+    'grpc.max_receive_message_length': -1,
+    'grpc.max_send_message_length': -1,
+  };
 
   // Assemble different services from their proto files
   return {
