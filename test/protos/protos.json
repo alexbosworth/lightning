@@ -1,7 +1,7 @@
 {
   "overrides": [
     ["router", 100, 171],
-    ["rpc", 3026],
+    ["rpc", 3078],
     ["walletkit", 3],
     ["walletunlocker", 2]
   ],
