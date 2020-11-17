@@ -64,6 +64,11 @@ const tests = [
     error: [400, 'ExpectedLndToCreateNewInvoice'],
   },
   {
+    args: makeArgs({mtokens: '1'}),
+    description: 'Millitokens and tokens must agree',
+    error: [400, 'ExpectedEqualValuesForTokensAndMtokens'],
+  },
+  {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),
     description: 'LND errors are passed back',
     error: [503, 'AddInvoiceError', {err: 'err'}],
@@ -122,13 +127,18 @@ const tests = [
     },
   },
   {
-    args: makeArgs({secret: undefined, is_fallback_nested: false}),
+    args: makeArgs({
+      description_hash: undefined,
+      description: undefined,
+      secret: undefined,
+      is_fallback_nested: false,
+    }),
     description: 'An invoice is created without a nested on-chain address',
     expected: {
       request,
       chain_address: 'address',
       created_at: '1970-01-01T00:00:01.000Z',
-      description: 'description',
+      description: undefined,
       id: '0001020304050607080900010203040506070809000102030405060708090102',
       mtokens: '0',
       secret: Buffer.alloc(32).toString('hex'),

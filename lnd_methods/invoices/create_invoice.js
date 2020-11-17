@@ -5,16 +5,19 @@ const {returnResult} = require('asyncjs-util');
 const {createChainAddress} = require('./../address');
 const getInvoice = require('./get_invoice');
 const {isLnd} = require('./../../lnd_requests');
+const {mtokensAmount} = require('./../../bolt00');
 
-const bufferFromHex = hex => !hex ? undefined : Buffer.from(hex, 'hex');
 const defaultExpirySec = 60 * 60 * 3;
 const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
 const invoiceExistsError = 'invoice with payment hash already exists';
 const {isArray} = Array;
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
+const method = 'addInvoice';
 const msPerSec = 1e3;
 const {parse} = Date;
 const {round} = Math;
+const tokensAsMtok = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
+const type = 'default';
 
 /** Create a Lightning invoice.
 
@@ -30,6 +33,7 @@ const {round} = Math;
     [is_including_private_channels]: <Invoice Includes Private Channels Bool>
     lnd: <Authenticated LND API Object>
     [secret]: <Payment Preimage Hex String>
+    [mtokens]: <Millitokens Number>
     [tokens]: <Tokens Number>
   }
 
@@ -37,7 +41,7 @@ const {round} = Math;
   {
     [chain_address]: <Backup Address String>
     created_at: <ISO 8601 Date String>
-    description: <Description String>
+    [description]: <Description String>
     id: <Payment Hash Hex String>
     [mtokens]: <Millitokens String>
     request: <BOLT 11 Encoded Payment Request String>
@@ -67,8 +71,16 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedFutureDateForInvoiceExpiration']);
         }
 
-        if (!isLnd({lnd: args.lnd, method: 'addInvoice', type: 'default'})) {
+        if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndToCreateNewInvoice']);
+        }
+
+        if (!!args.mtokens || args.tokens !== undefined) {
+          try {
+            mtokensAmount({mtokens: args.mtokens, tokens: args.tokens});
+          } catch (err) {
+            return cbk([400, err.message]);
+          }
         }
 
         return cbk();
@@ -86,9 +98,29 @@ module.exports = (args, cbk) => {
         return createChainAddress({format, lnd: args.lnd}, cbk);
       }],
 
+      // Determine the value of the invoice
+      mtokens: ['validate', ({}, cbk) => {
+        // Exit early when there are no mtokens
+        if (!args.mtokens && args.tokens === undefined) {
+          return cbk(null, Number().toString());
+        }
+
+        const {mtokens} =  mtokensAmount({
+          mtokens: args.mtokens,
+          tokens: args.tokens,
+        });
+
+        return cbk(null, mtokens);
+      }],
+
       // Add invoice
-      addInvoice: ['addAddress', 'preimage', ({addAddress, preimage}, cbk) => {
-        const fallbackAddress = !addAddress ? '' : addAddress.address;
+      addInvoice: [
+        'addAddress',
+        'mtokens',
+        'preimage',
+        ({addAddress, mtokens, preimage}, cbk) =>
+      {
+        const fallbackAddress = !addAddress ? String() : addAddress.address;
         const createdAt = new Date();
         const expireAt = !args.expires_at ? null : parse(args.expires_at);
 
@@ -102,7 +134,7 @@ module.exports = (args, cbk) => {
           memo: args.description,
           private: !!args.is_including_private_channels,
           r_preimage: preimage || undefined,
-          value: args.tokens || undefined,
+          value_msat: mtokens,
         },
         (err, response) => {
           if (!!err && err.details === invoiceExistsError) {
@@ -151,7 +183,7 @@ module.exports = (args, cbk) => {
         return cbk(null, {
           chain_address: !addAddress ? undefined : addAddress.address,
           created_at: getInvoice.created_at,
-          description: addInvoice.description,
+          description: addInvoice.description || undefined,
           id: addInvoice.id,
           mtokens: getInvoice.mtokens || Number().toString(),
           request: addInvoice.request,

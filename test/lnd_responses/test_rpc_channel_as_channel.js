@@ -47,6 +47,7 @@ const makeArgs = overrides => {
     },
     remote_pubkey: '00',
     static_remote_key: false,
+    thaw_height: 0,
     total_satoshis_received: '1',
     total_satoshis_sent: '1',
     unsettled_balance: '1',
@@ -64,6 +65,7 @@ const makeExpected = overrides => {
     commit_transaction_fee: 1,
     commit_transaction_weight: 1,
     cooperative_close_address: undefined,
+    cooperative_close_delay_height: undefined,
     id: '0x0x1',
     is_active: true,
     is_closing: false,
@@ -199,6 +201,11 @@ const tests = [
     args: makeArgs({remote_pubkey: undefined}),
     description: 'Remote public key is expected',
     error: 'ExpectedRemotePubkeyInChannelMessage',
+  },
+  {
+    args: makeArgs({thaw_height: undefined}),
+    description: 'Channel thaw height is expected',
+    error: 'ExpectedCooperativeCloseThawHeightInChannelMessage',
   },
   {
     args: makeArgs({total_satoshis_received: undefined}),

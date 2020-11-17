@@ -31,6 +31,7 @@ const type = 'default';
       commit_transaction_fee: <Commit Transaction Fee Number>
       commit_transaction_weight: <Commit Transaction Weight Number>
       [cooperative_close_address]: <Coop Close Restricted to Address String>
+      [cooperative_close_delay_height]: <Deny Coop Close Until Height Number>
       id: <Standard Format Channel Id String>
       is_active: <Channel Active Bool>
       is_closing: <Channel Is Closing Bool>

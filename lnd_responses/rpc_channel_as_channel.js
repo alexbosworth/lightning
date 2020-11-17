@@ -1,5 +1,6 @@
 const {chanFormat} = require('bolt07');
 
+const parseThawHeight = require('./parse_thaw_height');
 const rpcHtlcAsPayment = require('./rpc_htlc_as_payment');
 
 const {isArray} = Array;
@@ -53,6 +54,7 @@ const outpointDelimiter = ':';
     }
     remote_pubkey: <Peer Public Key Hex String>
     static_remote_key: <Channel Uses Seed Recoverable Key Type Bool>
+    thaw_height: <Channel Cooperative Close Prevention Blocks Number>
     total_satoshis_received: <Total Tokens Transferred Inbound String>
     total_satoshis_sent: <Total Tokens Transferred Outbound String>
     unsettled_balance: <Balance In Transaction Tokens String>
@@ -68,6 +70,7 @@ const outpointDelimiter = ':';
     commit_transaction_fee: <Commit Transaction Fee Number>
     commit_transaction_weight: <Commit Transaction Weight Number>
     [cooperative_close_address]: <Coop Close Restricted to Address String>
+    [cooperative_close_delay_height]: <Prevent Coop Close Until Height Number>
     id: <Standard Format Channel Id String>
     is_active: <Channel Active Bool>
     is_closing: <Channel Is Closing Bool>
@@ -182,6 +185,10 @@ module.exports = args => {
     throw new Error('ExpectedRemotePubkeyInChannelMessage');
   }
 
+  if (args.thaw_height === undefined) {
+    throw new Error('ExpectedCooperativeCloseThawHeightInChannelMessage');
+  }
+
   if (args.total_satoshis_received === undefined) {
     throw new Error('ExpectedTotalSatoshisReceivedInChannelMessage');
   }
@@ -195,6 +202,7 @@ module.exports = args => {
   }
 
   const commitWeight = Number(args.commit_weight);
+  const {height} = parseThawHeight({id: args.chan_id, thaw: args.thaw_height});
   const own = args.local_constraints;
   const peer = args.remote_constraints;
   const pushAmount = Number(args.push_amount_sat) || Number();
@@ -208,6 +216,7 @@ module.exports = args => {
     commit_transaction_fee: Number(args.commit_fee),
     commit_transaction_weight: commitWeight,
     cooperative_close_address: args.close_address || undefined,
+    cooperative_close_delay_height: height,
     id: chanFormat({number: args.chan_id}).channel,
     is_active: args.active,
     is_closing: false,
