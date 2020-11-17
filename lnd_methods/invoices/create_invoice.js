@@ -33,7 +33,7 @@ const type = 'default';
     [is_including_private_channels]: <Invoice Includes Private Channels Bool>
     lnd: <Authenticated LND API Object>
     [secret]: <Payment Preimage Hex String>
-    [mtokens]: <Millitokens Number>
+    [mtokens]: <Millitokens String>
     [tokens]: <Tokens Number>
   }
 
