@@ -31,7 +31,10 @@ const tests = [
     args: {
       lnd: {
         wallet: {
-          deriveKey: ({}, cbk) => cbk(null, {raw_key_bytes: Buffer.alloc(33)}),
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(33),
+          }),
         },
       },
     },

@@ -11,6 +11,8 @@ const getUtxos = require('./get_utxos');
 const lockUtxo = require('./lock_utxo');
 const openChannel = require('./open_channel');
 const openChannels = require('./open_channels');
+const prepareForChannelProposal = require('./prepare_for_channel_proposal');
+const proposeChannel = require('./propose_channel');
 const setAutopilot = require('./set_autopilot');
 const signPsbt = require('./sign_psbt');
 const subscribeToBlocks = require('./subscribe_to_blocks');
@@ -31,6 +33,8 @@ module.exports = {
   lockUtxo,
   openChannel,
   openChannels,
+  prepareForChannelProposal,
+  proposeChannel,
   setAutopilot,
   signPsbt,
   subscribeToBlocks,

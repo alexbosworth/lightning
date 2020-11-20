@@ -140,7 +140,7 @@ module.exports = (args, cbk) => {
       // Fund the PSBT
       fund: ['fee', 'funding', ({fee, funding}, cbk) => {
         return args.lnd[type][method]({
-          psbt: args.psbt || undefined,
+          psbt: !!args.psbt ? Buffer.from(args.psbt, 'hex') : undefined,
           raw: funding || undefined,
           sat_per_vbyte: fee.fee_tokens_per_vbyte || undefined,
           target_conf: fee.target_confirmations || undefined,

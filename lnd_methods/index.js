@@ -45,6 +45,8 @@ const {payViaPaymentDetails} = require('./offchain');
 const {payViaPaymentRequest} = require('./offchain');
 const {payViaRequest} = require('./offchain');
 const {payViaRoutes} = require('./offchain');
+const {prepareForChannelProposal} = require('./onchain');
+const {proposeChannel} = require('./onchain');
 const {revokeAccess} = require('./macaroon');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
@@ -112,6 +114,8 @@ module.exports = {
   payViaPaymentRequest,
   payViaRequest,
   payViaRoutes,
+  prepareForChannelProposal,
+  proposeChannel,
   revokeAccess,
   setAutopilot,
   settleHodlInvoice,

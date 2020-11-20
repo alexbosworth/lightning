@@ -9,11 +9,6 @@ const tests = [
     error: [400, 'ExpectedKeyFamilyToGetPublicKey'],
   },
   {
-    args: {family: 1},
-    description: 'Index is required',
-    error: [400, 'ExpectedKeyIndexToGetPublicKey'],
-  },
-  {
     args: {family: 1, index: 1},
     description: 'LND is required',
     error: [400, 'ExpectedWalletRpcLndToGetPublicKey'],
@@ -61,7 +56,10 @@ const tests = [
       index: 1,
       lnd: {
         wallet: {
-          deriveKey: ({}, cbk) => cbk(null, {raw_key_bytes: Buffer.alloc(1)}),
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
         },
       },
     },

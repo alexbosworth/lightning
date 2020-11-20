@@ -1,7 +1,15 @@
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
+const {isLnd} = require('./../../lnd_requests');
+
+const methodNextKey = 'deriveNextKey';
+const methodIndexLookup = 'deriveKey';
+const type = 'wallet';
+
 /** Get a public key in the seed
+
+  Omit a key index to cycle to the "next" key in the family
 
   Requires LND compiled with `walletrpc` build tag
 
@@ -9,12 +17,13 @@ const {returnResult} = require('asyncjs-util');
 
   {
     family: <Key Family Number>
-    index: <Key Index Number>
+    [index]: <Key Index Number>
     lnd: <Authenticated API LND Object>
   }
 
   @returns via cbk or Promise
   {
+    index: <Key Index Number>
     public_key: <Public Key Hex String>
   }
 */
@@ -27,11 +36,7 @@ module.exports = ({family, index, lnd}, cbk) => {
           return cbk([400, 'ExpectedKeyFamilyToGetPublicKey']);
         }
 
-        if (index === undefined) {
-          return cbk([400, 'ExpectedKeyIndexToGetPublicKey']);
-        }
-
-        if (!lnd || !lnd.wallet || !lnd.wallet.deriveKey) {
+        if (!isLnd({lnd, type, method: methodIndexLookup})) {
           return cbk([400, 'ExpectedWalletRpcLndToGetPublicKey']);
         }
 
@@ -40,7 +45,9 @@ module.exports = ({family, index, lnd}, cbk) => {
 
       // Get public key
       getPublicKey: ['validate', ({}, cbk) => {
-        return lnd.wallet.deriveKey({
+        const method = index === undefined ? methodNextKey : methodIndexLookup;
+
+        return lnd[type][method]({
           key_family: family,
           key_index: index,
         },
@@ -57,7 +64,18 @@ module.exports = ({family, index, lnd}, cbk) => {
             return cbk([503, 'ExpectedRawPubKeyBytesInDerivePubKeyResponse']);
           }
 
-          return cbk(null, {public_key: res.raw_key_bytes.toString('hex')});
+          if (!res.key_loc) {
+            return cbk([503, 'ExpectedKeyLocatorInPublicKeyResponse']);
+          }
+
+          if (res.key_loc.key_index === undefined) {
+            return cbk([503, 'ExpectedKeyIndexInPublicKeyResponse']);
+          }
+
+          return cbk(null, {
+            index: res.key_loc.key_index,
+            public_key: res.raw_key_bytes.toString('hex')
+          });
         });
       }],
     },
