@@ -9,6 +9,9 @@
   "dependencies": {
     "@grpc/grpc-js": "1.2.1",
     "@grpc/proto-loader": "0.5.5",
+    "@types/express": "^4.17.9",
+    "@types/request": "^2.48.5",
+    "@types/ws": "^7.4.0",
     "async": "3.2.0",
     "asyncjs-util": "1.2.3",
     "bitcoinjs-lib": "5.2.0",

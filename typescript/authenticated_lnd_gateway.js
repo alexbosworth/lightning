@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lndGateway = void 0;
+exports.authenticatedLndGateway = void 0;
 const lnd_gateway_1 = require("./../lnd_gateway");
 /**
- * Interface to an LND gateway server.
+ * Interface to an authenticated LND gateway server.
  */
-function lndGateway(server) {
+function authenticatedLndGateway(server) {
     return lnd_gateway_1.lndGateway({
         cert: server.cert,
         macaroon: server.macaroon,
@@ -14,5 +14,5 @@ function lndGateway(server) {
         websocket: server.websocket,
     });
 }
-exports.lndGateway = lndGateway;
-//# sourceMappingURL=lnd_gateway.js.map
+exports.authenticatedLndGateway = authenticatedLndGateway;
+//# sourceMappingURL=authenticated_lnd_gateway.js.map

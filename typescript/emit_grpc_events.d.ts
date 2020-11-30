@@ -1,18 +1,16 @@
-interface GrpcConnection {
+export declare type GrpcConnection = {
+    /** Base64 or Hex Serialized LND TLS Cert String */
     cert?: string;
+    /** Host:Port Network Address String */
     socket?: string;
-    ws: Function;
-}
-/** Emit events from a gRPC call
-
-  {
-    [cert]: <Base64 or Hex Serialized LND TLS Cert String>
-    [socket]: <Host:Port Network Address String>
     ws: {
-      on: <Add Event Listener Function>
-      send: <Send Data Function>
-    }
-  }
-*/
-export default function (connection: GrpcConnection): void;
-export {};
+        /** Add Event Listener Function */
+        on: (event: string, listener: (...args: any[]) => void) => void;
+        /** Send Data Function */
+        send: (message: any) => void;
+    };
+};
+/**
+ * Emit events from a gRPC call
+ */
+export declare function emitGrpcEvents(connection: GrpcConnection): void;

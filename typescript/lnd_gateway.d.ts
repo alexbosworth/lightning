@@ -1,27 +1,13 @@
-interface Server {
-    cert?: string;
+import type { AuthenticatedLnd } from "./authenticated_lnd_grpc";
+import type { UnauthenticatedLndGatewayServer } from "./unauthenticated_lnd_gateway";
+import type { UnauthenticatedLnd } from "./unauthenticated_lnd_grpc";
+export declare type LndGatewayServer = UnauthenticatedLndGatewayServer & {
+    /** Use Base 64 Encoded Macaroon String */
     macaroon?: string;
-    request: Function;
-    url: string;
-    websocket: Function;
-}
-/** Interface to an LND gateway server.
-
-  {
-    [cert]: <Base64 or Hex Serialized Gateway TLS Cert String>
-    [macaroon]: <Use Base 64 Encoded Macaroon String>
-    request: <Request Function>
-    url: <LND Gateway URL String>
-    websocket: <Websocket Constructor Function>
-  }
-
-  @throws
-  <Error>
-
-  @returns
-  {
-    lnd: <LND gRPC Gateway Object>
-  }
-*/
-export default function (server: Server): any;
-export {};
+};
+/**
+ * Interface to an LND gateway server.
+ */
+export declare function lndGateway(server: LndGatewayServer): {
+    lnd: AuthenticatedLnd | UnauthenticatedLnd;
+};

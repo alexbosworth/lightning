@@ -1,23 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { emitGrpcEvents } = require('./../lnd_gateway');
-/** Emit events from a gRPC call
-
-  {
-    [cert]: <Base64 or Hex Serialized LND TLS Cert String>
-    [socket]: <Host:Port Network Address String>
-    ws: {
-      on: <Add Event Listener Function>
-      send: <Send Data Function>
-    }
-  }
-*/
-function default_1(connection) {
-    return emitGrpcEvents({
+exports.emitGrpcEvents = void 0;
+const lnd_gateway_1 = require("./../lnd_gateway");
+/**
+ * Emit events from a gRPC call
+ */
+function emitGrpcEvents(connection) {
+    return lnd_gateway_1.emitGrpcEvents({
         cert: connection.cert,
         socket: connection.socket,
         ws: connection.ws,
     });
 }
-exports.default = default_1;
+exports.emitGrpcEvents = emitGrpcEvents;
 //# sourceMappingURL=emit_grpc_events.js.map

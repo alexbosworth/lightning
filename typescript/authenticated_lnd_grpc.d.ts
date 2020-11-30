@@ -1,35 +1,25 @@
-interface LndAuthentication {
-    cert?: string;
-    macaroon: string;
-    socket?: string;
-}
-/** Initiate an gRPC API Methods Object for authenticated methods
-
-  Both the cert and macaroon expect the entire serialized lnd generated file
-
-  {
-    [cert]: <Base64 or Hex Serialized LND TLS Cert>
-    macaroon: <Base64 or Hex Serialized Macaroon String>
-    [socket]: <Host:Port Network Address String>
-  }
-
-  @throws
-  <Error>
-
-  @returns
-  {
-    lnd: {
-      autopilot: <Autopilot gRPC Methods Object>
-      chain: <ChainNotifier gRPC Methods Object>
-      default: <Default gRPC Methods Object>
-      invoices: <Invoices gRPC Methods Object>
-      router: <Router gRPC Methods Object>
-      signer: <Signer gRPC Methods Object>
-      wallet: <WalletKit gRPC Methods Object>
-    }
-  }
-*/
-export default function (auth: LndAuthentication): {
-    lnd: any;
+import type { LndAuthentication } from "./unauthenticated_lnd_grpc";
+export declare type AuthenticatedLnd = {
+    autopilot: any;
+    chain: any;
+    default: any;
+    invoices: any;
+    router: any;
+    signer: any;
+    tower_client: any;
+    tower_server: any;
+    wallet: any;
+    version: any;
 };
-export {};
+export declare type LndAuthenticationWithMacaroon = LndAuthentication & {
+    /** Base64 or Hex Serialized Macaroon String */
+    macaroon: string;
+};
+/**
+ * Initiate a gRPC API Methods Object for authenticated methods
+ *
+ * Both the `cert` and `macaroon` expect the entire serialized LND generated file
+ */
+export declare function authenticatedLndGrpc(auth: LndAuthenticationWithMacaroon): {
+    lnd: AuthenticatedLnd;
+};

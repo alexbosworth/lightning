@@ -1,16 +1,11 @@
-interface Credentials {
+import type { Router } from "express";
+export declare type Credentials = {
+    /** Base64 or Hex Serialized LND TLS Cert String */
     cert?: string;
+    /** Host:Port Network Address String */
     socket?: string;
-}
-/** Get a gRPC gateway router
-
-  {
-    [cert]: <Base64 or Hex Serialized LND TLS Cert String>
-    [socket]: <Host:Port Network Address String>
-  }
-
-  @returns
-  <Router Object>
-*/
-export default function (credentials: Credentials): any;
-export {};
+};
+/**
+ * Get a gRPC gateway router
+ */
+export declare function grpcRouter(credentials: Credentials): Router;
