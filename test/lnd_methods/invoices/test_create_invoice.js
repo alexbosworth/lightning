@@ -5,7 +5,11 @@ const {createInvoice} = require('./../../../lnd_methods');
 const request = 'lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq8rkx3yf5tcsyz3d73gafnh3cax9rn449d9p5uxz9ezhhypd0elx87sjle52x86fux2ypatgddc6k63n7erqz25le42c4u4ecky03ylcqca784w';
 
 const makeLnd = ({err, res}) => {
-  const response = {payment_request: request, r_hash: Buffer.alloc(32)};
+  const response = {
+    payment_addr: Buffer.alloc(0),
+    payment_request: request,
+    r_hash: Buffer.alloc(32),
+  };
 
   return {
     default: {
@@ -17,6 +21,7 @@ const makeLnd = ({err, res}) => {
         features: {},
         htlcs: [],
         memo: 'memo',
+        payment_addr: Buffer.alloc(0),
         payment_request: request,
         r_hash: Buffer.alloc(32),
         r_preimage: Buffer.alloc(32),
@@ -84,11 +89,20 @@ const tests = [
   },
   {
     args: makeArgs({lnd: makeLnd({res: {}})}),
+    description: 'A payment address is expected in the response',
+    error: [503, 'ExpectedPaymentAddressInCreateInvoiceResponse'],
+  },
+  {
+    args: makeArgs({lnd: makeLnd({res: {payment_addr: Buffer.alloc(0)}})}),
     description: 'A payment request is expected in the response',
     error: [503, 'ExpectedPaymentRequestForCreatedInvoice'],
   },
   {
-    args: makeArgs({lnd: makeLnd({res: {payment_request: 'request'}})}),
+    args: makeArgs({
+      lnd: makeLnd({
+        res: {payment_addr: Buffer.alloc(0), payment_request: 'request'},
+      }),
+    }),
     description: 'A valid payment request is expected in the response',
     error: [503, 'ExpectedValidPaymentRequestForInvoice'],
   },
@@ -102,6 +116,7 @@ const tests = [
       description: 'description',
       id: '0001020304050607080900010203040506070809000102030405060708090102',
       mtokens: '0',
+      payment: undefined,
       secret: Buffer.alloc(32).toString('hex'),
       tokens: 0,
     },
@@ -122,6 +137,7 @@ const tests = [
       description: 'description',
       id: '0001020304050607080900010203040506070809000102030405060708090102',
       mtokens: '0',
+      payment: undefined,
       secret: Buffer.alloc(32).toString('hex'),
       tokens: 0,
     },
@@ -141,6 +157,7 @@ const tests = [
       description: undefined,
       id: '0001020304050607080900010203040506070809000102030405060708090102',
       mtokens: '0',
+      payment: undefined,
       secret: Buffer.alloc(32).toString('hex'),
       tokens: 0,
     },

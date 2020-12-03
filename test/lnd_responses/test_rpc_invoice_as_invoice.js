@@ -33,6 +33,7 @@ const makeInput = overrides => {
     }],
     is_keysend: true,
     memo: 'memo',
+    payment_addr: Buffer.alloc(0),
     payment_request: 'request',
     private: true,
     r_hash: Buffer.alloc(32),
@@ -84,6 +85,7 @@ const makeExpected = overrides => {
     is_private: true,
     is_push: true,
     mtokens: '1000',
+    payment: undefined,
     payments: [{
       canceled_at: undefined,
       confirmed_at: undefined,
@@ -156,6 +158,11 @@ const tests = [
     args: makeInput({memo: undefined}),
     description: 'RPC invoice is expected to have a memo',
     error: 'ExpectedMemoInLookupInvoiceResponse',
+  },
+  {
+    args: makeInput({payment_addr: undefined}),
+    description: 'RPC invoice is expected to have a payment identifier',
+    error: 'ExpectedPaymentAddressBufferInRpcInvoiceMessage',
   },
   {
     args: makeInput({r_hash: undefined}),

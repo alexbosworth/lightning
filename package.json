@@ -7,7 +7,7 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.2.1",
+    "@grpc/grpc-js": "1.2.2",
     "@grpc/proto-loader": "0.5.5",
     "async": "3.2.0",
     "asyncjs-util": "1.2.3",
@@ -19,7 +19,7 @@
     "cbor": "5.1.0",
     "express": "4.17.1",
     "invoices": "1.1.4",
-    "psbt": "1.1.6"
+    "psbt": "1.1.7"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -49,5 +49,5 @@
     "tsc": "./node_modules/typescript/bin/tsc --build tsconfig.json"
   },
   "types": "index.d.ts",
-  "version": "3.0.11"
+  "version": "3.0.12"
 }

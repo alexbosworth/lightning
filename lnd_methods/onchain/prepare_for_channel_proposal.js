@@ -8,7 +8,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const family = 0;
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
-const makeId = randomBytes(32).toString('hex');
+const makeId = () => randomBytes(32).toString('hex');
 const maxCooperativeCloseDelay = 5e4;
 const method = 'fundingStateStep';
 const type = 'default';
