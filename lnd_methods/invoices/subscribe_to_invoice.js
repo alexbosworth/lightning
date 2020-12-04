@@ -94,6 +94,18 @@ module.exports = ({id, lnd}) => {
     r_hash: Buffer.from(id, 'hex'),
   });
 
+  // Cancel the subscription when all listeners are removed
+  eventEmitter.on('removeListener', () => {
+    // Exit early when there are still listeners
+    if (eventEmitter.listenerCount('invoice_updated')) {
+      return;
+    }
+
+    subscription.cancel();
+
+    return;
+  });
+
   const errored = err => {
     // Exit early when no listeners are attached to error
     if (!eventEmitter.listenerCount('error')) {
