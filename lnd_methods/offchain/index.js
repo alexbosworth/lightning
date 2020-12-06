@@ -4,6 +4,7 @@ const getChannels = require('./get_channels');
 const getClosedChannels = require('./get_closed_channels');
 const getForwards = require('./get_forwards');
 const getPayment = require('./get_payment');
+const getPayments = require('./get_payments');
 const getPendingChannels = require('./get_pending_channels');
 const getRouteThroughHops = require('./get_route_through_hops');
 const pay = require('./pay');
@@ -26,6 +27,7 @@ module.exports = {
   getClosedChannels,
   getForwards,
   getPayment,
+  getPayments,
   getPendingChannels,
   getRouteThroughHops,
   pay,

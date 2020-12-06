@@ -94,6 +94,10 @@ module.exports = ({id, lnd}) => {
     r_hash: Buffer.from(id, 'hex'),
   });
 
+  if (!subscription.cancel) {
+    throw new Error('ExpectedCancelMethodOnSingleInvoiceSubscriptionStream');
+  }
+
   // Cancel the subscription when all listeners are removed
   eventEmitter.on('removeListener', () => {
     // Exit early when there are still listeners

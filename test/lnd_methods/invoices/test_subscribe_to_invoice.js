@@ -7,6 +7,8 @@ const {subscribeToInvoice} = require('./../../../lnd_methods');
 
 const emitter = new EventEmitter();
 
+emitter.cancel = () => {};
+
 const makeLnd = ({err}) => {
   return {invoices: {subscribeSingleInvoice: ({}) => emitter}};
 };

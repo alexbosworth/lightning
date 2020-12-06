@@ -37,7 +37,7 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
         htlc_msat: <HTLC Millitokens String>
       }
       resolve_time_ns: <HTLC Resolved At Epoch Time Nanoseconds String>
-      route: [{
+      route: {
         hops: [{
           amt_to_forward: <Tokens to Forward String>
           amt_to_forward_msat: <Millitokens to Forward String>
@@ -50,7 +50,7 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
             payment_addr: <Payment Identifier Buffer>
             total_amt_msat: <Total Payment Millitokens Amount String>
           }
-          [pub_key]: <Next Hop Public Key Hex String>
+          pub_key: <Next Hop Public Key Hex String>
           tlv_payload: <Has Extra TLV Data Bool>
         }]
         total_amt: <Total Tokens String>
@@ -58,7 +58,7 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
         total_fees: <Route Fee Tokens String>
         total_fees_msat: <Route Total Fees Millitokens String>
         total_time_lock: <Route Total Timelock Number>
-      }]
+      }
       status: <HTLC Status String>
     }]
     path: [<Hop Public Key Hex String>]
