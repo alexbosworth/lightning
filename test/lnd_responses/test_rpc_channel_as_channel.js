@@ -12,6 +12,7 @@ const makeArgs = overrides => {
     close_address: undefined,
     commit_fee: '1',
     commit_weight: '1',
+    commitment_type: 'LEGACY',
     csv_delay: 1,
     fee_per_kw: '1',
     initiator: false,
@@ -68,11 +69,13 @@ const makeExpected = overrides => {
     cooperative_close_delay_height: undefined,
     id: '0x0x1',
     is_active: true,
+    is_anchor: false,
     is_closing: false,
     is_opening: false,
     is_partner_initiated: true,
     is_private: true,
     is_static_remote_key: false,
+    is_variable_remote_key: true,
     local_balance: 1,
     local_csv: 1,
     local_dust: 1,
@@ -146,6 +149,11 @@ const tests = [
     args: makeArgs({commit_weight: undefined}),
     description: 'Channel commit weight is expected',
     error: 'ExpectedCommitWeightInChannelMessage',
+  },
+  {
+    args: makeArgs({commitment_type: undefined}),
+    description: 'Channel commit type is expected',
+    error: 'ExpectedCommitmentTypeInChannelMessage',
   },
   {
     args: makeArgs({fee_per_kw: undefined}),
@@ -228,12 +236,17 @@ const tests = [
     expected: makeExpected({}),
   },
   {
-    args: makeArgs({initiator: true}),
+    args: makeArgs({commitment_type: 'STATIC_REMOTE_KEY', initiator: true}),
     description: 'Initiated RPC channel is mapped to channel',
-    expected: makeExpected({is_partner_initiated: false}),
+    expected: makeExpected({
+      is_partner_initiated: false,
+      is_static_remote_key: true,
+      is_variable_remote_key: false,
+    }),
   },
   {
     args: makeArgs({
+      commitment_type: 'ANCHORS',
       local_constraints: {
         chan_reserve_sat: '1',
         csv_delay: 1,
@@ -253,6 +266,8 @@ const tests = [
     }),
     description: 'Local constraints RPC channel is mapped to channel',
     expected: makeExpected({
+      is_anchor: true,
+      is_variable_remote_key: false,
       local_csv: 1,
       local_dust: 1,
       local_max_htlcs: 1,
