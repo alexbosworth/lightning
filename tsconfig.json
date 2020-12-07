@@ -6,10 +6,12 @@
     "lib": [
       "es2017"
     ],
-    "declaration": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "compileOnSave": true,
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }
