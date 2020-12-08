@@ -1,29 +1,21 @@
-import {unauthenticatedLndGrpc} from './../lnd_grpc';
+import {unauthenticatedLndGrpc as _unauthenticatedLndGrpc} from "./../lnd_grpc";
 
-interface LndAuthentication {
+export type LndAuthentication = {
+  /** Base64 or Hex Serialized LND TLS Cert String */
   cert?: string;
+  /** Host:Port String */
   socket?: string;
-}
+};
 
-/** Unauthenticated gRPC interface to the Lightning Network Daemon (lnd).
+export type UnauthenticatedLnd = {
+  unlocker: any;
+};
 
-  Make sure to provide a cert when using LND with its default self-signed cert
-
-  {
-    [cert]: <Base64 or Hex Serialized LND TLS Cert String>
-    [socket]: <Host:Port String>
-  }
-
-  @throws
-  <Error>
-
-  @returns
-  {
-    lnd: {
-      unlocker: <Unlocker LND GRPC Api Object>
-    }
-  }
-*/
-export default function(auth: LndAuthentication): {lnd: any} {
-  return unauthenticatedLndGrpc({cert: auth.cert, socket: auth.socket});
+/**
+ * Unauthenticated gRPC interface to the Lightning Network Daemon (lnd).
+ */
+export function unauthenticatedLndGrpc(
+  auth: LndAuthentication
+): {lnd: UnauthenticatedLnd} {
+  return _unauthenticatedLndGrpc({cert: auth.cert, socket: auth.socket});
 }

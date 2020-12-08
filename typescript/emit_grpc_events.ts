@@ -1,24 +1,23 @@
-const {emitGrpcEvents} = require('./../lnd_gateway');
+import {emitGrpcEvents as _emitGrpcEvents} from "./../lnd_gateway";
 
-interface GrpcConnection {
+export type GrpcConnection = {
+  /** Base64 or Hex Serialized LND TLS Cert String */
   cert?: string;
+  /** Host:Port Network Address String */
   socket?: string;
-  ws: Function;
-}
+  ws: {
+    /** Add Event Listener Function */
+    on: (event: string, listener: (...args: any[]) => void) => void;
+    /** Send Data Function */
+    send: (message: any) => void;
+  };
+};
 
-/** Emit events from a gRPC call
-
-  {
-    [cert]: <Base64 or Hex Serialized LND TLS Cert String>
-    [socket]: <Host:Port Network Address String>
-    ws: {
-      on: <Add Event Listener Function>
-      send: <Send Data Function>
-    }
-  }
-*/
-export default function(connection: GrpcConnection): void {
-  return emitGrpcEvents({
+/**
+ * Emit events from a gRPC call
+ */
+export function emitGrpcEvents(connection: GrpcConnection): void {
+  return _emitGrpcEvents({
     cert: connection.cert,
     socket: connection.socket,
     ws: connection.ws,
