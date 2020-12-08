@@ -1,7 +1,5 @@
 const {featureFlagDetails} = require('bolt09');
 
-const channelEdgeAsChannel = require('./channel_edge_as_channel');
-
 const colorTemplate = '#000000';
 const {isArray} = Array;
 const {keys} = Object;

@@ -1,5 +1,7 @@
 const EventEmitter = require('events');
 
+const {featureFlagDetails} = require('bolt09');
+
 const getNode = require('./get_node');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcChannelClosedAsClosed} = require('./../../lnd_responses');
@@ -7,6 +9,7 @@ const {rpcChannelUpdateAsUpdate} = require('./../../lnd_responses');
 
 const events = ['channel_closed', 'channel_updated', 'node_updated'];
 const {isArray} = Array;
+const {keys} = Object;
 const method = 'subscribeChannelGraph';
 const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
 const type = 'default';
@@ -147,6 +150,24 @@ module.exports = ({lnd}) => {
         return emitError(new Error('ExpectedPubKeyInNodeUpdateAnnouncement'));
       }
 
+      // LND 0.11.1 and below don't support features, but above do: exit early
+      if (!!node.features && !!keys(node.features).length) {
+        return eventEmitter.emit('node_updated', {
+          alias: node.alias,
+          color: node.color,
+          features: keys(node.features).map(bit => ({
+            bit: Number(bit),
+            is_known: node.features[bit].is_known,
+            is_required: node.features[bit].is_required,
+            type: featureFlagDetails({bit: Number(bit)}).type,
+          })),
+          public_key: node.identity_key,
+          sockets: node.addresses,
+          updated_at: new Date().toISOString(),
+        });
+      }
+
+      // Lookup features for LND 0.11.1 and below
       return getNode({
         lnd,
         is_omitting_channels: true,
