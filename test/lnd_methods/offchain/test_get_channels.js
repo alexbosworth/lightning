@@ -11,11 +11,13 @@ const makeExpected = overrides => {
     cooperative_close_delay_height: undefined,
     id: '0x0x1',
     is_active: true,
+    is_anchor: false,
     is_closing: false,
     is_opening: false,
     is_partner_initiated: false,
     is_private: true,
     is_static_remote_key: false,
+    is_variable_remote_key: true,
     local_balance: 1,
     local_csv: 1,
     local_dust: 1,
@@ -68,6 +70,7 @@ const makeLnd = overrides => {
     close_address: 'cooperative_close_address',
     commit_fee: '1',
     commit_weight: '1',
+    commitment_type: 'LEGACY',
     fee_per_kw: '1',
     initiator: true,
     lifetime: 1,
@@ -236,14 +239,31 @@ const tests = [
     expected: {channel: makeExpected({})},
   },
   {
-    args: {lnd: makeLnd({thaw_height: 1})},
+    args: {
+      lnd: makeLnd({
+        commitment_type: 'STATIC_REMOTE_KEY',
+        thaw_height: 1,
+      }),
+    },
     description: 'Channels are returned when relative thaw height specified',
-    expected: {channel: makeExpected({cooperative_close_delay_height: 1})},
+    expected: {
+      channel: makeExpected({
+        cooperative_close_delay_height: 1,
+        is_static_remote_key: true,
+        is_variable_remote_key: false,
+      }),
+    },
   },
   {
-    args: {lnd: makeLnd({thaw_height: 5e5})},
+    args: {lnd: makeLnd({commitment_type: 'ANCHORS', thaw_height: 5e5})},
     description: 'Channels are returned when a static thaw height specified',
-    expected: {channel: makeExpected({cooperative_close_delay_height: 5e5})},
+    expected: {
+      channel: makeExpected({
+        cooperative_close_delay_height: 5e5,
+        is_anchor: true,
+        is_variable_remote_key: false,
+      }),
+    },
   },
   {
     args: {

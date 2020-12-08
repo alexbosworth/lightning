@@ -26,6 +26,7 @@ const {getNetworkCentrality} = require('./info');
 const {getNetworkGraph} = require('./info');
 const {getNode} = require('./info');
 const {getPayment} = require('./offchain');
+const {getPayments} = require('./offchain');
 const {getPeers} = require('./peers');
 const {getPendingChainBalance} = require('./onchain');
 const {getPendingChannels} = require('./offchain');
@@ -95,6 +96,7 @@ module.exports = {
   getNetworkGraph,
   getNode,
   getPayment,
+  getPayments,
   getPeers,
   getPendingChainBalance,
   getPendingChannels,

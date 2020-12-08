@@ -74,6 +74,19 @@ const payViaRoutes = require('./pay_via_routes');
     is_confirmed: <Is Confirmed Bool>
     is_outgoing: <Is Outoing Bool>
     mtokens: <Total Millitokens Sent String>
+    [paths]: [{
+      fee_mtokens: <Total Fee Millitokens Paid String>
+      hops: [{
+        channel: <First Route Standard Format Channel Id String>
+        channel_capacity: <First Route Channel Capacity Tokens Number>
+        fee: <First Route Fee Tokens Rounded Down Number>
+        fee_mtokens: <First Route Fee Millitokens String>
+        forward_mtokens: <First Route Forward Millitokens String>
+        public_key: <First Route Public Key Hex String>
+        timeout: <First Route Timeout Block Height Number>
+      }]
+      mtokens: <Total Millitokens Paid String>
+    }]
     safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>
     safe_tokens: <Payment Tokens Rounded Up Number>
     secret: <Payment Secret Preimage Hex String>
@@ -156,6 +169,7 @@ module.exports = (args, cbk) => {
           is_confirmed: true,
           is_outgoing: true,
           mtokens: result.mtokens,
+          paths: result.paths || undefined,
           safe_fee: result.safe_fee,
           safe_tokens: result.safe_tokens,
           secret: result.secret,

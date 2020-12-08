@@ -4,6 +4,11 @@
     "failed": "FAILED",
     "pending": "IN_FLIGHT"
   },
+  "commitmentTypes": {
+    "anchor": "ANCHORS",
+    "static_remote_key": "STATIC_REMOTE_KEY",
+    "variable_remote_key": "LEGACY"
+  },
   "failureReason": {
     "invalid_payment": "FAILURE_REASON_INCORRECT_PAYMENT_DETAILS",
     "insufficient_balance": "FAILURE_REASON_INSUFFICIENT_BALANCE",

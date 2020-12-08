@@ -70,6 +70,7 @@ module.exports = ({}) => {
     htlcs: [],
     is_keysend: false,
     memo: '',
+    payment_addr: Buffer.alloc(0),
     payment_request: 'request',
     private: false,
     r_hash: Buffer.alloc(32),

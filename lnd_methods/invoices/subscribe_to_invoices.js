@@ -15,6 +15,8 @@ const updateEvent = 'invoice_updated';
 
   Requires `invoices:read` permission
 
+  `payment` is not supported on LND 0.11.1 and below
+
   {
     [added_after]: <Invoice Added After Index Number>
     [confirmed_after]: <Invoice Confirmed After Index Number>
@@ -48,6 +50,8 @@ const updateEvent = 'invoice_updated';
     index: <Invoice Index Number>
     is_confirmed: <Invoice is Confirmed Bool>
     [is_push]: <Invoice is Push Payment Bool>
+    mtokens: <Invoiced Millitokens String>
+    [payment]: <Payment Identifying Secret Hex String>
     payments: [{
       [confirmed_at]: <Payment Settled At ISO 8601 Date String>
       created_at: <Payment Held Since ISO 860 Date String>

@@ -7,7 +7,7 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.2.1",
+    "@grpc/grpc-js": "1.2.2",
     "@grpc/proto-loader": "0.5.5",
     "@types/express": "^4.17.9",
     "@types/request": "^2.48.5",
@@ -22,14 +22,14 @@
     "cbor": "5.1.0",
     "express": "4.17.1",
     "invoices": "1.1.4",
-    "psbt": "1.1.6"
+    "psbt": "1.1.7"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
     "request-promise-native": "1.0.9",
     "tap": "14.11.0",
     "typescript": "4.1.2",
-    "ws": "7.4.0"
+    "ws": "7.4.1"
   },
   "engines": {
     "node": ">=10.10.0"
@@ -55,5 +55,5 @@
   "files": [
     "dist"
   ],
-  "version": "3.0.11"
+  "version": "3.0.15"
 }

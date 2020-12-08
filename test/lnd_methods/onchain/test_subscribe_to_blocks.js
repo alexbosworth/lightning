@@ -77,10 +77,17 @@ tests.forEach(({args, description, error, expected}) => {
     const sub = subscribeToBlocks(args);
 
     if (!!error) {
+      sub.once('block', () => {});
       sub.once('error', err => {
         deepIs(err, error, 'Got expected error');
 
-        return end();
+        subscribeToBlocks(args);
+
+        process.nextTick(() => {
+          sub.removeAllListeners();
+
+          return end();
+        });
       });
     } else {
       sub.once('block', ({height, id}) => {

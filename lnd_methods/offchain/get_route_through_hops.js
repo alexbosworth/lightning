@@ -6,6 +6,7 @@ const {routesFromQueryRoutes} = require('../../lnd_responses');
 
 const defaultFinalCltvDelta = 40;
 const defaultMtokens = '1000000';
+const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;
 const noChannelMsg = 'no matching outgoing channel available for node';
 const tokAsMtok = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
@@ -96,6 +97,7 @@ module.exports = (args, cbk) => {
           final_cltv_delta: args.cltv_delta || defaultFinalCltvDelta,
           hop_pubkeys: args.public_keys.map(n => Buffer.from(n, 'hex')),
           outgoing_chan_id: outgoingId,
+          payment_addr: !!args.payment ? hexAsBuffer(args.payment) : undefined,
         },
         (err, res) => {
           if (!!err && err.details === unknownServiceMessage) {

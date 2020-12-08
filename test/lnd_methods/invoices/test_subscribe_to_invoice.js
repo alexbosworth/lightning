@@ -7,6 +7,8 @@ const {subscribeToInvoice} = require('./../../../lnd_methods');
 
 const emitter = new EventEmitter();
 
+emitter.cancel = () => {};
+
 const makeLnd = ({err}) => {
   return {invoices: {subscribeSingleInvoice: ({}) => emitter}};
 };
@@ -49,6 +51,7 @@ const tests = [
         is_private: false,
         is_push: undefined,
         mtokens: '1000',
+        payment: undefined,
         payments: [],
         received: 0,
         received_mtokens: '0',
@@ -80,6 +83,7 @@ const tests = [
         is_private: false,
         is_push: undefined,
         mtokens: '1000',
+        payment: undefined,
         payments: [],
         received: 0,
         received_mtokens: '0',

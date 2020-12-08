@@ -13,6 +13,8 @@ const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 
   Requires `invoices:read` permission
 
+  `payment` is not supported on LND 0.11.1 and below
+
   {
     id: <Payment Hash Id Hex String>
     lnd: <Authenticated LND gRPC API Object>
@@ -41,6 +43,7 @@ const isHash = n => /^[0-9A-F]{64}$/i.test(n);
     is_private: <Invoice is Private Bool>
     [is_push]: <Invoice is Push Payment Bool>
     mtokens: <Millitokens String>
+    [payment]: <Payment Identifying Secret Hex String>
     payments: [{
       [confirmed_at]: <Payment Settled At ISO 8601 Date String>
       created_at: <Payment Held Since ISO 860 Date String>

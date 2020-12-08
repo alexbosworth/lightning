@@ -12,6 +12,8 @@ const updateEvent = 'invoice_updated';
 
   Requires `invoices:read` permission
 
+  `payment` is not supported on LND 0.11.1 and below
+
   {
     id: <Invoice Payment Preimage Hash Hex String>
     lnd: <Authenticated LND API Object>
@@ -43,7 +45,9 @@ const updateEvent = 'invoice_updated';
     [is_held]: <HTLC is Held Bool>
     is_outgoing: <Invoice is Outgoing Bool>
     is_private: <Invoice is Private Bool>
+    [is_push]: <Invoice is Push Payment Bool>
     mtokens: <Invoiced Millitokens String>
+    [payment]: <Payment Identifying Secret Hex String>
     payments: [{
       [confirmed_at]: <Payment Settled At ISO 8601 Date String>
       created_at: <Payment Held Since ISO 860 Date String>
@@ -88,6 +92,22 @@ module.exports = ({id, lnd}) => {
 
   const subscription = lnd.invoices.subscribeSingleInvoice({
     r_hash: Buffer.from(id, 'hex'),
+  });
+
+  if (!subscription.cancel) {
+    throw new Error('ExpectedCancelMethodOnSingleInvoiceSubscriptionStream');
+  }
+
+  // Cancel the subscription when all listeners are removed
+  eventEmitter.on('removeListener', () => {
+    // Exit early when there are still listeners
+    if (eventEmitter.listenerCount('invoice_updated')) {
+      return;
+    }
+
+    subscription.cancel();
+
+    return;
   });
 
   const errored = err => {

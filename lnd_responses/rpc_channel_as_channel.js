@@ -1,5 +1,6 @@
 const {chanFormat} = require('bolt07');
 
+const {commitmentTypes} = require('./constants');
 const parseThawHeight = require('./parse_thaw_height');
 const rpcHtlcAsPayment = require('./rpc_htlc_as_payment');
 
@@ -18,6 +19,7 @@ const outpointDelimiter = ':';
     close_address: <Pre-arranged Desired Future Close Address String>
     commit_fee: <Force Close Transaction Fee Tokens String>
     commit_weight: <Force Close Transaction Total Weight Units String>
+    commitment_type: <Channel Commitment Type String>
     csv_delay: <Required Blocks Wait Time After Force Close Number>
     fee_per_kw: <Force Close Transaction Tokens Per 1k Weight String>
     initiator: <Is Channel Made By Local Node Bool>
@@ -53,7 +55,6 @@ const outpointDelimiter = ':';
       min_htlc_msat: <Minimum Millitokens HTLC String>
     }
     remote_pubkey: <Peer Public Key Hex String>
-    static_remote_key: <Channel Uses Seed Recoverable Key Type Bool>
     thaw_height: <Channel Cooperative Close Prevention Blocks Number>
     total_satoshis_received: <Total Tokens Transferred Inbound String>
     total_satoshis_sent: <Total Tokens Transferred Outbound String>
@@ -73,11 +74,13 @@ const outpointDelimiter = ':';
     [cooperative_close_delay_height]: <Prevent Coop Close Until Height Number>
     id: <Standard Format Channel Id String>
     is_active: <Channel Active Bool>
+    is_anchor: <Channel Supports Anchor Outputs Bool>
     is_closing: <Channel Is Closing Bool>
     is_opening: <Channel Is Opening Bool>
     is_partner_initiated: <Channel Partner Opened Channel Bool>
     is_private: <Channel Is Private Bool>
     is_static_remote_key: <Remote Key Is Static Bool>
+    is_variable_remote_key: <Remote Key Is Variable Bool>
     local_balance: <Local Balance Tokens Number>
     local_csv: <Local CSV Blocks Delay Number>
     local_dust: <Remote Non-Enforceable Amount Tokens Number>
@@ -141,6 +144,10 @@ module.exports = args => {
     throw new Error('ExpectedCommitWeightInChannelMessage');
   }
 
+  if (!args.commitment_type) {
+    throw new Error('ExpectedCommitmentTypeInChannelMessage');
+  }
+
   if (args.fee_per_kw === undefined) {
     throw new Error('ExpectedFeePerKwInChannelMessage');
   }
@@ -201,6 +208,7 @@ module.exports = args => {
     throw new Error('ExpectedUnsettledBalanceInChannelMessage');
   }
 
+  const chanType = args.commitment_type;
   const commitWeight = Number(args.commit_weight);
   const {height} = parseThawHeight({id: args.chan_id, thaw: args.thaw_height});
   const own = args.local_constraints;
@@ -219,11 +227,13 @@ module.exports = args => {
     cooperative_close_delay_height: height,
     id: chanFormat({number: args.chan_id}).channel,
     is_active: args.active,
+    is_anchor: chanType === commitmentTypes.anchor,
     is_closing: false,
     is_opening: false,
     is_partner_initiated: !args.initiator,
     is_private: args.private,
-    is_static_remote_key: !!args.static_remote_key,
+    is_static_remote_key: chanType === commitmentTypes.static_remote_key,
+    is_variable_remote_key: chanType === commitmentTypes.variable_remote_key,
     local_balance: Number(args.local_balance),
     local_csv: own.csv_delay,
     local_dust: Number(own.dust_limit_sat),

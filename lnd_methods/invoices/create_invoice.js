@@ -23,6 +23,8 @@ const type = 'default';
 
   Requires `address:write`, `invoices:write` permission
 
+  `payment` is not supported on LND 0.11.1 and below
+
   {
     [cltv_delta]: <CLTV Delta Number>
     [description]: <Invoice Description String>
@@ -44,6 +46,7 @@ const type = 'default';
     [description]: <Description String>
     id: <Payment Hash Hex String>
     [mtokens]: <Millitokens String>
+    [payment]: <Payment Identifying Secret Hex String>
     request: <BOLT 11 Encoded Payment Request String>
     secret: <Hex Encoded Payment Secret String>
     [tokens]: <Tokens Number>
@@ -145,6 +148,10 @@ module.exports = (args, cbk) => {
             return cbk([503, 'AddInvoiceError', {err}]);
           }
 
+          if (!Buffer.isBuffer(response.payment_addr)) {
+            return cbk([503, 'ExpectedPaymentAddressInCreateInvoiceResponse']);
+          }
+
           if (!response.payment_request) {
             return cbk([503, 'ExpectedPaymentRequestForCreatedInvoice']);
           }
@@ -155,6 +162,7 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedValidPaymentRequestForInvoice']);
           }
 
+          const payment = response.payment_addr.toString('hex');
           const req = parsePaymentRequest({request: response.payment_request});
 
           return cbk(null, {
@@ -162,6 +170,7 @@ module.exports = (args, cbk) => {
             description: args.description,
             id: req.id,
             mtokens: req.mtokens,
+            payment: payment || undefined,
             request: response.payment_request,
             tokens: req.tokens,
           });
@@ -186,6 +195,7 @@ module.exports = (args, cbk) => {
           description: addInvoice.description || undefined,
           id: addInvoice.id,
           mtokens: getInvoice.mtokens || Number().toString(),
+          payment: addInvoice.payment || undefined,
           request: addInvoice.request,
           secret: getInvoice.secret,
           tokens: addInvoice.tokens || Number(),

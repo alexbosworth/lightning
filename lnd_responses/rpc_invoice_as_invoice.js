@@ -40,8 +40,9 @@ const mtokensPerToken = BigInt(1e3);
       resolve_time: <HTLC Removed At Epoch Time Number String>
       state: <HTLC Lifecycle State String>
     }]
-    is_push: <Invoice Was Push Payment Bool>
+    is_keysend: <Invoice Was Push Payment Bool>
     memo: <Memo String>
+    payment_addr: <Payment Identifying Secret Buffer Object>
     payment_request: <BOLT 11 Payment Request String>
     private: <Invoice Includes Routing Hints Bool>
     r_hash: <Preimage Hash Buffer Object>
@@ -90,6 +91,7 @@ const mtokensPerToken = BigInt(1e3);
     is_private: <Invoice is Private Bool>
     [is_push]: <Invoice is Push Payment Bool>
     mtokens: <Millitokens String>
+    [payment]: <Payment Identifying Secret Hex String>
     payments: [{
       [canceled_at]: <Payment Canceled At ISO 8601 Date String>
       [confirmed_at]: <Payment Settled At ISO 8601 Date String>
@@ -151,6 +153,10 @@ module.exports = args => {
     throw new Error('ExpectedPaymentRequestForInvoice');
   }
 
+  if (!Buffer.isBuffer(args.payment_addr)) {
+    throw new Error('ExpectedPaymentAddressBufferInRpcInvoiceMessage');
+  }
+
   if (!Buffer.isBuffer(args.r_hash)) {
     throw new Error('ExpectedPreimageHashInLookupInvoiceResponse');
   }
@@ -172,6 +178,7 @@ module.exports = args => {
   const descHash = args.description_hash;
   const expiresInMs = Number(args.expiry) * msPerSec;
   const mtok = (BigInt(args.value) * mtokensPerToken).toString();
+  const payment = args.payment_addr.toString('hex');
   const settleDate = args.settle_date;
 
   const createdAtMs = createdAtEpochTime * msPerSec;
@@ -199,6 +206,7 @@ module.exports = args => {
     is_private: args.private,
     is_push: args.is_keysend || undefined,
     mtokens: args.value_msat === '0' ? mtok : args.value_msat,
+    payment: payment || undefined,
     payments: args.htlcs.map(htlcAsPayment),
     received: Number(args.amt_paid_sat),
     received_mtokens: args.amt_paid_msat,
