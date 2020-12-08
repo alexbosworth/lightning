@@ -1,11 +1,8 @@
-import {authenticatedLndGrpc} from './../lnd_grpc';
-
 interface LndAuthentication {
-  cert?: string;
-  macaroon: string;
-  socket?: string;
+    cert?: string;
+    macaroon: string;
+    socket?: string;
 }
-
 /** Initiate an gRPC API Methods Object for authenticated methods
 
   Both the cert and macaroon expect the entire serialized lnd generated file
@@ -32,10 +29,7 @@ interface LndAuthentication {
     }
   }
 */
-export default function(auth: LndAuthentication): {lnd: any} {
-  return authenticatedLndGrpc({
-    cert: auth.cert,
-    macaroon: auth.macaroon,
-    socket: auth.socket,
-  });
-}
+export default function (auth: LndAuthentication): {
+    lnd: any;
+};
+export {};

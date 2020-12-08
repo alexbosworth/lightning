@@ -1,13 +1,10 @@
-const {lndGateway} = require('./../lnd_gateway');
-
 interface Server {
-  cert?: string;
-  macaroon?: string;
-  request: Function;
-  url: string;
-  websocket: Function;
+    cert?: string;
+    macaroon?: string;
+    request: Function;
+    url: string;
+    websocket: Function;
 }
-
 /** Interface to an LND gateway server.
 
   {
@@ -26,12 +23,5 @@ interface Server {
     lnd: <LND gRPC Gateway Object>
   }
 */
-export default function(server: Server): any {
-  return lndGateway({
-    cert: server.cert,
-    macaroon: server.macaroon,
-    request: server.request,
-    url: server.url,
-    websocket: server.websocket,
-  });
-}
+export default function (server: Server): any;
+export {};
