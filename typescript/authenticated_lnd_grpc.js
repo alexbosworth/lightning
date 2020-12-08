@@ -1,11 +1,6 @@
-import {authenticatedLndGrpc} from './../lnd_grpc';
-
-interface LndAuthentication {
-  cert?: string;
-  macaroon: string;
-  socket?: string;
-}
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const lnd_grpc_1 = require("./../lnd_grpc");
 /** Initiate an gRPC API Methods Object for authenticated methods
 
   Both the cert and macaroon expect the entire serialized lnd generated file
@@ -32,10 +27,12 @@ interface LndAuthentication {
     }
   }
 */
-export default function(auth: LndAuthentication): {lnd: any} {
-  return authenticatedLndGrpc({
-    cert: auth.cert,
-    macaroon: auth.macaroon,
-    socket: auth.socket,
-  });
+function default_1(auth) {
+    return lnd_grpc_1.authenticatedLndGrpc({
+        cert: auth.cert,
+        macaroon: auth.macaroon,
+        socket: auth.socket,
+    });
 }
+exports.default = default_1;
+//# sourceMappingURL=authenticated_lnd_grpc.js.map

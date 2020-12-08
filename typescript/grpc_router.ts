@@ -1,16 +1,20 @@
-import type {Router} from "express";
-import {grpcRouter as _grpcRouter} from "./../lnd_gateway";
+const {grpcRouter} = require('./../lnd_gateway');
 
-export type Credentials = {
-  /** Base64 or Hex Serialized LND TLS Cert String */
+interface Credentials {
   cert?: string;
-  /** Host:Port Network Address String */
   socket?: string;
-};
+}
 
-/**
- * Get a gRPC gateway router
- */
-export function grpcRouter(credentials: Credentials): Router {
+/** Get a gRPC gateway router
+
+  {
+    [cert]: <Base64 or Hex Serialized LND TLS Cert String>
+    [socket]: <Host:Port Network Address String>
+  }
+
+  @returns
+  <Router Object>
+*/
+export default function(credentials: Credentials): any {
   return grpcRouter({cert: credentials.cert, socket: credentials.socket});
 }

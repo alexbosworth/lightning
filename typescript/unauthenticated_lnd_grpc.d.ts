@@ -1,10 +1,7 @@
-import {unauthenticatedLndGrpc} from './../lnd_grpc';
-
 interface LndAuthentication {
-  cert?: string;
-  socket?: string;
+    cert?: string;
+    socket?: string;
 }
-
 /** Unauthenticated gRPC interface to the Lightning Network Daemon (lnd).
 
   Make sure to provide a cert when using LND with its default self-signed cert
@@ -24,6 +21,7 @@ interface LndAuthentication {
     }
   }
 */
-export default function(auth: LndAuthentication): {lnd: any} {
-  return unauthenticatedLndGrpc({cert: auth.cert, socket: auth.socket});
-}
+export default function (auth: LndAuthentication): {
+    lnd: any;
+};
+export {};
