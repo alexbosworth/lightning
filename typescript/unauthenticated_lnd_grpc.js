@@ -1,10 +1,6 @@
-import {unauthenticatedLndGrpc} from './../lnd_grpc';
-
-interface LndAuthentication {
-  cert?: string;
-  socket?: string;
-}
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const lnd_grpc_1 = require("./../lnd_grpc");
 /** Unauthenticated gRPC interface to the Lightning Network Daemon (lnd).
 
   Make sure to provide a cert when using LND with its default self-signed cert
@@ -24,6 +20,8 @@ interface LndAuthentication {
     }
   }
 */
-export default function(auth: LndAuthentication): {lnd: any} {
-  return unauthenticatedLndGrpc({cert: auth.cert, socket: auth.socket});
+function default_1(auth) {
+    return lnd_grpc_1.unauthenticatedLndGrpc({ cert: auth.cert, socket: auth.socket });
 }
+exports.default = default_1;
+//# sourceMappingURL=unauthenticated_lnd_grpc.js.map
