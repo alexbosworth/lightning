@@ -59,7 +59,13 @@ const makeLnd = ({}) => {
               },
               closed_height: 1,
             }],
-            node_updates: [{identity_key: Buffer.alloc(33).toString('hex')}],
+            node_updates: [{
+              addresses: ['addr'],
+              alias: 'alias',
+              color: '#123456',
+              features: {'1': {is_known: true, is_required: false}},
+              identity_key: Buffer.alloc(33).toString('hex'),
+            }],
           });
 
           emitter.emit('error', 'error');
