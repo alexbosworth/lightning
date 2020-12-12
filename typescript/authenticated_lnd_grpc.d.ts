@@ -1,5 +1,5 @@
-import {authenticatedLndGrpc as _authenticatedLndGrpc} from "./../lnd_grpc";
-import type {LndAuthentication} from "./unauthenticated_lnd_grpc";
+import {authenticatedLndGrpc as _authenticatedLndGrpc} from '../lnd_grpc';
+import type {LndAuthentication} from './unauthenticated_lnd_grpc';
 
 export type AuthenticatedLnd = {
   autopilot: any;
@@ -28,6 +28,4 @@ export function authenticatedLndGrpc(
   auth: LndAuthenticationWithMacaroon
 ): {
   lnd: AuthenticatedLnd;
-} {
-  return _authenticatedLndGrpc(auth);
-}
+};

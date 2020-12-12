@@ -1,4 +1,4 @@
-import {unauthenticatedLndGrpc as _unauthenticatedLndGrpc} from "./../lnd_grpc";
+import {unauthenticatedLndGrpc as _unauthenticatedLndGrpc} from '../lnd_grpc';
 
 export type LndAuthentication = {
   /** Base64 or Hex Serialized LND TLS Cert String */
@@ -16,6 +16,4 @@ export type UnauthenticatedLnd = {
  */
 export function unauthenticatedLndGrpc(
   auth: LndAuthentication
-): {lnd: UnauthenticatedLnd} {
-  return _unauthenticatedLndGrpc({cert: auth.cert, socket: auth.socket});
-}
+): {lnd: UnauthenticatedLnd};

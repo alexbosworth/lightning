@@ -1,4 +1,4 @@
-import {emitGrpcEvents as _emitGrpcEvents} from "./../lnd_gateway";
+import {emitGrpcEvents as _emitGrpcEvents} from '../lnd_gateway';
 
 export type GrpcConnection = {
   /** Base64 or Hex Serialized LND TLS Cert String */
@@ -16,10 +16,4 @@ export type GrpcConnection = {
 /**
  * Emit events from a gRPC call
  */
-export function emitGrpcEvents(connection: GrpcConnection): void {
-  return _emitGrpcEvents({
-    cert: connection.cert,
-    socket: connection.socket,
-    ws: connection.ws,
-  });
-}
+export function emitGrpcEvents(connection: GrpcConnection): void;
