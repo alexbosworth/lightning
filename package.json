@@ -40,7 +40,7 @@
     "lnd"
   ],
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "index.js",
   "name": "lightning",
   "repository": {
     "type": "git",
