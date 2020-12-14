@@ -1,4 +1,4 @@
-import type {LndAuthentication} from './unauthenticated_lnd_grpc';
+import {LndAuthentication} from './unauthenticated_lnd_grpc';
 
 export type AuthenticatedLnd = {
   autopilot: any;

@@ -1,5 +1,5 @@
 import {expectType} from 'tsd';
-import type {Router} from 'express';
+import {Router} from 'express';
 import {grpcRouter} from '../..';
 
 expectType<Router>(grpcRouter({}));

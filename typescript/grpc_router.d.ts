@@ -1,4 +1,4 @@
-import type {Router} from 'express';
+import {Router} from 'express';
 
 export type Credentials = {
   /** Base64 or Hex Serialized LND TLS Cert String */

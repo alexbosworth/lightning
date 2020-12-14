@@ -1,4 +1,4 @@
-import type * as request from 'request';
+import * as request from 'request';
 import WebSocket = require('ws');
 import {AuthenticatedLnd} from './authenticated_lnd_grpc';
 import {UnauthenticatedLnd} from './unauthenticated_lnd_grpc';
