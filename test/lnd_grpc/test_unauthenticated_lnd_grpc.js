@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {unauthenticatedLndGrpc} = require('./../../');
+const unauthenticatedLndGrpc = require('./../../lnd_grpc/unauthenticated_lnd_grpc');
 
 const expectedServices = ['unlocker'];
 

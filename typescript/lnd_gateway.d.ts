@@ -1,27 +1,37 @@
-interface Server {
-    cert?: string;
-    macaroon?: string;
-    request: Function;
-    url: string;
-    websocket: Function;
-}
-/** Interface to an LND gateway server.
+import * as request from 'request';
+import WebSocket = require('ws');
+import {AuthenticatedLnd} from './authenticated_lnd_grpc';
+import {UnauthenticatedLnd} from './unauthenticated_lnd_grpc';
 
-  {
-    [cert]: <Base64 or Hex Serialized Gateway TLS Cert String>
-    [macaroon]: <Use Base 64 Encoded Macaroon String>
-    request: <Request Function>
-    url: <LND Gateway URL String>
-    websocket: <Websocket Constructor Function>
-  }
+export type UnauthenticatedLndGatewayServer = {
+  /** Base64 or Hex Serialized Gateway TLS Cert String */
+  cert?: string;
+  /** Request Function */
+  request: (
+    options: request.Options,
+    callback: request.RequestCallback
+  ) => request.Request;
+  /** LND Gateway URL String */
+  url: string;
+  /** Websocket Constructor Function */
+  websocket: typeof WebSocket;
+};
 
-  @throws
-  <Error>
+export type AuthenticatedLndGatewayServer = UnauthenticatedLndGatewayServer & {
+  /** Use Base 64 Encoded Macaroon String */
+  macaroon: string;
+};
 
-  @returns
-  {
-    lnd: <LND gRPC Gateway Object>
-  }
-*/
-export default function (server: Server): any;
-export {};
+/**
+ * Interface to an LND gateway server.
+ */
+export function lndGateway(
+  server: AuthenticatedLndGatewayServer
+): {lnd: AuthenticatedLnd};
+
+/**
+ * Interface to an LND gateway server.
+ */
+export function lndGateway(
+  server: UnauthenticatedLndGatewayServer
+): {lnd: UnauthenticatedLnd};

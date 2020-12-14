@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {authenticatedLndGrpc} = require('./../../');
+const authenticatedLndGrpc = require('./../../lnd_grpc/authenticated_lnd_grpc');
 
 const expectedServices = [
   'autopilot',
