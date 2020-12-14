@@ -1,5 +1,3 @@
-import {emitGrpcEvents as _emitGrpcEvents} from '../lnd_gateway';
-
 export type GrpcConnection = {
   /** Base64 or Hex Serialized LND TLS Cert String */
   cert?: string;

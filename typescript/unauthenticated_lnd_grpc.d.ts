@@ -1,5 +1,3 @@
-import {unauthenticatedLndGrpc as _unauthenticatedLndGrpc} from '../lnd_grpc';
-
 export type LndAuthentication = {
   /** Base64 or Hex Serialized LND TLS Cert String */
   cert?: string;
