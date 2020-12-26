@@ -15,10 +15,12 @@ const rpcChannelAsChannel = require('./rpc_channel_as_channel');
 const rpcChannelClosedAsClosed = require('./rpc_channel_closed_as_closed');
 const rpcChannelUpdateAsUpdate = require('./rpc_channel_update_as_update');
 const rpcClosedChannelAsClosed = require('./rpc_closed_channel_as_closed');
+const rpcFeesAsChannelFees = require('./rpc_fees_as_channel_fees');
 const rpcForwardAsForward = require('./rpc_forward_as_forward');
 const rpcForwardAsForwardRequest = require('./rpc_forward_as_forward_request');
 const rpcHopAsHop = require('./rpc_hop_as_hop');
 const rpcInvoiceAsInvoice = require('./rpc_invoice_as_invoice');
+const rpcNetworkAsNetworkInfo = require('./rpc_network_as_network_info');
 const rpcNodeAsNode = require('./rpc_node_as_node');
 const rpcOutpointAsUpdate = require('./rpc_outpoint_as_update');
 const rpcPaymentAsPayment = require('./rpc_payment_as_payment');
@@ -46,10 +48,12 @@ module.exports = {
   rpcChannelClosedAsClosed,
   rpcChannelUpdateAsUpdate,
   rpcClosedChannelAsClosed,
+  rpcFeesAsChannelFees,
   rpcForwardAsForward,
   rpcForwardAsForwardRequest,
   rpcHopAsHop,
   rpcInvoiceAsInvoice,
+  rpcNetworkAsNetworkInfo,
   rpcNodeAsNode,
   rpcOutpointAsUpdate,
   rpcPaymentAsPayment,

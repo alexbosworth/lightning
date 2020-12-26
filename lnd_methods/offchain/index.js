@@ -1,7 +1,9 @@
+const deletePayments = require('./delete_payments');
 const getBackup = require('./get_backup');
 const getChannelBalance = require('./get_channel_balance');
 const getChannels = require('./get_channels');
 const getClosedChannels = require('./get_closed_channels');
+const getFeeRates = require('./get_fee_rates');
 const getForwards = require('./get_forwards');
 const getPayment = require('./get_payment');
 const getPayments = require('./get_payments');
@@ -21,10 +23,12 @@ const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
 const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
 
 module.exports = {
+  deletePayments,
   getBackup,
   getChannelBalance,
   getChannels,
   getClosedChannels,
+  getFeeRates,
   getForwards,
   getPayment,
   getPayments,

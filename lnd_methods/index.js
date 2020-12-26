@@ -5,18 +5,21 @@ const {closeChannel} = require('./onchain');
 const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
+const {deletePayments} = require('./offchain');
 const {fundPendingChannels} = require('./onchain');
 const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
 const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
 const {getChainBalance} = require('./onchain');
+const {getChainFeeEstimate} = require('./onchain');
 const {getChainFeeRate} = require('./onchain');
 const {getChainTransactions} = require('./onchain');
 const {getChannel} = require('./info');
 const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
 const {getClosedChannels} = require('./offchain');
+const {getFeeRates} = require('./offchain');
 const {getForwards} = require('./offchain');
 const {getHeight} = require('./generic');
 const {getIdentity} = require('./info');
@@ -24,6 +27,7 @@ const {getInvoice} = require('./invoices');
 const {getMethods} = require('./info');
 const {getNetworkCentrality} = require('./info');
 const {getNetworkGraph} = require('./info');
+const {getNetworkInfo} = require('./info');
 const {getNode} = require('./info');
 const {getPayment} = require('./offchain');
 const {getPayments} = require('./offchain');
@@ -75,18 +79,21 @@ module.exports = {
   createChainAddress,
   createHodlInvoice,
   createInvoice,
+  deletePayments,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
   getAutopilot,
   getBackup,
   getChainBalance,
+  getChainFeeEstimate,
   getChainFeeRate,
   getChainTransactions,
   getChannel,
   getChannelBalance,
   getChannels,
   getClosedChannels,
+  getFeeRates,
   getForwards,
   getHeight,
   getIdentity,
@@ -94,6 +101,7 @@ module.exports = {
   getMethods,
   getNetworkCentrality,
   getNetworkGraph,
+  getNetworkInfo,
   getNode,
   getPayment,
   getPayments,

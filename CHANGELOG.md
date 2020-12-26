@@ -1,6 +1,6 @@
 # Versions
 
-## 3.0.16
+## 3.0.17
 
 Support for versions of LND lower than v0.11.0 is ended due to security issues with those
 releases.

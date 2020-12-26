@@ -1,4 +1,6 @@
+const anchorChannelType = 'ANCHORS';
 const {isArray} = Array;
+const remoteInitiator = 'INITIATOR_REMOTE';
 const outpointSeparator = ':';
 
 /** Derive pending channel details from a pending channels response
@@ -80,6 +82,7 @@ const outpointSeparator = ':';
     pending_channels: [{
       [close_transaction_id]: <Channel Closing Transaction Id String>
       is_active: <Channel Is Active Bool>
+      is_anchor: <Channel Is Anchor Channel Type Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Initiated Channel Bool>
@@ -100,10 +103,10 @@ const outpointSeparator = ':';
       remote_reserve: <Channel Remote Reserved Tokens Number>
       sent: <Send Tokens Number>
       [timelock_expiration]: <Pending Tokens Block Height Timelock Number>
-      [transaction_fee]: <Funding Transaction Fee Tokens Number>
+      [transaction_fee]: <Commit Transaction Fee Tokens Number>
       transaction_id: <Channel Funding Transaction Id String>
       transaction_vout: <Channel Funding Transaction Vout Number>
-      [transaction_weight]: <Funding Transaction Weight Number>
+      [transaction_weight]: <Commit Transaction Weight Number>
     }]
   }
 */
@@ -282,9 +285,10 @@ module.exports = args => {
     return {
       close_transaction_id: endTx || undefined,
       is_active: false,
+      is_anchor: channel.commitment_type === anchorChannelType,
       is_closing: !chanOpen,
       is_opening: !!chanOpen,
-      is_partner_initiated: !channel.initiated,
+      is_partner_initiated: channel.initiator === remoteInitiator,
       local_balance: Number(channel.local_balance),
       local_reserve: Number(channel.local_chan_reserve_sat),
       partner_public_key: channel.remote_node_pub,

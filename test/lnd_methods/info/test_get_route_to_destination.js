@@ -108,7 +108,7 @@ const tests = [
   {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),
     description: 'Unexpected errors are passed back',
-    error: [503, 'UnexpectedErrGettingRouteToDestination', {err: 'err'}],
+    error: [503, 'UnexpectedErrInGetRouteToDestination', {err: 'err'}],
   },
   {
     args: makeArgs({lnd: makeLnd({res: null})}),

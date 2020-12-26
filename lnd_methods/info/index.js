@@ -4,6 +4,7 @@ const getIdentity = require('./get_identity');
 const getMethods = require('./get_methods');
 const getNetworkCentrality = require('./get_network_centrality');
 const getNetworkGraph = require('./get_network_graph');
+const getNetworkInfo = require('./get_network_info');
 const getNode = require('./get_node');
 const getRouteToDestination = require('./get_route_to_destination');
 const getWalletInfo = require('./get_wallet_info');
@@ -17,6 +18,7 @@ module.exports = {
   getMethods,
   getNetworkCentrality,
   getNetworkGraph,
+  getNetworkInfo,
   getNode,
   getRouteToDestination,
   getWalletInfo,

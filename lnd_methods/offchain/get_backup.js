@@ -1,11 +1,12 @@
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
+const {isLnd} = require('./../../lnd_requests');
+
 const bufferFromHex = hex => Buffer.from(hex, 'hex');
 const hexFromBuffer = buffer => buffer.toString('hex');
 const {isBuffer} = Buffer;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
-const {isLnd} = require('./../../lnd_requests');
 const isNumber = n => !isNaN(n);
 const method = 'exportChannelBackup';
 const type = 'default';
