@@ -6,6 +6,7 @@ const lnd = {} as AuthenticatedLnd;
 const public_key = Buffer.alloc(33).toString('hex');
 const socket = 'socket';
 
+expectError(addPeer());
 expectError(addPeer({}));
 expectError(addPeer({lnd}));
 expectError(addPeer({lnd, public_key}));
