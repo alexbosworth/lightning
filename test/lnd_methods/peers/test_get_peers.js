@@ -9,6 +9,11 @@ const tests = [
     error: [400, 'ExpectedAuthenticatedLndToGetConnectedPeers'],
   },
   {
+    args: {lnd: {default: {disconnectPeer: ({}, cbk) => cbk('err')}}},
+    description: 'LND is required',
+    error: [400, 'ExpectedAuthenticatedLndToGetConnectedPeers'],
+  },
+  {
     args: {lnd: {default: {listPeers: ({}, cbk) => cbk('err')}}},
     description: 'Errors are passed back',
     error: [503, 'UnexpectedGetPeersError', {err: 'err'}],

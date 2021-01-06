@@ -107,7 +107,7 @@ const mtokensPerToken = BigInt(1e3);
       }]
       mtokens: <Incoming Payment Millitokens String>
       [pending_index]: <Pending Payment Channel HTLC Index Number>
-      timeout: <HTLC CLTV Timeout Height>
+      timeout: <HTLC CLTV Timeout Height Number>
       tokens: <Payment Tokens Number>
       [total_mtokens]: <Total Millitokens String>
     }]

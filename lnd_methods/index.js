@@ -5,12 +5,14 @@ const {closeChannel} = require('./onchain');
 const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
+const {decodePaymentRequest} = require('./offchain');
 const {deletePayments} = require('./offchain');
 const {fundPendingChannels} = require('./onchain');
 const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
 const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
+const {getBackups} = require('./offchain');
 const {getChainBalance} = require('./onchain');
 const {getChainFeeEstimate} = require('./onchain');
 const {getChainFeeRate} = require('./onchain');
@@ -24,6 +26,7 @@ const {getForwards} = require('./offchain');
 const {getHeight} = require('./generic');
 const {getIdentity} = require('./info');
 const {getInvoice} = require('./invoices');
+const {getInvoices} = require('./invoices');
 const {getMethods} = require('./info');
 const {getNetworkCentrality} = require('./info');
 const {getNetworkGraph} = require('./info');
@@ -52,10 +55,17 @@ const {payViaRequest} = require('./offchain');
 const {payViaRoutes} = require('./offchain');
 const {prepareForChannelProposal} = require('./onchain');
 const {proposeChannel} = require('./onchain');
+const {recoverFundsFromChannel} = require('./offchain');
+const {recoverFundsFromChannels} = require('./offchain');
+const {removePeer} = require('./peers');
 const {revokeAccess} = require('./macaroon');
+const {sendToChainAddress} = require('./onchain');
+const {sendToChainAddresses} = require('./onchain');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
+const {signMessage} = require('./message');
 const {signPsbt} = require('./onchain');
+const {subscribeToBackups} = require('./offchain');
 const {subscribeToBlocks} = require('./onchain');
 const {subscribeToChannels} = require('./offchain');
 const {subscribeToForwardRequests} = require('./offchain');
@@ -63,6 +73,7 @@ const {subscribeToForwards} = require('./offchain');
 const {subscribeToGraph} = require('./info');
 const {subscribeToInvoice} = require('./invoices');
 const {subscribeToInvoices} = require('./invoices');
+const {subscribeToOpenRequests} = require('./offchain');
 const {subscribeToPastPayment} = require('./offchain');
 const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
@@ -70,6 +81,9 @@ const {subscribeToPayViaRoutes} = require('./offchain');
 const {subscribeToProbeForRoute} = require('./offchain');
 const {unlockUtxo} = require('./onchain');
 const {updateChainTransaction} = require('./onchain');
+const {verifyBackup} = require('./offchain');
+const {verifyBackups} = require('./offchain');
+const {verifyMessage} = require('./message');
 
 module.exports = {
   addPeer,
@@ -79,12 +93,14 @@ module.exports = {
   createChainAddress,
   createHodlInvoice,
   createInvoice,
+  decodePaymentRequest,
   deletePayments,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
   getAutopilot,
   getBackup,
+  getBackups,
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,
@@ -98,6 +114,7 @@ module.exports = {
   getHeight,
   getIdentity,
   getInvoice,
+  getInvoices,
   getMethods,
   getNetworkCentrality,
   getNetworkGraph,
@@ -126,10 +143,17 @@ module.exports = {
   payViaRoutes,
   prepareForChannelProposal,
   proposeChannel,
+  recoverFundsFromChannel,
+  recoverFundsFromChannels,
+  removePeer,
   revokeAccess,
+  sendToChainAddress,
+  sendToChainAddresses,
   setAutopilot,
   settleHodlInvoice,
+  signMessage,
   signPsbt,
+  subscribeToBackups,
   subscribeToBlocks,
   subscribeToChannels,
   subscribeToForwardRequests,
@@ -137,6 +161,7 @@ module.exports = {
   subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
+  subscribeToOpenRequests,
   subscribeToPastPayment,
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
@@ -144,4 +169,7 @@ module.exports = {
   subscribeToProbeForRoute,
   unlockUtxo,
   updateChainTransaction,
+  verifyBackup,
+  verifyBackups,
+  verifyMessage,
 };

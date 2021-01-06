@@ -1,3 +1,5 @@
+const backupsFromSnapshot = require('./backups_from_snapshot');
+const channelAcceptAsOpenRequest = require('./channel_accept_as_open_request');
 const channelEdgeAsChannel = require('./channel_edge_as_channel');
 const confirmedFromPayment = require('./confirmed_from_payment');
 const confirmedFromPaymentStatus = require('./confirmed_from_payment_status');
@@ -7,6 +9,7 @@ const htlcAsPayment = require('./htlc_as_payment');
 const infoAsWalletInfo = require('./info_as_wallet_info');
 const nodeInfoAsNode = require('./node_info_as_node');
 const paymentFailure = require('./payment_failure');
+const paymentRequestDetails = require('./payment_request_details');
 const pendingAsPendingChannels = require('./pending_as_pending_channels');
 const policyFromChannelUpdate = require('./policy_from_channel_update');
 const routesFromQueryRoutes = require('./routes_from_query_routes');
@@ -31,6 +34,8 @@ const rpcTxAsTransaction = require('./rpc_tx_as_transaction');
 const rpcUtxoAsUtxo = require('./rpc_utxo_as_utxo');
 
 module.exports = {
+  backupsFromSnapshot,
+  channelAcceptAsOpenRequest,
   channelEdgeAsChannel,
   confirmedFromPayment,
   confirmedFromPaymentStatus,
@@ -40,6 +45,7 @@ module.exports = {
   infoAsWalletInfo,
   nodeInfoAsNode,
   paymentFailure,
+  paymentRequestDetails,
   pendingAsPendingChannels,
   policyFromChannelUpdate,
   routesFromQueryRoutes,

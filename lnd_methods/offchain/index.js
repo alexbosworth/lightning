@@ -1,5 +1,7 @@
+const decodePaymentRequest = require('./decode_payment_request');
 const deletePayments = require('./delete_payments');
 const getBackup = require('./get_backup');
+const getBackups = require('./get_backups');
 const getChannelBalance = require('./get_channel_balance');
 const getChannels = require('./get_channels');
 const getClosedChannels = require('./get_closed_channels');
@@ -13,18 +15,26 @@ const pay = require('./pay');
 const payViaPaymentDetails = require('./pay_via_payment_details');
 const payViaPaymentRequest = require('./pay_via_payment_request');
 const payViaRoutes = require('./pay_via_routes');
+const recoverFundsFromChannel = require('./recover_funds_from_channel');
+const recoverFundsFromChannels = require('./recover_funds_from_channels');
+const subscribeToBackups = require('./subscribe_to_backups');
 const subscribeToChannels = require('./subscribe_to_channels');
 const subscribeToForwardRequests = require('./subscribe_to_forward_requests');
 const subscribeToForwards = require('./subscribe_to_forwards');
+const subscribeToOpenRequests = require('./subscribe_to_open_requests');
 const subscribeToPastPayment = require('./subscribe_to_past_payment');
 const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
 const subscribeToPayViaRequest = require('./subscribe_to_pay_via_request');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
 const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
+const verifyBackup = require('./verify_backup');
+const verifyBackups = require('./verify_backups');
 
 module.exports = {
+  decodePaymentRequest,
   deletePayments,
   getBackup,
+  getBackups,
   getChannelBalance,
   getChannels,
   getClosedChannels,
@@ -38,12 +48,18 @@ module.exports = {
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,
+  recoverFundsFromChannel,
+  recoverFundsFromChannels,
+  subscribeToBackups,
   subscribeToChannels,
   subscribeToForwardRequests,
   subscribeToForwards,
+  subscribeToOpenRequests,
   subscribeToPastPayment,
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
+  verifyBackup,
+  verifyBackups,
 };
