@@ -1,5 +1,5 @@
 import {expectError, expectType} from 'tsd';
-import {authenticatedLndGrpc, AuthenticatedLnd} from '../..';
+import {authenticatedLndGrpc, AuthenticatedLnd} from '../../lnd_grpc';
 
 expectError(authenticatedLndGrpc());
 expectError(authenticatedLndGrpc({}));
