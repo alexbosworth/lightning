@@ -59,6 +59,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
     [outgoing_channel]: <Pay Out of Outgoing Channel Id String>
     [outgoing_channels]: [<Pay Out of Outgoing Channel Ids String>]
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
+    [payment]: <Payment Identifier Hex String>
     [request]: <BOLT 11 Payment Request String>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
@@ -306,6 +307,7 @@ module.exports = args => {
         no_inflight_updates: true,
         outgoing_chan_id: !hasOutIds ? singleOut : undefined,
         outgoing_chan_ids: outgoingChannelIds,
+        payment_addr: !!args.payment ? hexToBuf(args.payment) : undefined,
         payment_hash: !args.id ? undefined : hexToBuf(args.id),
         payment_request: !args.request ? undefined : args.request,
         route_hints: !hints.length ? undefined : hints,

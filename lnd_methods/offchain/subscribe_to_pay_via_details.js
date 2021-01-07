@@ -13,6 +13,8 @@ const type = 'router';
 
   Requires `offchain:write` permission
 
+  `payment` is not supported on LND 0.11.1 and below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
     destination: <Destination Public Key String>
@@ -34,6 +36,7 @@ const type = 'router';
     [outgoing_channel]: <Pay Out of Outgoing Channel Id String>
     [outgoing_channels]: [<Pay Out of Outgoing Channel Ids String>]
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
+    [payment]: <Payment Identifier Hex String>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
       [channel]: <Standard Format Channel Id String>
@@ -143,6 +146,7 @@ module.exports = args => {
     mtokens: args.mtokens,
     outgoing_channel: args.outgoing_channel,
     pathfinding_timeout: args.pathfinding_timeout,
+    payment: args.payment,
     routes: args.routes,
     tokens: args.tokens,
   });
