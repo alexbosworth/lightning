@@ -3,7 +3,7 @@ const {encodeAsync} = require('cbor');
 /** Make a request to LND that returns subscription events
 
   {
-    lnd: <LND gRPC API Object>
+    lnd: <LND API Object>
     method: <LND Method Name String>
     params: <Method Arguments Object>
     server: <LND RPC Server Name String>
@@ -33,6 +33,8 @@ module.exports = ({lnd, method, params, server, ws}) => {
     details: err.details,
     message: err.message,
   }));
+
+  ws.on('close', () => sub.cancel());
 
   return {cancel: () => sub.cancel()};
 };

@@ -56,5 +56,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "3.0.19"
+  "version": "3.0.20"
 }
