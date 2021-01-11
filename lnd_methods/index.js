@@ -1,4 +1,5 @@
 const {addPeer} = require('./peers');
+const {broadcastChainTransaction} = require('./onchain');
 const {cancelHodlInvoice} = require('./invoices');
 const {cancelPendingChannel} = require('./onchain');
 const {closeChannel} = require('./onchain');
@@ -6,7 +7,9 @@ const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
 const {decodePaymentRequest} = require('./offchain');
+const {deleteForwardingReputations} = require('./offchain');
 const {deletePayments} = require('./offchain');
+const {diffieHellmanComputeSecret} = require('./signer');
 const {fundPendingChannels} = require('./onchain');
 const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
@@ -63,8 +66,10 @@ const {sendToChainAddress} = require('./onchain');
 const {sendToChainAddresses} = require('./onchain');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
+const {signBytes} = require('./signer');
 const {signMessage} = require('./message');
 const {signPsbt} = require('./onchain');
+const {signTransaction} = require('./signer');
 const {subscribeToBackups} = require('./offchain');
 const {subscribeToBlocks} = require('./onchain');
 const {subscribeToChannels} = require('./offchain');
@@ -81,12 +86,15 @@ const {subscribeToPayViaRoutes} = require('./offchain');
 const {subscribeToProbeForRoute} = require('./offchain');
 const {unlockUtxo} = require('./onchain');
 const {updateChainTransaction} = require('./onchain');
+const {updateRoutingFees} = require('./offchain');
 const {verifyBackup} = require('./offchain');
 const {verifyBackups} = require('./offchain');
+const {verifyBytesSignature} = require('./signer');
 const {verifyMessage} = require('./message');
 
 module.exports = {
   addPeer,
+  broadcastChainTransaction,
   cancelHodlInvoice,
   cancelPendingChannel,
   closeChannel,
@@ -94,7 +102,9 @@ module.exports = {
   createHodlInvoice,
   createInvoice,
   decodePaymentRequest,
+  deleteForwardingReputations,
   deletePayments,
+  diffieHellmanComputeSecret,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
@@ -151,8 +161,10 @@ module.exports = {
   sendToChainAddresses,
   setAutopilot,
   settleHodlInvoice,
+  signBytes,
   signMessage,
   signPsbt,
+  signTransaction,
   subscribeToBackups,
   subscribeToBlocks,
   subscribeToChannels,
@@ -169,7 +181,9 @@ module.exports = {
   subscribeToProbeForRoute,
   unlockUtxo,
   updateChainTransaction,
+  updateRoutingFees,
   verifyBackup,
   verifyBackups,
+  verifyBytesSignature,
   verifyMessage,
 };

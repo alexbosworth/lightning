@@ -1,3 +1,4 @@
+const broadcastChainTransaction = require('./broadcast_chain_transaction');
 const cancelPendingChannel = require('./cancel_pending_channel');
 const closeChannel = require('./close_channel');
 const fundPendingChannels = require('./fund_pending_channels');
@@ -23,6 +24,7 @@ const unlockUtxo = require('./unlock_utxo');
 const updateChainTransaction = require('./update_chain_transaction');
 
 module.exports = {
+  broadcastChainTransaction,
   cancelPendingChannel,
   closeChannel,
   fundPendingChannels,

@@ -1,4 +1,5 @@
 const decodePaymentRequest = require('./decode_payment_request');
+const deleteForwardingReputations = require('./delete_forwarding_reputations');
 const deletePayments = require('./delete_payments');
 const getBackup = require('./get_backup');
 const getBackups = require('./get_backups');
@@ -27,11 +28,13 @@ const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
 const subscribeToPayViaRequest = require('./subscribe_to_pay_via_request');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
 const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
+const updateRoutingFees = require('./update_routing_fees');
 const verifyBackup = require('./verify_backup');
 const verifyBackups = require('./verify_backups');
 
 module.exports = {
   decodePaymentRequest,
+  deleteForwardingReputations,
   deletePayments,
   getBackup,
   getBackups,
@@ -60,6 +63,7 @@ module.exports = {
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
+  updateRoutingFees,
   verifyBackup,
   verifyBackups,
 };

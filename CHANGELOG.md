@@ -1,6 +1,6 @@
 # Versions
 
-## 3.0.20
+## 3.0.21
 
 - `emitGrpcEvents`: Cancel subscriptions when websocket connection is lost
 
