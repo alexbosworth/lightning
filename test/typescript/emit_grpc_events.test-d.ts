@@ -1,6 +1,6 @@
 import {expectType, expectError} from 'tsd';
 import WebSocket = require('ws');
-import {emitGrpcEvents} from '../..';
+import {emitGrpcEvents} from '../../lnd_gateway';
 
 const ws = new WebSocket('address');
 

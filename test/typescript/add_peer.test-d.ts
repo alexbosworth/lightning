@@ -1,6 +1,6 @@
 import {expectError, expectType} from 'tsd';
 import {addPeer} from '../../lnd_methods';
-import {AuthenticatedLnd} from '../../typescript/authenticated_lnd_grpc';
+import {AuthenticatedLnd} from '../../lnd_grpc';
 
 const lnd = {} as AuthenticatedLnd;
 const public_key = Buffer.alloc(33).toString('hex');

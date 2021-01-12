@@ -1,6 +1,5 @@
 import * as events from 'events';
-import {AuthenticatedLnd} from './authenticated_lnd_grpc';
-import {UnauthenticatedLnd} from './unauthenticated_lnd_grpc';
+import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
 
 export type LightningError<TDetails = any> = [number, string, TDetails];
 

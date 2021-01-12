@@ -1,7 +1,7 @@
 import * as request from 'request';
 import WebSocket = require('ws');
-import {AuthenticatedLnd} from './authenticated_lnd_grpc';
-import {UnauthenticatedLnd} from './unauthenticated_lnd_grpc';
+import {AuthenticatedLnd} from '../lnd_grpc/authenticated_lnd_grpc';
+import {UnauthenticatedLnd} from '../lnd_grpc/unauthenticated_lnd_grpc';
 
 export type UnauthenticatedLndGatewayServer = {
   /** Base64 or Hex Serialized Gateway TLS Cert String */

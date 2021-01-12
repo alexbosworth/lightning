@@ -1,6 +1,6 @@
 import {expectType} from 'tsd';
 import {Router} from 'express';
-import {grpcRouter} from '../..';
+import {grpcRouter} from '../../lnd_gateway';
 
 expectType<Router>(grpcRouter({}));
 expectType<Router>(grpcRouter({cert: '00'}));

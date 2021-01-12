@@ -1,7 +1,8 @@
 import {expectType, expectError} from 'tsd';
 import request = require('request');
 import websocket = require('ws');
-import {lndGateway, UnauthenticatedLnd, AuthenticatedLnd} from '../../';
+import {UnauthenticatedLnd, AuthenticatedLnd} from '../../lnd_grpc';
+import {lndGateway} from '../../lnd_gateway';
 
 expectError(lndGateway());
 expectError(lndGateway({}));

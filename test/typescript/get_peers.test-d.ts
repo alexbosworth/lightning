@@ -1,6 +1,6 @@
 import {expectError, expectType} from 'tsd';
 import {getPeers, GetPeersResult} from '../../lnd_methods';
-import {AuthenticatedLnd} from '../../typescript/authenticated_lnd_grpc';
+import {AuthenticatedLnd} from '../../lnd_grpc';
 
 const lnd = {} as AuthenticatedLnd;
 
