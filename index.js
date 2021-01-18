@@ -8,6 +8,7 @@ const {getInvoices} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {settleHodlInvoice} = require('./lnd_methods');
+const {subscribeToInvoice} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 
 module.exports = {
@@ -21,5 +22,6 @@ module.exports = {
   grpcRouter,
   lndGateway,
   settleHodlInvoice,
+  subscribeToInvoice,
   unauthenticatedLndGrpc,
 };
