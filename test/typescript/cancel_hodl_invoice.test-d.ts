@@ -10,6 +10,5 @@ expectError(cancelHodlInvoice({}));
 expectError(cancelHodlInvoice({id}));
 expectError(cancelHodlInvoice({lnd}));
 
-expectError(cancelHodlInvoice({lnd, id}));
 expectType<void>(await cancelHodlInvoice({lnd, id}));
 expectType<void>(cancelHodlInvoice({lnd, id}, error => {}));
