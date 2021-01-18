@@ -6,6 +6,7 @@ const {lndGateway} = require('./lnd_gateway');
 const {signBytes} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
+const {verifyBytesSignature} = require('./lnd_methods');
 
 module.exports = {
   authenticatedLndGrpc,
@@ -16,4 +17,5 @@ module.exports = {
   signBytes,
   signTransaction,
   unauthenticatedLndGrpc,
+  verifyBytesSignature,
 };
