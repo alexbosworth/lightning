@@ -1,7 +1,7 @@
 import {AuthenticatedLndMethod} from '../../typescript';
 
 export type GetInvoiceArgs = {
-  /** Payment Hash Id Hex */
+  /** Payment Hash Id Hex String */
   id: string;
 };
 
@@ -16,7 +16,7 @@ export type GetInvoiceResult = {
   created_at: string;
   /** Description */
   description: string;
-  /** Description Hash Hex */
+  /** Description Hash Hex String */
   description_hash?: string;
   /** ISO 8601 Date */
   expires_at: string;
@@ -66,7 +66,7 @@ export type GetInvoiceResult = {
     messages: {
       /** Message Type number */
       type: string;
-      /** Raw Value Hex */
+      /** Raw Value Hex String */
       value: string;
     }[];
     /** Incoming Payment Millitokens */
@@ -82,7 +82,7 @@ export type GetInvoiceResult = {
   received_mtokens: string;
   /** Bolt 11 Invoice */
   request?: string;
-  /** Secret Preimage Hex */
+  /** Secret Preimage Hex String */
   secret: string;
   /** Tokens */
   tokens: number;

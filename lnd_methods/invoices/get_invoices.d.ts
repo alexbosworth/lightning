@@ -22,7 +22,7 @@ export type GetInvoicesResult = {
     created_at: string;
     /** Description */
     description: string;
-    /** Description Hash Hex */
+    /** Description Hash Hex String */
     description_hash?: string;
     /** ISO 8601 Date */
     expires_at: string;
@@ -68,7 +68,7 @@ export type GetInvoicesResult = {
       messages: {
         /** Message Type number */
         type: string;
-        /** Raw Value Hex */
+        /** Raw Value Hex String */
         value: string;
       }[];
       /** Incoming Payment Millitokens */
@@ -86,7 +86,7 @@ export type GetInvoicesResult = {
     received_mtokens: string;
     /** Bolt 11 Invoice */
     request?: string;
-    /** Secret Preimage Hex */
+    /** Secret Preimage Hex String */
     secret: string;
     /** Tokens */
     tokens: number;
