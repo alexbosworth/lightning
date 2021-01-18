@@ -4,6 +4,7 @@ const {emitGrpcEvents} = require('./lnd_gateway');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {signBytes} = require('./lnd_methods');
+const {signTransaction} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   grpcRouter,
   lndGateway,
   signBytes,
+  signTransaction,
   unauthenticatedLndGrpc,
 };
