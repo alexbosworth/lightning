@@ -1,5 +1,23 @@
 # Versions
 
+## 3.1.0
+
+- `addPeer`: Add method to add a peer
+- `cancelHodlInvoice`: Add method to cancel an invoice
+- `createHodlInvoice`: Add method to create a HODL invoice
+- `createInvoice`: Add method to create an invoice
+- `diffieHellmanComputeSecret`: Add method to derive a shared secret
+- `getInvoice`: Add method to lookup an invoice
+- `getInvoices`: Add method to fetch past invoicies
+- `getPeers`: Add method to list connected peers
+- `removePeer`: Add method to disconnect a connected peer
+- `settleHodlInvoice`: Add method to settle an accepted HODL invoice
+- `signBytes`: Add method to sign arbitrary bytes
+- `signTransaction`: Add method to create a transaction signature
+- `subscribeToInvoice`: Add method to subscribe to updates to an invoice
+- `subscribeToInvoices`: Add method to subscribe to invoice updates
+- `verifyBytesSignature`: Add method to validate a signature over arbitrary bytes
+
 ## 3.0.22
 
 - `emitGrpcEvents`: Cancel subscriptions when websocket connection is lost
