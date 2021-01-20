@@ -9,6 +9,7 @@ const getNode = require('./get_node');
 const getRouteToDestination = require('./get_route_to_destination');
 const getWalletInfo = require('./get_wallet_info');
 const getWalletVersion = require('./get_wallet_version');
+const stopDaemon = require('./stop_daemon');
 const subscribeToGraph = require('./subscribe_to_graph');
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   getRouteToDestination,
   getWalletInfo,
   getWalletVersion,
+  stopDaemon,
   subscribeToGraph,
 };

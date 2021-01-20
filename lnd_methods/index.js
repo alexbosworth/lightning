@@ -70,6 +70,7 @@ const {signBytes} = require('./signer');
 const {signMessage} = require('./message');
 const {signPsbt} = require('./onchain');
 const {signTransaction} = require('./signer');
+const {stopDaemon} = require('./info');
 const {subscribeToBackups} = require('./offchain');
 const {subscribeToBlocks} = require('./onchain');
 const {subscribeToChannels} = require('./offchain');
@@ -165,6 +166,7 @@ module.exports = {
   signMessage,
   signPsbt,
   signTransaction,
+  stopDaemon,
   subscribeToBackups,
   subscribeToBlocks,
   subscribeToChannels,
