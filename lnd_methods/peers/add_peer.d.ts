@@ -1,6 +1,9 @@
-import {AuthenticatedLndMethod} from '../../typescript/shared';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript/shared';
 
-export type AddPeerArgs = {
+export type AddPeerArgs = AuthenticatedLightningArgs<{
   /** Add Peer as Temporary Peer, default: `false` */
   is_temporary?: boolean;
   /** Public Key Hex */
@@ -13,7 +16,7 @@ export type AddPeerArgs = {
   socket: string;
   /** Connection Attempt Timeout Milliseconds, not supported in LND 0.11.1 and below */
   timeout?: number;
-};
+}>;
 
 /**
  * Add a peer if possible (not self, or already connected)
@@ -22,4 +25,4 @@ export type AddPeerArgs = {
  *
  * `timeout` is not supported in LND 0.11.1 and below
  */
-export const addPeer: AuthenticatedLndMethod<AddPeerArgs>;
+export const addPeer: AuthenticatedLightningMethod<AddPeerArgs>;

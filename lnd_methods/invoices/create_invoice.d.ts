@@ -1,6 +1,9 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type CreateInvoiceArgs = {
+export type CreateInvoiceArgs = AuthenticatedLightningArgs<{
   /** CLTV Delta */
   cltv_delta?: number;
   /** Invoice Description */
@@ -21,7 +24,7 @@ export type CreateInvoiceArgs = {
   mtokens?: string;
   /** Tokens */
   tokens?: number;
-};
+}>;
 
 export type CreateInvoiceResult = {
   /** Backup Address */
@@ -55,7 +58,7 @@ export type CreateInvoiceResult = {
  *
  * `payment` is not supported on LND 0.11.1 and below
  */
-export const createInvoice: AuthenticatedLndMethod<
+export const createInvoice: AuthenticatedLightningMethod<
   CreateInvoiceArgs,
   CreateInvoiceResult
 >;

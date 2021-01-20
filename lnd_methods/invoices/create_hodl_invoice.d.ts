@@ -1,6 +1,9 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type CreateHodlInvoiceArgs = {
+export type CreateHodlInvoiceArgs = AuthenticatedLightningArgs<{
   /** Final CLTV Delta */
   cltv_delta?: number;
   /** Invoice Description */
@@ -21,7 +24,7 @@ export type CreateHodlInvoiceArgs = {
   mtokens?: string;
   /** Tokens */
   tokens?: number;
-};
+}>;
 
 export type CreateHodlInvoiceResult = {
   /** Backup Address String */
@@ -51,7 +54,7 @@ export type CreateHodlInvoiceResult = {
  *
  * Requires `address:write`, `invoices:write` permission
  */
-export const createHodlInvoice: AuthenticatedLndMethod<
+export const createHodlInvoice: AuthenticatedLightningMethod<
   CreateHodlInvoiceArgs,
   CreateHodlInvoiceResult
 >;

@@ -1,6 +1,11 @@
 import * as events from 'events';
 import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
 
+export type AuthenticatedLightningArgs<TArgs> = TArgs & {lnd: AuthenticatedLnd};
+export type UnauthenticatedLightningArgs<TArgs> = TArgs & {
+  lnd: UnauthenticatedLnd;
+};
+
 export type LightningError<TDetails = any> = [number, string, TDetails];
 
 export type LightningCallback<TResult = void, TErrorDetails = any> = (
@@ -17,18 +22,18 @@ export type LightningMethod<
   (args: TArgs, callback: LightningCallback<TResult, TErrorDetails>): void;
 };
 
-export type AuthenticatedLndMethod<
-  TArgs = {[key: string]: never},
+export type AuthenticatedLightningMethod<
+  TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd},
   TResult = void,
   TErrorDetails = any
-> = LightningMethod<TArgs & {lnd: AuthenticatedLnd}, TResult, TErrorDetails>;
+> = LightningMethod<TArgs, TResult, TErrorDetails>;
 
-export type UnauthenticatedLndMethod<
-  TArgs = {[key: string]: never},
+export type UnauthenticatedLightningMethod<
+  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd},
   TResult = void,
   TErrorDetails = any
-> = LightningMethod<TArgs & {lnd: UnauthenticatedLnd}, TResult, TErrorDetails>;
+> = LightningMethod<TArgs, TResult, TErrorDetails>;
 
-export type AuthenticatedLndSubscription<TArgs = {[key: string]: never}> = (
-  args: TArgs & {lnd: AuthenticatedLnd}
-) => events.EventEmitter;
+export type AuthenticatedLightningSubscription<
+  TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd}
+> = (args: TArgs) => events.EventEmitter;

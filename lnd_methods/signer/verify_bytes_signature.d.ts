@@ -1,13 +1,16 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type VerifyBytesSignatureArgs = {
+export type VerifyBytesSignatureArgs = AuthenticatedLightningArgs<{
   /** Message Preimage Bytes Hex Encoded String */
   preimage: string;
   /** Signature Valid For Public Key Hex String */
   public_key: string;
   /** Signature Hex */
   signature: string;
-};
+}>;
 
 export type VerifyBytesSignatureResult = {
   /** Signature is Valid */
@@ -21,7 +24,7 @@ export type VerifyBytesSignatureResult = {
  *
  * Requires `signer:read` permission
  */
-export const verifyBytesSignature: AuthenticatedLndMethod<
+export const verifyBytesSignature: AuthenticatedLightningMethod<
   VerifyBytesSignatureArgs,
   VerifyBytesSignatureResult
 >;

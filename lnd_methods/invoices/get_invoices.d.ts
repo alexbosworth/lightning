@@ -1,6 +1,9 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type GetInvoicesArgs =
+export type GetInvoicesArgs = AuthenticatedLightningArgs<
   | {
       /** Page Result Limit */
       limit?: number;
@@ -10,7 +13,8 @@ export type GetInvoicesArgs =
       limit?: never;
       /** Opaque Paging Token */
       token?: string;
-    };
+    }
+>;
 
 export type GetInvoicesResult = {
   invoices: {
@@ -104,7 +108,7 @@ export type GetInvoicesResult = {
  *
  * Invoice `payment` is not supported on LND 0.11.1 and below
  */
-export const getInvoices: AuthenticatedLndMethod<
+export const getInvoices: AuthenticatedLightningMethod<
   GetInvoicesArgs,
   GetInvoicesResult
 >;

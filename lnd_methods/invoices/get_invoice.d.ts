@@ -1,9 +1,12 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type GetInvoiceArgs = {
+export type GetInvoiceArgs = AuthenticatedLightningArgs<{
   /** Payment Hash Id Hex String */
   id: string;
-};
+}>;
 
 export type GetInvoiceResult = {
   /** Fallback Chain Address */
@@ -98,7 +101,7 @@ over-paid.
  * 
  * `payment` is not supported on LND 0.11.1 and below
  */
-export const getInvoice: AuthenticatedLndMethod<
+export const getInvoice: AuthenticatedLightningMethod<
   GetInvoiceArgs,
   GetInvoiceResult
 >;

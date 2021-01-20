@@ -1,9 +1,12 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type CancelHodlInvoiceArgs = {
+export type CancelHodlInvoiceArgs = AuthenticatedLightningArgs<{
   /** Payment Preimage Hash Hex String */
   id: string;
-};
+}>;
 
 /**
  * Cancel an invoice
@@ -14,4 +17,4 @@ export type CancelHodlInvoiceArgs = {
  *
  * Requires `invoices:write` permission
  */
-export const cancelHodlInvoice: AuthenticatedLndMethod<CancelHodlInvoiceArgs>;
+export const cancelHodlInvoice: AuthenticatedLightningMethod<CancelHodlInvoiceArgs>;

@@ -1,9 +1,12 @@
-import {AuthenticatedLndSubscription} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningSubscription,
+} from '../../typescript';
 
-export type SubscribeToInvoiceArgs = {
+export type SubscribeToInvoiceArgs = AuthenticatedLightningArgs<{
   /** Invoice Payment Hash Hex String */
   id: string;
-};
+}>;
 
 export type SubscribeToInvoiceInvoiceUpdatedEvent = {
   /** Fallback Chain Address */
@@ -109,4 +112,4 @@ export type SubscribeToInvoiceInvoiceUpdatedEvent = {
  *
  * `payment` is not supported on LND 0.11.1 and below
  */
-export const subscribeToInvoice: AuthenticatedLndSubscription<SubscribeToInvoiceArgs>;
+export const subscribeToInvoice: AuthenticatedLightningSubscription<SubscribeToInvoiceArgs>;

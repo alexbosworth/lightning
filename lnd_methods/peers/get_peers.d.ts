@@ -1,4 +1,5 @@
-import {AuthenticatedLndMethod} from '../../typescript/shared';
+import {AuthenticatedLnd} from '../../lnd_grpc';
+import {AuthenticatedLightningMethod} from '../../typescript/shared';
 
 export type GetPeersResult = {
   peers: {
@@ -44,4 +45,7 @@ export type GetPeersResult = {
  *
  * LND 0.11.1 and below do not return `last_reconnected` or `reconnection_rate
  */
-export const getPeers: AuthenticatedLndMethod<{}, GetPeersResult>;
+export const getPeers: AuthenticatedLightningMethod<
+  {lnd: AuthenticatedLnd},
+  GetPeersResult
+>;

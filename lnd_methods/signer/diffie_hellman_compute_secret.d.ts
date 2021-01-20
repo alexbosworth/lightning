@@ -1,13 +1,16 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type DiffieHellmanComputeSecretArgs = {
+export type DiffieHellmanComputeSecretArgs = AuthenticatedLightningArgs<{
   /** Key Family */
   key_family?: number;
   /** Key Index */
   key_index?: number;
   /** Public Key Hex */
   partner_public_key: string;
-};
+}>;
 
 export type DiffieHellmanComputeSecretResult = {
   /** Shared Secret Hex */
@@ -23,7 +26,7 @@ export type DiffieHellmanComputeSecretResult = {
  *
  * Requires `signer:generate` permission
  */
-export const diffieHellmanComputeSecret: AuthenticatedLndMethod<
+export const diffieHellmanComputeSecret: AuthenticatedLightningMethod<
   DiffieHellmanComputeSecretArgs,
   DiffieHellmanComputeSecretResult
 >;
