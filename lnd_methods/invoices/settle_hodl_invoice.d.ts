@@ -1,9 +1,12 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type SettleHodlInvoiceArgs = {
+export type SettleHodlInvoiceArgs = AuthenticatedLightningArgs<{
   /** Payment Preimage Hex String */
   secret: string;
-};
+}>;
 
 /**
  * Settle HODL invoice
@@ -12,4 +15,4 @@ export type SettleHodlInvoiceArgs = {
  *
  * Requires `invoices:write` permission
  */
-export const settleHodlInvoice: AuthenticatedLndMethod<SettleHodlInvoiceArgs>;
+export const settleHodlInvoice: AuthenticatedLightningMethod<SettleHodlInvoiceArgs>;

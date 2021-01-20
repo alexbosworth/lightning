@@ -1,6 +1,9 @@
-import {AuthenticatedLndMethod} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningMethod,
+} from '../../typescript';
 
-export type SignTransactionArgs = {
+export type SignTransactionArgs = AuthenticatedLightningArgs<{
   inputs: {
     /** Key Family */
     key_family: number;
@@ -19,7 +22,7 @@ export type SignTransactionArgs = {
   }[];
   /** Unsigned Transaction Hex String */
   transaction: string;
-};
+}>;
 
 export type SignTransactionResult = {
   /** Signature Hex Strings */
@@ -33,7 +36,7 @@ export type SignTransactionResult = {
  *
  * Requires `signer:generate` permission
  */
-export const signTransaction: AuthenticatedLndMethod<
+export const signTransaction: AuthenticatedLightningMethod<
   SignTransactionArgs,
   SignTransactionResult
 >;
