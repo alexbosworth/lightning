@@ -1,6 +1,7 @@
 const {addPeer} = require('./lnd_methods');
 const {authenticatedLndGrpc} = require('./lnd_grpc');
 const {cancelHodlInvoice} = require('./lnd_methods');
+const {createChainAddress} = require('./lnd_methods');
 const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
@@ -8,6 +9,7 @@ const {emitGrpcEvents} = require('./lnd_gateway');
 const {getInvoice} = require('./lnd_methods');
 const {getInvoices} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
+const {getPublicKey} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {removePeer} = require('./lnd_methods');
@@ -23,6 +25,7 @@ module.exports = {
   addPeer,
   authenticatedLndGrpc,
   cancelHodlInvoice,
+  createChainAddress,
   createHodlInvoice,
   createInvoice,
   diffieHellmanComputeSecret,
@@ -30,6 +33,7 @@ module.exports = {
   getInvoice,
   getInvoices,
   getPeers,
+  getPublicKey,
   grpcRouter,
   lndGateway,
   removePeer,
