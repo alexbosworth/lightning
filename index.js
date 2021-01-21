@@ -9,6 +9,7 @@ const {emitGrpcEvents} = require('./lnd_gateway');
 const {getInvoice} = require('./lnd_methods');
 const {getInvoices} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
+const {getPublicKey} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {removePeer} = require('./lnd_methods');
@@ -32,6 +33,7 @@ module.exports = {
   getInvoice,
   getInvoices,
   getPeers,
+  getPublicKey,
   grpcRouter,
   lndGateway,
   removePeer,
