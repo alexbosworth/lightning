@@ -11,6 +11,7 @@ const {getIdentity} = require('./lnd_methods');
 const {getInvoice} = require('./lnd_methods');
 const {getInvoices} = require('./lnd_methods');
 const {getMethods} = require('./lnd_methods');
+const {getNetworkCentrality} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
@@ -37,6 +38,7 @@ module.exports = {
   getInvoice,
   getInvoices,
   getMethods,
+  getNetworkCentrality,
   getPeers,
   grpcRouter,
   lndGateway,
