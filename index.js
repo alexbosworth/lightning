@@ -28,6 +28,7 @@ const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
 const {stopDaemon} = require('./lnd_methods');
+const {subscribeToGraph} = require('./lnd_methods');
 const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
@@ -64,6 +65,7 @@ module.exports = {
   signBytes,
   signTransaction,
   stopDaemon,
+  subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
   unauthenticatedLndGrpc,
