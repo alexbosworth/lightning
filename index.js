@@ -13,6 +13,7 @@ const {getInvoice} = require('./lnd_methods');
 const {getInvoices} = require('./lnd_methods');
 const {getMethods} = require('./lnd_methods');
 const {getNetworkCentrality} = require('./lnd_methods');
+const {getNetworkGraph} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
@@ -42,6 +43,7 @@ module.exports = {
   getInvoices,
   getMethods,
   getNetworkCentrality,
+  getNetworkGraph,
   getPeers,
   getPublicKey,
   grpcRouter,
