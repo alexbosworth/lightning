@@ -9,3 +9,4 @@ export * from './get_node';
 export * from './get_route_to_destination';
 export * from './get_wallet_info';
 export * from './get_wallet_version';
+export * from './stop_daemon';

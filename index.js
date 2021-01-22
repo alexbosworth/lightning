@@ -27,6 +27,7 @@ const {removePeer} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
+const {stopDaemon} = require('./lnd_methods');
 const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
@@ -62,6 +63,7 @@ module.exports = {
   settleHodlInvoice,
   signBytes,
   signTransaction,
+  stopDaemon,
   subscribeToInvoice,
   subscribeToInvoices,
   unauthenticatedLndGrpc,
