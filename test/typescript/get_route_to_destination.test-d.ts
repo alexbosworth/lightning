@@ -7,7 +7,12 @@ import {
 
 const lnd = {} as AuthenticatedLnd;
 const destination = '00';
-const messages = [];
+const messages = [
+  {
+    type: 'type',
+    value: 'value',
+  },
+];
 const payment = '00';
 const routes = [
   [
