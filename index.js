@@ -19,6 +19,7 @@ const {getNode} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
 const {getRouteToDestination} = require('./lnd_methods');
+const {getWalletInfo} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {removePeer} = require('./lnd_methods');
@@ -52,6 +53,7 @@ module.exports = {
   getPeers,
   getPublicKey,
   getRouteToDestination,
+  getWalletInfo,
   grpcRouter,
   lndGateway,
   removePeer,

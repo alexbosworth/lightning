@@ -7,3 +7,4 @@ export * from './get_network_graph';
 export * from './get_network_info';
 export * from './get_node';
 export * from './get_route_to_destination';
+export * from './get_wallet_info';
