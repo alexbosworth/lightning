@@ -27,6 +27,7 @@ const {getWalletVersion} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {removePeer} = require('./lnd_methods');
+const {revokeAccess} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
@@ -67,6 +68,7 @@ module.exports = {
   grpcRouter,
   lndGateway,
   removePeer,
+  revokeAccess,
   settleHodlInvoice,
   signBytes,
   signTransaction,
