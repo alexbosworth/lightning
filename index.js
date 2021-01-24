@@ -6,6 +6,7 @@ const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {emitGrpcEvents} = require('./lnd_gateway');
+const {getAccessIds} = require('./lnd_methods');
 const {getAutopilot} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
 const {getHeight} = require('./lnd_methods');
@@ -44,6 +45,7 @@ module.exports = {
   createInvoice,
   diffieHellmanComputeSecret,
   emitGrpcEvents,
+  getAccessIds,
   getAutopilot,
   getChannel,
   getHeight,
