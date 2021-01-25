@@ -38,6 +38,7 @@ const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {verifyBytesSignature} = require('./lnd_methods');
+const {verifyMessage} = require('./lnd_methods');
 
 module.exports = {
   addPeer,
@@ -80,4 +81,5 @@ module.exports = {
   subscribeToInvoices,
   unauthenticatedLndGrpc,
   verifyBytesSignature,
+  verifyMessage,
 };
