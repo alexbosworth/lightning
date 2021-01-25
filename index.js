@@ -30,6 +30,7 @@ const {removePeer} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
+const {signMessage} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
 const {stopDaemon} = require('./lnd_methods');
 const {subscribeToGraph} = require('./lnd_methods');
@@ -37,6 +38,7 @@ const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {verifyBytesSignature} = require('./lnd_methods');
+const {verifyMessage} = require('./lnd_methods');
 
 module.exports = {
   addPeer,
@@ -71,6 +73,7 @@ module.exports = {
   revokeAccess,
   settleHodlInvoice,
   signBytes,
+  signMessage,
   signTransaction,
   stopDaemon,
   subscribeToGraph,
@@ -78,4 +81,5 @@ module.exports = {
   subscribeToInvoices,
   unauthenticatedLndGrpc,
   verifyBytesSignature,
+  verifyMessage,
 };
