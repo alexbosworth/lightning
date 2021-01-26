@@ -1,6 +1,6 @@
 # Versions
 
-## 3.2.0
+## 3.2.1
 
 - `getAccessIds`: Add method to list access ids
 - `grantAccess`: Add method to generate a macaroon

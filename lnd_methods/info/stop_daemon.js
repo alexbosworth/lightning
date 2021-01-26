@@ -48,7 +48,11 @@ module.exports = ({lnd}, cbk) => {
       // Poll wallet info until it fails to know when the daemon is really off
       waitForGetInfoFailure: ['stopDaemon', ({stopDaemon}, cbk) => {
         return asyncRetry({interval, times}, cbk => {
-          return getWalletInfo({lnd}, (err, res) => {
+          return getWalletInfo({lnd}, err => {
+            if (!err) {
+              return cbk([503, 'ExpectedDaemonError']);
+            }
+
             const [, message] = err;
 
             if (message !== 'FailedToConnectToDaemon') {
