@@ -1,5 +1,13 @@
 # Versions
 
+## 3.2.0
+
+- `getAccessIds`: Add method to list access ids
+- `grantAccess`: Add method to generate a macaroon
+- `revokeAccess`: Add method to revoke a macaroon
+- `signMessage`: Add method to sign a message
+- `verifyMessage`: Add method to verify a message signature
+
 ## 3.1.0
 
 - `addPeer`: Add method to add a peer

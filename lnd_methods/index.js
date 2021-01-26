@@ -3,6 +3,7 @@ const {broadcastChainTransaction} = require('./onchain');
 const {cancelHodlInvoice} = require('./invoices');
 const {cancelPendingChannel} = require('./onchain');
 const {closeChannel} = require('./onchain');
+const {connectWatchtower} = require('./tower_client');
 const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
@@ -25,6 +26,8 @@ const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
 const {getClosedChannels} = require('./offchain');
 const {getFeeRates} = require('./offchain');
+const {getForwardingConfidence} = require('./offchain');
+const {getForwardingReputations} = require('./offchain');
 const {getForwards} = require('./offchain');
 const {getHeight} = require('./generic');
 const {getIdentity} = require('./info');
@@ -99,6 +102,7 @@ module.exports = {
   cancelHodlInvoice,
   cancelPendingChannel,
   closeChannel,
+  connectWatchtower,
   createChainAddress,
   createHodlInvoice,
   createInvoice,
@@ -121,6 +125,8 @@ module.exports = {
   getChannels,
   getClosedChannels,
   getFeeRates,
+  getForwardingConfidence,
+  getForwardingReputations,
   getForwards,
   getHeight,
   getIdentity,

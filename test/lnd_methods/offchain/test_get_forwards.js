@@ -35,7 +35,7 @@ const tests = [
   },
   {
     args: {},
-    description: 'LND is epxected to get forwards',
+    description: 'LND is expected to get forwards',
     error: [400, 'ExpectedLndToGetForwardingHistory'],
   },
   {
