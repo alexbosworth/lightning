@@ -37,3 +37,36 @@ export type UnauthenticatedLightningMethod<
 export type AuthenticatedLightningSubscription<
   TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd}
 > = (args: TArgs) => events.EventEmitter;
+
+type CommonStatus = 'IN_FLIGHT' | 'SUCCEEDED' | 'FAILED';
+
+export type AttemptState = CommonStatus;
+
+export type CommitmentType = 'ANCHORS' | 'STATIC_REMOTE_KEY' | 'LEGACY';
+
+export type FailureReason =
+  | 'FAILURE_REASON_INCORRECT_PAYMENT_DETAILS'
+  | 'FAILURE_REASON_INSUFFICIENT_BALANCE'
+  | 'FAILURE_REASON_TIMEOUT'
+  | 'FAILURE_REASON_NO_ROUTE'
+  | 'FAILURE_REASON_NONE';
+
+export type HtlcState = 'ACCEPTED' | 'CANCELED' | 'SETTLED';
+export type HtlcStatus = CommonStatus;
+export type HtlcType = 'FORWARD' | 'RECEIVE' | 'SEND';
+
+export type ResolutionOutcome = 'CLAIMED' | 'FIRST_STAGE' | 'TIMEOUT';
+export type ResolutionType = 'COMMIT' | 'INCOMING_HTLC' | 'OUTGOING_HTLC';
+
+export type SyncType = 'ACTIVE_SYNC' | 'PASSIVE_SYNC';
+
+export type ForwardPaymentAction = 'RESUME' | 'FAIL' | 'SETTLE';
+
+export type PaymentState =
+  | CommonStatus
+  | 'FAILED_ERROR'
+  | 'FAILED_INSUFFICIENT_BALANCE'
+  | 'FAILED_INCORRECT_PAYMENT_DETAILS'
+  | 'FAILED_NO_ROUTE'
+  | 'FAILED_TIMEOUT';
+export type PaymentStatus = CommonStatus | 'UNKNOWN';
