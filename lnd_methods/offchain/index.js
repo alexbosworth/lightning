@@ -1,3 +1,4 @@
+const attemptRoute = require('./attempt_route');
 const decodePaymentRequest = require('./decode_payment_request');
 const deleteForwardingReputations = require('./delete_forwarding_reputations');
 const deletePayments = require('./delete_payments');
@@ -35,6 +36,7 @@ const verifyBackup = require('./verify_backup');
 const verifyBackups = require('./verify_backups');
 
 module.exports = {
+  attemptRoute,
   decodePaymentRequest,
   deleteForwardingReputations,
   deletePayments,
