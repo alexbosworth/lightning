@@ -1,4 +1,5 @@
 const {addPeer} = require('./lnd_methods');
+const {attemptRoute} = require('./lnd_methods');
 const {authenticatedLndGrpc} = require('./lnd_grpc');
 const {cancelHodlInvoice} = require('./lnd_methods');
 const {createChainAddress} = require('./lnd_methods');
@@ -42,6 +43,7 @@ const {verifyMessage} = require('./lnd_methods');
 
 module.exports = {
   addPeer,
+  attemptRoute,
   authenticatedLndGrpc,
   cancelHodlInvoice,
   createChainAddress,
