@@ -26,10 +26,10 @@ const mtokensAsTokens = mtokens => safeTokens({mtokens}).tokens;
           amt_to_forward: <Tokens to Forward String>
           amt_to_forward_msat: <Millitokens to Forward String>
           chan_id: <Numeric Format Channel Id String>
-          chan_capacity: <Channel Capacity Number>
+          chan_capacity: <Channel Capacity Tokens String>
           expiry: <Timeout Chain Height Number>
-          fee: <Fee in Tokens Number>
-          fee_msat: <Fee in Millitokens Number>
+          fee: <Fee in Tokens String>
+          fee_msat: <Fee in Millitokens String>
           [mpp_record]: {
             payment_addr: <Payment Identifier Buffer>
             total_amt_msat: <Total Payment Millitokens Amount String>
