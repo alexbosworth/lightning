@@ -24,14 +24,14 @@ export type ConfirmedFromPaymentArgs = {
         amt_to_forward_msat: string;
         /** Numeric Format Channel Id String */
         chan_id: string;
-        /** Channel Capacity Number */
-        chan_capacity: number;
+        /** Channel Capacity String */
+        chan_capacity: string;
         /** Timeout Chain Height Number */
         expiry: number;
-        /** Fee in Tokens Number */
-        fee: number;
-        /** Fee in Millitokens Number */
-        fee_msat: number;
+        /** Fee in Tokens String */
+        fee: string;
+        /** Fee in Millitokens String */
+        fee_msat: string;
         mpp_record?: {
           /** Payment Identifier Buffer */
           payment_addr: Buffer;
