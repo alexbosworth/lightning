@@ -32,6 +32,9 @@ const rpcRouteAsRoute = require('./rpc_route_as_route');
         amt_to_forward_msat: <Millitokens to Forward String>
         chan_id: <Numeric Format Channel Id String>
         chan_capacity: <Channel Capacity Number>
+        custom_records: {
+          <UInt64 String>: <Record Data Buffer>
+        }
         expiry: <Timeout Chain Height Number>
         fee_msat: <Fee in Millitokens String>
         [mpp_record]: {
