@@ -4,11 +4,6 @@ const grpcCredentials = require('./../../lnd_grpc/grpc_credentials');
 
 const tests = [
   {
-    args: {},
-    description: 'A macaroon is required for gRPC credentials',
-    error: 'ExpectedBase64OrHexEncodedMacaroonToCreateCredentials',
-  },
-  {
     args: {macaroon: '00'},
     description: 'gRPC credentials are returned',
     expected: {},

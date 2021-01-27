@@ -1,5 +1,9 @@
 # Versions
 
+## 3.2.3
+
+- `authenticatedLndGrpc`: Allow not specifying a macaroon
+
 ## 3.2.2
 
 - `getAccessIds`: Add method to list access ids

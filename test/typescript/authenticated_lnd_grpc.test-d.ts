@@ -2,7 +2,6 @@ import {expectError, expectType} from 'tsd';
 import {authenticatedLndGrpc, AuthenticatedLnd} from '../../lnd_grpc';
 
 expectError(authenticatedLndGrpc());
-expectError(authenticatedLndGrpc({}));
 expectType<{lnd: AuthenticatedLnd}>(
   authenticatedLndGrpc({macaroon: Buffer.alloc(1).toString('hex')})
 );

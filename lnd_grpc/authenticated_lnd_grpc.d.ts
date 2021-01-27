@@ -15,7 +15,7 @@ export type AuthenticatedLnd = {
 
 export type LndAuthenticationWithMacaroon = LndAuthentication & {
   /** Base64 or Hex Serialized Macaroon String */
-  macaroon: string;
+  macaroon?: string;
 };
 
 /**
