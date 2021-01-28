@@ -23,7 +23,7 @@ const pathForProto = proto => join(__dirname, protosDir, proto);
 
   {
     [cert]: <Base64 or Hex Serialized LND TLS Cert>
-    macaroon: <Base64 or Hex Serialized Macaroon String>
+    [macaroon]: <Base64 or Hex Serialized Macaroon String>
     [socket]: <Host:Port Network Address String>
   }
 

@@ -3,7 +3,7 @@ const {broadcastChainTransaction} = require('./onchain');
 const {cancelHodlInvoice} = require('./invoices');
 const {cancelPendingChannel} = require('./onchain');
 const {closeChannel} = require('./onchain');
-const {connectWatchtower} = require('./tower_client');
+const {connectWatchtower} = require('./offchain');
 const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
@@ -47,6 +47,7 @@ const {getPublicKey} = require('./address');
 const {getRouteThroughHops} = require('./offchain');
 const {getRouteToDestination} = require('./info');
 const {getSweepTransactions} = require('./onchain');
+const {getTowerServerInfo} = require('./info');
 const {getUtxos} = require('./onchain');
 const {getWalletInfo} = require('./info');
 const {getWalletVersion} = require('./info');
@@ -146,6 +147,7 @@ module.exports = {
   getRouteThroughHops,
   getRouteToDestination,
   getSweepTransactions,
+  getTowerServerInfo,
   getUtxos,
   getWalletInfo,
   getWalletVersion,

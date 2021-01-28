@@ -19,7 +19,7 @@ const generate = macaroon => {
 
   {
     [cert]: <Base64 or Hex Serialized LND TLS Cert>
-    macaroon: <Base64 or Hex Serialized Macaroon String>
+    [macaroon]: <Base64 or Hex Serialized Macaroon String>
   }
 
   @throws
@@ -31,6 +31,10 @@ const generate = macaroon => {
   }
 */
 module.exports = ({cert, macaroon}) => {
+  if (!macaroon) {
+    return {credentials: grpcSsl({cert}).ssl};
+  }
+
   const mac = decodeSerialized({serialized: macaroon}).decoded;
 
   if (!mac) {
