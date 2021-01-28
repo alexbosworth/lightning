@@ -1,6 +1,6 @@
 import {expectError, expectType} from 'tsd';
 import {AuthenticatedLnd} from '../../lnd_grpc';
-import {attemptRoute} from '../../lnd_methods';
+import {attemptRoute} from '../../lnd_methods/offchain/attempt_route';
 
 const lnd = {} as AuthenticatedLnd;
 const max_timeout_height = 1;

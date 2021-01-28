@@ -1,4 +1,3 @@
-const attemptRoute = require('./attempt_route');
 const connectWatchtower = require('./connect_watchtower');
 const decodePaymentRequest = require('./decode_payment_request');
 const deleteForwardingReputations = require('./delete_forwarding_reputations');
@@ -37,7 +36,6 @@ const verifyBackup = require('./verify_backup');
 const verifyBackups = require('./verify_backups');
 
 module.exports = {
-  attemptRoute,
   connectWatchtower,
   decodePaymentRequest,
   deleteForwardingReputations,
