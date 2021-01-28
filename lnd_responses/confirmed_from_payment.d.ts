@@ -1,4 +1,4 @@
-import {FailureReason, HtlcStatus, PaymentState} from '../typescript';
+import { FailureReason, HtlcStatus, PaymentState } from '../typescript';
 
 export type ConfirmedFromPaymentArgs = {
   /** Creation Date Epoch Time Seconds String */
@@ -26,6 +26,9 @@ export type ConfirmedFromPaymentArgs = {
         chan_id: string;
         /** Channel Capacity String */
         chan_capacity: string;
+        custom_records: {
+          [key: string]: Buffer;
+        };
         /** Timeout Chain Height Number */
         expiry: number;
         /** Fee in Tokens String */
