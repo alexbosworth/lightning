@@ -7,6 +7,7 @@ const getNetworkGraph = require('./get_network_graph');
 const getNetworkInfo = require('./get_network_info');
 const getNode = require('./get_node');
 const getRouteToDestination = require('./get_route_to_destination');
+const getTowerServerInfo = require('./get_tower_server_info');
 const getWalletInfo = require('./get_wallet_info');
 const getWalletVersion = require('./get_wallet_version');
 const stopDaemon = require('./stop_daemon');
@@ -22,6 +23,7 @@ module.exports = {
   getNetworkInfo,
   getNode,
   getRouteToDestination,
+  getTowerServerInfo,
   getWalletInfo,
   getWalletVersion,
   stopDaemon,
