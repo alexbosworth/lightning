@@ -12,6 +12,7 @@ const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {emitGrpcEvents} = require('./lnd_gateway');
 const {getAccessIds} = require('./lnd_methods');
 const {getAutopilot} = require('./lnd_methods');
+const {getBackup} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
 const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
@@ -59,6 +60,7 @@ module.exports = {
   emitGrpcEvents,
   getAccessIds,
   getAutopilot,
+  getBackup,
   getChannel,
   getHeight,
   getIdentity,
