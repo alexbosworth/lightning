@@ -1,6 +1,7 @@
 const {addPeer} = require('./lnd_methods');
 const {authenticatedLndGrpc} = require('./lnd_grpc');
 const {cancelHodlInvoice} = require('./lnd_methods');
+const {connectWatchtower} = require('./lnd_methods');
 const {createChainAddress} = require('./lnd_methods');
 const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
@@ -47,6 +48,7 @@ module.exports = {
   addPeer,
   authenticatedLndGrpc,
   cancelHodlInvoice,
+  connectWatchtower,
   createChainAddress,
   createHodlInvoice,
   createInvoice,
