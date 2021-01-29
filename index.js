@@ -16,6 +16,7 @@ const {getBackup} = require('./lnd_methods');
 const {getBackups} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
 const {getChannels} = require('./lnd_methods');
+const {getClosedChannels} = require('./lnd_methods');
 const {getChannelBalance} = require('./lnd_methods');
 const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
@@ -68,6 +69,7 @@ module.exports = {
   getChannelBalance,
   getChannel,
   getChannels,
+  getClosedChannels,
   getHeight,
   getIdentity,
   getInvoice,
