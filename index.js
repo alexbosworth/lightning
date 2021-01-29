@@ -15,6 +15,7 @@ const {getAutopilot} = require('./lnd_methods');
 const {getBackup} = require('./lnd_methods');
 const {getBackups} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
+const {getChannelBalance} = require('./lnd_methods');
 const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
 const {getInvoice} = require('./lnd_methods');
@@ -63,6 +64,7 @@ module.exports = {
   getAutopilot,
   getBackup,
   getBackups,
+  getChannelBalance,
   getChannel,
   getHeight,
   getIdentity,
