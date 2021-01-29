@@ -2,11 +2,14 @@ const {addPeer} = require('./peers');
 const {broadcastChainTransaction} = require('./onchain');
 const {cancelHodlInvoice} = require('./invoices');
 const {cancelPendingChannel} = require('./onchain');
+const {changePassword} = require('./unauthenticated');
 const {closeChannel} = require('./onchain');
 const {connectWatchtower} = require('./offchain');
 const {createChainAddress} = require('./address');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
+const {createSeed} = require('./unauthenticated');
+const {createWallet} = require('./unauthenticated');
 const {decodePaymentRequest} = require('./offchain');
 const {deleteForwardingReputations} = require('./offchain');
 const {deletePayments} = require('./offchain');
@@ -90,6 +93,7 @@ const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
 const {subscribeToProbeForRoute} = require('./offchain');
 const {unlockUtxo} = require('./onchain');
+const {unlockWallet} = require('./unauthenticated');
 const {updateChainTransaction} = require('./onchain');
 const {updateRoutingFees} = require('./offchain');
 const {verifyBackup} = require('./offchain');
@@ -102,11 +106,14 @@ module.exports = {
   broadcastChainTransaction,
   cancelHodlInvoice,
   cancelPendingChannel,
+  changePassword,
   closeChannel,
   connectWatchtower,
   createChainAddress,
   createHodlInvoice,
   createInvoice,
+  createSeed,
+  createWallet,
   decodePaymentRequest,
   deleteForwardingReputations,
   deletePayments,
@@ -190,6 +197,7 @@ module.exports = {
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
   unlockUtxo,
+  unlockWallet,
   updateChainTransaction,
   updateRoutingFees,
   verifyBackup,

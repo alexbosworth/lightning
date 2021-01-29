@@ -49,12 +49,12 @@
     "url": "https://github.com/alexbosworth/lightning.git"
   },
   "scripts": {
-    "test": "tap test/arrays/*.js test/bolt00/*.js test/bolt02/*.js test/lnd_gateway/*.js test/lnd_grpc/*.js test/lnd_methods/address/*.js test/lnd_methods/generic/*.js test/lnd_methods/info/*.js test/lnd_methods/invoices/*.js test/lnd_methods/macaroon/*.js test/lnd_methods/message/*.js test/lnd_methods/offchain/*.js test/lnd_methods/onchain/*.js test/lnd_methods/peers/*.js test/lnd_methods/signer/*.js test/lnd_requests/*.js test/lnd_responses/*.js && npm run test:types",
+    "test": "tap test/arrays/*.js test/bolt00/*.js test/bolt02/*.js test/lnd_gateway/*.js test/lnd_grpc/*.js test/lnd_methods/address/*.js test/lnd_methods/generic/*.js test/lnd_methods/info/*.js test/lnd_methods/invoices/*.js test/lnd_methods/macaroon/*.js test/lnd_methods/message/*.js test/lnd_methods/offchain/*.js test/lnd_methods/onchain/*.js test/lnd_methods/peers/*.js test/lnd_methods/signer/*.js test/lnd_methods/unauthenticated/*.js test/lnd_requests/*.js test/lnd_responses/*.js && npm run test:types",
     "test:types": "tsd"
   },
   "tsd": {
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "3.2.4"
+  "version": "3.2.5"
 }
