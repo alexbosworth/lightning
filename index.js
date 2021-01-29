@@ -13,6 +13,7 @@ const {emitGrpcEvents} = require('./lnd_gateway');
 const {getAccessIds} = require('./lnd_methods');
 const {getAutopilot} = require('./lnd_methods');
 const {getBackup} = require('./lnd_methods');
+const {getBackups} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
 const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
@@ -61,6 +62,7 @@ module.exports = {
   getAccessIds,
   getAutopilot,
   getBackup,
+  getBackups,
   getChannel,
   getHeight,
   getIdentity,
