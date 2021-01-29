@@ -9,7 +9,6 @@ const payment: ConfirmedFromPaymentArgs = {
   creation_date: '1',
   creation_time_ns: '1',
   failure_reason: 'FAILURE_REASON_NONE',
-  fee: '1',
   fee_msat: '1000',
   fee_sat: '1',
   htlcs: [
