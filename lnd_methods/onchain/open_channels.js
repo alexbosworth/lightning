@@ -97,11 +97,18 @@ module.exports = ({channels, lnd}, cbk) => {
 
       // Open channels
       openChannels: ['toOpen', ({toOpen}, cbk) => {
+        const [lastChannel] = toOpen.map(n => n.id).reverse();
+
         return asyncMap(toOpen, (channel, cbk) => {
           let isDone = false;
 
           const channelOpen = lnd[type][method]({
-            funding_shim: {psbt_shim: {pending_chan_id: channel.id}},
+            funding_shim: {
+              psbt_shim: {
+                no_publish: channel.id !== lastChannel,
+                pending_chan_id: channel.id,
+              },
+            },
             local_funding_amount: channel.capacity,
             min_htlc_msat: channel.min_htlc_mtokens || defaultMinHtlcMtokens,
             node_pubkey: bufferFromHex(channel.partner_public_key),
