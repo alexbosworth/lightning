@@ -105,7 +105,7 @@ module.exports = ({channels, lnd}, cbk) => {
           const channelOpen = lnd[type][method]({
             funding_shim: {
               psbt_shim: {
-                no_publish: channel.id !== lastChannel,
+                no_publish: !channel.id.equals(lastChannel),
                 pending_chan_id: channel.id,
               },
             },
