@@ -31,6 +31,7 @@ const {getNetworkCentrality} = require('./lnd_methods');
 const {getNetworkGraph} = require('./lnd_methods');
 const {getNetworkInfo} = require('./lnd_methods');
 const {getNode} = require('./lnd_methods');
+const {getPayment} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
 const {getRouteToDestination} = require('./lnd_methods');
@@ -87,6 +88,7 @@ module.exports = {
   getNetworkGraph,
   getNetworkInfo,
   getNode,
+  getPayment,
   getPeers,
   getPublicKey,
   getRouteToDestination,
