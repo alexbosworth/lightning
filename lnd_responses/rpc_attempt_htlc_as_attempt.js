@@ -5,6 +5,7 @@ const rpcRouteAsRoute = require('./rpc_route_as_route');
 /** Payment attempt details from RPC HTLCAttempt message
 
   {
+    attempt_id: <Attempt Id String>
     attempt_time_ns: <Attempt Created At Epoch Time Nanoseconds String>
     failure: {
       [channel_update]: {

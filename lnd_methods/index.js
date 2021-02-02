@@ -14,6 +14,7 @@ const {decodePaymentRequest} = require('./offchain');
 const {deleteForwardingReputations} = require('./offchain');
 const {deletePayments} = require('./offchain');
 const {diffieHellmanComputeSecret} = require('./signer');
+const {disconnectWatchtower} = require('./offchain');
 const {fundPendingChannels} = require('./onchain');
 const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
@@ -95,6 +96,7 @@ const {subscribeToProbeForRoute} = require('./offchain');
 const {unlockUtxo} = require('./onchain');
 const {unlockWallet} = require('./unauthenticated');
 const {updateChainTransaction} = require('./onchain');
+const {updateConnectedWatchtower} = require('./offchain');
 const {updateRoutingFees} = require('./offchain');
 const {verifyBackup} = require('./offchain');
 const {verifyBackups} = require('./offchain');
@@ -118,6 +120,7 @@ module.exports = {
   deleteForwardingReputations,
   deletePayments,
   diffieHellmanComputeSecret,
+  disconnectWatchtower,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
@@ -199,6 +202,7 @@ module.exports = {
   unlockUtxo,
   unlockWallet,
   updateChainTransaction,
+  updateConnectedWatchtower,
   updateRoutingFees,
   verifyBackup,
   verifyBackups,
