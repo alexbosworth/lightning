@@ -1,23 +1,16 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  PaginationArgs,
 } from '../../typescript';
 
 export type GetForwardsArgs = AuthenticatedLightningArgs<
-  | {
-      /** Get Only Payments Forwarded At Or After ISO 8601 Date */
-      after?: string;
-      /** Get Only Payments Forwarded Before ISO 8601 Date */
-      before?: string;
-      /** Page Result Limit */
-      limit?: number;
-      token?: never;
-    }
-  | {
-      limit?: never;
-      /** Opaque Paging Token */
-      token?: string;
-    }
+  PaginationArgs & {
+    /** Get Only Payments Forwarded At Or After ISO 8601 Date */
+    after?: string;
+    /** Get Only Payments Forwarded Before ISO 8601 Date */
+    before?: string;
+  }
 >;
 
 export type GetForwardsResult = {

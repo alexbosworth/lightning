@@ -70,3 +70,15 @@ export type PaymentState =
   | 'FAILED_NO_ROUTE'
   | 'FAILED_TIMEOUT';
 export type PaymentStatus = CommonStatus | 'UNKNOWN';
+
+export type PaginationArgs =
+  | {
+      /** Page Result Limit */
+      limit?: number;
+      token?: never;
+    }
+  | {
+      limit?: never;
+      /** Opaque Paging Token */
+      token?: string;
+    };

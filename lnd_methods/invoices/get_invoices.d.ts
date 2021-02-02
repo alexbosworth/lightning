@@ -1,20 +1,10 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  PaginationArgs,
 } from '../../typescript';
 
-export type GetInvoicesArgs = AuthenticatedLightningArgs<
-  | {
-      /** Page Result Limit */
-      limit?: number;
-      token?: never;
-    }
-  | {
-      limit?: never;
-      /** Opaque Paging Token */
-      token?: string;
-    }
->;
+export type GetInvoicesArgs = AuthenticatedLightningArgs<PaginationArgs>;
 
 export type GetInvoicesResult = {
   invoices: {
