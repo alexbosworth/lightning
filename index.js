@@ -18,6 +18,7 @@ const {getChannel} = require('./lnd_methods');
 const {getChannels} = require('./lnd_methods');
 const {getClosedChannels} = require('./lnd_methods');
 const {getFeeRates} = require('./lnd_methods');
+const {getForwardingConfidence} = require('./lnd_methods');
 const {getChannelBalance} = require('./lnd_methods');
 const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
@@ -72,6 +73,7 @@ module.exports = {
   getChannels,
   getClosedChannels,
   getFeeRates,
+  getForwardingConfidence,
   getHeight,
   getIdentity,
   getInvoice,

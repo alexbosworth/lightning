@@ -8,3 +8,4 @@ export * from './get_channel_balance';
 export * from './get_channels';
 export * from './get_closed_channels';
 export * from './get_fee_rates';
+export * from './get_forwarding_confidence';
