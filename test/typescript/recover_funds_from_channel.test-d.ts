@@ -12,8 +12,4 @@ expectError(recoverFundsFromChannel({lnd}));
 
 expectType<void>(await recoverFundsFromChannel({lnd, backup}));
 
-expectType<void>(
-  recoverFundsFromChannel({lnd, backup}, (error, result) => {
-    expectType<void>(result);
-  })
-);
+expectType<void>(recoverFundsFromChannel({lnd, backup}, (error, result) => {}));
