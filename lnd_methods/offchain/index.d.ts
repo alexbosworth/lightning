@@ -13,3 +13,4 @@ export * from './get_forwarding_reputations';
 export * from './get_forwards';
 export * from './get_payment';
 export * from './get_payments';
+export * from './get_pending_channels';
