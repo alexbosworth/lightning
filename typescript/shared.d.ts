@@ -1,5 +1,6 @@
 import * as events from 'events';
 import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
+import {Xor} from './util';
 
 export type AuthenticatedLightningArgs<TArgs> = TArgs & {lnd: AuthenticatedLnd};
 export type UnauthenticatedLightningArgs<TArgs> = TArgs & {
@@ -71,14 +72,13 @@ export type PaymentState =
   | 'FAILED_TIMEOUT';
 export type PaymentStatus = CommonStatus | 'UNKNOWN';
 
-export type PaginationArgs =
-  | {
-      /** Page Result Limit */
-      limit?: number;
-      token?: never;
-    }
-  | {
-      limit?: never;
-      /** Opaque Paging Token */
-      token?: string;
-    };
+export type PaginationArgs = Xor<
+  {
+    /** Page Result Limit */
+    limit?: number;
+  },
+  {
+    /** Opaque Paging Token */
+    token?: string;
+  }
+>;
