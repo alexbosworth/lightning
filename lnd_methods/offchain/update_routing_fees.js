@@ -19,7 +19,7 @@ const type = 'default';
   Requires `offchain:write` permission
 
   {
-    [base_fee_mtokens]: <Base Fee Millitokens Charged Number>
+    [base_fee_mtokens]: <Base Fee Millitokens Charged String>
     [base_fee_tokens]: <Base Fee Tokens Charged Number>
     [cltv_delta]: <HTLC CLTV Delta Number>
     [fee_rate]: <Fee Rate In Millitokens Per Million Number>
