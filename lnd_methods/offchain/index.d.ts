@@ -17,3 +17,4 @@ export * from './get_pending_channels';
 export * from './pay_via_payment_details';
 export * from './pay_via_payment_request';
 export * from './pay_via_routes';
+export * from './pay';

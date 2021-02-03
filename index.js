@@ -45,6 +45,7 @@ const {lndGateway} = require('./lnd_gateway');
 const {payViaPaymentDetails} = require('./lnd_methods');
 const {payViaPaymentRequest} = require('./lnd_methods');
 const {payViaRoutes} = require('./lnd_methods');
+const {pay} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
@@ -107,6 +108,7 @@ module.exports = {
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,
+  pay,
   removePeer,
   revokeAccess,
   settleHodlInvoice,
