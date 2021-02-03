@@ -145,7 +145,6 @@ module.exports = {
   subscribeToPayViaRoutes,
   subscribeToPay,
   subscribeToProbeForRoute,
-  subscribeToPayViaDetails,
   unauthenticatedLndGrpc,
   verifyBytesSignature,
   verifyMessage,
