@@ -31,3 +31,4 @@ export * from './subscribe_to_pay_via_request';
 export * from './subscribe_to_pay_via_routes';
 export * from './subscribe_to_pay';
 export * from './subscribe_to_probe_for_route';
+export * from './update_routing_fees';
