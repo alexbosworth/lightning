@@ -29,3 +29,4 @@ export * from './subscribe_to_past_payment';
 export * from './subscribe_to_pay_via_details';
 export * from './subscribe_to_pay_via_request';
 export * from './subscribe_to_pay_via_routes';
+export * from './subscribe_to_pay';
