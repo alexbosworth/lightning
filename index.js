@@ -57,6 +57,7 @@ const {signTransaction} = require('./lnd_methods');
 const {stopDaemon} = require('./lnd_methods');
 const {subscribeToBackups} = require('./lnd_methods');
 const {subscribeToChannels} = require('./lnd_methods');
+const {subscribeToForwardRequests} = require('./lnd_methods');
 const {subscribeToGraph} = require('./lnd_methods');
 const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
@@ -124,6 +125,7 @@ module.exports = {
   stopDaemon,
   subscribeToBackups,
   subscribeToChannels,
+  subscribeToForwardRequests,
   subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
