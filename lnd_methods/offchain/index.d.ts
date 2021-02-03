@@ -14,6 +14,7 @@ export * from './get_forwards';
 export * from './get_payment';
 export * from './get_payments';
 export * from './get_pending_channels';
+export * from './get_route_through_hops';
 export * from './pay_via_payment_details';
 export * from './pay_via_payment_request';
 export * from './pay_via_routes';
