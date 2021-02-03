@@ -47,6 +47,7 @@ const {payViaPaymentRequest} = require('./lnd_methods');
 const {payViaRoutes} = require('./lnd_methods');
 const {pay} = require('./lnd_methods');
 const {recoverFundsFromChannel} = require('./lnd_methods');
+const {recoverFundsFromChannels} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
@@ -111,6 +112,7 @@ module.exports = {
   payViaRoutes,
   pay,
   recoverFundsFromChannel,
+  recoverFundsFromChannels,
   removePeer,
   revokeAccess,
   settleHodlInvoice,

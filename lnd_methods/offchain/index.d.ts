@@ -19,3 +19,4 @@ export * from './pay_via_payment_request';
 export * from './pay_via_routes';
 export * from './pay';
 export * from './recover_funds_from_channel';
+export * from './recover_funds_from_channels';
