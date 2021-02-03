@@ -58,6 +58,7 @@ const {stopDaemon} = require('./lnd_methods');
 const {subscribeToBackups} = require('./lnd_methods');
 const {subscribeToChannels} = require('./lnd_methods');
 const {subscribeToForwardRequests} = require('./lnd_methods');
+const {subscribeToForwards} = require('./lnd_methods');
 const {subscribeToGraph} = require('./lnd_methods');
 const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
@@ -126,6 +127,7 @@ module.exports = {
   subscribeToBackups,
   subscribeToChannels,
   subscribeToForwardRequests,
+  subscribeToForwards,
   subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
