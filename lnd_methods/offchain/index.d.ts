@@ -21,3 +21,4 @@ export * from './pay';
 export * from './recover_funds_from_channel';
 export * from './recover_funds_from_channels';
 export * from './subscribe_to_backups';
+export * from './subscribe_to_channels';
