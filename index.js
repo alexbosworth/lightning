@@ -44,6 +44,7 @@ const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {payViaPaymentDetails} = require('./lnd_methods');
 const {payViaPaymentRequest} = require('./lnd_methods');
+const {payViaRoutes} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
@@ -105,6 +106,7 @@ module.exports = {
   lndGateway,
   payViaPaymentDetails,
   payViaPaymentRequest,
+  payViaRoutes,
   removePeer,
   revokeAccess,
   settleHodlInvoice,
