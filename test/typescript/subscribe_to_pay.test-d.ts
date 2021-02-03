@@ -1,7 +1,7 @@
 import * as events from 'events';
 import {expectError, expectType} from 'tsd';
 import {AuthenticatedLnd} from '../../lnd_grpc';
-import {subscribeToPay} from '../../lnd_methods';
+import {subscribeToPay} from '../../lnd_methods/offchain/subscribe_to_pay';
 
 const lnd = {} as AuthenticatedLnd;
 const id = 'id';
