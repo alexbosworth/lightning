@@ -20,3 +20,4 @@ export * from './pay_via_routes';
 export * from './pay';
 export * from './recover_funds_from_channel';
 export * from './recover_funds_from_channels';
+export * from './subscribe_to_backups';
