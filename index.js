@@ -63,6 +63,7 @@ const {subscribeToGraph} = require('./lnd_methods');
 const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
 const {subscribeToOpenRequests} = require('./lnd_methods');
+const {subscribeToPastPayment} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {verifyBytesSignature} = require('./lnd_methods');
 const {verifyMessage} = require('./lnd_methods');
@@ -133,6 +134,7 @@ module.exports = {
   subscribeToInvoice,
   subscribeToInvoices,
   subscribeToOpenRequests,
+  subscribeToPastPayment,
   unauthenticatedLndGrpc,
   verifyBytesSignature,
   verifyMessage,

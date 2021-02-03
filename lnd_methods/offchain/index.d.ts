@@ -25,3 +25,4 @@ export * from './subscribe_to_channels';
 export * from './subscribe_to_forward_requests';
 export * from './subscribe_to_forwards';
 export * from './subscribe_to_open_requests';
+export * from './subscribe_to_past_payment';
