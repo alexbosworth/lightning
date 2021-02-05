@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 
 const {test} = require('tap');
 
-const {subscribeToForwards} = require('./../../../lnd_methods');
+const {subscribeToForwards} = require('./../../../');
 
 const emitter = new EventEmitter();
 

@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {settleHodlInvoice} = require('./../../../lnd_methods');
+const {settleHodlInvoice} = require('./../../../');
 
 const secret = Buffer.alloc(32).toString('hex');
 

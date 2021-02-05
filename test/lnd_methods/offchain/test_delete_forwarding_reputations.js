@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {deleteForwardingReputations} = require('./../../../lnd_methods');
+const {deleteForwardingReputations} = require('./../../../');
 
 const tests = [
   {

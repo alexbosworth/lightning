@@ -1,7 +1,7 @@
 const {test} = require('tap');
 const websocket = require('ws');
 
-const {lndGateway} = require('./../../lnd_gateway');
+const {lndGateway} = require('./../../');
 
 const tests = [
   {

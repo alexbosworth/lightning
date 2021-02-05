@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 
 const {test} = require('tap');
 
-const {getHeight} = require('./../../../lnd_methods');
+const {getHeight} = require('./../../../');
 const {getInfoResponse} = require('./../fixtures');
 
 const makeLnd = overrides => {

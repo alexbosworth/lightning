@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 
 const {test} = require('tap');
 
-const {getPayment} = require('./../../../lnd_methods');
+const {getPayment} = require('./../../../');
 
 const makeLnd = args => {
   return {

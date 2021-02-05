@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getPendingChannels} = require('./../../../lnd_methods');
+const {getPendingChannels} = require('./../../../');
 
 const expectedChannel = {
 };

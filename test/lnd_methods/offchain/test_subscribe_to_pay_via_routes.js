@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {subscribeToPayViaRoutes} = require('./../../../lnd_methods');
+const {subscribeToPayViaRoutes} = require('./../../../');
 
 const route = {
   fee: 1,

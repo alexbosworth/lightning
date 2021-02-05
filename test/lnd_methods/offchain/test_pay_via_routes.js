@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {payViaRoutes} = require('./../../../lnd_methods');
+const {payViaRoutes} = require('./../../../');
 
 const preimage = Buffer.alloc(32);
 

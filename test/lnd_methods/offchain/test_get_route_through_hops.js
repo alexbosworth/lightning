@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getRouteThroughHops} = require('./../../../lnd_methods');
+const {getRouteThroughHops} = require('./../../../');
 
 const makeExpected = overrides => {
   const route = {

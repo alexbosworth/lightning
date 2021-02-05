@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {connectWatchtower} = require('./../../../lnd_methods');
+const {connectWatchtower} = require('./../../../');
 
 const makeLnd = err => {
   return {tower_client: {addTower: ({}, cbk) => cbk(err)}};

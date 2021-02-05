@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 
 const {test} = require('tap');
 
-const emitGrpcEvents = require('./../../lnd_gateway/emit_grpc_events');
+const {emitGrpcEvents} = require('./../../');
 
 const tests = [
   {

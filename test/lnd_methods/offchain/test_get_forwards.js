@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getForwards} = require('./../../../lnd_methods');
+const {getForwards} = require('./../../../');
 
 const makeLnd = ({empty, err, overrides}) => {
   if (!!empty) {

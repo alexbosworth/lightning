@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {subscribeToPastPayment} = require('./../../../lnd_methods/offchain');
+const {subscribeToPastPayment} = require('./../../../');
 
 const tests = [
   {

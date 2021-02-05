@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getAutopilot} = require('./../../../lnd_methods');
+const {getAutopilot} = require('./../../../');
 
 const tests = [
   {

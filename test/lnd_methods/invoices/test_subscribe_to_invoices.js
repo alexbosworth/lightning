@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const {test} = require('tap');
 
 const {lookupInvoiceResponse} = require('./../fixtures');
-const {subscribeToInvoices} = require('./../../../lnd_methods');
+const {subscribeToInvoices} = require('./../../../');
 
 const emitter = new EventEmitter();
 

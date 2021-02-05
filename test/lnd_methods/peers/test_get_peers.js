@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getPeers} = require('./../../../lnd_methods');
+const {getPeers} = require('./../../../');
 
 const tests = [
   {

@@ -4,7 +4,7 @@ const BN = require('bn.js');
 const {test} = require('tap');
 
 const {getInfoResponse} = require('./../fixtures');
-const {getRouteToDestination} = require('./../../../lnd_methods/info');
+const {getRouteToDestination} = require('./../../../');
 
 const customRecords = {};
 

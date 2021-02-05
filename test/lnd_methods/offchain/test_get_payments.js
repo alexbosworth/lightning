@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getPayments} = require('./../../../lnd_methods');
+const {getPayments} = require('./../../../');
 
 const makeLnd = args => {
   return {

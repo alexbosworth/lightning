@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getForwardingConfidence} = require('./../../../lnd_methods');
+const {getForwardingConfidence} = require('./../../../');
 
 const makeLnd = ({err, res}) => {
   return {

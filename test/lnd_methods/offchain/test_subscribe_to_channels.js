@@ -3,7 +3,7 @@ const {promisify} = require('util');
 
 const {test} = require('tap');
 
-const {subscribeToChannels} = require('./../../../lnd_methods');
+const {subscribeToChannels} = require('./../../../');
 
 const nextTick = promisify(process.nextTick);
 

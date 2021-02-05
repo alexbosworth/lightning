@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {cancelHodlInvoice} = require('./../../../lnd_methods');
+const {cancelHodlInvoice} = require('./../../../');
 
 const makeLnd = ({err}) => {
   return {invoices: {cancelInvoice: ({}, cbk) => cbk(err)}};

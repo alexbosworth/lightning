@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {addPeer} = require('./../../../lnd_methods');
+const {addPeer} = require('./../../../');
 
 const makeLnd = args => {
   const peersRes = {

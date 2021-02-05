@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {updateRoutingFees} = require('./../../../lnd_methods');
+const {updateRoutingFees} = require('./../../../');
 
 const makeLnd = ({err, policy}) => {
   return {

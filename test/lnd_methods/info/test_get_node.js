@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getNode} = require('./../../../lnd_methods');
+const {getNode} = require('./../../../');
 
 const makeLnd = ({err, res}) => {
   const response = {

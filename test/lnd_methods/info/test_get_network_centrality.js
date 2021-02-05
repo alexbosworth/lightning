@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getNetworkCentrality} = require('./../../../lnd_methods');
+const {getNetworkCentrality} = require('./../../../');
 
 const makeLnd = ({err, res}) => {
   const response = {

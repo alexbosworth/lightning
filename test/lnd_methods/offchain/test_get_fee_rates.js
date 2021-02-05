@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getFeeRates} = require('./../../../lnd_methods');
+const {getFeeRates} = require('./../../../');
 
 const tests = [
   {

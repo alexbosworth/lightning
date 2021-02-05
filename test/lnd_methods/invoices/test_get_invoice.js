@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getInvoice} = require('./../../../lnd_methods');
+const {getInvoice} = require('./../../../');
 const {lookupInvoiceResponse} = require('./../fixtures');
 
 const id = Buffer.alloc(32).toString('hex');

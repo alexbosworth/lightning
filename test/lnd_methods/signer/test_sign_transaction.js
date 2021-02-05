@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {signTransaction} = require('./../../../lnd_methods');
+const {signTransaction} = require('./../../../');
 
 const makeLnd = (err, res) => {
   return {signer: {signOutputRaw: ({}, cbk) => cbk(err, res)}};

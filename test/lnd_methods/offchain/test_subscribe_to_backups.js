@@ -3,7 +3,7 @@ const {promisify} = require('util');
 
 const {test} = require('tap');
 
-const {subscribeToBackups} = require('./../../../lnd_methods');
+const {subscribeToBackups} = require('./../../../');
 
 const nextTick = promisify(process.nextTick);
 

@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {revokeAccess} = require('./../../../lnd_methods');
+const {revokeAccess} = require('./../../../');
 
 const id = '1';
 

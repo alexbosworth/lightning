@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getChannel} = require('./../../../lnd_methods');
+const {getChannel} = require('./../../../');
 
 const tests = [
   {

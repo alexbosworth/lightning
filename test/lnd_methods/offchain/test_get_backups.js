@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getBackups} = require('./../../../lnd_methods');
+const {getBackups} = require('./../../../');
 
 const tests = [
   {

@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getClosedChannels} = require('./../../../lnd_methods');
+const {getClosedChannels} = require('./../../../');
 
 const makeLnd = (err, override, response) => {
   const channel = {

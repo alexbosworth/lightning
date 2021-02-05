@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getNetworkGraph} = require('./../../../lnd_methods');
+const {getNetworkGraph} = require('./../../../');
 
 const makeLnd = ({edges, nodes}) => {
   return {

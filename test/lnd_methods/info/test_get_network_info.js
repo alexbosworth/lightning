@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getNetworkInfo} = require('./../../../lnd_methods');
+const {getNetworkInfo} = require('./../../../');
 
 const tests = [
   {

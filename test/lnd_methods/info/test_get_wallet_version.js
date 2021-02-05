@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getWalletVersion} = require('./../../../lnd_methods');
+const {getWalletVersion} = require('./../../../');
 
 const makeResponse = overrides => {
   const response = {

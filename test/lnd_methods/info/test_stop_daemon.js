@@ -1,7 +1,7 @@
 const {test} = require('tap');
 
 const {getInfoResponse} = require('./../fixtures');
-const {stopDaemon} = require('./../../../lnd_methods');
+const {stopDaemon} = require('./../../../');
 
 const makeLnd = ({attempts}) => {
   const response = getInfoResponse;

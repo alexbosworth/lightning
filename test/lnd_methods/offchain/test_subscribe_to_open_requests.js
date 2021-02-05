@@ -3,7 +3,7 @@ const {promisify} = require('util');
 
 const {test} = require('tap');
 
-const {subscribeToOpenRequests} = require('./../../../lnd_methods');
+const {subscribeToOpenRequests} = require('./../../../');
 
 const nextTick = promisify(process.nextTick);
 

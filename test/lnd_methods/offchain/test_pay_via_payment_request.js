@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 
 const {test} = require('tap');
 
-const {payViaPaymentRequest} = require('./../../../lnd_methods');
+const {payViaPaymentRequest} = require('./../../../');
 
 const makePaymentData = overrides => {
   const data = {

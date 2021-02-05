@@ -1,7 +1,7 @@
 const {test} = require('tap');
 
 const {getInfoResponse} = require('./../fixtures');
-const {getWalletInfo} = require('./../../../lnd_methods');
+const {getWalletInfo} = require('./../../../');
 
 const makeLnd = ({custom, err, res}) => {
   const response = getInfoResponse;

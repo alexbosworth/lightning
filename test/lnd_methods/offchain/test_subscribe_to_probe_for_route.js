@@ -2,7 +2,7 @@ const {test} = require('tap');
 
 const {getInfoResponse} = require('./../fixtures');
 const {queryRoutesResponse} = require('./../fixtures');
-const {subscribeToProbeForRoute} = require('./../../../lnd_methods');
+const {subscribeToProbeForRoute} = require('./../../../');
 
 const expectedRoute = {
   confidence: 1000000,

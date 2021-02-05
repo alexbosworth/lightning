@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {signBytes} = require('./../../../lnd_methods');
+const {signBytes} = require('./../../../');
 
 const makeLnd = (err, res) => {
   return {signer: {signMessage: ({}, cbk) => cbk(err, res)}};

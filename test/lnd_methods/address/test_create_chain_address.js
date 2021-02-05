@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {createChainAddress} = require('./../../../lnd_methods');
+const {createChainAddress} = require('./../../../');
 
 const tests = [
   {

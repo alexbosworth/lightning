@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getChannels} = require('./../../../lnd_methods');
+const {getChannels} = require('./../../../');
 
 const makeExpected = overrides => {
   const expectedChannel = {

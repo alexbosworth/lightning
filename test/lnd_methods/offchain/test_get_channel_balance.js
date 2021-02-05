@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getChannelBalance} = require('./../../../lnd_methods');
+const {getChannelBalance} = require('./../../../');
 
 const makeLnd = overrides => {
   const res = {

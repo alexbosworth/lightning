@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {decodePaymentRequest} = require('./../../../lnd_methods');
+const {decodePaymentRequest} = require('./../../../');
 
 const tests = [
   {

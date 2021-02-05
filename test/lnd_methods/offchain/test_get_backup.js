@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getBackup} = require('./../../../lnd_methods');
+const {getBackup} = require('./../../../');
 
 const txId = Buffer.alloc(32).toString('hex');
 

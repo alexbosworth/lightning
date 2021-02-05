@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {grantAccess} = require('./../../../lnd_methods');
+const {grantAccess} = require('./../../../');
 
 const tests = [
   {

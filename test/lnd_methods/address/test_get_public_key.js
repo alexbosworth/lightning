@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {getPublicKey} = require('./../../../lnd_methods');
+const {getPublicKey} = require('./../../../');
 
 const tests = [
   {

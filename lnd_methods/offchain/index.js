@@ -8,6 +8,7 @@ const getBackups = require('./get_backups');
 const getChannelBalance = require('./get_channel_balance');
 const getChannels = require('./get_channels');
 const getClosedChannels = require('./get_closed_channels');
+const getConnectedWatchtowers = require('./get_connected_watchtowers');
 const getFeeRates = require('./get_fee_rates');
 const getForwardingConfidence = require('./get_forwarding_confidence');
 const getForwardingReputations = require('./get_forwarding_reputations');
@@ -48,6 +49,7 @@ module.exports = {
   getChannelBalance,
   getChannels,
   getClosedChannels,
+  getConnectedWatchtowers,
   getFeeRates,
   getForwardingConfidence,
   getForwardingReputations,

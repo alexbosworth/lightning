@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const grpcRouter = require('./../../lnd_gateway/grpc_router');
+const {grpcRouter} = require('./../../');
 
 const tests = [
   {

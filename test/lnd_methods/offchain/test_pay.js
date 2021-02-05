@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const {test} = require('tap');
 
 const {getInfoResponse} = require('./../fixtures');
-const {pay} = require('./../../../lnd_methods');
+const {pay} = require('./../../../');
 
 const getInfo = ({}, cbk) => cbk(null, getInfoResponse);
 const preimage = Buffer.alloc(32);

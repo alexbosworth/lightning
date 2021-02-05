@@ -43,6 +43,7 @@
   },
   "syncTypes": {
     "active": "ACTIVE_SYNC",
-    "passive": "PASSIVE_SYNC"
+    "passive": "PASSIVE_SYNC",
+    "pinned": "PINNED_SYNC"
   }
 }

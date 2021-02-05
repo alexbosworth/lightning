@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {diffieHellmanComputeSecret} = require('./../../../lnd_methods');
+const {diffieHellmanComputeSecret} = require('./../../../');
 
 const makeLnd = (err, res) => {
   return {signer: {deriveSharedKey: ({}, cbk) => cbk(err, res)}};

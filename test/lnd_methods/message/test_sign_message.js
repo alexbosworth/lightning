@@ -1,6 +1,6 @@
 const {test} = require('tap');
 
-const {signMessage} = require('./../../../lnd_methods');
+const {signMessage} = require('./../../../');
 
 const tests = [
   {
