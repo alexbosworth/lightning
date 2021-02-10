@@ -93,7 +93,9 @@ const {subscribeToPastPayment} = require('./offchain');
 const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
+const {subscribeToPeers} = require('./peers');
 const {subscribeToProbeForRoute} = require('./offchain');
+const {subscribeToTransactions} = require('./onchain');
 const {unlockUtxo} = require('./onchain');
 const {unlockWallet} = require('./unauthenticated');
 const {updateChainTransaction} = require('./onchain');
@@ -200,7 +202,9 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPeers,
   subscribeToProbeForRoute,
+  subscribeToTransactions,
   unlockUtxo,
   unlockWallet,
   updateChainTransaction,
