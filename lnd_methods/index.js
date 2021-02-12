@@ -49,6 +49,7 @@ const {getPeers} = require('./peers');
 const {getPendingChainBalance} = require('./onchain');
 const {getPendingChannels} = require('./offchain');
 const {getPublicKey} = require('./address');
+const {getRouteConfidence} = require('./generic');
 const {getRouteThroughHops} = require('./offchain');
 const {getRouteToDestination} = require('./info');
 const {getSweepTransactions} = require('./onchain');
@@ -57,6 +58,7 @@ const {getUtxos} = require('./onchain');
 const {getWalletInfo} = require('./info');
 const {getWalletVersion} = require('./info');
 const {grantAccess} = require('./macaroon');
+const {isDestinationPayable} = require('./offchain');
 const {lockUtxo} = require('./onchain');
 const {openChannel} = require('./onchain');
 const {openChannels} = require('./onchain');
@@ -66,6 +68,7 @@ const {payViaPaymentRequest} = require('./offchain');
 const {payViaRequest} = require('./offchain');
 const {payViaRoutes} = require('./offchain');
 const {prepareForChannelProposal} = require('./onchain');
+const {probeForRoute} = require('./offchain');
 const {proposeChannel} = require('./onchain');
 const {recoverFundsFromChannel} = require('./offchain');
 const {recoverFundsFromChannels} = require('./offchain');
@@ -82,6 +85,8 @@ const {signTransaction} = require('./signer');
 const {stopDaemon} = require('./info');
 const {subscribeToBackups} = require('./offchain');
 const {subscribeToBlocks} = require('./onchain');
+const {subscribeToChainAddress} = require('./onchain');
+const {subscribeToChainSpend} = require('./onchain');
 const {subscribeToChannels} = require('./offchain');
 const {subscribeToForwardRequests} = require('./offchain');
 const {subscribeToForwards} = require('./offchain');
@@ -158,6 +163,7 @@ module.exports = {
   getPendingChainBalance,
   getPendingChannels,
   getPublicKey,
+  getRouteConfidence,
   getRouteThroughHops,
   getRouteToDestination,
   getSweepTransactions,
@@ -166,6 +172,7 @@ module.exports = {
   getWalletInfo,
   getWalletVersion,
   grantAccess,
+  isDestinationPayable,
   lockUtxo,
   openChannel,
   openChannels,
@@ -175,6 +182,7 @@ module.exports = {
   payViaRequest,
   payViaRoutes,
   prepareForChannelProposal,
+  probeForRoute,
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
@@ -191,6 +199,8 @@ module.exports = {
   stopDaemon,
   subscribeToBackups,
   subscribeToBlocks,
+  subscribeToChainAddress,
+  subscribeToChainSpend,
   subscribeToChannels,
   subscribeToForwardRequests,
   subscribeToForwards,

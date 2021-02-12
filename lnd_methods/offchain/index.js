@@ -17,10 +17,12 @@ const getPayment = require('./get_payment');
 const getPayments = require('./get_payments');
 const getPendingChannels = require('./get_pending_channels');
 const getRouteThroughHops = require('./get_route_through_hops');
+const isDestinationPayable = require('./is_destination_payable');
 const pay = require('./pay');
 const payViaPaymentDetails = require('./pay_via_payment_details');
 const payViaPaymentRequest = require('./pay_via_payment_request');
 const payViaRoutes = require('./pay_via_routes');
+const probeForRoute = require('./probe_for_route');
 const recoverFundsFromChannel = require('./recover_funds_from_channel');
 const recoverFundsFromChannels = require('./recover_funds_from_channels');
 const subscribeToBackups = require('./subscribe_to_backups');
@@ -58,10 +60,12 @@ module.exports = {
   getPayments,
   getPendingChannels,
   getRouteThroughHops,
+  isDestinationPayable,
   pay,
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,
+  probeForRoute,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
   subscribeToBackups,
