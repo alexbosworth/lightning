@@ -40,6 +40,34 @@ To access unauthenticated methods like the wallet unlocker, use
 
 ## Methods
 
+### addPeer
+
+Add a peer if possible (not self, or already connected)
+
+Requires `peers:write` permission
+
+`timeout` is not supported in LND 0.11.1 and below
+
+    {
+      [is_temporary]: <Add Peer as Temporary Peer Bool> // Default: false
+      lnd: <Authenticated LND API Object>
+      public_key: <Public Key Hex String>
+      [retry_count]: <Retry Count Number>
+      [retry_delay]: <Delay Retry By Milliseconds Number>
+      socket: <Host Network Address And Optional Port String> // ip:port
+      [timeout]: <Connection Attempt Timeout Milliseconds Number>
+    }
+
+    @returns via cbk or Promise
+
+Example:
+
+```node
+const {addPeer} = require('lightning');
+const socket = hostIp + ':' + portNumber;
+await addPeer({lnd, socket, public_key: publicKeyHexString});
+```
+
 ### authenticatedLndGrpc
 
 Initiate an gRPC API Methods Object for LND authenticated methods.
@@ -78,6 +106,118 @@ const {lnd} = authenticatedLndGrpc({
   cert: 'base64 encoded tls.cert',
   macaroon: 'base64 encoded admin.macaroon',
   socket: '127.0.0.1:10009',
+});
+```
+
+### cancelHodlInvoice
+
+Cancel an invoice
+
+This call can cancel both HODL invoices and also void regular invoices
+
+Requires LND built with `invoicesrpc`
+
+Requires `invoices:write` permission
+
+    {
+      id: <Payment Preimage Hash Hex String>
+      lnd: <Authenticated RPC LND API Object>
+    }
+
+Example:
+
+```node
+const {cancelHodlInvoice} = require('lightning');
+const id = paymentRequestPreimageHashHexString;
+await cancelHodlInvoice({id, lnd});
+```
+
+### createChainAddress
+
+Create a new receive address.
+
+Requires `address:write` permission
+
+    {
+      format: <Receive Address Type String> // "np2wpkh" || "p2wpkh"
+      [is_unused]: <Get As-Yet Unused Address Bool>
+      lnd: <Authenticated LND API Object>
+    }
+
+Example:
+
+```node
+const {createChainAddress} = require('lightning');
+const format = 'p2wpkh';
+const {address} = await createChainAddress({format, lnd});
+```
+
+### createHodlInvoice
+
+Create HODL invoice. This invoice will not settle automatically when an
+HTLC arrives. It must be settled separately with the secret preimage.
+
+Warning: make sure to cancel the created invoice before its CLTV timeout.
+
+Requires LND built with `invoicesrpc` tag
+
+Requires `address:write`, `invoices:write` permission
+
+    {
+      [cltv_delta]: <Final CLTV Delta Number>
+      [description]: <Invoice Description String>
+      [description_hash]: <Hashed Description of Payment Hex String>
+      [expires_at]: <Expires At ISO 8601 Date String>
+      [id]: <Payment Hash Hex String>
+      [is_fallback_included]: <Is Fallback Address Included Bool>
+      [is_fallback_nested]: <Is Fallback Address Nested Bool>
+      [is_including_private_channels]: <Invoice Includes Private Channels Bool>
+      lnd: <Authenticated LND API Object>
+      [mtokens]: <Millitokens String>
+      [tokens]: <Tokens Number>
+    }
+
+    @returns via cbk or Promise
+    {
+      [chain_address]: <Backup Address String>
+      created_at: <ISO 8601 Date String>
+      description: <Description String>
+      id: <Payment Hash Hex String>
+      mtokens: <Millitokens Number>
+      request: <BOLT 11 Encoded Payment Request String>
+      [secret]: <Hex Encoded Payment Secret String>
+      tokens: <Tokens Number>
+    }
+
+Example:
+
+```node
+const {createHash, randomBytes} = require('crypto');
+const {createHodlInvoice, settleHodlInvoice} = require('lightning');
+const {subscribeToInvoice} = require('lightning');
+
+const randomSecret = () => randomBytes(32);
+const sha256 = buffer => createHash('sha256').update(buffer).digest('hex');
+
+// Choose an r_hash for this invoice, a single sha256, on say randomBytes(32)
+const secret = randomSecret();
+
+const id = sha256(secret);
+
+// Supply an authenticatedLndGrpc object for an lnd built with invoicesrpc tag
+const {request} = await createHodlInvoice({id, lnd});
+
+// Share the request with the payer and wait for a payment
+const sub = subscribeToInvoice({id, lnd});
+
+sub.on('invoice_updated', async invoice => {
+  // Only actively held invoices can be settled
+  if (!invoice.is_held) {
+    return;
+  }
+
+  // Use the secret to claim the funds
+  await settleHodlInvoice({lnd, secret: secret.toString('hex')});
 });
 ```
 
