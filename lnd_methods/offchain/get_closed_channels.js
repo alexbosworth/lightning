@@ -23,7 +23,7 @@ const outpointSeparator = ':';
     [is_funding_cancel]: <Only Return Funding Canceled Channels Bool>
     [is_local_force_close]: <Only Return Local Force Close Channels Bool>
     [is_remote_force_close]: <Only Return Remote Force Close Channels Bool>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise

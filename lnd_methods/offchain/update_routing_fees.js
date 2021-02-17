@@ -23,7 +23,7 @@ const type = 'default';
     [base_fee_tokens]: <Base Fee Tokens Charged Number>
     [cltv_delta]: <HTLC CLTV Delta Number>
     [fee_rate]: <Fee Rate In Millitokens Per Million Number>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [max_htlc_mtokens]: <Maximum HTLC Millitokens to Forward String>
     [min_htlc_mtokens]: <Minimum HTLC Millitokens to Forward String>
     [transaction_id]: <Channel Funding Transaction Id String>

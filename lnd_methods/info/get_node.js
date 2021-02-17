@@ -22,7 +22,7 @@ const type = 'default';
 
   {
     [is_omitting_channels]: <Omit Channels from Node Bool>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     public_key: <Node Public Key Hex String>
   }
 

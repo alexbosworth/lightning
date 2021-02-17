@@ -15,11 +15,14 @@ const payViaRoutes = require('./pay_via_routes');
 
   Requires `offchain:write` permission
 
+  `max_path_mtokens` is not supported in LND 0.12.0 or below
+
   {
     [incoming_peer]: <Pay Through Specific Final Hop Public Key Hex String>
     lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Additional Fee Tokens To Pay Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens to Pay String>
+    [max_path_mtokens]: <Maximum Millitokens For A Multi-Path Path String>
     [max_paths]: <Maximum Simultaneous Paths Number>
     [max_timeout_height]: <Max CLTV Timeout Number>
     [messages]: [{
@@ -124,6 +127,7 @@ module.exports = (args, cbk) => {
           lnd: args.lnd,
           max_fee: args.max_fee,
           max_fee_mtokens: args.max_fee_mtokens,
+          max_path_mtokens: args.max_path_mtokens,
           max_paths: args.max_paths,
           max_timeout_height: args.max_timeout_height,
           messages: args.messages,

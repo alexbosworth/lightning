@@ -31,6 +31,8 @@ export type SubscribeToPayArgs = AuthenticatedLightningArgs<
     max_fee?: number;
     /** Maximum Fee Millitokens to Pay String> */
     max_fee_mtokens?: string;
+    /** Maximum Millitokens For A Multi-Path Path */
+    max_path_mtokens?: string;
     /** Maximum Simultaneous Paths Number> */
     max_paths?: number;
     /** Maximum Height of Payment Timeout Number> */
@@ -178,5 +180,8 @@ export type SubscribeToPayPayingEvent = {[key: string]: never};
  * Initiate and subscribe to the outcome of a payment
  *
  * Either a request or a destination, id, and tokens amount is required
+ *
+ * `max_path_mtokens` is not supported in LND 0.12.0 or below
+ *
  */
 export const subscribeToPay: AuthenticatedLightningSubscription<SubscribeToPayArgs>;

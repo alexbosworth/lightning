@@ -19,6 +19,7 @@ const {states} = require('./payment_states');
 const cltvBuf = 3;
 const cltvLimit = (limit, height) => !limit ? undefined : limit - height;
 const defaultCltvDelta = 43;
+const defaultMaxPaths = 1;
 const defaultTimeoutSeconds = 25;
 const hexToBuf = hex => !hex ? undefined : Buffer.from(hex, 'hex');
 const {isArray} = Array;
@@ -38,6 +39,8 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
 
   Either a request or a destination, id, and tokens amount is required
 
+  `max_path_mtokens` is not supported in LND 0.12.0 or below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
     [destination]: <Destination Public Key String>
@@ -46,9 +49,10 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
     }]
     [id]: <Payment Request Hash Hex String>
     [incoming_peer]: <Pay Through Specific Final Hop Public Key Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Fee Tokens To Pay Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens to Pay String>
+    [max_path_mtokens]: <Maximum Millitokens For A Multi-Path Path String>
     [max_paths]: <Maximum Simultaneous Paths Number>
     [max_timeout_height]: <Maximum Height of Payment Timeout Number>
     [messages]: [{
@@ -303,7 +307,8 @@ module.exports = args => {
         fee_limit_sat: amounts.max_fee,
         final_cltv_delta: !args.request ? finalCltv : undefined,
         last_hop_pubkey: hexToBuf(args.incoming_peer),
-        max_parts: args.max_paths || undefined,
+        max_parts: args.max_paths || defaultMaxPaths,
+        max_shard_size_msat: args.max_path_mtokens || undefined,
         no_inflight_updates: true,
         outgoing_chan_id: !hasOutIds ? singleOut : undefined,
         outgoing_chan_ids: outgoingChannelIds,

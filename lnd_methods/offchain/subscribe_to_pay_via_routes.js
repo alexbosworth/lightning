@@ -27,7 +27,7 @@ const unknownWireError = 'unknown wire error';
 
   {
     [id]: <Payment Hash Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
     routes: [{
       fee: <Total Fee Tokens To Pay Number>

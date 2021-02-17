@@ -20,6 +20,8 @@ export type PayViaPaymentDetailsArgs = AuthenticatedLightningArgs<{
   max_fee?: number;
   /** Maximum Fee Millitokens to Pay */
   max_fee_mtokens?: string;
+  /** Maximum Millitokens For A Multi-Path Path */
+  max_path_mtokens?: string;
   /** Maximum Simultaneous Paths */
   max_paths?: number;
   /** Maximum Expiration CLTV Timeout Height */
@@ -123,6 +125,9 @@ export type PayViaPaymentDetailsResult = {
  * Requires `offchain:write` permission
  *
  * `payment` is not supported on LND 0.11.1 and below
+ *
+ * `max_path_mtokens` is not supported in LND 0.12.0 or below
+ *
  */
 export const payViaPaymentDetails: AuthenticatedLightningMethod<
   PayViaPaymentDetailsArgs,

@@ -18,7 +18,7 @@ const unsuppportedErr = /unknown/;
 
   {
     id: <Lock Id Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     transaction_id: <Unspent Transaction Id Hex String>
     transaction_vout: <Unspent Transaction Output Index Number>
   }

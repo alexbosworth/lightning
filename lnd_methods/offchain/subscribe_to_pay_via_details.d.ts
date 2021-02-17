@@ -20,6 +20,8 @@ export type SubscribeToPayViaDetailsArgs = AuthenticatedLightningArgs<{
   max_fee?: number;
   /** Maximum Fee Millitokens to Pay */
   max_fee_mtokens?: string;
+  /** Maximum Millitokens For A Multi-Path Path */
+  max_path_mtokens?: string;
   /** Maximum Simultaneous Paths */
   max_paths?: number;
   /** Maximum Height of Payment Timeout */

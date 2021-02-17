@@ -20,7 +20,7 @@ const type = 'default';
     [is_offline]: <Limit Results To Only Offline Channels Bool> // false
     [is_private]: <Limit Results To Only Private Channels Bool> // false
     [is_public]: <Limit Results To Only Public Channels Bool> // false
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
     [partner_public_key]: <Only Channels With Public Key Hex String>
   }
 

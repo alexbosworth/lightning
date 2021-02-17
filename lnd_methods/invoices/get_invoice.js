@@ -17,7 +17,7 @@ const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 
   {
     id: <Payment Hash Id Hex String>
-    lnd: <Authenticated LND gRPC API Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise

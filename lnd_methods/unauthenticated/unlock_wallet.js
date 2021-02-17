@@ -11,7 +11,7 @@ const utf8AsBuffer = utf8 => Buffer.from(utf8, 'utf8');
 /** Unlock the wallet
 
   {
-    lnd: <Unauthenticated LND gRPC API Object>
+    lnd: <Unauthenticated LND API Object>
     password: <Wallet Password String>
   }
 
