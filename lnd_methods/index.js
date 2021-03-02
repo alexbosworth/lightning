@@ -11,6 +11,8 @@ const {createInvoice} = require('./invoices');
 const {createSeed} = require('./unauthenticated');
 const {createWallet} = require('./unauthenticated');
 const {decodePaymentRequest} = require('./offchain');
+const {deleteFailedPayAttempts} = require('./offchain');
+const {deleteFailedPayments} = require('./offchain');
 const {deleteForwardingReputations} = require('./offchain');
 const {deletePayments} = require('./offchain');
 const {diffieHellmanComputeSecret} = require('./signer');
@@ -125,6 +127,8 @@ module.exports = {
   createSeed,
   createWallet,
   decodePaymentRequest,
+  deleteFailedPayAttempts,
+  deleteFailedPayments,
   deleteForwardingReputations,
   deletePayments,
   diffieHellmanComputeSecret,

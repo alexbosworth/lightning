@@ -1,5 +1,7 @@
 const connectWatchtower = require('./connect_watchtower');
 const decodePaymentRequest = require('./decode_payment_request');
+const deleteFailedPayAttempts = require('./delete_failed_pay_attempts');
+const deleteFailedPayments = require('./delete_failed_payments');
 const deleteForwardingReputations = require('./delete_forwarding_reputations');
 const deletePayments = require('./delete_payments');
 const disconnectWatchtower = require('./disconnect_watchtower');
@@ -43,6 +45,8 @@ const verifyBackups = require('./verify_backups');
 module.exports = {
   connectWatchtower,
   decodePaymentRequest,
+  deleteFailedPayAttempts,
+  deleteFailedPayments,
   deleteForwardingReputations,
   deletePayments,
   disconnectWatchtower,
