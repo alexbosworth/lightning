@@ -15,6 +15,7 @@ const getFeeRates = require('./get_fee_rates');
 const getForwardingConfidence = require('./get_forwarding_confidence');
 const getForwardingReputations = require('./get_forwarding_reputations');
 const getForwards = require('./get_forwards');
+const getPathfindingSettings = require('./get_pathfinding_settings');
 const getPayment = require('./get_payment');
 const getPayments = require('./get_payments');
 const getPendingChannels = require('./get_pending_channels');
@@ -38,6 +39,7 @@ const subscribeToPayViaRequest = require('./subscribe_to_pay_via_request');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
 const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
 const updateConnectedWatchtower = require('./update_connected_watchtower');
+const updatePathfindingSettings = require('./update_pathfinding_settings');
 const updateRoutingFees = require('./update_routing_fees');
 const verifyBackup = require('./verify_backup');
 const verifyBackups = require('./verify_backups');
@@ -60,6 +62,7 @@ module.exports = {
   getForwardingConfidence,
   getForwardingReputations,
   getForwards,
+  getPathfindingSettings,
   getPayment,
   getPayments,
   getPendingChannels,
@@ -83,6 +86,7 @@ module.exports = {
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
   updateConnectedWatchtower,
+  updatePathfindingSettings,
   updateRoutingFees,
   verifyBackup,
   verifyBackups,

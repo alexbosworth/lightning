@@ -45,6 +45,7 @@ const {getNetworkCentrality} = require('./info');
 const {getNetworkGraph} = require('./info');
 const {getNetworkInfo} = require('./info');
 const {getNode} = require('./info');
+const {getPathfindingSettings} = require('./offchain');
 const {getPayment} = require('./offchain');
 const {getPayments} = require('./offchain');
 const {getPeers} = require('./peers');
@@ -107,6 +108,7 @@ const {unlockUtxo} = require('./onchain');
 const {unlockWallet} = require('./unauthenticated');
 const {updateChainTransaction} = require('./onchain');
 const {updateConnectedWatchtower} = require('./offchain');
+const {updatePathfindingSettings} = require('./offchain');
 const {updateRoutingFees} = require('./offchain');
 const {verifyBackup} = require('./offchain');
 const {verifyBackups} = require('./offchain');
@@ -161,6 +163,7 @@ module.exports = {
   getNetworkGraph,
   getNetworkInfo,
   getNode,
+  getPathfindingSettings,
   getPayment,
   getPayments,
   getPeers,
@@ -223,6 +226,7 @@ module.exports = {
   unlockWallet,
   updateChainTransaction,
   updateConnectedWatchtower,
+  updatePathfindingSettings,
   updateRoutingFees,
   verifyBackup,
   verifyBackups,
