@@ -5,6 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const asRate = n => Math.floor(n * 1e6);
 const method = 'getMissionControlConfig';
+const notSupported = /unknown/;
 const secsAsMs = n => Number(n) * 1e3;
 const type = 'router';
 
@@ -41,6 +42,10 @@ module.exports = ({lnd}, cbk) => {
       // Get pathfinding settings
       getSettings: ['validate', ({}, cbk) => {
         return lnd[type][method]({}, (err, res) => {
+          if (!!err && notSupported.test(err.details)) {
+            return cbk([501, 'GetMissionControlConfigMethodNotSupported']);
+          }
+
           if (!!err) {
             return cbk([503, 'UnexpectedErrorGettingPathSettings', {err}]);
           }

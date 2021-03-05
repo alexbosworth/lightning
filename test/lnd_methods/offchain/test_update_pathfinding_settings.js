@@ -56,6 +56,11 @@ const tests = [
     error: [503, 'UnexpectedErrorGettingPathSettings', {err: 'err'}],
   },
   {
+    args: {lnd: makeLnd({err: {details: 'unknown method'}})},
+    description: 'An unsupported error is returned',
+    error: [501, 'GetMissionControlConfigMethodNotSupported'],
+  },
+  {
     args: {lnd: makeLnd({setErr: 'err'})},
     description: 'An error is returned when setting',
     error: [503, 'UnexpectedErrorUpdatingPathingSettings', {err: 'err'}],

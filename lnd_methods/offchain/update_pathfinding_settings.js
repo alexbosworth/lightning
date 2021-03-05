@@ -7,6 +7,7 @@ const asFloat = n => n / 1e6;
 const getMethod = 'getMissionControlConfig';
 const isValidRate = rate => rate === undefined || (rate >= 0 && rate <= 1e6);
 const msAsSecs = ms => Math.floor(ms / 1e3);
+const notSupported = /unknown/;
 const setMethod = 'setMissionControlConfig';
 const type = 'router';
 
@@ -49,6 +50,10 @@ module.exports = (args, cbk) => {
       // Get current pathfinding settings
       getSettings: ['validate', ({}, cbk) => {
         return args.lnd[type][getMethod]({}, (err, res) => {
+          if (!!err && notSupported.test(err.details)) {
+            return cbk([501, 'GetMissionControlConfigMethodNotSupported']);
+          }
+
           if (!!err) {
             return cbk([503, 'UnexpectedErrorGettingPathSettings', {err}]);
           }
