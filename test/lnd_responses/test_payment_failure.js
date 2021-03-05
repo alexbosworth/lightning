@@ -184,6 +184,11 @@ const tests = [
     expected: makeExpected({code: 503, message: 'InvalidOnionKey'}),
   },
   {
+    args: makeFailure({fail: {code: 'INVALID_ONION_PAYLOAD'}}),
+    description: 'Invalid payload key is mapped to a payment failure',
+    expected: makeExpected({code: 503, message: 'InvalidOnionPayload'}),
+  },
+  {
     args: makeFailure({fail: {code: 'INVALID_ONION_VERSION'}}),
     description: 'Invalid onion version is mapped to a payment failure',
     expected: makeExpected({code: 503, message: 'InvalidOnionVersion'}),

@@ -137,6 +137,9 @@ module.exports = ({channel, failure, index, key, keys}) => {
   case 'INVALID_ONION_KEY':
     return {details, code: 503, message: 'InvalidOnionKey'};
 
+  case 'INVALID_ONION_PAYLOAD':
+    return {details, code: 503, message: 'InvalidOnionPayload'};
+
   case 'INVALID_ONION_VERSION':
     return {details, code: 503, message: 'InvalidOnionVersion'};
 
