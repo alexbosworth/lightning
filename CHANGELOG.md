@@ -1,6 +1,6 @@
 # Versions
 
-## 3.2.19
+## 3.2.20
 
 - `authenticatedLndGrpc`: Allow not specifying a macaroon
 
