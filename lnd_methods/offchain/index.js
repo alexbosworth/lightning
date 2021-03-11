@@ -4,7 +4,9 @@ const deleteFailedPayAttempts = require('./delete_failed_pay_attempts');
 const deleteFailedPayments = require('./delete_failed_payments');
 const deleteForwardingReputations = require('./delete_forwarding_reputations');
 const deletePayments = require('./delete_payments');
+const disableChannel = require('./disable_channel');
 const disconnectWatchtower = require('./disconnect_watchtower');
+const enableChannel = require('./enable_channel');
 const getBackup = require('./get_backup');
 const getBackups = require('./get_backups');
 const getChannelBalance = require('./get_channel_balance');
@@ -51,7 +53,9 @@ module.exports = {
   deleteFailedPayments,
   deleteForwardingReputations,
   deletePayments,
+  disableChannel,
   disconnectWatchtower,
+  enableChannel,
   getBackup,
   getBackups,
   getChannelBalance,

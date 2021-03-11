@@ -13,6 +13,7 @@ const makeForward = override => {
     fee: '1',
     fee_msat: '1000',
     timestamp: '1',
+    timestamp_ns: '1000000000',
   };
 
   Object.keys(override).forEach(key => forward[key] = override[key]);
@@ -67,8 +68,26 @@ const tests = [
     error: 'ExpectedTimestampForForwardEvent',
   },
   {
+    args: makeForward({timestamp_ns: undefined}),
+    description: 'A forward timestamp in ns is expected',
+    error: 'ExpectedTimestampNanosecondsForForwardEvent',
+  },
+  {
     args: makeForward({}),
     description: 'An RPC forward is mapped to a forward',
+    expected: {
+      created_at: '1970-01-01T00:00:01.000Z',
+      fee: 1,
+      fee_mtokens: '1000',
+      incoming_channel: '0x0x1',
+      mtokens: '1000',
+      outgoing_channel: '0x0x2',
+      tokens: 1,
+    },
+  },
+  {
+    args: makeForward({timestamp_ns: '0'}),
+    description: 'An RPC forward without ns is mapped to a forward',
     expected: {
       created_at: '1970-01-01T00:00:01.000Z',
       fee: 1,

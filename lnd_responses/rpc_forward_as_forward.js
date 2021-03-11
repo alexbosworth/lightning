@@ -1,5 +1,6 @@
 const {chanFormat} = require('bolt07');
 
+const asSeconds = (ns, s) => ns === '0' ? s : Number(BigInt(ns) / BigInt(1e9));
 const msPerSec = 1e3;
 
 /** RPC forward as forward
@@ -14,6 +15,7 @@ const msPerSec = 1e3;
     fee: <Routing Fee Tokens String>
     fee_msat: <Routing Fee Millitokens String>
     timestamp: <Timestamp Epoch Time Seconds String>
+    timestamp_ns: <Timestamp Epoch Time Nanoseconds String>
   }
 
   @throws
@@ -71,8 +73,15 @@ module.exports = forward => {
     throw new Error('ExpectedTimestampForForwardEvent');
   }
 
+  if (!forward.timestamp_ns) {
+    throw new Error('ExpectedTimestampNanosecondsForForwardEvent');
+  }
+
+  // timestamp_ns is not supported in LND 0.12.1 and below, fall back to secs
+  const epochSec = asSeconds(forward.timestamp_ns, forward.timestamp);
+
   return {
-    created_at: new Date(Number(forward.timestamp) * msPerSec).toISOString(),
+    created_at: new Date(epochSec * msPerSec).toISOString(),
     fee: Number(forward.fee),
     fee_mtokens: forward.fee_msat,
     incoming_channel: chanFormat({number: forward.chan_id_in}).channel,

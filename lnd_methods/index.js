@@ -16,7 +16,9 @@ const {deleteFailedPayments} = require('./offchain');
 const {deleteForwardingReputations} = require('./offchain');
 const {deletePayments} = require('./offchain');
 const {diffieHellmanComputeSecret} = require('./signer');
+const {disableChannel} = require('./offchain');
 const {disconnectWatchtower} = require('./offchain');
+const {enableChannel} = require('./offchain');
 const {fundPendingChannels} = require('./onchain');
 const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
@@ -134,7 +136,9 @@ module.exports = {
   deleteForwardingReputations,
   deletePayments,
   diffieHellmanComputeSecret,
+  disableChannel,
   disconnectWatchtower,
+  enableChannel,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
