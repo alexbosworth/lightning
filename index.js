@@ -48,6 +48,7 @@ const {getPendingChannels} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
 const {getRouteThroughHops} = require('./lnd_methods');
 const {getRouteToDestination} = require('./lnd_methods');
+const {getSweepTransactions} = require('./lnd_methods');
 const {getWalletInfo} = require('./lnd_methods');
 const {getWalletVersion} = require('./lnd_methods');
 const {grantAccess} = require('./lnd_methods');
@@ -137,6 +138,7 @@ module.exports = {
   getPublicKey,
   getRouteThroughHops,
   getRouteToDestination,
+  getSweepTransactions,
   getWalletInfo,
   getWalletVersion,
   grantAccess,
