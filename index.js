@@ -22,6 +22,7 @@ const {getBackups} = require('./lnd_methods');
 const {getChainBalance} = require('./lnd_methods');
 const {getChainFeeEstimate} = require('./lnd_methods');
 const {getChainFeeRate} = require('./lnd_methods');
+const {getChainTransactions} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
 const {getChannelBalance} = require('./lnd_methods');
 const {getChannels} = require('./lnd_methods');
@@ -109,6 +110,7 @@ module.exports = {
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,
+  getChainTransactions,
   getChannelBalance,
   getChannel,
   getChannels,
