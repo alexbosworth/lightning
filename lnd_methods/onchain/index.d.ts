@@ -10,3 +10,4 @@ export * from './get_chain_transactions';
 export * from './get_pending_chain_balance';
 export * from './get_sweep_transactions';
 export * from './get_utxos';
+export * from './lock_utxo';
