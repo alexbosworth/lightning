@@ -14,6 +14,7 @@ const {deletePayments} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {emitGrpcEvents} = require('./lnd_gateway');
 const {fundPendingChannels} = require('./lnd_methods');
+const {fundPsbt} = require('./lnd_methods');
 const {getAccessIds} = require('./lnd_methods');
 const {getAutopilot} = require('./lnd_methods');
 const {getBackup} = require('./lnd_methods');
@@ -97,6 +98,7 @@ module.exports = {
   diffieHellmanComputeSecret,
   emitGrpcEvents,
   fundPendingChannels,
+  fundPsbt,
   getAccessIds,
   getAutopilot,
   getBackup,
