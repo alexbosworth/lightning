@@ -12,3 +12,4 @@ export * from './get_sweep_transactions';
 export * from './get_utxos';
 export * from './lock_utxo';
 export * from './open_channel';
+export * from './open_channels';
