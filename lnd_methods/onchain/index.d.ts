@@ -7,3 +7,4 @@ export * from './get_chain_balance';
 export * from './get_chain_fee_estimate';
 export * from './get_chain_fee_rate';
 export * from './get_chain_transactions';
+export * from './get_pending_chain_balance';
