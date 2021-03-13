@@ -56,6 +56,7 @@ const {grantAccess} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
 const {lndGateway} = require('./lnd_gateway');
 const {lockUtxo} = require('./lnd_methods');
+const {openChannel} = require('./lnd_methods');
 const {payViaPaymentDetails} = require('./lnd_methods');
 const {payViaPaymentRequest} = require('./lnd_methods');
 const {payViaRoutes} = require('./lnd_methods');
@@ -148,6 +149,7 @@ module.exports = {
   grpcRouter,
   lndGateway,
   lockUtxo,
+  openChannel,
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,
