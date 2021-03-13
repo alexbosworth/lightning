@@ -13,3 +13,4 @@ export * from './get_utxos';
 export * from './lock_utxo';
 export * from './open_channel';
 export * from './open_channels';
+export * from './prepare_for_channel_proposal';
