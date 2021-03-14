@@ -22,3 +22,4 @@ export * from './sign_psbt';
 export * from './subscribe_to_blocks';
 export * from './subscribe_to_chain_address';
 export * from './subscribe_to_chain_spend';
+export * from './subscribe_to_transactions';
