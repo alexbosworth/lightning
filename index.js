@@ -70,6 +70,7 @@ const {removePeer} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {scriptFromChainAddress} = require('./lnd_methods');
 const {sendToChainAddress} = require('./lnd_methods');
+const {sendToChainAddresses} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signMessage} = require('./lnd_methods');
@@ -168,6 +169,7 @@ module.exports = {
   revokeAccess,
   scriptFromChainAddress,
   sendToChainAddress,
+  sendToChainAddresses,
   settleHodlInvoice,
   signBytes,
   signMessage,

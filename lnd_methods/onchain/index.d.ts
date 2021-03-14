@@ -17,3 +17,4 @@ export * from './prepare_for_channel_proposal';
 export * from './propose_channel';
 export * from './script_from_chain_address';
 export * from './send_to_chain_address';
+export * from './send_to_chain_addresses';
