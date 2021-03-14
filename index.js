@@ -81,6 +81,7 @@ const {stopDaemon} = require('./lnd_methods');
 const {subscribeToBackups} = require('./lnd_methods');
 const {subscribeToBlocks} = require('./lnd_methods');
 const {subscribeToChainAddress} = require('./lnd_methods');
+const {subscribeToChainSpend} = require('./lnd_methods');
 const {subscribeToChannels} = require('./lnd_methods');
 const {subscribeToForwardRequests} = require('./lnd_methods');
 const {subscribeToForwards} = require('./lnd_methods');
@@ -184,6 +185,7 @@ module.exports = {
   subscribeToBackups,
   subscribeToBlocks,
   subscribeToChainAddress,
+  subscribeToChainSpend,
   subscribeToChannels,
   subscribeToForwardRequests,
   subscribeToForwards,
