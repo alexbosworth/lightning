@@ -31,7 +31,7 @@ expectError(sendToChainAddress({}));
 expectError(sendToChainAddress({lnd}));
 expectError(sendToChainAddress({lnd, address}));
 expectError(sendToChainAddress({lnd, tokens}));
-expectError(sendToChainAddress({lnd, is_send_all}));
+expectError(sendToChainAddress({lnd, is_send_all: true}));
 expectError(sendToChainAddress({lnd, address, tokens, is_send_all: true})); // Expected either send all or tokens to send to chain address
 expectError(sendToChainAddress({lnd, address, tokens, wss})); // A log method is expected to send to chain address
 
