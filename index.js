@@ -75,6 +75,7 @@ const {setAutopilot} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signMessage} = require('./lnd_methods');
+const {signPsbt} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
 const {stopDaemon} = require('./lnd_methods');
 const {subscribeToBackups} = require('./lnd_methods');
@@ -175,6 +176,7 @@ module.exports = {
   settleHodlInvoice,
   signBytes,
   signMessage,
+  signPsbt,
   signTransaction,
   stopDaemon,
   subscribeToBackups,
