@@ -20,3 +20,4 @@ export * from './send_to_chain_address';
 export * from './send_to_chain_addresses';
 export * from './set_autopilot';
 export * from './sign_psbt';
+export * from './subscribe_to_blocks';
