@@ -15,3 +15,4 @@ export * from './open_channel';
 export * from './open_channels';
 export * from './prepare_for_channel_proposal';
 export * from './propose_channel';
+export * from './script_from_chain_address';

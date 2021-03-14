@@ -68,6 +68,7 @@ const {recoverFundsFromChannel} = require('./lnd_methods');
 const {recoverFundsFromChannels} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
+const {scriptFromChainAddress} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signMessage} = require('./lnd_methods');
@@ -164,6 +165,7 @@ module.exports = {
   recoverFundsFromChannels,
   removePeer,
   revokeAccess,
+  scriptFromChainAddress,
   settleHodlInvoice,
   signBytes,
   signMessage,
