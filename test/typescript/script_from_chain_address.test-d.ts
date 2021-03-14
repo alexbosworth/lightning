@@ -3,7 +3,7 @@ import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   scriptFromChainAddress,
   ScriptFromChainAddressResult,
-} from '../../lnd_methods';
+} from '../../lnd_methods/onchain/script_from_chain_address';
 
 const bech32_address =
   'bc1qct4whle4te6qz6y7mjqxgufuvngz5h46mr6z2z3yjlpg5zvpkqyscrgp6y';
