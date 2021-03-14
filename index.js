@@ -71,6 +71,7 @@ const {revokeAccess} = require('./lnd_methods');
 const {scriptFromChainAddress} = require('./lnd_methods');
 const {sendToChainAddress} = require('./lnd_methods');
 const {sendToChainAddresses} = require('./lnd_methods');
+const {setAutopilot} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
 const {signMessage} = require('./lnd_methods');
@@ -170,6 +171,7 @@ module.exports = {
   scriptFromChainAddress,
   sendToChainAddress,
   sendToChainAddresses,
+  setAutopilot,
   settleHodlInvoice,
   signBytes,
   signMessage,
