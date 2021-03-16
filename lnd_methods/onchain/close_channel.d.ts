@@ -4,26 +4,56 @@ import {
 } from '../../typescript';
 import {Xor} from '../../typescript/util';
 
-export type CloseChannelArgs = AuthenticatedLightningArgs<{
-  /** Request Sending Local Channel Funds To Address */
-  address?: string;
-  /** Standard Format Channel Id */
-  id?: string;
-  /** Is Force Close */
-  is_force_close?: boolean;
-  /** Peer Public Key */
-  public_key?: string;
-  /** Peer Socket */
-  socket?: string;
-  /** Confirmation Target */
-  target_confirmations?: number;
-  /** Tokens Per Virtual Byte */
-  tokens_per_vbyte?: number;
-  /** Transaction Id Hex */
-  transaction_id?: string;
-  /** Transaction Output Index */
-  transaction_vout?: number;
-}>;
+type ExpectedIdOfChannelToClose = Xor<
+  {
+    /** Standard Format Channel Id String */
+    id: string;
+  },
+  {
+    /** Transaction Id Hex String */
+    transaction_id: string;
+    /** Transaction Output Index Number */
+    transaction_vout: number;
+  }
+>;
+
+type UnexpectedTokensPerVbyteForChannelClose = Xor<
+  {
+    /** Confirmation Target Number */
+    target_confirmations?: number;
+  },
+  {
+    /** Tokens Per Virtual Byte Number */
+    tokens_per_vbyte?: number;
+  }
+>;
+
+type ExpectedBothPublicKeyAndSocketForChannelClose = Xor<
+  {
+    /** Peer Public Key String */
+    public_key: string;
+    /** Peer Socket String */
+    socket: string;
+  },
+  {public_key?: never; socket?: never}
+>;
+
+export type ForceCloseChannelArgs = AuthenticatedLightningArgs<
+  ExpectedIdOfChannelToClose & {
+    is_force_close: true;
+  }
+>;
+
+export type CoopCloseChannelArgs = AuthenticatedLightningArgs<
+  ExpectedIdOfChannelToClose & {
+    is_force_close?: false;
+    /** Request Sending Local Channel Funds To Address String */
+    address?: string;
+  } & ExpectedBothPublicKeyAndSocketForChannelClose &
+    UnexpectedTokensPerVbyteForChannelClose
+>;
+
+export type CloseChannelArgs = Xor<ForceCloseChannelArgs, CoopCloseChannelArgs>;
 
 export type CloseChannelResult = {
   /** Closing Transaction Id Hex */
