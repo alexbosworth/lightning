@@ -1,5 +1,35 @@
 # Versions
 
+## 3.3.0
+
+- `broadcastChainTransaction`: Add method to publish a raw transaction
+- `cancelPendingChannel`: Add method to abort a channel open
+- `closeChannel`: Add method to close a channel
+- `fundPendingChannels`: Add method to add funding to opening channels
+- `fundPsbt`: Add method to create a funded PSBT
+- `getChainBalance`: Add method to retrieve the on-chain funds amount
+- `getChainFeeEstimate`: Add method to estimate a chain-fee to send an on-chain tx
+- `getChainFeeRate`: Add method to get a chain fee rate estimate
+- `getChainTransactions`: Add method to list on-chain transactions
+- `getPendingChainBalance`: Add method to retrieve the unconfirmed on-chain balance
+- `getSweepTransactions`: Add method to list transactions related to sweeps
+- `getUtxos`: Add method to list unspent coins
+- `lockUtxo`: Add method to lease an unspent coin
+- `openChannel`: Add method to create a new channel
+- `openChannels`Add method to create multiple new channels
+- `prepareForChannelProposal`: Add method to prepare for a channel proposal
+- `proposeChannel`: Add method to propose a channel
+- `sendToChainAddress`: Add method to send on-chain funds to an address
+- `sendToChainAddresses`: Add method to send on-chain funds to multiple addresses
+- `setAutopilot`: Add method to set the autopilot configuration
+- `signPsbt`: Add method to sign a funded PSBT
+- `subscribeToBlocks`: Add method to subscribe to blockchain progression
+- `subscribeToChainAddress`: Add method to subscribe to chain address events
+- `subscribeToChainSpend`: Add metthod to subscribe to chain UTXO spend events
+- `subscribeToTransactions`: Add method to subscribe to local on-chain transactions
+- `unlockUtxo`: Add method to release a lease on an unspent coin
+- `updateChainTransaction`: Add method to update metadata on a chain tx
+
 ## 3.2.21
 
 - `authenticatedLndGrpc`: Allow not specifying a macaroon
