@@ -33,6 +33,8 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
   {
     at: <Forward Update At ISO 8601 Date String>
     [external_failure]: <Public Failure Reason String>
+    [fee]: <Fee Tokens Charged Number>
+    [fee_mtokens]: <Fee Millitokens Charged String>
     [in_channel]: <Inbound Standard Format Channel Id String>
     [in_payment]: <Inbound Channel Payment Id Number>
     [internal_failure]: <Private Failure Reason String>
@@ -40,7 +42,7 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
     is_failed: <Forward Is Failed Bool>
     is_receive: <Is Receive Bool>
     is_send: <Is Send Bool>
-    [mtokens]: <Sending Millitokens Number>
+    [mtokens]: <Sending Millitokens String>
     [out_channel]: <Outgoing Standard Format Channel Id String>
     [out_payment]: <Outgoing Channel Payment Id Number>
     [timeout]: <Forward Timeout at Height Number>

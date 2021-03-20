@@ -2,7 +2,7 @@ const {test} = require('tap');
 
 const {unauthenticatedLndGrpc} = require('./../../');
 
-const expectedServices = ['unlocker'];
+const expectedServices = ['status', 'unlocker'];
 
 const tests = [
   {

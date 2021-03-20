@@ -7,8 +7,9 @@
     "ChainNotifier": "chainrpc",
     "Invoices": "invoicesrpc",
     "Lightning": "lnrpc",
-    "Signer": "signrpc",
     "Router": "routerrpc",
+    "Signer": "signrpc",
+    "State": "lnrpc",
     "Versioner": "verrpc",
     "WalletUnlocker": "lnrpc",
     "WalletKit": "walletrpc",
@@ -20,8 +21,9 @@
     "ChainNotifier": "chainnotifier.proto",
     "Invoices": "invoices.proto",
     "Lightning": "rpc.proto",
-    "Signer": "signer.proto",
     "Router": "router.proto",
+    "Signer": "signer.proto",
+    "State": "stateservice.proto",
     "Versioner": "verrpc.proto",
     "WalletUnlocker": "walletunlocker.proto",
     "WalletKit": "walletkit.proto",
@@ -42,9 +44,11 @@
     "wallet": "WalletKit"
   },
   "unauthenticatedPackageTypes": {
+    "State": "lnrpc",
     "WalletUnlocker": "lnrpc"
   },
   "unauthenticatedServiceTypes": {
+    "status": "State",
     "unlocker": "WalletUnlocker"
   }
 }

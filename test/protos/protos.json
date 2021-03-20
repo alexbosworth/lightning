@@ -12,6 +12,7 @@
     ["routerrpc", "router"],
     ["rpc"],
     ["signrpc", "signer"],
+    ["stateservice"],
     ["verrpc", "verrpc"],
     ["walletrpc", "walletkit"],
     ["walletunlocker"],

@@ -10,9 +10,10 @@ const {grpcSslCipherSuites} = require('./../grpc');
 const {packageTypes} = require('./../grpc');
 const {protoFiles} = require('./../grpc');
 const {protosDir} = require('./../grpc');
+const {unauthenticatedServiceTypes} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
-const service = 'WalletUnlocker';
+const {keys} = Object;
 
 /** Unauthenticated gRPC interface to the Lightning Network Daemon (lnd).
 
@@ -29,23 +30,35 @@ const service = 'WalletUnlocker';
   @returns
   {
     lnd: {
-      unlocker: <Unlocker LND GRPC Api Object>
+      status: <Status LND API Object>
+      unlocker: <Unlocker LND API Object>
     }
   }
 */
 module.exports = ({cert, socket}) => {
   const credentials = grpcSsl({cert}).ssl;
   const lndSocket = socket || defaultSocket;
-  const protoPath = join(__dirname, protosDir, protoFiles[service]);
 
-  const rpc = grpc.loadPackageDefinition(loadSync(protoPath, grpcOptions));
-
-  // Exit early when cert passing with unexpected GRPC_SSL_CIPHER_SUITES type
   if (!!cert && GRPC_SSL_CIPHER_SUITES !== grpcSslCipherSuites) {
     process.env.GRPC_SSL_CIPHER_SUITES = grpcSslCipherSuites;
   }
 
-  const lnd = new rpc[packageTypes[service]][service](lndSocket, credentials);
+  // Assemble different services from their proto files
+  return {
+    lnd: keys(unauthenticatedServiceTypes).reduce((services, type) => {
+      const service = unauthenticatedServiceTypes[type];
 
-  return {lnd: {unlocker: lnd}};
+      const protoPath = join(__dirname, protosDir, protoFiles[service]);
+
+      const rpc = grpc.loadPackageDefinition(loadSync(protoPath, grpcOptions));
+
+      services[type] = new rpc[packageTypes[service]][service](
+        lndSocket,
+        credentials
+      );
+
+      return services;
+    },
+    {}),
+  };
 };

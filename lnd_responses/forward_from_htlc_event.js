@@ -54,7 +54,7 @@ const nsPerMs = BigInt(1e6);
     is_failed: <Forward Is Failed Bool>
     is_receive: <Is Receive Bool>
     is_send: <Is Send Bool>
-    [mtokens]: <Sending Millitokens Number>
+    [mtokens]: <Sending Millitokens String>
     [out_channel]: <Outgoing Standard Format Channel Id String>
     [out_payment]: <Outgoing Channel Payment Id Number>
     [timeout]: <Forward Timeout at Height Number>

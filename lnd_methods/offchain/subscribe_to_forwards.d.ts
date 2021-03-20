@@ -5,6 +5,10 @@ export type SubscribeToForwardsForwardEvent = {
   at: string;
   /** Public Failure Reason */
   external_failure?: string;
+  /** Fee Tokens Charged Number */
+  fee?: number;
+  /** Fee Millitokens Charged String */
+  fee_mtokens?: string;
   /** Inbound Standard Format Channel Id */
   in_channel?: string;
   /** Inbound Channel Payment Id */
@@ -20,7 +24,7 @@ export type SubscribeToForwardsForwardEvent = {
   /** Is Send */
   is_send: boolean;
   /** Sending Millitokens */
-  mtokens?: number;
+  mtokens?: string;
   /** Outgoing Standard Format Channel Id */
   out_channel?: string;
   /** Outgoing Channel Payment Id */

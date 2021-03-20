@@ -1,5 +1,9 @@
 # Versions
 
+## 3.3.1
+
+- `subscribeToForwards`: Correct output value documentation and type definitions
+
 ## 3.3.0
 
 - `broadcastChainTransaction`: Add method to publish a raw transaction
