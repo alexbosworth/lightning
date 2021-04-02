@@ -22,7 +22,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     const emitter = new EventEmitter();
     const message = args.message;
 
@@ -41,7 +41,7 @@ tests.forEach(({args, description, error, expected}) => {
     } else {
       const [, [emitted]] = await all([emit, once(emitter, expected.event)]);
 
-      deepIs(emitted, expected.emitted, 'Got expected emitted data');
+      strictSame(emitted, expected.emitted, 'Got expected emitted data');
     }
 
     return end();

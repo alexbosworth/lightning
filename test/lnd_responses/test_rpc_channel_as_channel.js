@@ -105,7 +105,7 @@ const makeExpected = overrides => {
     remote_max_htlcs: 1,
     remote_max_pending_mtokens: '1',
     remote_min_htlc_mtokens: '1',
-    remote_reserve: '1',
+    remote_reserve: 1,
     sent: 1,
     time_offline: 0,
     time_online: 1000,
@@ -285,13 +285,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcChannelAsChannel(args), new Error(error), 'Got error');
     } else {
       const channel = rpcChannelAsChannel(args);
 
-      deepEqual(channel, expected, 'Channel cast as channel');
+      strictSame(channel, expected, 'Channel cast as channel');
     }
 
     return end();

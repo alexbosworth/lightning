@@ -298,8 +298,8 @@ const tests = [
               cltv_delta: 40,
               fee_rate: 1,
               is_disabled: false,
-              max_htlc_mtokens: '10000',
-              min_htlc_mtokens: '1000',
+              max_htlc_mtokens: 10000,
+              min_htlc_mtokens: 1000,
               public_key: '00',
               updated_at: '2009-01-03T18:15:05.000Z',
             },
@@ -362,13 +362,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal}) => {
+  return test(description, async ({end, equal, strictSame}) => {
     if (!!error) {
       try {
         await payViaRoutes(args);
       } catch (gotErr) {
         if (gotErr.length === 2) {
-          deepEqual(gotErr, error, 'Got expected error')
+          strictSame(gotErr, error, 'Got expected error')
         } else {
           const [errCode, errMessage, {failures}] = gotErr;
           const [expectedCode, expectedMessage, expectedDetails] = error;
@@ -376,7 +376,7 @@ tests.forEach(({args, description, error, expected}) => {
           equal(errCode, expectedCode, 'Error code received');
           equal(errMessage, expectedMessage, 'Error message received');
 
-          deepEqual(failures, expectedDetails.failures, 'Full fails received');
+          strictSame(failures, expectedDetails.failures, 'Full fails received');
         }
 
         return end();
@@ -385,10 +385,10 @@ tests.forEach(({args, description, error, expected}) => {
 
     const paid = await payViaRoutes(args);
 
-    deepEqual(paid.failures, expected.failures, 'Failures are returned');
+    strictSame(paid.failures, expected.failures, 'Failures are returned');
     equal(paid.fee, expected.fee, 'Fee is returned');
     equal(paid.fee_mtokens, expected.fee_mtokens, 'Fee mtokens are returned');
-    deepEqual(paid.hops, expected.hops, 'Hops are returned');
+    strictSame(paid.hops, expected.hops, 'Hops are returned');
     equal(paid.id.length, preimage.toString('hex').length, 'Got payment hash');
     equal(paid.is_confirmed, true, 'Payment is confirmed');
     equal(paid.is_outgoing, true, 'Transaction is an outgoing one');

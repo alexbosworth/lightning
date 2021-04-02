@@ -87,7 +87,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, match, throws}) => {
+  return test(description, async ({end, match, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToBackups(args), new Error(error), 'Got error');
     } else {
@@ -108,7 +108,7 @@ tests.forEach(({args, description, error, expected}) => {
 
       await nextTick();
 
-      deepIs(events, expected.events);
+      strictSame(events, expected.events);
     }
 
     return end();

@@ -41,13 +41,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
-      rejects(() => getPeers(args), error, 'Got expected error');
+      await rejects(() => getPeers(args), error, 'Got expected error');
     } else {
       const {peers} = await getPeers(args);
 
-      deepEqual(peers, expected.peers, 'Got expected peers');
+      strictSame(peers, expected.peers, 'Got expected peers');
     }
 
     return end();

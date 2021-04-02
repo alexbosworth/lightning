@@ -261,7 +261,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToProbeForRoute(args), new Error(error), 'Error');
 
@@ -283,10 +283,10 @@ tests.forEach(({args, description, error, expected}) => {
       }
 
       sub.on('end', () => {
-        deepIs(failures, expected.failures, 'Got expected failures');
-        deepIs(gotError, expected.error, 'Got expected error');
-        deepIs(gotSuccess, expected.success, 'Got expected success');
-        deepIs(routes, expected.routes, 'Got expected routes');
+        strictSame(failures, expected.failures, 'Got expected failures');
+        strictSame(gotError, expected.error, 'Got expected error');
+        strictSame(gotSuccess, expected.success, 'Got expected success');
+        strictSame(routes, expected.routes, 'Got expected routes');
 
         return end();
       });

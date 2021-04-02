@@ -218,13 +218,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, equal, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => payViaPaymentRequest(args), error, 'Got error');
     } else {
       const payment = await payViaPaymentRequest(args);
 
-      deepEqual(payment, expected.payment, 'Got expected payment');
+      strictSame(payment, expected.payment, 'Got expected payment');
     }
 
     return end();

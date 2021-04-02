@@ -115,7 +115,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, equal, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => createHodlInvoice(args), error, 'Got error');
     } else {
@@ -135,7 +135,7 @@ tests.forEach(({args, description, error, expected}) => {
       delete got.id;
       delete got.secret;
 
-      deepIs(got, expected, 'Got expected result');
+      strictSame(got, expected, 'Got expected result');
     }
 
     return end();

@@ -33,7 +33,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => ignoreAsIgnoredPairs(args), new Error(error), 'Got error');
     } else if (!!expected.ignored) {
@@ -43,7 +43,7 @@ tests.forEach(({args, description, error, expected}) => {
         return {from: n.from.toString('hex'), to: n.to.toString('hex')};
       });
 
-      deepEqual(got, expected.ignored, 'Got expected ignore pairs');
+      strictSame(got, expected.ignored, 'Got expected ignore pairs');
     } else {
       equal(ignoreAsIgnoredPairs(args).ignored, undefined, 'Nothing ignored');
     }

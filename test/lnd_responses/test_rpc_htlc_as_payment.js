@@ -108,11 +108,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcHtlcAsPayment(args), new Error(error), 'Got err');
     } else {
-      deepEqual(rpcHtlcAsPayment(args), expected, 'Mapped to payment');
+      strictSame(rpcHtlcAsPayment(args), expected, 'Mapped to payment');
     }
 
     return end();

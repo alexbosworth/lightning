@@ -121,13 +121,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => channelAcceptAsOpenRequest(args), new Error(error), 'Err');
     } else {
       const res = channelAcceptAsOpenRequest(args);
 
-      deepIs(res, expected, 'Got expected result');
+      strictSame(res, expected, 'Got expected result');
     }
 
     return end();

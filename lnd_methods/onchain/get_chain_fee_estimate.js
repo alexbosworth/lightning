@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const hasNumber = n => !!n && n !== '0';
 const {isArray} = Array;
 const method = 'estimateFee';
 const notFound = -1;
@@ -82,10 +83,17 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedFeeRateValueInChainFeeEstimateQuery']);
           }
 
-          return cbk(null, {
-            fee: Number(res.fee_sat),
-            tokens_per_vbyte: Number(res.feerate_sat_per_byte),
-          });
+          const fee = Number(res.fee_sat);
+
+          // Exit early in LND 0.12.1 and below that do not support sat/vbyte
+          if (!hasNumber(res.sat_per_vbyte)) {
+            return cbk(null, {
+              fee,
+              tokens_per_vbyte: Number(res.feerate_sat_per_byte),
+            });
+          }
+
+          return cbk(null, {fee, tokens_per_vbyte: Number(res.sat_per_vbyte)});
         });
       }],
     },

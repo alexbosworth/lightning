@@ -111,11 +111,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcNodeAsNode(args), new Error(error), 'Got error');
     } else {
-      deepEqual(rpcNodeAsNode(args), expected, 'Node info mapped to node');
+      strictSame(rpcNodeAsNode(args), expected, 'Node info mapped to node');
     }
 
     return end();

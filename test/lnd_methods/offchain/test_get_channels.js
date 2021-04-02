@@ -284,7 +284,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getChannels(args), error, 'Got expected error');
     } else {
@@ -292,7 +292,7 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [channel] = channels;
 
-      deepEqual(channel, expected.channel, 'Got expected channel');
+      strictSame(channel, expected.channel, 'Got expected channel');
     }
 
     return end();

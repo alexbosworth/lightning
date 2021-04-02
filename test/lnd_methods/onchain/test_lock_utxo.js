@@ -65,13 +65,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(lockUtxo(args), error, 'Got expected error');
     } else {
       const got = await lockUtxo(args);
 
-      deepEqual(got, expected, 'Got expected result');
+      strictSame(got, expected, 'Got expected result');
     }
 
     return end();

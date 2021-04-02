@@ -80,7 +80,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, equal, throws}) => {
     if (!!error) {
       throws(() => rpcRouteAsRoute(args), new Error(error), 'Got error');
     } else {

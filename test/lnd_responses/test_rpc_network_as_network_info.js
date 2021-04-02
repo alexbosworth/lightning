@@ -81,11 +81,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcNetworkAsNetworkInfo(args), new Error(error), 'Got err');
     } else {
-      deepEqual(rpcNetworkAsNetworkInfo(args), expected, 'Got network info');
+      strictSame(rpcNetworkAsNetworkInfo(args), expected, 'Got network info');
     }
 
     return end();

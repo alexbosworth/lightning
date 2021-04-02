@@ -56,7 +56,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, match, throws}) => {
+  return test(description, async ({end, equal, match, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToForwards(args), new Error(error), 'Got error');
     } else {
@@ -86,11 +86,11 @@ tests.forEach(({args, description, error, expected}) => {
 
       const forwardErr = 'ExpectedHtlcEventTypeToDeriveForwardFromHtlcEvent';
 
-      deepIs(gotErr3, [503, forwardErr], 'Got forward event error');
+      strictSame(gotErr3, [503, forwardErr], 'Got forward event error');
 
       emitter.emit('data', makeForwardResponse({}));
 
-      deepIs(gotForward, expected.forward, 'Got expected forward');
+      strictSame(gotForward, expected.forward, 'Got expected forward');
 
       [sub, sub2].forEach(n => n.removeAllListeners());
     }

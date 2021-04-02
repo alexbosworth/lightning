@@ -51,7 +51,7 @@ const tests = [
     expected: {
       channels: [{
         base_fee: 0,
-        base_fee_mtokens: 0,
+        base_fee_mtokens: '0',
         fee_rate: 0,
         id: '0x0x1',
         transaction_id: Buffer.alloc(32).toString('hex'),
@@ -62,13 +62,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getFeeRates(args), error, 'Got expected error');
     } else {
       const res = await getFeeRates(args);
 
-      deepEqual(res, expected, 'Got expected result');
+      strictSame(res, expected, 'Got expected result');
     }
 
     return end();

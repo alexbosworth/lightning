@@ -134,13 +134,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getUtxos(args), error, 'Got expected error');
     } else {
       const {utxos} = await getUtxos(args);
 
-      deepEqual(utxos, expected.utxos, 'Got utxos');
+      strictSame(utxos, expected.utxos, 'Got utxos');
     }
 
     return end();

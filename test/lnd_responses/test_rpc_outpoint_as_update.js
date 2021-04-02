@@ -44,11 +44,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcOutpointAsUpdate(args), new Error(error), 'Got error');
     } else {
-      deepEqual(rpcOutpointAsUpdate(args), expected, 'Outpoint info mapped');
+      strictSame(rpcOutpointAsUpdate(args), expected, 'Outpoint info mapped');
     }
 
     return end();

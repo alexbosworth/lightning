@@ -193,11 +193,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => nodeInfoAsNode(args), new Error(error), 'Got error');
     } else {
-      deepEqual(nodeInfoAsNode(args), expected, 'Node info mapped to node');
+      strictSame(nodeInfoAsNode(args), expected, 'Node info mapped to node');
     }
 
     return end();

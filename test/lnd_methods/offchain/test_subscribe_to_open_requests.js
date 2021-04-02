@@ -98,7 +98,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, match, throws}) => {
+  return test(description, async ({end, equal, match, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToOpenRequests(args), new Error(error), 'Got err');
     } else {
@@ -132,7 +132,7 @@ tests.forEach(({args, description, error, expected}) => {
         }
       });
 
-      deepIs(events, expected.events);
+      strictSame(events, expected.events);
     }
 
     return end();

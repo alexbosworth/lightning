@@ -32,13 +32,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(verifyBackup(args), error, 'Got expected error');
     } else {
       const res = await verifyBackup(args);
 
-      deepEqual(res, expected, 'Got expected result');
+      strictSame(res, expected, 'Got expected result');
     }
 
     return end();

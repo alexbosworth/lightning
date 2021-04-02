@@ -144,7 +144,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, rejects}) => {
+  return test(description, async ({end, rejects}) => {
     if (!!error) {
       await rejects(updateRoutingFees(args), error, 'Got expected error');
     } else {

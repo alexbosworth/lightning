@@ -284,11 +284,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(getConnectedWatchtowers(args), error, 'Got error');
     } else {
-      deepIs(await getConnectedWatchtowers(args), expected, 'Got expected');
+      strictSame(await getConnectedWatchtowers(args), expected, 'Got result');
     }
 
     return end();

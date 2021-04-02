@@ -17,15 +17,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end}) => {
+  return test(description, ({end, strictSame}) => {
     const {middleware} = decodeCborBody({});
     const req = {body: args.body};
 
     return middleware(req, null, err => {
       if (!!error) {
-        deepIs(err, error, 'Got expected error');
+        strictSame(err, error, 'Got expected error');
       } else {
-        deepIs(req.body, expected.body, 'Got expected body');
+        strictSame(req.body, expected.body, 'Got expected body');
       }
 
       return end();

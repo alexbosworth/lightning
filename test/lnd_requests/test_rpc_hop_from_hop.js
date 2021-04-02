@@ -44,11 +44,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcHopFromHop(args), new Error(error), 'Got error');
     } else {
-      deepIs(rpcHopFromHop(args), expected, 'RPC hop is derived from a hop');
+      strictSame(rpcHopFromHop(args), expected, 'RPC hop derived from a hop');
     }
 
     return end();

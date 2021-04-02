@@ -51,7 +51,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, equal, rejects}) => {
     if (!!error) {
       await rejects(() => settleHodlInvoice(args), error, 'Got error');
     } else {

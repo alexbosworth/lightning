@@ -96,7 +96,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, match, throws}) => {
+  return test(description, async ({end, equal, match, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToInvoice(args), new Error(error), 'Got error');
     } else {
@@ -132,11 +132,11 @@ tests.forEach(({args, description, error, expected}) => {
 
       const invoiceError = 'ExpectedInvoiceCreationDateInResponse';
 
-      deepIs(gotErr3, [503, invoiceError], 'Got invoice update error');
+      strictSame(gotErr3, [503, invoiceError], 'Got invoice update error');
 
       emitter.emit('data', lookupInvoiceResponse({}));
 
-      deepIs(gotInvoice, expected.invoice, 'Got expected invoice');
+      strictSame(gotInvoice, expected.invoice, 'Got expected invoice');
     }
 
     return end();

@@ -198,13 +198,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(openChannel(args), error, 'Got expected error');
     } else {
       const res = await openChannel(args);
 
-      deepIs(res, expected, 'Got expected result');
+      strictSame(res, expected, 'Got expected result');
     }
 
     return end();

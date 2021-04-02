@@ -50,11 +50,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getNetworkInfo(args), error, 'Got error');
     } else {
-      deepIs(await getNetworkInfo(args), expected, 'Got expected res');
+      strictSame(await getNetworkInfo(args), expected, 'Got expected res');
     }
 
     return end();

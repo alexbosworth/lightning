@@ -106,13 +106,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => chanPolicyAsPolicy(args), new Error(error), 'Got error');
     } else {
       const policy = chanPolicyAsPolicy(args);
 
-      deepEqual(policy, expected, 'Raw policy cast as policy');
+      strictSame(policy, expected, 'Raw policy cast as policy');
     }
 
     return end();

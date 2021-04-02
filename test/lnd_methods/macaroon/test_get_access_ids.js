@@ -59,13 +59,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getAccessIds(args), error, 'Got expected error');
     } else {
       const {ids} = await getAccessIds(args);
 
-      deepIs(ids, expected.ids, 'Got expected ids');
+      strictSame(ids, expected.ids, 'Got expected ids');
     }
 
     return end();

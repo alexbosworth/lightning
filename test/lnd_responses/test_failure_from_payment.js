@@ -39,11 +39,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => failureFromPayment(args), new Error(error), 'Got error');
     } else {
-      deepIs(failureFromPayment(args), expected, 'Got expected');
+      strictSame(failureFromPayment(args), expected, 'Got expected');
     }
 
     return end();

@@ -325,7 +325,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToPayViaRoutes(args), new Error(error), 'Got err');
 
@@ -343,9 +343,9 @@ tests.forEach(({args, description, error, expected}) => {
       sub.on('success', success => gotSuccess = success);
 
       return sub.once('end', () => {
-        deepIs(attempts, expected.attempts, 'Got expected payment attempts');
-        deepIs(failures, expected.failures, 'Got expected payment failures');
-        deepIs(gotSuccess, expected.success, 'Got expected payment success');
+        strictSame(attempts, expected.attempts, 'Got expected pay attempts');
+        strictSame(failures, expected.failures, 'Got expected pay failures');
+        strictSame(gotSuccess, expected.success, 'Got expected pay success');
 
         const [errCode, errMessage] = gotError || [];
         const [expectedErrCode, expectedErrMessage] = expected.error || [];

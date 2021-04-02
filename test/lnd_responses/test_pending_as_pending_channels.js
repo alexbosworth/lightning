@@ -430,11 +430,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => pendingAsPendingChannels(args), new Error(error), 'Errors');
     } else {
-      deepEqual(pendingAsPendingChannels(args), expected, 'Mapped to pending');
+      strictSame(pendingAsPendingChannels(args), expected, 'Pending mapped');
     }
 
     return end();

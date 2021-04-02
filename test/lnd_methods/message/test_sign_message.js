@@ -48,11 +48,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => signMessage(args), error, 'Got expected error');
     } else {
-      deepIs(await signMessage(args), expected, 'Got expected result');
+      strictSame(await signMessage(args), expected, 'Got expected result');
     }
 
     return end();

@@ -160,13 +160,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcClosedChannelAsClosed(args), new Error(error), 'Error');
     } else {
       const channel = rpcClosedChannelAsClosed(args);
 
-      deepEqual(channel, expected, 'Channel closed cast as close');
+      strictSame(channel, expected, 'Channel closed cast as close');
     }
 
     return end();

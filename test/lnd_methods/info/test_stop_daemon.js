@@ -44,7 +44,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, equal, rejects}) => {
     if (!!error) {
       await rejects(() => stopDaemon(args), error, 'Got error');
     } else {

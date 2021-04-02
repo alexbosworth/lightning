@@ -130,11 +130,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => routeFromHint(args), new Error(error), 'Got error');
     } else {
-      deepIs(routeFromHint(args), expected.route, 'Got expected route');
+      strictSame(routeFromHint(args), expected.route, 'Got expected route');
     }
 
     return end();

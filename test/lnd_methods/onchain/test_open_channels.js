@@ -131,7 +131,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects, match}) => {
+  return test(description, async ({end, equal, rejects, match}) => {
     if (!!error) {
       await rejects(openChannels(args), error, 'Got error');
     } else {

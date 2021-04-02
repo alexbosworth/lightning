@@ -44,7 +44,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => lndGateway(args), new Error(error), 'Got expected error');
 
@@ -55,7 +55,7 @@ tests.forEach(({args, description, error, expected}) => {
       lnd.unlocker.genSeed({}, (err, res) => {
         const [code, message, details] = err;
 
-        deepIs(err, expected.err, 'Got expected result');
+        strictSame(err, expected.err, 'Got expected result');
 
         return end();
       });

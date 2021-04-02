@@ -135,13 +135,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => channelEdgeAsChannel(args), new Error(error), 'Got error');
     } else {
       const channel = channelEdgeAsChannel(args);
 
-      deepEqual(channel, expected, 'Channel cast as channel');
+      strictSame(channel, expected, 'Channel cast as channel');
     }
 
     return end();

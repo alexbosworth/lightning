@@ -154,11 +154,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getNode(args), error, 'Got expected error');
     } else {
-      deepIs(await getNode(args), expected, 'Got expected node details');
+      strictSame(await getNode(args), expected, 'Got expected node details');
     }
 
     return end();

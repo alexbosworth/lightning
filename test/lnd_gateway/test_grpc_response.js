@@ -16,7 +16,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({deepIs, end}) => {
+  return test(description, ({end}) => {
     const locals = args.locals || {};
     const {middleware} = grpcResponse(args);
 

@@ -7,6 +7,7 @@ const getChainBalance = require('./get_chain_balance');
 const getChainFeeEstimate = require('./get_chain_fee_estimate');
 const getChainFeeRate = require('./get_chain_fee_rate');
 const getChainTransactions = require('./get_chain_transactions');
+const getLockedUtxos = require('./get_locked_utxos');
 const getPendingChainBalance = require('./get_pending_chain_balance');
 const getSweepTransactions = require('./get_sweep_transactions');
 const getUtxos = require('./get_utxos');
@@ -36,6 +37,7 @@ module.exports = {
   getChainFeeEstimate,
   getChainFeeRate,
   getChainTransactions,
+  getLockedUtxos,
   getPendingChainBalance,
   getSweepTransactions,
   getUtxos,

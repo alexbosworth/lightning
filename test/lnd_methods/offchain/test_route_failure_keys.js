@@ -45,10 +45,10 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({deepIs, end}) => {
+  return test(description, ({end, strictSame}) => {
     const {keys} = method(args);
 
-    deepIs(keys, expected.keys, 'Got expected route failure keys');
+    strictSame(keys, expected.keys, 'Got expected route failure keys');
 
     return end();
   });

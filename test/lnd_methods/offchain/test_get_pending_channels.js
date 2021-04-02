@@ -41,13 +41,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getPendingChannels(args), error, 'Got expected err');
     } else {
       const pending = await getPendingChannels(args);
 
-      deepEqual(pending, expected, 'Got expected pending channels');
+      strictSame(pending, expected, 'Got expected pending channels');
     }
 
     return end();

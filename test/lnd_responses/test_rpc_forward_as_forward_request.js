@@ -126,13 +126,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcForwardAsForwardRequest(args), new Error(error), 'Err');
     } else {
       const request = rpcForwardAsForwardRequest(args);
 
-      deepIs(request, expected, 'Got expected forward request');
+      strictSame(request, expected, 'Got expected forward request');
     }
 
     return end();

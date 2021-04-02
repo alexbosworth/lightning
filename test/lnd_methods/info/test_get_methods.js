@@ -67,11 +67,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getMethods(args), error, 'Got error');
     } else {
-      deepIs(await getMethods(args), expected, 'Got expected res');
+      strictSame(await getMethods(args), expected, 'Got expected res');
     }
 
     return end();

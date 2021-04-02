@@ -5,12 +5,14 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const asSecs = date => !date ? null : (Date.parse(date) - Date.now()) / 1e3;
 const bufferToHex = buffer => buffer.toString('hex');
 const expirationAsDate = epoch => new Date(Number(epoch) * 1e3).toISOString();
 const isHash = n => !!n && /^[0-9A-F]{64}$/i.test(n);
 const isNumber = n => !isNaN(n);
 const makeId = () => randomBytes(32);
 const method = 'leaseOutput';
+const minExpireSecs = 1;
 const type = 'wallet';
 const unsuppportedErr = /unknown/;
 
@@ -20,7 +22,10 @@ const unsuppportedErr = /unknown/;
 
   Requires LND built with `walletrpc` build tag
 
+  `expires_at` is not supported on LND 0.12.1 and below
+
   {
+    [expires_at]: <Lock Expires At ISO 8601 Date String>
     [id]: <Lock Identifier Hex String>
     lnd: <Authenticated LND API Object>
     transaction_id: <Unspent Transaction Id Hex String>
@@ -38,6 +43,10 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
+        if (!!args.expires_at && asSecs(args.expires_at) < minExpireSecs) {
+          return cbk([400, 'ExpectedLaterDateToSetLockExpirationDateTo']);
+        }
+
         if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndToLockUtxo']);
         }
@@ -59,6 +68,7 @@ module.exports = (args, cbk) => {
 
         return args.lnd[type][method]({
           id,
+          expiration_seconds: asSecs(args.expires_at) || undefined,
           outpoint: {
             output_index: args.transaction_vout,
             txid_str: args.transaction_id,

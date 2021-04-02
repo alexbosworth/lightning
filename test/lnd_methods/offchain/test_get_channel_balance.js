@@ -152,13 +152,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       rejects(() => getChannelBalance(args), error, 'Got expected error');
     } else {
       const balances = await getChannelBalance(args);
 
-      deepEqual(balances, expected, 'Got channel balances');
+      strictSame(balances, expected, 'Got channel balances');
     }
 
     return end();

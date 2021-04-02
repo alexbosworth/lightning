@@ -93,11 +93,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     try {
       subscribeToWalletStatus({});
     } catch (err) {
-      deepIs(
+      strictSame(
         err,
         new Error('ExpectedAuthenticatedLndToSubscribeToPeers'), 'Needs lnd');
     }
@@ -106,7 +106,7 @@ tests.forEach(({args, description, error, expected}) => {
 
     if (!!error) {
       sub.once('error', err => {
-        deepIs(err, error, 'Got expected error');
+        strictSame(err, error, 'Got expected error');
 
         subscribeToWalletStatus(args);
 

@@ -67,11 +67,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     try {
       subscribeToBlocks({});
     } catch (err) {
-      deepIs(err, new Error('ExpectedLndToSubscribeToBlocks'), 'Requires lnd');
+      strictSame(err, new Error('ExpectedLndToSubscribeToBlocks'), 'no lnd');
     }
 
     const sub = subscribeToBlocks(args);
@@ -79,7 +79,7 @@ tests.forEach(({args, description, error, expected}) => {
     if (!!error) {
       sub.once('block', () => {});
       sub.once('error', err => {
-        deepIs(err, error, 'Got expected error');
+        strictSame(err, error, 'Got expected error');
 
         subscribeToBlocks(args);
 

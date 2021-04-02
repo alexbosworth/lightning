@@ -16,10 +16,10 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({deepIs, end}) => {
+  return test(description, ({end, strictSame}) => {
     const {tlv} = destinationCustomRecords(args);
 
-    deepIs(tlv, expected.tlv, 'Got expected output');
+    strictSame(tlv, expected.tlv, 'Got expected output');
 
     return end();
   });

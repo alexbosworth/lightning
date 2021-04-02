@@ -71,13 +71,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcFeesAsChannelFees(args), new Error(error), 'Got error');
     } else {
       const res = rpcFeesAsChannelFees(args);
 
-      deepIs(res, expected, 'Got expected details');
+      strictSame(res, expected, 'Got expected details');
     }
 
     return end();

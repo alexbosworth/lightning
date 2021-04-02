@@ -83,13 +83,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcAttemptHtlcAsAttempt(args), new Error(error), 'Got err');
     } else {
       const attempt = rpcAttemptHtlcAsAttempt(args);
 
-      deepIs(attempt, expected.attempt, 'Got attempt from rpc attempt');
+      strictSame(attempt, expected.attempt, 'Got attempt from rpc attempt');
     }
 
     return end();

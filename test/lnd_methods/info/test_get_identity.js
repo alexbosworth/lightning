@@ -46,11 +46,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getIdentity(args), error, 'Got error');
     } else {
-      deepIs(await getIdentity(args), expected, 'Got identity');
+      strictSame(await getIdentity(args), expected, 'Got identity');
     }
 
     return end();

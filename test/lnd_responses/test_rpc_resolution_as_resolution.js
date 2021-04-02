@@ -114,11 +114,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcResolutionAsResolution(args), new Error(error), 'Err');
     } else {
-      deepEqual(rpcResolutionAsResolution(args), expected, 'RPC res mapped');
+      strictSame(rpcResolutionAsResolution(args), expected, 'RPC res mapped');
     }
 
     return end();

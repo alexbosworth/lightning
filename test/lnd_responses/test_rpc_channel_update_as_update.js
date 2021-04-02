@@ -171,7 +171,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcChannelUpdateAsUpdate(args), new Error(error), 'Error');
     } else {
@@ -181,7 +181,7 @@ tests.forEach(({args, description, error, expected}) => {
 
       delete update.updated_at;
 
-      deepEqual(update, expected, 'Channel update cast as update');
+      strictSame(update, expected, 'Channel update cast as update');
     }
 
     return end();

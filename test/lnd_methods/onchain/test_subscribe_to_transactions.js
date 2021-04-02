@@ -105,11 +105,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     try {
       subscribeToTransactions({});
     } catch (err) {
-      deepIs(
+      strictSame(
         err,
         new Error('ExpectedAuthenticatedLndToSubscribeToTransactions'),
         'Requires lnd'
@@ -121,7 +121,7 @@ tests.forEach(({args, description, error, expected}) => {
     if (!!error) {
       sub.once('chain_transaction', () => {});
       sub.once('error', err => {
-        deepIs(err, error, 'Got expected error');
+        strictSame(err, error, 'Got expected error');
 
         subscribeToTransactions(args);
 
@@ -133,7 +133,7 @@ tests.forEach(({args, description, error, expected}) => {
       });
     } else {
       sub.once('chain_transaction', tx => {
-        deepIs(tx, expected, 'Got expected chain transaction details');
+        strictSame(tx, expected, 'Got expected chain transaction details');
 
         return end();
       });

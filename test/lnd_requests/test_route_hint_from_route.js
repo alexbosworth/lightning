@@ -58,13 +58,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => routeHintFromRoute(args), new Error(error), 'Got error');
     } else {
       const route = routeHintFromRoute(args);
 
-      deepIs(route, expected, 'Hints are derived as expected');
+      strictSame(route, expected, 'Hints are derived as expected');
     }
 
     return end();

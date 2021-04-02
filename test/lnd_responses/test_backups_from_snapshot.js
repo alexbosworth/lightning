@@ -138,13 +138,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => backupsFromSnapshot(args), new Error(error), 'Got error');
     } else {
       const res = backupsFromSnapshot(args);
 
-      deepIs(res, expected, 'Got expected result');
+      strictSame(res, expected, 'Got expected result');
     }
 
     return end();

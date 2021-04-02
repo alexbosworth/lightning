@@ -85,11 +85,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getWalletVersion(args), error, 'Got error');
     } else {
-      deepIs(await getWalletVersion(args), expected, 'Got info');
+      strictSame(await getWalletVersion(args), expected, 'Got info');
     }
 
     return end();

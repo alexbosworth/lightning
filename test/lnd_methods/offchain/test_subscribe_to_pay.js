@@ -35,7 +35,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, equal, throws}) => {
+  return test(description, ({end, equal, throws}) => {
     if (!!error) {
       throws(() => method(args), new Error(error), 'Got err');
 

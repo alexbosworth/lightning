@@ -163,13 +163,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
-      rejects(() => getChainTransactions(args), error, 'Got expected error');
+      await rejects(() => getChainTransactions(args), error, 'Got err');
     } else {
       const {transactions} = await getChainTransactions(args);
 
-      deepEqual(transactions, expected.transactions, 'Got transactions');
+      strictSame(transactions, expected.transactions, 'Got transactions');
     }
 
     return end();

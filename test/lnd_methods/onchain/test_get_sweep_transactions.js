@@ -108,13 +108,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getSweepTransactions(args), error, 'Got error');
     } else {
       const res = await getSweepTransactions(args);
 
-      deepEqual(res.transactions, expected.transactions, 'Got transactions');
+      strictSame(res.transactions, expected.transactions, 'Got transactions');
     }
 
     return end();

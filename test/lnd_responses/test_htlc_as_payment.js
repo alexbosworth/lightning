@@ -72,7 +72,7 @@ const tests = [
     args: makeHtlc({mpp_total_amt_msat: '0'}),
     description: 'HTLC mapped to payment',
     expected: {
-      canceled_at: null,
+      canceled_at: undefined,
       confirmed_at: '1970-01-01T00:00:01.000Z',
       created_at: '1970-01-01T00:00:01.000Z',
       created_height: 1,
@@ -93,7 +93,7 @@ const tests = [
     description: 'Canceled HTLC mapped to payment',
     expected: {
       canceled_at: '1970-01-01T00:00:01.000Z',
-      confirmed_at: null,
+      confirmed_at: undefined,
       created_at: '1970-01-01T00:00:01.000Z',
       created_height: 1,
       in_channel: '0x0x1',
@@ -112,8 +112,8 @@ const tests = [
     args: makeHtlc({mpp_total_amt_msat: '1', state: 'ACCEPTED'}),
     description: 'Accepted HTLC mapped to payment',
     expected: {
-      canceled_at: null,
-      confirmed_at: null,
+      canceled_at: undefined,
+      confirmed_at: undefined,
       created_at: '1970-01-01T00:00:01.000Z',
       created_height: 1,
       in_channel: '0x0x1',
@@ -131,11 +131,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => htlcAsPayment(args), new Error(error), 'Got expected err');
     } else {
-      deepEqual(htlcAsPayment(args), expected, 'HTLC mapped as payment');
+      strictSame(htlcAsPayment(args), expected, 'HTLC mapped as payment');
     }
 
     return end();

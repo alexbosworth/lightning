@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 
 const {isLnd} = require('./../../lnd_requests');
+const {rpcConfAsConfirmation} = require('./../../lnd_responses');
 const scriptFromChainAddress = require('./script_from_chain_address');
 
 const bufferAsHex = buffer => buffer.toString('hex');
@@ -118,42 +119,12 @@ module.exports = args => {
   });
 
   sub.on('data', data => {
-    if (!data) {
-      return eventEmitter.emit('error', new Error('ExpectedDataForConfEvent'));
-    }
+    try {
+      const event = rpcConfAsConfirmation(data);
 
-    switch (!!data.conf) {
-    case false:
-      if (!data.reorg) {
-        eventEmitter.emit('error', new Error('ExpectedTransactionReorgEvent'));
-        break;
-      }
-
-      eventEmitter.emit('reorg');
-      break;
-
-    case true:
-      if (!Buffer.isBuffer(data.conf.block_hash)) {
-        eventEmitter.emit('error', new Error('ExpectedConfirmationBlockHash'));
-        break;
-      }
-
-      if (!data.conf.block_height) {
-        eventEmitter.emit('error', new Error('ExpectedConfirmationHeight'));
-        break;
-      }
-
-      if (!isBuffer(data.conf.raw_tx)) {
-        eventEmitter.emit('error', new Error('ExpectedRawTxInAddressConf'));
-        break;
-      }
-
-      eventEmitter.emit('confirmation', {
-        block: bufferAsHex(data.conf.block_hash),
-        height: data.conf.block_height,
-        transaction: bufferAsHex(data.conf.raw_tx),
-      });
-      break;
+      return !event.type ? null : eventEmitter.emit(event.type, event.data);
+    } catch (err) {
+      return eventEmitter.emit('error', err);
     }
 
     return;

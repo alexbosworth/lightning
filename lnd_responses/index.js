@@ -18,6 +18,7 @@ const rpcChannelAsChannel = require('./rpc_channel_as_channel');
 const rpcChannelClosedAsClosed = require('./rpc_channel_closed_as_closed');
 const rpcChannelUpdateAsUpdate = require('./rpc_channel_update_as_update');
 const rpcClosedChannelAsClosed = require('./rpc_closed_channel_as_closed');
+const rpcConfAsConfirmation = require('./rpc_conf_as_confirmation');
 const rpcFeesAsChannelFees = require('./rpc_fees_as_channel_fees');
 const rpcForwardAsForward = require('./rpc_forward_as_forward');
 const rpcForwardAsForwardRequest = require('./rpc_forward_as_forward_request');
@@ -54,6 +55,7 @@ module.exports = {
   rpcChannelClosedAsClosed,
   rpcChannelUpdateAsUpdate,
   rpcClosedChannelAsClosed,
+  rpcConfAsConfirmation,
   rpcFeesAsChannelFees,
   rpcForwardAsForward,
   rpcForwardAsForwardRequest,

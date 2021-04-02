@@ -210,11 +210,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcInvoiceAsInvoice(args), new Error(error), 'Got err');
     } else {
-      deepEqual(rpcInvoiceAsInvoice(args), expected, 'Mapped to invoice');
+      strictSame(rpcInvoiceAsInvoice(args), expected, 'Mapped to invoice');
     }
 
     return end();

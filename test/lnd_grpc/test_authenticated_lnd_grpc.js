@@ -29,11 +29,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, async ({deepIs, end, equal}) => {
+  return test(description, async ({end, equal, strictSame}) => {
     const {lnd} = authenticatedLndGrpc(args);
 
     equal(!!lnd, true, 'Got LND object');
-    deepIs(Object.keys(lnd), expected.services, 'Got expected services');
+    strictSame(Object.keys(lnd), expected.services, 'Got expected services');
 
     return end();
   });

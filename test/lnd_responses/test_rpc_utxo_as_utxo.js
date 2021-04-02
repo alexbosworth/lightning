@@ -87,13 +87,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcUtxoAsUtxo(args), new Error(error), 'Got error');
     } else {
       const utxo = rpcUtxoAsUtxo(args);
 
-      deepIs(utxo, expected, 'Got expected UTXO details');
+      strictSame(utxo, expected, 'Got expected UTXO details');
     }
 
     return end();

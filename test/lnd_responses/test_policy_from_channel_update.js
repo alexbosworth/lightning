@@ -31,8 +31,8 @@ const makeExpected = overrides => {
     cltv_delta: 1,
     fee_rate: 1,
     is_disabled: true,
-    max_htlc_mtokens: '1',
-    min_htlc_mtokens: '1',
+    max_htlc_mtokens: 1,
+    min_htlc_mtokens: 1,
     public_key: 'aa',
     updated_at: '1970-01-01T00:00:01.000Z',
   };
@@ -96,11 +96,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => policyFromChannelUpdate(args), new Error(error), 'Got err');
     } else {
-      deepEqual(policyFromChannelUpdate(args), expected, 'Mapped to policy');
+      strictSame(policyFromChannelUpdate(args), expected, 'Mapped to policy');
     }
 
     return end();

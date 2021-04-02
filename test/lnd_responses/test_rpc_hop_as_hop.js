@@ -105,11 +105,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcHopAsHop(args), new Error(error), 'Got err');
     } else {
-      deepEqual(rpcHopAsHop(args), expected, 'Got expected result');
+      strictSame(rpcHopAsHop(args), expected, 'Got expected result');
     }
 
     return end();

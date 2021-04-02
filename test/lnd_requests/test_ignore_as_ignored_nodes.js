@@ -36,7 +36,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, equal, throws}) => {
+  return test(description, ({end, equal, strictSame, throws}) => {
     if (!!error) {
       throws(() => ignoreAsIgnoredNodes(args), new Error(error), 'Got error');
     } else if (!!expected.ignore) {
@@ -44,7 +44,7 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [ignore] = ignored;
 
-      deepEqual(ignore.toString('hex'), expected.ignore, 'Node ignore mapped');
+      strictSame(ignore.toString('hex'), expected.ignore, 'Ignore mapped');
     } else {
       equal(ignoreAsIgnoredNodes(args).ignored, undefined, 'Nothing ignored');
     }

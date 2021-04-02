@@ -119,11 +119,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepIs, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcRouteFromRoute(args), new Error(error), 'Got error');
     } else {
-      deepIs(rpcRouteFromRoute(args), expected, 'RPC route is derived');
+      strictSame(rpcRouteFromRoute(args), expected, 'RPC route is derived');
     }
 
     return end();

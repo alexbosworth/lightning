@@ -241,11 +241,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       rejects(getRouteThroughHops(args), error, 'Got expected error');
     } else {
-      deepIs((await getRouteThroughHops(args)).route, expected.route, 'Route');
+      const {route} = await getRouteThroughHops(args);
+
+      strictSame(route, expected.route, 'Route');
     }
 
     return end();

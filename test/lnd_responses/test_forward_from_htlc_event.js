@@ -56,7 +56,7 @@ const makeExpected = overrides => {
     cltv_delta: 1,
     external_failure: undefined,
     fee: 0,
-    fee_mtokens: 1,
+    fee_mtokens: '1',
     in_channel: '0x0x1',
     in_payment: 0,
     internal_failure: undefined,
@@ -309,11 +309,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => forwardFromHtlcEvent(args), new Error(error), 'Got err');
     } else {
-      deepEqual(forwardFromHtlcEvent(args), expected, 'HTLC as forward');
+      strictSame(forwardFromHtlcEvent(args), expected, 'HTLC as forward');
     }
 
     return end();

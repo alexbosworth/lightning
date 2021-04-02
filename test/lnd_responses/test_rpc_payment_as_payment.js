@@ -277,11 +277,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcPaymentAsPayment(args), new Error(error), 'Got err');
     } else {
-      deepEqual(rpcPaymentAsPayment(args), expected, 'Got expected result');
+      strictSame(rpcPaymentAsPayment(args), expected, 'Got expected result');
     }
 
     return end();

@@ -165,13 +165,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepIs, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => createInvoice(args), error, 'Got error');
     } else {
-      const got = await createInvoice(args);
-
-      deepIs(got, expected, 'Got expected result');
+      strictSame(await createInvoice(args), expected, 'Got expected result');
     }
 
     return end();

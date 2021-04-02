@@ -117,13 +117,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({deepIs, end, equal, throws}) => {
+  return test(({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => rpcTxAsTransaction(args), new Error(error), 'Got error');
     } else {
       const transaction = rpcTxAsTransaction(args);
 
-      deepIs(transaction, expected, 'Got expected transaction details');
+      strictSame(transaction, expected, 'Got expected transaction details');
     }
 
     return end();

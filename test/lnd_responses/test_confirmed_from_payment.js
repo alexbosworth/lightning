@@ -142,11 +142,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => confirmedFromPayment(args), new Error(error), 'Err');
     } else {
-      deepEqual(confirmedFromPayment(args), expected, 'Mapped');
+      strictSame(confirmedFromPayment(args), expected, 'Mapped');
     }
 
     return end();

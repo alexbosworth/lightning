@@ -155,11 +155,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({deepEqual, end, throws}) => {
+  return test(description, ({end, strictSame, throws}) => {
     if (!!error) {
       throws(() => infoAsWalletInfo(args), new Error(error), 'Got error');
     } else {
-      deepEqual(infoAsWalletInfo(args), expected, 'Info as wallet info');
+      strictSame(infoAsWalletInfo(args), expected, 'Info as wallet info');
     }
 
     return end();

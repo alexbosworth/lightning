@@ -16,12 +16,12 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({deepIs, end}) => {
+  return test(description, ({end, strictSame}) => {
     const {middleware} = bearerToken({});
     const res = {locals: {}};
 
     return middleware({get: key => args.header}, res, () => {
-      deepIs(res.locals, expected.locals, 'Got expected locals');
+      strictSame(res.locals, expected.locals, 'Got expected locals');
 
       return end();
     });

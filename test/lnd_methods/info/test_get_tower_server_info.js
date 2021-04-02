@@ -87,11 +87,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async ({end, rejects, strictSame}) => {
     if (!!error) {
       await rejects(() => getTowerServerInfo(args), error, 'Got expected err');
     } else {
-      deepEqual(await getTowerServerInfo(args), expected, 'Got server info');
+      strictSame(await getTowerServerInfo(args), expected, 'Got server info');
     }
 
     return end();
