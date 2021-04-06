@@ -84,7 +84,7 @@ module.exports = ({lnd}) => {
       return emitError(new Error('ExpectedStateFromWalletStatus'));
     }
 
-    switch (state.State) {
+    switch (state.state) {
     case stateAbsent:
       return emitter.emit('absent', {});
 

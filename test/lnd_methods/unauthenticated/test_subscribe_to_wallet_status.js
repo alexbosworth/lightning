@@ -5,7 +5,7 @@ const {test} = require('tap');
 const {subscribeToWalletStatus} = require('./../../../lnd_methods');
 
 const makeLnd = overrides => {
-  const data = {State: 'LOCKED'};
+  const data = {state: 'LOCKED'};
 
   Object.keys(overrides).forEach(k => data[k] = overrides[k]);
 
@@ -79,15 +79,15 @@ const tests = [
     description: 'Wallet state emitted',
   },
   {
-    args: {lnd: makeLnd({State: 'NON_EXISTING'})},
+    args: {lnd: makeLnd({state: 'NON_EXISTING'})},
     description: 'Absent wallet state emitted',
   },
   {
-    args: {lnd: makeLnd({State: 'RPC_ACTIVE'})},
+    args: {lnd: makeLnd({state: 'RPC_ACTIVE'})},
     description: 'Active wallet state emitted',
   },
   {
-    args: {lnd: makeLnd({State: 'UNLOCKED'})},
+    args: {lnd: makeLnd({state: 'UNLOCKED'})},
     description: 'Starting state emitted',
   },
 ];
