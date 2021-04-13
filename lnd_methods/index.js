@@ -82,6 +82,7 @@ const {removePeer} = require('./peers');
 const {revokeAccess} = require('./macaroon');
 const {sendToChainAddress} = require('./onchain');
 const {sendToChainAddresses} = require('./onchain');
+const {sendToChainOutputScripts} = require('./onchain');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
 const {signBytes} = require('./signer');
@@ -204,6 +205,7 @@ module.exports = {
   revokeAccess,
   sendToChainAddress,
   sendToChainAddresses,
+  sendToChainOutputScripts,
   setAutopilot,
   settleHodlInvoice,
   signBytes,

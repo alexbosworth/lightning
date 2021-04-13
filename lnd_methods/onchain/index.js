@@ -18,6 +18,7 @@ const prepareForChannelProposal = require('./prepare_for_channel_proposal');
 const proposeChannel = require('./propose_channel');
 const sendToChainAddress = require('./send_to_chain_address');
 const sendToChainAddresses = require('./send_to_chain_addresses');
+const sendToChainOutputScripts = require('./send_to_chain_output_scripts');
 const setAutopilot = require('./set_autopilot');
 const signPsbt = require('./sign_psbt');
 const subscribeToBlocks = require('./subscribe_to_blocks');
@@ -48,6 +49,7 @@ module.exports = {
   proposeChannel,
   sendToChainAddress,
   sendToChainAddresses,
+  sendToChainOutputScripts,
   setAutopilot,
   signPsbt,
   subscribeToBlocks,
