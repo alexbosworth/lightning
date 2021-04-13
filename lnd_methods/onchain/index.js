@@ -16,6 +16,7 @@ const openChannel = require('./open_channel');
 const openChannels = require('./open_channels');
 const prepareForChannelProposal = require('./prepare_for_channel_proposal');
 const proposeChannel = require('./propose_channel');
+const requestChainFeeIncrease = require('./request_chain_fee_increase');
 const sendToChainAddress = require('./send_to_chain_address');
 const sendToChainAddresses = require('./send_to_chain_addresses');
 const sendToChainOutputScripts = require('./send_to_chain_output_scripts');
@@ -47,6 +48,7 @@ module.exports = {
   openChannels,
   prepareForChannelProposal,
   proposeChannel,
+  requestChainFeeIncrease,
   sendToChainAddress,
   sendToChainAddresses,
   sendToChainOutputScripts,

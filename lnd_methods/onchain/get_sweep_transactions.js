@@ -15,6 +15,8 @@ const type = 'wallet';
 
   Requires `onchain:read` permission
 
+  Requires LND built with `walletrpc` build tag
+
   {
     lnd: <Authenticated LND API Object>
   }

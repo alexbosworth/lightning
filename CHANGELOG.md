@@ -1,6 +1,6 @@
 # Versions
 
-## 3.3.4
+## 3.3.5
 
 - `subscribeToForwards`: Correct output value documentation and type definitions
 

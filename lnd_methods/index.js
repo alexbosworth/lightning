@@ -79,6 +79,7 @@ const {proposeChannel} = require('./onchain');
 const {recoverFundsFromChannel} = require('./offchain');
 const {recoverFundsFromChannels} = require('./offchain');
 const {removePeer} = require('./peers');
+const {requestChainFeeIncrease} = require('./onchain');
 const {revokeAccess} = require('./macaroon');
 const {sendToChainAddress} = require('./onchain');
 const {sendToChainAddresses} = require('./onchain');
@@ -202,6 +203,7 @@ module.exports = {
   recoverFundsFromChannel,
   recoverFundsFromChannels,
   removePeer,
+  requestChainFeeIncrease,
   revokeAccess,
   sendToChainAddress,
   sendToChainAddresses,
