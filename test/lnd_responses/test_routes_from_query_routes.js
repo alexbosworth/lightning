@@ -90,7 +90,9 @@ const tests = [
 
             buf.writeBigInt64LE(BigInt(n.type));
 
-            sum[buf.toString('ascii')] = n.value;
+            const type = Array(...buf).map(n => String.fromCharCode(n));
+
+            sum[type.join('')] = n.value;
 
             return sum;
           }, {}),

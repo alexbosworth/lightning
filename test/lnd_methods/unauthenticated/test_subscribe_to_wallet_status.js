@@ -99,7 +99,7 @@ tests.forEach(({args, description, error, expected}) => {
     } catch (err) {
       strictSame(
         err,
-        new Error('ExpectedAuthenticatedLndToSubscribeToPeers'), 'Needs lnd');
+        new Error('ExpectedAuthenticatedLndToSubscribeToWalletStatus'), 'lnd');
     }
 
     const sub = subscribeToWalletStatus(args);

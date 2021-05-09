@@ -44,7 +44,7 @@ const type = 'status';
 */
 module.exports = ({lnd}) => {
   if (!isLnd({lnd, method, type})) {
-    throw new Error('ExpectedAuthenticatedLndToSubscribeToPeers');
+    throw new Error('ExpectedAuthenticatedLndToSubscribeToWalletStatus');
   }
 
   const emitter = new EventEmitter();
