@@ -18,6 +18,7 @@ const {states} = require('./payment_states');
 
 const cltvBuf = 3;
 const cltvLimit = (limit, height) => !limit ? undefined : limit - height;
+const cltvLimitErr = /cltv limit \d+ should be greater than \d+/;
 const defaultCltvDelta = 43;
 const defaultMaxPaths = 1;
 const defaultTimeoutSeconds = 25;
@@ -212,6 +213,11 @@ module.exports = args => {
 
     if (!!isArray(err)) {
       return emitter.emit('error', err);
+    }
+
+    // Exit early when there is a CLTV limit related failure
+    if (!!err && !!err.details && cltvLimitErr.test(err.details)) {
+      return emitter.emit('failed', {is_route_not_found: true});
     }
 
     return emitter.emit('error', [503, 'UnexpectedPaymentError', {err}]);

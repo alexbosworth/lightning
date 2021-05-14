@@ -9,6 +9,11 @@ const tests = [
     error: 'ExpectedAmountFromRequestOrMillitokensOrTokens',
   },
   {
+    args: {max_fee_mtokens: 0},
+    description: 'Max fee mtokens must be specified as a string',
+    error: 'ExpectedMaxFeeMtokensValueAsString',
+  },
+  {
     args: {max_fee: 1, max_fee_mtokens: '2', tokens: 1},
     description: 'Max fee mtokens cannot contradict max fee',
     error: 'UnexpectedDifferingMaxFeeAndMaxFeeMtokens',

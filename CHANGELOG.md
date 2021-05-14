@@ -1,5 +1,9 @@
 # Versions
 
+## 3.3.7
+
+- On payment requests, validate millitokens maximum fee is either a string or undefined
+
 ## 3.3.6
 
 - `subscribeToForwards`: Correct output value documentation and type definitions

@@ -1,3 +1,4 @@
+const isString = n => typeof n === 'string';
 const {MAX_SAFE_INTEGER} = Number;
 const mtokPerTok = BigInt(1e3);
 
@@ -35,6 +36,10 @@ module.exports = args => {
   const hasMaxFeeTokens = args.max_fee !== undefined;
   const hasMtokens = !!args.mtokens;
   const hasTokens = args.tokens !== undefined;
+
+  if (args.max_fee_mtokens !== undefined && !isString(args.max_fee_mtokens)) {
+    throw new Error('ExpectedMaxFeeMtokensValueAsString');
+  }
 
   if (!args.request && !hasMtokens && !hasTokens) {
     throw new Error('ExpectedAmountFromRequestOrMillitokensOrTokens');
