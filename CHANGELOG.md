@@ -1,6 +1,6 @@
 # Versions
 
-## 3.3.8
+## 3.3.9
 
 - On payment requests, validate millitokens maximum fee is either a string or undefined
 

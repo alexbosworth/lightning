@@ -22,14 +22,14 @@
     "bolt09": "0.1.5",
     "cbor": "7.0.5",
     "express": "4.17.1",
-    "invoices": "1.2.0",
+    "invoices": "1.2.1",
     "psbt": "1.1.10"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
     "request-promise-native": "1.0.9",
     "tap": "15.0.9",
-    "tsd": "0.15.1",
+    "tsd": "0.16.0",
     "typescript": "4.3.2",
     "ws": "7.4.6"
   },
@@ -56,5 +56,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "3.3.8"
+  "version": "3.3.9"
 }
