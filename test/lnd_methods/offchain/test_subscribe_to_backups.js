@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const {promisify} = require('util');
 
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const {subscribeToBackups} = require('./../../../');
 

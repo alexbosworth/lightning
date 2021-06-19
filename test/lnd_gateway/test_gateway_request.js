@@ -1,5 +1,5 @@
 const {encode} = require('cbor');
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const gatewayRequest = require('./../../lnd_gateway/gateway_request');
 

@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 
 const BN = require('bn.js');
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const {getInfoResponse} = require('./../fixtures');
 const {getRouteToDestination} = require('./../../../');

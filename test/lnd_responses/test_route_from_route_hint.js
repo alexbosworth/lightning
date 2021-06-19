@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const routeFromHint = require('./../../lnd_responses/route_from_route_hint');
 

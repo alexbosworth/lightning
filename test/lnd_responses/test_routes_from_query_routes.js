@@ -1,6 +1,6 @@
 const {stringify} = JSON;
 
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const {routesFromQueryRoutes} = require('./../../lnd_responses');
 

@@ -58,6 +58,7 @@ const isHash = n => /^[0-9A-F]{64}$/i.test(n);
       }]
       mtokens: <Incoming Payment Millitokens String>
       [pending_index]: <Pending Payment Channel HTLC Index Number>
+      timeout: <HTLC CLTV Timeout Height Number>
       tokens: <Payment Tokens Number>
     }]
     received: <Received Tokens Number>

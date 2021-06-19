@@ -76,6 +76,8 @@ module.exports = args => {
     amounts.tokens = args.tokens;
   } else if (!args.request) {
     amounts.mtokens = args.mtokens;
+  } else if (hasMtokens) {
+    amounts.mtokens = args.mtokens;
   }
 
   return {

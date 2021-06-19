@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const scriptFromChainAddress = require('./../../../lnd_methods/onchain/script_from_chain_address');
 

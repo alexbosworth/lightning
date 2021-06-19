@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const wsUrl = require('./../../lnd_gateway/ws_url');
 

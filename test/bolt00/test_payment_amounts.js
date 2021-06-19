@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const {paymentAmounts} = require('./../../bolt00');
 
@@ -57,6 +57,11 @@ const tests = [
     args: {request: 'request'},
     description: 'A request can be set instead of tokens',
     expected: {max_fee: Number.MAX_SAFE_INTEGER},
+  },
+  {
+    args: {mtokens: '1', request: 'request'},
+    description: 'Request mtokens can be overridden',
+    expected: {max_fee: Number.MAX_SAFE_INTEGER, mtokens: '1'},
   },
 ];
 

@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const rpcHopFromHop = require('./../../lnd_requests/rpc_hop_from_hop');
 

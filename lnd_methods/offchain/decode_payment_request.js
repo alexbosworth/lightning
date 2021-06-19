@@ -22,8 +22,8 @@ const type = 'default';
     [cltv_delta]: <Final CLTV Delta Number>
     created_at: <Payment Request Created At ISO 8601 Date String>
     description: <Payment Description String>
-    description_hash: <Payment Longer Description Hash String>
-    destination: <Public Key String>
+    description_hash: <Payment Longer Description Hash Hex String>
+    destination: <Public Key Hex String>
     expires_at: <ISO 8601 Date String>
     features: [{
       bit: <BOLT 09 Feature Bit Number>
@@ -31,7 +31,7 @@ const type = 'default';
       is_required: <Feature Support is Required To Pay Bool>
       type: <Feature Type String>
     }]
-    id: <Payment Hash String>
+    id: <Payment Hash Hex String>
     is_expired: <Invoice is Expired Bool>
     mtokens: <Requested Millitokens String>
     [payment]: <Payment Identifier Hex Encoded String>

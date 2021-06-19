@@ -25,7 +25,6 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
     }]
     [incoming_peer]: <Incoming Peer Public Key Hex String>
     [is_ignoring_past_failures]: <Adjust Probe For Past Routing Failures Bool>
-    [is_strict_hints]: <Only Route Through Specified Paths Bool>
     lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Fee Tokens Number>
     [max_fee_mtokens]: <Maximum Fee Millitokens to Pay String>
@@ -118,7 +117,6 @@ module.exports = (args, cbk) => {
           ignore: args.ignore,
           incoming_peer: args.incoming_peer,
           is_ignoring_past_failures: args.is_ignoring_past_failures,
-          is_strict_hints: args.is_strict_hints,
           lnd: args.lnd,
           max_fee: args.max_fee,
           max_fee_mtokens: args.max_fee_mtokens,

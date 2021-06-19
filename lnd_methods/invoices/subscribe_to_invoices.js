@@ -6,7 +6,6 @@ const {rpcInvoiceAsInvoice} = require('./../../lnd_responses');
 const {isLnd} = require('./../../lnd_requests');
 
 const connectionFailureMessage = 'failed to connect to all addresses';
-const {min} = Math;
 const msPerSec = 1e3;
 const restartSubscriptionMs = 1000 * 30;
 const updateEvent = 'invoice_updated';
@@ -113,7 +112,7 @@ module.exports = args => {
           listener_count: eventEmitter.listenerCount(updateEvent),
         });
       },
-      min(...[args.restart_delay_ms, restartSubscriptionMs]));
+      args.restart_delay_ms || restartSubscriptionMs);
     };
 
     // Relay invoice updates to the emitter

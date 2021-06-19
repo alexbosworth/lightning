@@ -1,4 +1,4 @@
-const {test} = require('tap');
+const {test} = require('@alexbosworth/tap');
 
 const {rpcFeesAsChannelFees} = require('./../../lnd_responses');
 

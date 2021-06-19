@@ -62,6 +62,7 @@ const updateEvent = 'invoice_updated';
       }]
       mtokens: <Incoming Payment Millitokens String>
       [pending_index]: <Pending Payment Channel HTLC Index Number>
+      timeout: <HTLC CLTV Timeout Height Number>
       tokens: <Payment Tokens Number>
       [total_mtokens]: <Total Payment Millitokens String>
     }]

@@ -2,8 +2,8 @@ const {join} = require('path');
 const {readFile} = require('fs').promises;
 
 const asyncMap = require('async/map');
-const request = require('request-promise-native');
-const {test} = require('tap');
+const fetch = require('node-fetch');
+const {test} = require('@alexbosworth/tap');
 
 const {overrides} = require('./protos');
 const {protos} = require('./protos');
@@ -14,10 +14,12 @@ test('Check proto files are in-sync with LND master', async ({end, equal}) => {
   const protoFiles = await asyncMap(protos, async path => {
     const [filename, dir] = path.slice().reverse();
 
+    const remoteProtoUrl = `${rpcApi}/${join(dir || '', filename)}.proto`;
+
     return {
       filename,
       local: await readFile(join(protosDir, `${filename}.proto`)),
-      remote: await request(`${rpcApi}/${join(dir || '', filename)}.proto`),
+      remote: await (await fetch(remoteProtoUrl)).text(),
     };
   });
 

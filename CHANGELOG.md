@@ -1,5 +1,10 @@
 # Versions
 
+## 3.3.10
+
+- `pay`: Fix error when paying a zero amount invoice but specifying mtokens
+- `subscribeToInvoices`: Fix restart timeout to add longer default timeout
+
 ## 3.3.9
 
 - On payment requests, validate millitokens maximum fee is either a string or undefined

@@ -1,8 +1,6 @@
 # Lightning
 
 [![npm version](https://badge.fury.io/js/lightning.svg)](https://badge.fury.io/js/lightning)
-[![Coverage Status](https://coveralls.io/repos/github/alexbosworth/lightning/badge.svg?branch=master)](https://coveralls.io/github/alexbosworth/lightning?branch=master)
-[![Build Status](https://travis-ci.org/alexbosworth/lightning.svg?branch=master)](https://travis-ci.org/alexbosworth/lightning)
 
 Methods for working with the Lightning Network
 
