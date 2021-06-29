@@ -196,6 +196,20 @@ const tests = [
   },
   {
     args: makeInput({
+      is_amp: true,
+      is_keysend: false,
+      payment_request: undefined,
+      settled: true,
+    }),
+    description: 'AMP invoice mapped to invoice',
+    expected: makeExpected({
+      confirmed_at: '1970-01-01T00:00:01.000Z',
+      is_confirmed: true,
+      request: undefined,
+    }),
+  },
+  {
+    args: makeInput({
       payment_request: undefined,
       settled: true,
       value_msat: '0',

@@ -14,7 +14,7 @@ const utf8StringAsBuffer = str => Buffer.from(str, 'utf8');
   {
     lnd: <Authenticated LND API Object>
     message: <Message String>
-    signature: <Signature Hex String>
+    signature: <Signature String>
   }
 
   @returns via cbk or Promise

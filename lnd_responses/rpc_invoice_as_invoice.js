@@ -40,6 +40,7 @@ const mtokensPerToken = BigInt(1e3);
       resolve_time: <HTLC Removed At Epoch Time Number String>
       state: <HTLC Lifecycle State String>
     }]
+    is_amp: <Invoice Was AMP Bool>
     is_keysend: <Invoice Was Push Payment Bool>
     memo: <Memo String>
     payment_addr: <Payment Identifying Secret Buffer Object>
@@ -149,7 +150,7 @@ module.exports = args => {
     throw new Error('ExpectedMemoInLookupInvoiceResponse');
   }
 
-  if (!args.is_keysend && !args.payment_request) {
+  if (!args.is_amp && !args.is_keysend && !args.payment_request) {
     throw new Error('ExpectedPaymentRequestForInvoice');
   }
 
@@ -177,6 +178,7 @@ module.exports = args => {
   const createdAtEpochTime = Number(args.creation_date);
   const descHash = args.description_hash;
   const expiresInMs = Number(args.expiry) * msPerSec;
+  const isAmpPush = !args.request && !!args.is_amp;
   const mtok = (BigInt(args.value) * mtokensPerToken).toString();
   const payment = args.payment_addr.toString('hex');
   const settleDate = args.settle_date;
@@ -204,7 +206,7 @@ module.exports = args => {
     is_confirmed: args.settled,
     is_held: args.state === 'ACCEPTED' || undefined,
     is_private: args.private,
-    is_push: args.is_keysend || undefined,
+    is_push: isAmpPush || args.is_keysend || undefined,
     mtokens: args.value_msat === '0' ? mtok : args.value_msat,
     payment: payment || undefined,
     payments: args.htlcs.map(htlcAsPayment),

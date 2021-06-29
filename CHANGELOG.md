@@ -1,6 +1,6 @@
 # Versions
 
-## 3.3.11
+## 3.3.12
 
 - `getWalletVersion`: Add support for LND 0.13.0
 
