@@ -6,7 +6,9 @@ const {returnResult} = require('asyncjs-util');
 const {nodeInfoAsNode} = require('./../../lnd_responses');
 const getChannel = require('./get_channel');
 const {isLnd} = require('./../../lnd_requests');
+const getWalletVersion = require('./get_wallet_version');
 
+const badVers = ['0.11.0-beta', '0.11.1-beta', '0.12.0-beta', '0.12.1-beta'];
 const colorTemplate = '#000000';
 const getChannelLimit = 20;
 const {isArray} = Array;
@@ -101,8 +103,18 @@ module.exports = (args, cbk) => {
         });
       }],
 
+      // Get version
+      getVersion: ['validate', ({}, cbk) => {
+        return getWalletVersion({lnd: args.lnd}, cbk);
+      }],
+
       // Get channels
-      getChannels: ['getNode', ({getNode}, cbk) => {
+      getChannels: ['getNode', 'getVersion', ({getNode, getVersion}, cbk) => {
+        // In LND 0.13.0 and after the returned channel data is accurate
+        if (!badVers.includes(getVersion.version)) {
+          return cbk(null, getNode.channels);
+        }
+
         const channelIds = getNode.channels.map(n => n.id);
 
         // Fetch the channels directly as getNode gives back wrong policies

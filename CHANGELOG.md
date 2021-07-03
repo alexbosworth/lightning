@@ -1,5 +1,9 @@
 # Versions
 
+## 3.3.13
+
+- `getNode`: Optimize channel lookup speed on LND 0.13.0
+
 ## 3.3.12
 
 - `getWalletVersion`: Add support for LND 0.13.0

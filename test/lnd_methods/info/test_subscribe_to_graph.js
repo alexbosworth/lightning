@@ -76,6 +76,14 @@ const makeLnd = ({}) => {
         return emitter;
       },
     },
+    version: {
+      getVersion: ({}, cbk) => cbk(err, {
+        app_minor: 1,
+        app_patch: 1,
+        build_tags: ['autopilotrpc'],
+        commit_hash: Buffer.alloc(20).toString('hex'),
+      }),
+    },
   };
 };
 
@@ -104,6 +112,14 @@ const tests = [
 
             return emitter;
           },
+        },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
         },
       },
     },
@@ -135,6 +151,14 @@ const tests = [
             return emitter;
           },
         },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
+        },
       },
     },
     description: 'Closed channels are expected',
@@ -164,6 +188,14 @@ const tests = [
 
             return emitter;
           },
+        },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
         },
       },
     },
@@ -225,6 +257,14 @@ const tests = [
             return emitter;
           },
         },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
+        },
       },
     },
     description: 'Closed errors are emitted',
@@ -255,6 +295,14 @@ const tests = [
             return emitter;
           },
         },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
+        },
       },
     },
     description: 'Node errors are emitted',
@@ -284,6 +332,14 @@ const tests = [
 
             return emitter;
           },
+        },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
         },
       },
     },
@@ -316,6 +372,14 @@ const tests = [
 
             return emitter;
           },
+        },
+        version: {
+          getVersion: ({}, cbk) => cbk(err, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
         },
       },
     },
@@ -363,6 +427,14 @@ const tests = [
 
             return emitter;
           },
+        },
+        version: {
+          getVersion: ({}, cbk) => cbk(null, {
+            app_minor: 1,
+            app_patch: 1,
+            build_tags: ['autopilotrpc'],
+            commit_hash: Buffer.alloc(20).toString('hex'),
+          }),
         },
       },
     },
