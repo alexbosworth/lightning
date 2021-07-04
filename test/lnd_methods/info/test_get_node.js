@@ -2,7 +2,7 @@ const {test} = require('@alexbosworth/tap');
 
 const {getNode} = require('./../../../');
 
-const makeLnd = ({err, res}) => {
+const makeLnd = ({err, getVersionErr, res}) => {
   const response = {
     channels: [{
       capacity: '1',
@@ -73,13 +73,59 @@ const makeLnd = ({err, res}) => {
       getNodeInfo: ({}, cbk) => cbk(err, res || response),
     },
     version: {
-      getVersion: ({}, cbk) => cbk(err, {
+      getVersion: ({}, cbk) => cbk(getVersionErr, {
         app_minor: 1,
         app_patch: 1,
         build_tags: ['autopilotrpc'],
         commit_hash: Buffer.alloc(20).toString('hex'),
       }),
     },
+  };
+};
+
+const makeExpected = ({}) => {
+  return {
+    alias: 'alias',
+    capacity: 1,
+    channel_count: 1,
+    channels: [{
+      id: '0x0x0',
+      capacity: 1,
+      policies: [
+        {
+          base_fee_mtokens: '1',
+          cltv_delta: 1,
+          fee_rate: 1,
+          is_disabled: true,
+          max_htlc_mtokens: '1',
+          min_htlc_mtokens: '1',
+          public_key: Buffer.alloc(33).toString('hex'),
+          updated_at: '1970-01-01T00:00:01.000Z',
+        },
+        {
+          base_fee_mtokens: '2',
+          cltv_delta: 2,
+          fee_rate: 2,
+          is_disabled: false,
+          max_htlc_mtokens: '2',
+          min_htlc_mtokens: '2',
+          public_key: Buffer.alloc(33, 1).toString('hex'),
+          updated_at: '1970-01-01T00:00:01.000Z',
+        },
+      ],
+      transaction_id: Buffer.alloc(32).toString('hex'),
+      transaction_vout: 0,
+      updated_at: '1970-01-01T00:00:01.000Z',
+    }],
+    color: '#123456',
+    features: [{
+      bit: 1,
+      is_known: true,
+      is_required: false,
+      type: 'data_loss_protection',
+    }],
+    sockets: [{socket: 'addr', type: 'network'}],
+    updated_at: '1970-01-01T00:00:01.000Z',
   };
 };
 
@@ -115,49 +161,12 @@ const tests = [
   {
     args: {lnd: makeLnd({}), public_key: 'public_key'},
     description: 'Node details are returned from get node',
-    expected: {
-      alias: 'alias',
-      capacity: 1,
-      channel_count: 1,
-      channels: [{
-        id: '0x0x0',
-        capacity: 1,
-        policies: [
-          {
-            base_fee_mtokens: '1',
-            cltv_delta: 1,
-            fee_rate: 1,
-            is_disabled: true,
-            max_htlc_mtokens: '1',
-            min_htlc_mtokens: '1',
-            public_key: Buffer.alloc(33).toString('hex'),
-            updated_at: '1970-01-01T00:00:01.000Z',
-          },
-          {
-            base_fee_mtokens: '2',
-            cltv_delta: 2,
-            fee_rate: 2,
-            is_disabled: false,
-            max_htlc_mtokens: '2',
-            min_htlc_mtokens: '2',
-            public_key: Buffer.alloc(33, 1).toString('hex'),
-            updated_at: '1970-01-01T00:00:01.000Z',
-          },
-        ],
-        transaction_id: Buffer.alloc(32).toString('hex'),
-        transaction_vout: 0,
-        updated_at: '1970-01-01T00:00:01.000Z',
-      }],
-      color: '#123456',
-      features: [{
-        bit: 1,
-        is_known: true,
-        is_required: false,
-        type: 'data_loss_protection',
-      }],
-      sockets: [{socket: 'addr', type: 'network'}],
-      updated_at: '1970-01-01T00:00:01.000Z',
-    },
+    expected: makeExpected({}),
+  },
+  {
+    args: {lnd: makeLnd({getVersionErr: 'err'}), public_key: 'public_key'},
+    description: 'Node details are returned from get node',
+    expected: makeExpected({}),
   },
 ];
 

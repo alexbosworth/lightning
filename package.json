@@ -31,7 +31,7 @@
     "node-fetch": "2.6.1",
     "tsd": "0.17.0",
     "typescript": "4.3.5",
-    "ws": "7.5.1"
+    "ws": "7.5.2"
   },
   "engines": {
     "node": ">=10.10.0"
@@ -56,5 +56,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "3.3.13"
+  "version": "3.3.14"
 }

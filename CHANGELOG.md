@@ -1,5 +1,9 @@
 # Versions
 
+## 3.3.14
+
+- `getNode`: Return to fallback channels lookup when version check is unavailable
+
 ## 3.3.13
 
 - `getNode`: Optimize channel lookup speed on LND 0.13.0

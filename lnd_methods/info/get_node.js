@@ -105,13 +105,20 @@ module.exports = (args, cbk) => {
 
       // Get version
       getVersion: ['validate', ({}, cbk) => {
-        return getWalletVersion({lnd: args.lnd}, cbk);
+        return getWalletVersion({lnd: args.lnd}, (err, res) => {
+          // Ignore errors on wallet version
+          if (!!err) {
+            return cbk();
+          }
+
+          return cbk(null, res);
+        });
       }],
 
       // Get channels
       getChannels: ['getNode', 'getVersion', ({getNode, getVersion}, cbk) => {
         // In LND 0.13.0 and after the returned channel data is accurate
-        if (!badVers.includes(getVersion.version)) {
+        if (!!getVersion && !badVers.includes(getVersion.version)) {
           return cbk(null, getNode.channels);
         }
 
