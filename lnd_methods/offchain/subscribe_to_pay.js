@@ -336,7 +336,7 @@ module.exports = args => {
       sub.on('error', err => {
         sub.removeAllListeners();
 
-        return cbk(err)
+        return cbk(err);
       });
 
       return;

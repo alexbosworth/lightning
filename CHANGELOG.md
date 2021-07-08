@@ -1,5 +1,10 @@
 # Versions
 
+## 3.3.15
+
+- `getNode`: Return to fallback channels lookup when version commit hash is unavailable
+- `getWalletVersion`: Add support for builds that do not report a commit hash
+
 ## 3.3.14
 
 - `getNode`: Return to fallback channels lookup when version check is unavailable

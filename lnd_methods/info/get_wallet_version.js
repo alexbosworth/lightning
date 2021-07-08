@@ -76,7 +76,8 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'ExpectedArrayOfBuildTagsInGetVersionResponse']);
           }
 
-          if (!isHash(res.commit_hash)) {
+          // Some builds do not report a commit hash
+          if (!!res.commit_hash && !isHash(res.commit_hash)) {
             return cbk([503, 'ExpectedCommitHashInGetVersionResponse']);
           }
 

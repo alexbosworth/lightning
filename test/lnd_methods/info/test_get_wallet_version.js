@@ -62,7 +62,7 @@ const tests = [
     error: [503, 'ExpectedArrayOfBuildTagsInGetVersionResponse'],
   },
   {
-    args: {lnd: makeLnd({res: makeResponse({commit_hash: undefined})})},
+    args: {lnd: makeLnd({res: makeResponse({commit_hash: 'commit_hash'})})},
     description: 'Commit hash is expected',
     error: [503, 'ExpectedCommitHashInGetVersionResponse'],
   },
