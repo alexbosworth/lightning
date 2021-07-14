@@ -13,7 +13,7 @@ const makeForwardResponse = () => {
     incoming_htlc_id: '0',
     outgoing_channel_id: '2',
     outgoing_htlc_id: '1',
-    settle_event: {},
+    settle_event: {preimage: Buffer.alloc(0)},
     timestamp_ns: (1e6).toString(),
   };
 };
@@ -48,6 +48,7 @@ const tests = [
         mtokens: undefined,
         out_channel: '0x0x2',
         out_payment: 1,
+        secret: undefined,
         timeout: undefined,
         tokens: undefined,
       },

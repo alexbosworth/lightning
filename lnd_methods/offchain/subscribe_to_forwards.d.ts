@@ -29,6 +29,8 @@ export type SubscribeToForwardsForwardEvent = {
   out_channel?: string;
   /** Outgoing Channel Payment Id */
   out_payment?: number;
+  /** Settled Preimage Hex String */
+  secret?: string
   /** Forward Timeout at Height */
   timeout?: number;
   /** Sending Tokens */

@@ -3,6 +3,7 @@ const {chanFormat} = require('bolt07');
 const {htlcTypes} = require('./constants');
 const {safeTokens} = require('./../bolt00');
 
+const bufferAsHex = buffer => buffer.toString('hex');
 const nsPerMs = BigInt(1e6);
 
 /** Get RPC HTLC Event as a forward event
@@ -33,7 +34,9 @@ const nsPerMs = BigInt(1e6);
     }
     outgoing_channel_id: <Outbound Channel Numeric Id String>
     outgoing_htlc_id: <Outbound Channel Historic Index Number>
-    [settle_event]: <Settle Event Object>
+    [settle_event]: {
+      preimage: <HTLC Preimage Buffer Object>
+    }
     timestamp_ns: <Timestamp Nanoseconds String>
   }
 
@@ -57,6 +60,7 @@ const nsPerMs = BigInt(1e6);
     [mtokens]: <Sending Millitokens String>
     [out_channel]: <Outgoing Standard Format Channel Id String>
     [out_payment]: <Outgoing Channel Payment Id Number>
+    [secret]: <Settled Preimage Hex String>
     [timeout]: <Forward Timeout at Height Number>
     [tokens]: <Sending Tokens Number>
   }
@@ -134,6 +138,10 @@ module.exports = htlc => {
     throw new Error('ExpectedOutgoingHtlcIdToDeriveForward');
   }
 
+  if (!!htlc.settle_event && !Buffer.isBuffer(htlc.settle_event.preimage)) {
+    throw new Error('ExpectedHtlcPreimageInForwardedSettleEvent');
+  }
+
   if (!htlc.timestamp_ns) {
     throw new Error('ExpectedHtlcTimestampToDeriveForward');
   }
@@ -147,6 +155,7 @@ module.exports = htlc => {
   const isSend = htlc.event_type === htlcTypes.send;
   const outgoing = chanFormat({number: htlc.outgoing_channel_id});
   const outgoingId = Number(htlc.outgoing_htlc_id);
+  const settleEvent = htlc.settle_event || {preimage: Buffer.alloc(Number())};
 
   // Exit early when there is no extended info, for failed forwards and settles
   if (!!htlc.forward_fail_event || !!htlc.settle_event) {
@@ -166,6 +175,7 @@ module.exports = htlc => {
       mtokens: undefined,
       out_channel: !!isReceive ? undefined : outgoing.channel,
       out_payment: !!isReceive ? undefined : outgoingId,
+      secret: bufferAsHex(settleEvent.preimage) || undefined,
       timeout: undefined,
       tokens: undefined,
     };
@@ -201,6 +211,7 @@ module.exports = htlc => {
     mtokens: !!isReceive ? undefined : info.outgoing_amt_msat,
     out_channel: !!isReceive ? undefined : outgoing.channel,
     out_payment: !!isReceive ? undefined : outgoingId,
+    secret: bufferAsHex(settleEvent.preimage) || undefined,
     timeout: !!isReceive ? undefined : outgoingCltvHeight,
     tokens: !!isReceive ? undefined : tokens,
   };

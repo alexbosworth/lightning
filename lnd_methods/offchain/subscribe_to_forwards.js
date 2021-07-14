@@ -16,6 +16,8 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
 
   Requires `offchain:read` permission
 
+  Node: LND 0.13.1 and below do not return `secret` for forwards
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -45,6 +47,7 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
     [mtokens]: <Sending Millitokens String>
     [out_channel]: <Outgoing Standard Format Channel Id String>
     [out_payment]: <Outgoing Channel Payment Id Number>
+    [secret]: <Settled Preimage Hex String>
     [timeout]: <Forward Timeout at Height Number>
     [tokens]: <Sending Tokens Number>
   }

@@ -67,6 +67,7 @@ const makeExpected = overrides => {
     mtokens: '1',
     out_channel: '0x0x2',
     out_payment: 1,
+    secret: undefined,
     timeout: 1,
     tokens: 0,
   };
@@ -181,6 +182,11 @@ const tests = [
     error: 'ExpectedForwardEventOutgoingTimelockToDeriveForward',
   },
   {
+    args: makeHtlc({settle_event: {}}),
+    description: 'A preimage is expected when a settle event is emitted',
+    error: 'ExpectedHtlcPreimageInForwardedSettleEvent',
+  },
+  {
     args: makeHtlc({outgoing_channel_id: undefined}),
     description: 'Outgoing channel id is expected',
     error: 'ExpectedOutgoingChannelIdToDeriveForward',
@@ -255,7 +261,7 @@ const tests = [
     args: makeHtlc({
       event_type: 'SEND',
       forward_event: undefined,
-      settle_event: {},
+      settle_event: {preimage: Buffer.alloc(32, 1)},
     }),
     description: 'HTLC send settle mapped to forward',
     expected: makeExpected({
@@ -267,6 +273,7 @@ const tests = [
       is_confirmed: true,
       is_send: true,
       mtokens: undefined,
+      secret: '0101010101010101010101010101010101010101010101010101010101010101',
       timeout: undefined,
       tokens: undefined,
     }),
@@ -275,7 +282,7 @@ const tests = [
     args: makeHtlc({
       event_type: 'RECEIVE',
       forward_event: undefined,
-      settle_event: {},
+      settle_event: {preimage: Buffer.alloc(0)},
     }),
     description: 'HTLC receive settle mapped to forward',
     expected: makeExpected({
