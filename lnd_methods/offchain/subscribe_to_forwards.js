@@ -16,7 +16,7 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
 
   Requires `offchain:read` permission
 
-  Node: LND 0.13.1 and below do not return `secret` for forwards
+  Note: LND 0.13.1 and below do not return `secret` for forwards
 
   {
     lnd: <Authenticated LND API Object>
