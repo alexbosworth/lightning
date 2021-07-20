@@ -15,6 +15,9 @@ export type FundPsbtArgs = AuthenticatedLightningArgs<
       transaction_vout: number;
     }[];
 
+    /** Spend UTXOs With Minimum Confirmations */
+    min_confirmations?: number;
+
     /** Confirmations To Wait */
     target_confirmations?: number;
   } & Xor<
@@ -68,6 +71,8 @@ export type FundPsbtResult = {
  * Requires LND built with `walletrpc` tag
  *
  * This method is not supported in LND 0.11.1 and below
+ *
+ * Specifying 0 for `min_confirmations` is not supported in LND 0.13.0 and below
  */
 export const fundPsbt: AuthenticatedLightningMethod<
   FundPsbtArgs,

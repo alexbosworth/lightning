@@ -143,6 +143,11 @@ const tests = [
     expected: makeExpected({}),
   },
   {
+    args: makeArgs({min_confirmations: 0}),
+    description: 'PSBT funding is executed with min confs specified',
+    expected: makeExpected({}),
+  },
+  {
     args: makeArgs({psbt, fee_tokens_per_vbyte: 1, outputs: undefined}),
     description: 'PSBT funding can specify fee rate and use a PSBT',
     expected: makeExpected({}),

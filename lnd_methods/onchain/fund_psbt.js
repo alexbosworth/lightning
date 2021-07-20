@@ -30,6 +30,8 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
 
   This method is not supported in LND 0.11.1 and below
 
+  Specifying 0 for `min_confirmations` is not supported in LND 0.13.0 and below
+
   {
     [fee_tokens_per_vbyte]: <Chain Fee Tokens Per Virtual Byte Number>
     [inputs]: [{
@@ -37,6 +39,7 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
       transaction_vout: <Unspent Transaction Output Index Number>
     }]
     lnd: <Authenticated LND API Object>
+    [min_confirmations]: <Spend UTXOs With Minimum Confirmations Number>
     [outputs]: [{
       address: <Chain Address String>
       tokens: <Send Tokens Tokens Number>
@@ -112,6 +115,15 @@ module.exports = (args, cbk) => {
         return cbk(null, inputs);
       }],
 
+      // Minimum confirmations for UTXOs to select
+      minConfs: ['validate', ({}, cbk) => {
+        if (args.min_confirmations === Number()) {
+          return cbk(null, args.min_confirmations);
+        }
+
+        return cbk(null, args.min_confirmations || undefined);
+      }],
+
       // Raw outputs to send to
       outputs: ['validate', ({}, cbk) => {
         if (!args.outputs) {
@@ -138,11 +150,13 @@ module.exports = (args, cbk) => {
       }],
 
       // Fund the PSBT
-      fund: ['fee', 'funding', ({fee, funding}, cbk) => {
+      fund: ['fee', 'funding', 'minConfs', ({fee, funding, minConfs}, cbk) => {
         return args.lnd[type][method]({
+          min_confs: minConfs !== undefined ? minConfs : undefined,
           psbt: !!args.psbt ? Buffer.from(args.psbt, 'hex') : undefined,
           raw: funding || undefined,
           sat_per_vbyte: fee.fee_tokens_per_vbyte || undefined,
+          spend_unconfirmed: minConfs === Number() || undefined,
           target_conf: fee.target_confirmations || undefined,
         },
         (err, res) => {
