@@ -107,6 +107,7 @@ const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {unlockUtxo} = require('./lnd_methods');
 const {updateConnectedWatchtower} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
+const {updatePathfindingSettings} = require('./lnd_methods');
 const {updateRoutingFees} = require('./lnd_methods');
 const {verifyBackup} = require('./lnd_methods');
 const {verifyBackups} = require('./lnd_methods');
@@ -223,6 +224,7 @@ module.exports = {
   unlockUtxo,
   updateConnectedWatchtower,
   updateChainTransaction,
+  updatePathfindingSettings,
   updateRoutingFees,
   verifyBackup,
   verifyBackups,
