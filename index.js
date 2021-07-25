@@ -61,6 +61,7 @@ const {getWalletInfo} = require('./lnd_methods');
 const {getWalletVersion} = require('./lnd_methods');
 const {grantAccess} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
+const {isDestinationPayable} = require('./lnd_methods');
 const {lndGateway} = require('./lnd_gateway');
 const {lockUtxo} = require('./lnd_methods');
 const {openChannel} = require('./lnd_methods');
@@ -174,6 +175,7 @@ module.exports = {
   getWalletVersion,
   grantAccess,
   grpcRouter,
+  isDestinationPayable,
   lndGateway,
   lockUtxo,
   openChannel,
