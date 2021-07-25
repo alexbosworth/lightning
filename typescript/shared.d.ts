@@ -2,16 +2,14 @@ import * as events from 'events';
 import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
 import {Xor} from './util';
 
-export type AuthenticatedLightningArgs<
-  TArgs = undefined
-> = TArgs extends undefined
-  ? {lnd: AuthenticatedLnd}
-  : TArgs & {lnd: AuthenticatedLnd};
-export type UnauthenticatedLightningArgs<
-  TArgs = undefined
-> = TArgs extends undefined
-  ? {lnd: AuthenticatedLnd}
-  : TArgs & {lnd: AuthenticatedLnd};
+export type AuthenticatedLightningArgs<TArgs = undefined> =
+  TArgs extends undefined
+    ? {lnd: AuthenticatedLnd}
+    : TArgs & {lnd: AuthenticatedLnd};
+export type UnauthenticatedLightningArgs<TArgs = undefined> =
+  TArgs extends undefined
+    ? {lnd: UnauthenticatedLnd}
+    : TArgs & {lnd: UnauthenticatedLnd};
 
 export type LightningError<TDetails = any> = [number, string, TDetails];
 
