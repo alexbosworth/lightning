@@ -3,6 +3,7 @@ const {authenticatedLndGrpc} = require('./lnd_grpc');
 const {broadcastChainTransaction} = require('./lnd_methods');
 const {cancelHodlInvoice} = require('./lnd_methods');
 const {cancelPendingChannel} = require('./lnd_methods');
+const {changePassword} = require('./lnd_methods');
 const {closeChannel} = require('./lnd_methods');
 const {connectWatchtower} = require('./lnd_methods');
 const {createChainAddress} = require('./lnd_methods');
@@ -109,6 +110,7 @@ module.exports = {
   broadcastChainTransaction,
   cancelHodlInvoice,
   cancelPendingChannel,
+  changePassword,
   closeChannel,
   connectWatchtower,
   createChainAddress,
