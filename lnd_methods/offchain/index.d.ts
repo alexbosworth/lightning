@@ -1,6 +1,7 @@
 export * from './connect_watchtower';
 export * from './decode_payment_request';
 export * from './delete_failed_pay_attempts';
+export * from './delete_failed_payments';
 export * from './delete_forwarding_reputations';
 export * from './delete_payments';
 export * from './get_backup';

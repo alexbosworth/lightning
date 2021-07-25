@@ -10,6 +10,7 @@ const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
 const {decodePaymentRequest} = require('./lnd_methods');
 const {deleteFailedPayAttempts} = require('./lnd_methods');
+const {deleteFailedPayments} = require('./lnd_methods');
 const {deleteForwardingReputations} = require('./lnd_methods');
 const {deletePayments} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
@@ -117,6 +118,7 @@ module.exports = {
   createInvoice,
   decodePaymentRequest,
   deleteFailedPayAttempts,
+  deleteFailedPayments,
   deleteForwardingReputations,
   deletePayments,
   diffieHellmanComputeSecret,
