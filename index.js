@@ -15,6 +15,7 @@ const {deleteForwardingReputations} = require('./lnd_methods');
 const {deletePayments} = require('./lnd_methods');
 const {disableChannel} = require('./lnd_methods');
 const {disconnectWatchtower} = require('./lnd_methods');
+const {enableChannel} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {emitGrpcEvents} = require('./lnd_gateway');
 const {fundPendingChannels} = require('./lnd_methods');
@@ -125,6 +126,7 @@ module.exports = {
   deletePayments,
   disableChannel,
   disconnectWatchtower,
+  enableChannel,
   diffieHellmanComputeSecret,
   emitGrpcEvents,
   fundPendingChannels,
