@@ -43,6 +43,10 @@ export type AuthenticatedLightningSubscription<
   TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd}
 > = (args: TArgs) => events.EventEmitter;
 
+export type UnauthenticatedLightningSubscription<
+  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd}
+> = (args: TArgs) => events.EventEmitter;
+
 type CommonStatus = 'IN_FLIGHT' | 'SUCCEEDED' | 'FAILED';
 
 export type AttemptState = CommonStatus;
