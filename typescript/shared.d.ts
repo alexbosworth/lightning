@@ -2,16 +2,16 @@ import * as events from 'events';
 import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
 import {Xor} from './util';
 
-export type AuthenticatedLightningArgs<
-  TArgs = undefined
-> = TArgs extends undefined
-  ? {lnd: AuthenticatedLnd}
-  : TArgs & {lnd: AuthenticatedLnd};
-export type UnauthenticatedLightningArgs<
-  TArgs = undefined
-> = TArgs extends undefined
-  ? {lnd: AuthenticatedLnd}
-  : TArgs & {lnd: AuthenticatedLnd};
+export type EmptyObject = {[key: string]: never};
+
+export type AuthenticatedLightningArgs<TArgs = undefined> =
+  TArgs extends undefined
+    ? {lnd: AuthenticatedLnd}
+    : TArgs & {lnd: AuthenticatedLnd};
+export type UnauthenticatedLightningArgs<TArgs = undefined> =
+  TArgs extends undefined
+    ? {lnd: UnauthenticatedLnd}
+    : TArgs & {lnd: UnauthenticatedLnd};
 
 export type LightningError<TDetails = any> = [number, string, TDetails];
 
@@ -21,7 +21,7 @@ export type LightningCallback<TResult = void, TErrorDetails = any> = (
 ) => void;
 
 export type LightningMethod<
-  TArgs = {[key: string]: never},
+  TArgs = EmptyObject,
   TResult = void,
   TErrorDetails = any
 > = {
@@ -43,6 +43,10 @@ export type UnauthenticatedLightningMethod<
 
 export type AuthenticatedLightningSubscription<
   TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd}
+> = (args: TArgs) => events.EventEmitter;
+
+export type UnauthenticatedLightningSubscription<
+  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd}
 > = (args: TArgs) => events.EventEmitter;
 
 type CommonStatus = 'IN_FLIGHT' | 'SUCCEEDED' | 'FAILED';

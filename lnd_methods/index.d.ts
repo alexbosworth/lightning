@@ -8,3 +8,4 @@ export * from './offchain';
 export * from './onchain';
 export * from './peers';
 export * from './signer';
+export * from './unauthenticated';
