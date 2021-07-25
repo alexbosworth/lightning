@@ -9,6 +9,7 @@ const {connectWatchtower} = require('./lnd_methods');
 const {createChainAddress} = require('./lnd_methods');
 const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
+const {createSeed} = require('./lnd_methods');
 const {decodePaymentRequest} = require('./lnd_methods');
 const {deleteForwardingReputations} = require('./lnd_methods');
 const {deletePayments} = require('./lnd_methods');
@@ -116,6 +117,7 @@ module.exports = {
   createChainAddress,
   createHodlInvoice,
   createInvoice,
+  createSeed,
   decodePaymentRequest,
   deleteForwardingReputations,
   deletePayments,
