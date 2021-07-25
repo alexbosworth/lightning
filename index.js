@@ -99,6 +99,7 @@ const {subscribeToProbeForRoute} = require('./lnd_methods');
 const {subscribeToTransactions} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {unlockUtxo} = require('./lnd_methods');
+const {unlockWallet} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
 const {updateRoutingFees} = require('./lnd_methods');
 const {verifyBackup} = require('./lnd_methods');
@@ -208,6 +209,7 @@ module.exports = {
   subscribeToTransactions,
   unauthenticatedLndGrpc,
   unlockUtxo,
+  unlockWallet,
   updateChainTransaction,
   updateRoutingFees,
   verifyBackup,
