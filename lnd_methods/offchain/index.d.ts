@@ -27,6 +27,7 @@ export * from './pay_via_payment_details';
 export * from './pay_via_payment_request';
 export * from './pay_via_routes';
 export * from './pay';
+export * from './probe_for_route';
 export * from './recover_funds_from_channel';
 export * from './recover_funds_from_channels';
 export * from './subscribe_to_backups';

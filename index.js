@@ -71,6 +71,7 @@ const {payViaPaymentRequest} = require('./lnd_methods');
 const {payViaRoutes} = require('./lnd_methods');
 const {pay} = require('./lnd_methods');
 const {prepareForChannelProposal} = require('./lnd_methods');
+const {probeForRoute} = require('./lnd_methods');
 const {proposeChannel} = require('./lnd_methods');
 const {recoverFundsFromChannel} = require('./lnd_methods');
 const {recoverFundsFromChannels} = require('./lnd_methods');
@@ -185,6 +186,7 @@ module.exports = {
   payViaRoutes,
   pay,
   prepareForChannelProposal,
+  probeForRoute,
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
