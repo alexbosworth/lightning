@@ -2,6 +2,8 @@ import * as events from 'events';
 import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
 import {Xor} from './util';
 
+export type EmptyObject = {[key: string]: never};
+
 export type AuthenticatedLightningArgs<TArgs = undefined> =
   TArgs extends undefined
     ? {lnd: AuthenticatedLnd}
@@ -19,7 +21,7 @@ export type LightningCallback<TResult = void, TErrorDetails = any> = (
 ) => void;
 
 export type LightningMethod<
-  TArgs = {[key: string]: never},
+  TArgs = EmptyObject,
   TResult = void,
   TErrorDetails = any
 > = {
