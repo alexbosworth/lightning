@@ -44,7 +44,8 @@ export type IsDestinationPayableResult = {
 };
 
 /**
- * Probe to find a successful route
+ * Determine if a payment destination is actually payable by probing it
+ *
  * Requires `offchain:write` permission
  */
 export const isDestinationPayable: AuthenticatedLightningMethod<
