@@ -1,5 +1,24 @@
 # Versions
 
+## 3.5.0
+
+- `changePassword`: Add method to update the wallet password
+- `createSeed`: Add method to generate a wallet seed
+- `createWallet`: Add method to make a new wallet
+- `deleteFailedPayAttempts`: Add method to remove failed payment attempt data
+- `deleteFailedPayments`: Add method to remove failed payment data
+- `disableChannel`: Add method to mark a channel as forwarding disabled
+- `disconnectWatchtower`: Add method to remove a connected watchtower
+- `enableChannel`: Add method to signal forwarding enabled to a peer
+- `getConnectedWatchtowers`: Add method to list watchtowers that are connected
+- `getPathfindingSettings`: Add method to fetch configuration for pathfinding
+- `isDestinationPayable`: Add method to deterrmine if a destination can be paid
+- `probeForRoute`: Add method to probe to find a route to a destination
+- `subscribeToWalletStatus`: Add method to get updated on wallet lock status
+- `unlockWallet`: Add method to decrypt and start a wallet
+- `updateConnectedWatchtower`: Add method to edit a connected watchtower
+- `updatePathfindingSettings`: Add method to edit route finding heuristic configuration
+
 ## 3.4.0
 
 - `getWalletVersion`: Add support for LND 0.13.1-beta

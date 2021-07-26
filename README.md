@@ -42,7 +42,7 @@ There are two libraries, [ln-service](https://github.com/alexbosworth/ln-service
 
 Methods exported by this library support typescript, but ln-service includes additional metthods.
 
-- [Documetatiion of Methods]: https://github.com/alexbosworth/ln-service#all-methods
+- [Documentation of Methods]: https://github.com/alexbosworth/ln-service#all-methods
 
 - [addPeer](https://github.com/alexbosworth/ln-service#addpeer): Connect to a new peer
 - [authenticatedLndGrpc](https://github.com/alexbosworth/ln-service#authenticatedlndgrpc): 
@@ -55,6 +55,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Cancel a pending channel.
 - [closeChannel](https://github.com/alexbosworth/ln-service#closechannel): Close a channel out to
     the chain.
+- [changePassword](https://github.com/alexbosworth/ln-service#changepassword): Update the
+    wallet encryption passphrase.
 - [connectWatchtower](https://github.com/alexbosworth/ln-service#connectwatchtower): Connect a
     new watchtower.
 - [createChainAddress](https://github.com/alexbosworth/ln-service#createchainaddress): Generate
@@ -63,14 +65,28 @@ Methods exported by this library support typescript, but ln-service includes add
     off-chain invoice that will not automatically accept payment.
 - [createInvoice](https://github.com/alexbosworth/ln-service#createinvoice): Make a new off-chain
     invoice.
+- [createSeed](https://github.com/alexbosworth/ln-service#createseed): Generate a random wallet
+    HD seed.
+- [createWallet](https://github.com/alexbosworth/ln-service#createwallet): Make a new wallet.
 - [decodePaymentRequest](https://github.com/alexbosworth/ln-service#decodepaymentrequest):
     Get parsed details for a payment request.
+- [createWallet](https://github.com/alexbosworth/ln-service#createwallet): Make a new wallet.
+- [deleteFailedPayAttempts](https://github.com/alexbosworth/ln-service#deletefailedpayattempts)
+    Remove failed payment paths from database.
+- [deleteFailedPayments](https://github.com/alexbosworth/ln-service#deletefailedpayments)
+    Remove failed payments from the database.
 - [deleteForwardingReputations](https://github.com/alexbosworth/ln-service#deleteforwardingreputations)
     Clear pathfinding reputations of routing nodes and channels.
 - [deletePayments](https://github.com/alexbosworth/ln-service#deletepayments): Remove all
     past payment records.
 - [diffieHellmanComputeSecret](https://github.com/alexbosworth/ln-service#diffiehellmancomputesecret):
     Calculate a shared secret to enable symmetric encryption of data to another node.
+- [disableChannel](https://github.com/alexbosworth/ln-service#disablechannel): Signal disabled
+    forwarding to a peer
+- [disconnectWatchtower](https://github.com/alexbosworth/ln-service#disconnectwatchtower):
+    Remove a connected watchtower
+- [enableChannel](https://github.com/alexbosworth/ln-service#enablechannel): Signal forwarding
+    enabled towards a peer.
 - [fundPendingChannels](https://github.com/alexbosworth/ln-service#fundpendingchannels):
     Provide a signed funding source for opening channels.
 - [fundPsbt](https://github.com/alexbosworth/ln-service#fundpsbt): Make a PSBT with funds and
@@ -99,6 +115,8 @@ Methods exported by this library support typescript, but ln-service includes add
     the node.
 - [getClosedChannels](https://github.com/alexbosworth/ln-service#getclosedchannels): List closed
     channels on the node.
+- [getConnectedWatchtowers](https://github.com/alexbosworth/ln-service#getconnectedwatchtowers):
+    List watchtowers that were added
 - [getFeeRates](https://github.com/alexbosworth/ln-service#getfeerates): List routing fee rates
     and routing policies of channels on the node.
 - [getForwardingConfidence](https://github.com/alexbosworth/ln-service#getforwardingconfidence):
@@ -125,7 +143,9 @@ Methods exported by this library support typescript, but ln-service includes add
     graph statistics.
 - [getNode](https://github.com/alexbosworth/ln-service#getnode): Retrieve graph details for a
     node and optionally list its channels.
-- [getPayment](https://github.com/alexbosworth/ln-service#getpayment): Lookup details abou a
+- [getPathfindingSettings](https://github.com/alexbosworth/ln-service#getpathfindingsettings):
+    List out configuration options set for routing.
+- [getPayment](https://github.com/alexbosworth/ln-service#getpayment): Lookup details about a
     past payment.
 - [getPayments](https://github.com/alexbosworth/ln-service#getpayments): List details about past
     payment attempts and paid payment requests.
@@ -150,6 +170,8 @@ Methods exported by this library support typescript, but ln-service includes add
     version and build tags of the node.
 - [grantAccess](https://github.com/alexbosworth/ln-service#grantaccess): Create an access
     credential macaroon to access the API.
+- [isDestinationPayable](https://github.com/alexbosworth/ln-service#isdestinationpayable): Check
+    if a destination can be paid
 - [lockUtxo](https://github.com/alexbosworth/ln-service#lockutxo): Lease a UTXO so it cannot be
     chosen to be spent.
 - [openChannel](https://github.com/alexbosworth/ln-service#openchannel): Create a new channel
@@ -165,6 +187,8 @@ Methods exported by this library support typescript, but ln-service includes add
     using a specified route or routes.
 - [prepareForChannelProposal](https://github.com/alexbosworth/ln-service#prepareforchannelproposal):
     Prepare to receive a custom channel proposal.
+- [probeForRoute](https://github.com/alexbosworth/ln-service#probeforroute): Run a probe to find a
+    route to pay to a destination.
 - [proposeChannel](https://github.com/alexbosworth/ln-service#proposechannel): Propose a new
     channel to a peer who has prepared for the channel proposal.
 - [recoverFundsFromChannel](https://github.com/alexbosworth/ln-service#recoverfundsfromchannel):
@@ -227,12 +251,20 @@ Methods exported by this library support typescript, but ln-service includes add
     Start an off-chain probe to find a payable route and get notified on the status of the probe.
 - [subscribeToTransactions](https://github.com/alexbosworth/ln-service#subscribetotransactions):
     Get notified on on-chain transaction activity.
+- [subscribeToWalletStatus](https://github.com/alexbosworth/ln-service#subscribetowalletstatus):
+    Listen to updates to wallet state
 - [unauthenticatedLndGrpc](https://github.com/alexbosworth/ln-service#unauthenticatedlndgrpc):
     Create an lnd object for use with methods that do not require authentication credentials.
 - [unlockUtxo](https://github.com/alexbosworth/ln-service#unlockutxo): Release a lease on a wallet
     UTXO to allow it to be selected for spending again.
+- [unlockWallet](https://github.com/alexbosworth/ln-service#unlockwallet): Decrypt the wallet and
+    start the daemon
 - [updateChainTransaction](https://github.com/alexbosworth/ln-service#updatechaintransaction):
     Edit the metadata of an on-chain transaction record.
+- [updateConnectedWatchtower](https://github.com/alexbosworth/ln-service#updateconnectedwatchtower):
+    Edit the settings on an added watchtower
+- [updatePathfindingSettings](https://github.com/alexbosworth/ln-service#updatepathfindingsettings):
+    Edit the configuration for routing calculations
 - [updateRoutingFees](https://github.com/alexbosworth/ln-service#updateroutingfees): Set the
     forwarding fees or other routing policies for a channel or all channels.
 - [verifyBackup](https://github.com/alexbosworth/ln-service#verifybackup): Check if a channel fund
