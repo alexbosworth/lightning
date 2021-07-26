@@ -12,8 +12,13 @@ const {createInvoice} = require('./lnd_methods');
 const {createSeed} = require('./lnd_methods');
 const {createWallet} = require('./lnd_methods');
 const {decodePaymentRequest} = require('./lnd_methods');
+const {deleteFailedPayAttempts} = require('./lnd_methods');
+const {deleteFailedPayments} = require('./lnd_methods');
 const {deleteForwardingReputations} = require('./lnd_methods');
 const {deletePayments} = require('./lnd_methods');
+const {disableChannel} = require('./lnd_methods');
+const {disconnectWatchtower} = require('./lnd_methods');
+const {enableChannel} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {emitGrpcEvents} = require('./lnd_gateway');
 const {fundPendingChannels} = require('./lnd_methods');
@@ -30,6 +35,7 @@ const {getChannel} = require('./lnd_methods');
 const {getChannelBalance} = require('./lnd_methods');
 const {getChannels} = require('./lnd_methods');
 const {getClosedChannels} = require('./lnd_methods');
+const {getConnectedWatchtowers} = require('./lnd_methods');
 const {getFeeRates} = require('./lnd_methods');
 const {getForwardingConfidence} = require('./lnd_methods');
 const {getForwardingReputations} = require('./lnd_methods');
@@ -43,6 +49,7 @@ const {getNetworkCentrality} = require('./lnd_methods');
 const {getNetworkGraph} = require('./lnd_methods');
 const {getNetworkInfo} = require('./lnd_methods');
 const {getNode} = require('./lnd_methods');
+const {getPathfindingSettings} = require('./lnd_methods');
 const {getPayment} = require('./lnd_methods');
 const {getPayments} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
@@ -57,6 +64,7 @@ const {getWalletInfo} = require('./lnd_methods');
 const {getWalletVersion} = require('./lnd_methods');
 const {grantAccess} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
+const {isDestinationPayable} = require('./lnd_methods');
 const {lndGateway} = require('./lnd_gateway');
 const {lockUtxo} = require('./lnd_methods');
 const {openChannel} = require('./lnd_methods');
@@ -66,6 +74,7 @@ const {payViaPaymentRequest} = require('./lnd_methods');
 const {payViaRoutes} = require('./lnd_methods');
 const {pay} = require('./lnd_methods');
 const {prepareForChannelProposal} = require('./lnd_methods');
+const {probeForRoute} = require('./lnd_methods');
 const {proposeChannel} = require('./lnd_methods');
 const {recoverFundsFromChannel} = require('./lnd_methods');
 const {recoverFundsFromChannels} = require('./lnd_methods');
@@ -101,7 +110,9 @@ const {subscribeToWalletStatus} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {unlockUtxo} = require('./lnd_methods');
 const {unlockWallet} = require('./lnd_methods');
+const {updateConnectedWatchtower} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
+const {updatePathfindingSettings} = require('./lnd_methods');
 const {updateRoutingFees} = require('./lnd_methods');
 const {verifyBackup} = require('./lnd_methods');
 const {verifyBackups} = require('./lnd_methods');
@@ -123,8 +134,13 @@ module.exports = {
   createSeed,
   createWallet,
   decodePaymentRequest,
+  deleteFailedPayAttempts,
+  deleteFailedPayments,
   deleteForwardingReputations,
   deletePayments,
+  disableChannel,
+  disconnectWatchtower,
+  enableChannel,
   diffieHellmanComputeSecret,
   emitGrpcEvents,
   fundPendingChannels,
@@ -141,6 +157,7 @@ module.exports = {
   getChannel,
   getChannels,
   getClosedChannels,
+  getConnectedWatchtowers,
   getFeeRates,
   getForwardingConfidence,
   getForwardingReputations,
@@ -154,6 +171,7 @@ module.exports = {
   getNetworkGraph,
   getNetworkInfo,
   getNode,
+  getPathfindingSettings,
   getPayment,
   getPayments,
   getPeers,
@@ -168,6 +186,7 @@ module.exports = {
   getWalletVersion,
   grantAccess,
   grpcRouter,
+  isDestinationPayable,
   lndGateway,
   lockUtxo,
   openChannel,
@@ -177,6 +196,7 @@ module.exports = {
   payViaRoutes,
   pay,
   prepareForChannelProposal,
+  probeForRoute,
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
@@ -212,7 +232,9 @@ module.exports = {
   unauthenticatedLndGrpc,
   unlockUtxo,
   unlockWallet,
+  updateConnectedWatchtower,
   updateChainTransaction,
+  updatePathfindingSettings,
   updateRoutingFees,
   verifyBackup,
   verifyBackups,
