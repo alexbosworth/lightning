@@ -3,11 +3,14 @@ const {authenticatedLndGrpc} = require('./lnd_grpc');
 const {broadcastChainTransaction} = require('./lnd_methods');
 const {cancelHodlInvoice} = require('./lnd_methods');
 const {cancelPendingChannel} = require('./lnd_methods');
+const {changePassword} = require('./lnd_methods');
 const {closeChannel} = require('./lnd_methods');
 const {connectWatchtower} = require('./lnd_methods');
 const {createChainAddress} = require('./lnd_methods');
 const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
+const {createSeed} = require('./lnd_methods');
+const {createWallet} = require('./lnd_methods');
 const {decodePaymentRequest} = require('./lnd_methods');
 const {deleteFailedPayAttempts} = require('./lnd_methods');
 const {deleteFailedPayments} = require('./lnd_methods');
@@ -103,8 +106,10 @@ const {subscribeToPayViaRequest} = require('./lnd_methods');
 const {subscribeToPayViaRoutes} = require('./lnd_methods');
 const {subscribeToProbeForRoute} = require('./lnd_methods');
 const {subscribeToTransactions} = require('./lnd_methods');
+const {subscribeToWalletStatus} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {unlockUtxo} = require('./lnd_methods');
+const {unlockWallet} = require('./lnd_methods');
 const {updateConnectedWatchtower} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
 const {updatePathfindingSettings} = require('./lnd_methods');
@@ -120,11 +125,14 @@ module.exports = {
   broadcastChainTransaction,
   cancelHodlInvoice,
   cancelPendingChannel,
+  changePassword,
   closeChannel,
   connectWatchtower,
   createChainAddress,
   createHodlInvoice,
   createInvoice,
+  createSeed,
+  createWallet,
   decodePaymentRequest,
   deleteFailedPayAttempts,
   deleteFailedPayments,
@@ -220,8 +228,10 @@ module.exports = {
   subscribeToPayViaRoutes,
   subscribeToProbeForRoute,
   subscribeToTransactions,
+  subscribeToWalletStatus,
   unauthenticatedLndGrpc,
   unlockUtxo,
+  unlockWallet,
   updateConnectedWatchtower,
   updateChainTransaction,
   updatePathfindingSettings,
