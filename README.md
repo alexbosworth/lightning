@@ -4,6 +4,20 @@
 
 Methods for working with the Lightning Network
 
+## Selected Projects using Lightning
+
+- [coinos.io](https://coinos.io/) - https://github.com/coinos/coinos-server
+- [LNMarkets](https://twitter.com/lnmarkets) - https://github.com/lnmarkets/umbrel
+- [Galoy](https://galoy.io/) - https://github.com/GaloyMoney/galoy
+- [Tarnhelm](https://www.tarnhelm.app/) - https://github.com/bkiac/tarnhelm
+- [tbtcswaps](https://tbtcswaps.com/) - https://github.com/keep-community/tbtcswaps
+- [stackernews](https://stacker.news/) - https://github.com/stackernews/stacker.news
+- [Thunderhub](https://www.thunderhub.io/) - https://github.com/apotdevin/thunderhub)
+- [Lightning Roulette](https://lightning-roulette.com/) - https://github.com/igreshev/lightning-roulette
+- [Lightning Roulette](https://lightning-poker.com/) - https://github.com/igreshev/lightning-poker
+- [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
+- [Suredbits API](https://suredbits.com/) - https://github.com/Suredbits/sb-api-lnd
+
 ## LND Authentication
 
 To connect to an LND node, authentication details are required.
