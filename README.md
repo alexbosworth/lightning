@@ -56,8 +56,6 @@ There are two libraries, [ln-service](https://github.com/alexbosworth/ln-service
 
 Methods exported by this library support typescript, but ln-service includes additional metthods.
 
-- [Documentation of Methods]: https://github.com/alexbosworth/ln-service#all-methods
-
 - [addPeer](https://github.com/alexbosworth/ln-service#addpeer): Connect to a new peer
 - [authenticatedLndGrpc](https://github.com/alexbosworth/ln-service#authenticatedlndgrpc): 
     Instantiate connection to authenticated lnd methods.
