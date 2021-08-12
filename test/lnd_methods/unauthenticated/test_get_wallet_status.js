@@ -3,12 +3,8 @@ const {test} = require('@alexbosworth/tap');
 const {getStatusResponse} = require('./../fixtures');
 const {getWalletStatus} = require('./../../../');
 
-const makeLnd = ({custom, err, res}) => {
-  return {
-    status: {
-      getState: ({}, cbk) => cbk(err, res),
-    },
-  };
+const makeLnd = ({err, res}) => {
+  return {status: {getState: ({}, cbk) => cbk(err, res)}};
 };
 
 const tests = [
@@ -20,12 +16,17 @@ const tests = [
   {
     args: {lnd: makeLnd({err: {details: 'No connection established'}})},
     description: 'No connection returns error',
-    error: [503, 'FailedToConnectToDaemon'],
+    error: [503, 'FailedToConnectToDaemonToGetWalletStatus'],
+  },
+  {
+    args: {lnd: makeLnd({err: {details: 'unknown service lnrpc.State'}})},
+    description: 'Not supported returns error',
+    error: [501, 'GetWalletStatusMethodUnsupported'],
   },
   {
     args: {lnd: makeLnd({err: 'err'})},
     description: 'Generic failure returns back the error',
-    error: [503, 'GetWalletStatusErr', {err: 'err'}],
+    error: [503, 'UnexpectedGetWalletStatusError', {err: 'err'}],
   },
   {
     args: {lnd: makeLnd({res: {}})},
@@ -35,9 +36,7 @@ const tests = [
   {
     args: {lnd: makeLnd({res: getStatusResponse})},
     description: 'Info is returned',
-    expected: {
-      "state": 'RPC_ACTIVE'
-    },
+    expected: {is_active: true},
   },
 ];
 

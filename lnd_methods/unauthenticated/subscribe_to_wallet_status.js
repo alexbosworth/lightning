@@ -9,6 +9,7 @@ const stateAbsent = 'NON_EXISTING';
 const stateActive = 'RPC_ACTIVE';
 const stateLocked = 'LOCKED';
 const stateStarting = 'UNLOCKED';
+const stateWaiting = 'WAITING_TO_START';
 const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
 const type = 'status';
 
@@ -41,6 +42,9 @@ const type = 'status';
 
   // The wallet is in the process of starting
   @event 'starting'
+
+  // The wallet is waiting for leader election
+  @event 'waiting'
 */
 module.exports = ({lnd}) => {
   if (!isLnd({lnd, method, type})) {
@@ -96,6 +100,9 @@ module.exports = ({lnd}) => {
 
     case stateStarting:
       return emitter.emit('starting', {});
+
+    case stateWaiting:
+      return emitter.emit('waiting', {});
 
     default:
       break;

@@ -50,8 +50,6 @@ module.exports = htlc => {
     return {};
   }
 
-
-
   if (!!htlc.event.forward_event && htlc.event_type === htlcEventTypes) {
     return {event: 'forward'};
   }

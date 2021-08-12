@@ -1,13 +1,14 @@
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
-const {stateAsStateInfo} = require('./../../lnd_responses');
+const {rpcWalletStateAsState} = require('./../../lnd_responses');
 const {isLnd} = require('./../../lnd_requests');
 
 const method = 'getState';
 const type = 'status';
 
 const noConnectionMessage = 'No connection established';
+const unsupportedMessage = 'unknown service lnrpc.State';
 
 /** Get wallet status.
 
@@ -19,7 +20,11 @@ const noConnectionMessage = 'No connection established';
 
   @returns via cbk or Promise
   {
-    state: <LND State String>
+    [is_absent]: <Wallet Not Created Bool>
+    [is_active]: <Wallet Is Active Bool>
+    [is_locked]: <Wallet File Encrypted And Wallet Not Active Bool>
+    [is_starting]: <Wallet Is Starting Up Bool>
+    [is_waiting]: <Wallet Is Waiting To Start Bool>
   }
 */
 module.exports = ({lnd}, cbk) => {
@@ -28,7 +33,7 @@ module.exports = ({lnd}, cbk) => {
       // Check arguments
       validate: cbk => {
         if (!isLnd({lnd, method, type})) {
-          return cbk([400, 'ExpectedUnauthenticatedLndGrpcForGetStatusRequest']);
+          return cbk([400, 'ExpectedUnauthenticatedLndForGetStatusRequest']);
         }
 
         return cbk();
@@ -37,17 +42,20 @@ module.exports = ({lnd}, cbk) => {
       // Get wallet status
       getState: ['validate', ({}, cbk) => {
         return lnd[type][method]({}, (err, res) => {
-
           if (!!err && err.details === noConnectionMessage) {
-            return cbk([503, 'FailedToConnectToDaemon']);
+            return cbk([503, 'FailedToConnectToDaemonToGetWalletStatus']);
+          }
+
+          if (!!err && err.details === unsupportedMessage) {
+            return cbk([501, 'GetWalletStatusMethodUnsupported']);
           }
 
           if (!!err) {
-            return cbk([503, 'GetWalletStatusErr', {err}]);
+            return cbk([503, 'UnexpectedGetWalletStatusError', {err}]);
           }
 
           try {
-            return cbk(null, stateAsStateInfo(res));
+            return cbk(null, rpcWalletStateAsState(res));
           } catch (err) {
             return cbk([503, err.message]);
           }

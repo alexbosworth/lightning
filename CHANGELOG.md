@@ -1,5 +1,13 @@
 # Versions
 
+## 4.0.0
+
+- `getWalletStatus`: Add method to query the current wallet state
+
+### Breaking Changes
+
+- Node.js version 12 or higher is now required
+
 ## 3.5.0
 
 - `changePassword`: Add method to update the wallet password
