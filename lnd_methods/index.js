@@ -62,6 +62,7 @@ const {getSweepTransactions} = require('./onchain');
 const {getTowerServerInfo} = require('./info');
 const {getUtxos} = require('./onchain');
 const {getWalletInfo} = require('./info');
+const {getWalletStatus} = require('./unauthenticated');
 const {getWalletVersion} = require('./info');
 const {grantAccess} = require('./macaroon');
 const {isDestinationPayable} = require('./offchain');
@@ -186,6 +187,7 @@ module.exports = {
   getTowerServerInfo,
   getUtxos,
   getWalletInfo,
+  getWalletStatus,
   getWalletVersion,
   grantAccess,
   isDestinationPayable,
