@@ -174,6 +174,7 @@ Methods exported by this library support typescript, but ln-service includes add
     Calculate a route through specified nodes.
 - [getRouteToDestination](https://github.com/alexbosworth/ln-service#getroutetodestination):
     Calculate a route through the graph to a destination.
+- [getState](https://github.com/alexbosworth/ln-service#getState): Lookup state of wallet.
 - [getSweepTransactions](https://github.com/alexbosworth/ln-service#getsweeptransactions): List
     transactions that are sweeping funds on-chain.
 - [getUtxos](https://github.com/alexbosworth/ln-service#getutxos): List unspent transaction outputs

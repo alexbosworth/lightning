@@ -7,6 +7,7 @@ const failureFromPayment = require('./failure_from_payment');
 const forwardFromHtlcEvent = require('./forward_from_htlc_event');
 const htlcAsPayment = require('./htlc_as_payment');
 const infoAsWalletInfo = require('./info_as_wallet_info');
+const stateAsStateInfo = require('./state_as_state_info');
 const nodeInfoAsNode = require('./node_info_as_node');
 const paymentFailure = require('./payment_failure');
 const paymentRequestDetails = require('./payment_request_details');
@@ -44,6 +45,7 @@ module.exports = {
   forwardFromHtlcEvent,
   htlcAsPayment,
   infoAsWalletInfo,
+  stateAsStateInfo,
   nodeInfoAsNode,
   paymentFailure,
   paymentRequestDetails,

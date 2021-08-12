@@ -61,6 +61,7 @@ const {getRouteToDestination} = require('./lnd_methods');
 const {getSweepTransactions} = require('./lnd_methods');
 const {getUtxos} = require('./lnd_methods');
 const {getWalletInfo} = require('./lnd_methods');
+const {getWalletStatus} = require('./lnd_methods');
 const {getWalletVersion} = require('./lnd_methods');
 const {grantAccess} = require('./lnd_methods');
 const {grpcRouter} = require('./lnd_gateway');
@@ -183,6 +184,7 @@ module.exports = {
   getSweepTransactions,
   getUtxos,
   getWalletInfo,
+  getWalletStatus,
   getWalletVersion,
   grantAccess,
   grpcRouter,
