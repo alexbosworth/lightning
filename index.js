@@ -87,6 +87,7 @@ const {requestChainFeeIncrease} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {sendToChainAddress} = require('./lnd_methods');
 const {sendToChainAddresses} = require('./lnd_methods');
+const {sendToChainOutputScripts} = require('./lnd_methods');
 const {setAutopilot} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
@@ -214,6 +215,7 @@ module.exports = {
   revokeAccess,
   sendToChainAddress,
   sendToChainAddresses,
+  sendToChainOutputScripts,
   setAutopilot,
   settleHodlInvoice,
   signBytes,
