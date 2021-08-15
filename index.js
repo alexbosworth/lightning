@@ -60,6 +60,7 @@ const {getRouteConfidence} = require('./lnd_methods');
 const {getRouteThroughHops} = require('./lnd_methods');
 const {getRouteToDestination} = require('./lnd_methods');
 const {getSweepTransactions} = require('./lnd_methods');
+const {getTowerServerInfo} = require('./lnd_methods');
 const {getUtxos} = require('./lnd_methods');
 const {getWalletInfo} = require('./lnd_methods');
 const {getWalletStatus} = require('./lnd_methods');
@@ -184,6 +185,7 @@ module.exports = {
   getRouteThroughHops,
   getRouteToDestination,
   getSweepTransactions,
+  getTowerServerInfo,
   getUtxos,
   getWalletInfo,
   getWalletStatus,
