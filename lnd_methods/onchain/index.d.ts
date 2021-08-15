@@ -16,6 +16,7 @@ export * from './open_channel';
 export * from './open_channels';
 export * from './prepare_for_channel_proposal';
 export * from './propose_channel';
+export * from './request_chain_fee_increase';
 export * from './send_to_chain_address';
 export * from './send_to_chain_addresses';
 export * from './set_autopilot';
