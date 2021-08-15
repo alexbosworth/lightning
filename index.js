@@ -110,6 +110,7 @@ const {subscribeToPastPayment} = require('./lnd_methods');
 const {subscribeToPayViaDetails} = require('./lnd_methods');
 const {subscribeToPayViaRequest} = require('./lnd_methods');
 const {subscribeToPayViaRoutes} = require('./lnd_methods');
+const {subscribeToPeers} = require('./lnd_methods');
 const {subscribeToProbeForRoute} = require('./lnd_methods');
 const {subscribeToTransactions} = require('./lnd_methods');
 const {subscribeToWalletStatus} = require('./lnd_methods');
@@ -238,6 +239,7 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPeers,
   subscribeToProbeForRoute,
   subscribeToTransactions,
   subscribeToWalletStatus,
