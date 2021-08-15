@@ -44,6 +44,7 @@ const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
 const {getInvoice} = require('./lnd_methods');
 const {getInvoices} = require('./lnd_methods');
+const {getLockedUtxos} = require('./lnd_methods');
 const {getMethods} = require('./lnd_methods');
 const {getNetworkCentrality} = require('./lnd_methods');
 const {getNetworkGraph} = require('./lnd_methods');
@@ -169,6 +170,7 @@ module.exports = {
   getIdentity,
   getInvoice,
   getInvoices,
+  getLockedUtxos,
   getMethods,
   getNetworkCentrality,
   getNetworkGraph,
