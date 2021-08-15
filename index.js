@@ -44,6 +44,7 @@ const {getHeight} = require('./lnd_methods');
 const {getIdentity} = require('./lnd_methods');
 const {getInvoice} = require('./lnd_methods');
 const {getInvoices} = require('./lnd_methods');
+const {getLockedUtxos} = require('./lnd_methods');
 const {getMethods} = require('./lnd_methods');
 const {getNetworkCentrality} = require('./lnd_methods');
 const {getNetworkGraph} = require('./lnd_methods');
@@ -56,9 +57,11 @@ const {getPeers} = require('./lnd_methods');
 const {getPendingChainBalance} = require('./lnd_methods');
 const {getPendingChannels} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
+const {getRouteConfidence} = require('./lnd_methods');
 const {getRouteThroughHops} = require('./lnd_methods');
 const {getRouteToDestination} = require('./lnd_methods');
 const {getSweepTransactions} = require('./lnd_methods');
+const {getTowerServerInfo} = require('./lnd_methods');
 const {getUtxos} = require('./lnd_methods');
 const {getWalletInfo} = require('./lnd_methods');
 const {getWalletStatus} = require('./lnd_methods');
@@ -80,9 +83,11 @@ const {proposeChannel} = require('./lnd_methods');
 const {recoverFundsFromChannel} = require('./lnd_methods');
 const {recoverFundsFromChannels} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
+const {requestChainFeeIncrease} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {sendToChainAddress} = require('./lnd_methods');
 const {sendToChainAddresses} = require('./lnd_methods');
+const {sendToChainOutputScripts} = require('./lnd_methods');
 const {setAutopilot} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
@@ -105,6 +110,7 @@ const {subscribeToPastPayment} = require('./lnd_methods');
 const {subscribeToPayViaDetails} = require('./lnd_methods');
 const {subscribeToPayViaRequest} = require('./lnd_methods');
 const {subscribeToPayViaRoutes} = require('./lnd_methods');
+const {subscribeToPeers} = require('./lnd_methods');
 const {subscribeToProbeForRoute} = require('./lnd_methods');
 const {subscribeToTransactions} = require('./lnd_methods');
 const {subscribeToWalletStatus} = require('./lnd_methods');
@@ -167,6 +173,7 @@ module.exports = {
   getIdentity,
   getInvoice,
   getInvoices,
+  getLockedUtxos,
   getMethods,
   getNetworkCentrality,
   getNetworkGraph,
@@ -179,9 +186,11 @@ module.exports = {
   getPendingChainBalance,
   getPendingChannels,
   getPublicKey,
+  getRouteConfidence,
   getRouteThroughHops,
   getRouteToDestination,
   getSweepTransactions,
+  getTowerServerInfo,
   getUtxos,
   getWalletInfo,
   getWalletStatus,
@@ -203,9 +212,11 @@ module.exports = {
   recoverFundsFromChannel,
   recoverFundsFromChannels,
   removePeer,
+  requestChainFeeIncrease,
   revokeAccess,
   sendToChainAddress,
   sendToChainAddresses,
+  sendToChainOutputScripts,
   setAutopilot,
   settleHodlInvoice,
   signBytes,
@@ -228,6 +239,7 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPeers,
   subscribeToProbeForRoute,
   subscribeToTransactions,
   subscribeToWalletStatus,
