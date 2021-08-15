@@ -10,6 +10,8 @@ const transaction_vout = 0;
 const fee_tokens_per_vbyte = 10;
 const target_confirmations = 3;
 
+const args = {lnd, transaction_id, transaction_vout};
+
 expectError(requestChainFeeIncrease());
 expectError(requestChainFeeIncrease({lnd}));
 expectError(requestChainFeeIncrease({lnd, transaction_id, transaction_vout}));
@@ -21,8 +23,6 @@ expectError(
     target_confirmations,
   })
 );
-
-const args = {lnd, transaction_id, transaction_vout};
 
 expectType<void>(
   await requestChainFeeIncrease({...args, fee_tokens_per_vbyte})
