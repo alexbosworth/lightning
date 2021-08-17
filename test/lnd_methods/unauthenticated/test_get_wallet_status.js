@@ -11,7 +11,7 @@ const tests = [
   {
     args: {},
     description: 'LND is required to get status',
-    error: [400, 'ExpectedUnauthenticatedLndGrpcForGetStatusRequest'],
+    error: [400, 'ExpectedUnauthenticatedLndForGetStatusRequest'],
   },
   {
     args: {lnd: makeLnd({err: {details: 'No connection established'}})},

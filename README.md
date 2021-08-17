@@ -145,6 +145,8 @@ Methods exported by this library support typescript, but ln-service includes add
     invoice.
 - [getInvoices](https://github.com/alexbosworth/ln-service#getinvoices): List details of all past
     open invoices and received payments.
+- [getLockedUtxos](https://github.com/alexbosworth/ln-service#getlockedutxos): List the UTXOs
+    that are currently reserved and unavailable to coin selection.
 - [getMethods](https://github.com/alexbosworth/ln-service#getmethods): List RPC methods and
     permissions required to use them.
 - [getNetworkCentrality](https://github.com/alexbosworth/ln-service#getnetworkcentrality):
@@ -168,12 +170,16 @@ Methods exported by this library support typescript, but ln-service includes add
     details of opening or closing channels.
 - [getPublicKey](https://github.com/alexbosworth/ln-service#getpublickey): Derive a public key at
     a given index.
+- [getRouteConfidence](https://github.com/alexbosworth/ln-service#getrouteconfidence): Check a
+    route to see the pathfinding confidence score that a payment would succeed.
 - [getRouteThroughHops](https://github.com/alexbosworth/ln-service#getroutethroughhops):
     Calculate a route through specified nodes.
 - [getRouteToDestination](https://github.com/alexbosworth/ln-service#getroutetodestination):
     Calculate a route through the graph to a destination.
 - [getSweepTransactions](https://github.com/alexbosworth/ln-service#getsweeptransactions): List
     transactions that are sweeping funds on-chain.
+- [getTowerServerInfo](https://github.com/alexbosworth/ln-service#gettowerserverinfo): General
+    information about a watchtower server running.
 - [getUtxos](https://github.com/alexbosworth/ln-service#getutxos): List unspent transaction outputs
     in the on-chain wallet.
 - [getWalletInfo](https://github.com/alexbosworth/ln-service#getwalletinfo): Lookup general details
@@ -211,12 +217,16 @@ Methods exported by this library support typescript, but ln-service includes add
     Attempt to recover funds from multiple channels using a multiple channel backup.
 - [removePeer](https://github.com/alexbosworth/ln-service#removepeer): Disconnect from a
     connected peer.
+- [requestChainFeeIncrease](https://github.com/alexbosworth/ln-service#requestchainfeeincrease):
+    Ask for a CPFP chain fee rate increase on a pending confirm UTXO.
 - [revokeAccess](https://github.com/alexbosworth/ln-service#revokeaccess): Remove the access
     privileges of a previously issued access token macaroon credential.
 - [sendToChainAddress](https://github.com/alexbosworth/ln-service#sendtochainaddress): Send
     funds on-chain to an address.
 - [sendToChainAddresses](https://github.com/alexbosworth/ln-service#sendtochainaddresses):
     Send funds on-chain to multiple chain addresses.
+- [sendToChainOutputScripts](https://github.com/alexbosworth/ln-service#sendtochainoutputscripts):
+    Send funds on-chain to multiple chain destinations, specifying outputs scripts, not addresses.
 - [setAutopilot](https://github.com/alexbosworth/ln-service#setautopilot): Set the open channel
     autopilot configuration settings.
 - [settleHodlInvoice](https://github.com/alexbosworth/ln-service#settlehodlinvoice): Take incoming
@@ -261,6 +271,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Make an off-chain payment using a payment request and subscribe to the payment status.
 - [subscribeToPayViaRoutes](https://github.com/alexbosworth/ln-service#subscribetopayviaroutes):
     Start an off-chain payment using specific payment routes and subscribe to the payment result.
+- [subscribeToPeers](https://github.com/alexbosworth/ln-service#subscribetopeers): Listen to peer
+    disconnect and connect events.
 - [subscribeToProbeForRoute](https://github.com/alexbosworth/ln-service#subscribetoprobeforroute):
     Start an off-chain probe to find a payable route and get notified on the status of the probe.
 - [subscribeToTransactions](https://github.com/alexbosworth/ln-service#subscribetotransactions):
