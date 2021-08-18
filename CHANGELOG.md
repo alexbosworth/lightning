@@ -1,5 +1,14 @@
 # Versions
 
+## 4.1.0
+
+- `getLockedUtxos`: Add method to list locked UTXOs
+- `getRouteConfidence`: Add method to check confidence on a path
+- `getTowerServerInfo`: Add method to lookup watchtower server info
+- `requestChainFeeIncrease`: Add method to add a CPFP request for a UTXO
+- `sendToChainOutputScripts`: Add method to send chain funds to multiple outputs
+- `subscribeToPeers`: Add method to get notified of peer connects and disconnects
+
 ## 4.0.0
 
 - `getWalletStatus`: Add method to query the current wallet state
