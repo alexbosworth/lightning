@@ -12,7 +12,7 @@ Methods for working with the Lightning Network
 - [Tarnhelm](https://www.tarnhelm.app/) - https://github.com/bkiac/tarnhelm
 - [tbtcswaps](https://tbtcswaps.com/) - https://github.com/keep-community/tbtcswaps
 - [stackernews](https://stacker.news/) - https://github.com/stackernews/stacker.news
-- [Thunderhub](https://www.thunderhub.io/) - https://github.com/apotdevin/thunderhub)
+- [Thunderhub](https://www.thunderhub.io/) - https://github.com/apotdevin/thunderhub
 - [Lightning Roulette](https://lightning-roulette.com/) - https://github.com/igreshev/lightning-roulette
 - [Lightning Poker](https://lightning-poker.com/) - https://github.com/igreshev/lightning-poker
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr

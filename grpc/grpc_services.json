@@ -20,7 +20,7 @@
     "Autopilot": "autopilot.proto",
     "ChainNotifier": "chainnotifier.proto",
     "Invoices": "invoices.proto",
-    "Lightning": "rpc.proto",
+    "Lightning": "lightning.proto",
     "Router": "router.proto",
     "Signer": "signer.proto",
     "State": "stateservice.proto",

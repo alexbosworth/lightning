@@ -92,7 +92,7 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedStandardHexPaymentHashId']);
         }
 
-        if (!isLnd({lnd: args.lnd, method: 'sendToRoute', type: 'router'})) {
+        if (!isLnd({lnd: args.lnd, method: 'sendToRouteV2', type: 'router'})) {
           return cbk([400, 'ExpectedLndForToPayViaSpecifiedRoutes']);
         }
 

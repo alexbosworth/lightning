@@ -115,7 +115,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {preimage})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {preimage})},
       },
       path: {
         id: Buffer.alloc(32).toString('hex'),

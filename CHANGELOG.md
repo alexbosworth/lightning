@@ -1,5 +1,9 @@
 # Versions
 
+## 4.1.1
+
+- Switch to `sendToRouteV2` to execute payments over a specific route
+
 ## 4.1.0
 
 - `getLockedUtxos`: Add method to list locked UTXOs

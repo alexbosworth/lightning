@@ -53,7 +53,7 @@ const makeLnd = ({count, getInfo, sendToRoute}) => {
       },
     },
     router: {
-      sendToRoute: sendToRoute || defaultSendTo,
+      sendToRouteV2: sendToRoute || defaultSendTo,
     },
   };
 
@@ -79,7 +79,7 @@ const tests = [
   {
     args: {
       destination: Buffer.alloc(33).toString('hex'),
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk()}},
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk()}},
     },
     description: 'A token amount is required to subscribe to a probe',
     error: 'ExpectedTokenAmountToSubscribeToProbe',
@@ -124,7 +124,9 @@ const tests = [
   {
     args: {
       destination: Buffer.alloc(33).toString('hex'),
-      lnd: makeLnd({sendToRoute: ({}, cbk) => setTimeout(() => cbk('e'), 20)}),
+      lnd: makeLnd({
+        sendToRouteV2: ({}, cbk) => setTimeout(() => cbk('e'), 20),
+      }),
       probe_timeout_ms: 1,
       tokens: 1,
     },
@@ -138,7 +140,7 @@ const tests = [
   {
     args: {
       destination: Buffer.alloc(33).toString('hex'),
-      lnd: makeLnd({sendToRoute: ({}, cbk) => cbk('err')}),
+      lnd: makeLnd({sendToRouteV2: ({}, cbk) => cbk('err')}),
       tokens: 1,
     },
     description: 'A probe hits an error paying a route',
@@ -152,7 +154,7 @@ const tests = [
     args: {
       destination: Buffer.alloc(33).toString('hex'),
       lnd: makeLnd({
-        sendToRoute: ({}, cbk) => cbk(null, {
+        sendToRouteV2: ({}, cbk) => cbk(null, {
           failure: {
             chan_id: '1',
             code: 'UNKNOWN_FAILURE',
@@ -174,7 +176,7 @@ const tests = [
     args: {
       destination: Buffer.alloc(33).toString('hex'),
       lnd: makeLnd({
-        sendToRoute: ({}, cbk) => cbk(null, {
+        sendToRouteV2: ({}, cbk) => cbk(null, {
           failure: {
             chan_id: '1',
             code: 'UNKNOWN_FAILURE',
@@ -204,7 +206,7 @@ const tests = [
     args: {
       destination: Buffer.alloc(33).toString('hex'),
       lnd: makeLnd({
-        sendToRoute: ({}, cbk) => {
+        sendToRouteV2: ({}, cbk) => {
           return setTimeout(() => {
             return cbk(null, {
               failure: {
@@ -233,7 +235,7 @@ const tests = [
       destination: Buffer.alloc(33).toString('hex'),
       lnd: makeLnd({
         count: 2,
-        sendToRoute: ({}, cbk) => {
+        sendToRouteV2: ({}, cbk) => {
           return setTimeout(() => {
             return cbk(null, {
               failure: {

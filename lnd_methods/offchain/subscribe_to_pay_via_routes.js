@@ -15,6 +15,7 @@ const {rpcRouteFromRoute} = require('./../../lnd_requests');
 
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
+const method = 'sendToRouteV2';
 const notFoundIndex = -1;
 const {now} = Date;
 const payHashLength = Buffer.alloc(32).length;
@@ -200,7 +201,7 @@ module.exports = args => {
     throw new Error('ExpectedPaymentHashToPayViaRoutes');
   }
 
-  if (!isLnd({lnd: args.lnd, method: 'sendToRoute', type: 'router'})) {
+  if (!isLnd({method, lnd: args.lnd, type: 'router'})) {
     throw new Error('ExpectedAuthenticatedLndToPayViaRoutes');
   }
 
@@ -251,7 +252,7 @@ module.exports = args => {
       attempt: ['waitForSubscribers', ({}, cbk) => {
         emitter.emit('paying', {route});
 
-        return args.lnd.router.sendToRoute({
+        return args.lnd.router[method]({
           payment_hash: Buffer.from(id, 'hex'),
           route: rpcRouteFromRoute(route),
         },

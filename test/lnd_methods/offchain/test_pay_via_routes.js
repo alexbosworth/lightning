@@ -38,7 +38,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
     },
     description: 'An array of routes is expected',
@@ -48,7 +48,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [],
     },
@@ -59,7 +59,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [{
         fee: 1,
@@ -86,7 +86,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk('err')},
+        router: {sendToRouteV2: ({}, cbk) => cbk('err')},
       },
       routes: [{
         fee: 1,
@@ -117,7 +117,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [{
         fee: 1,
@@ -143,7 +143,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [{
         fee: 1,
@@ -171,7 +171,7 @@ const tests = [
       lnd: {
         default: {getInfo},
         router: {
-          sendToRoute: ({}, cbk) => {
+          sendToRouteV2: ({}, cbk) => {
             return cbk(null, {
               failure: {
                 code: 'UNKNOWN_PAYMENT_HASH',
@@ -225,7 +225,7 @@ const tests = [
       lnd: {
         default: {getInfo},
         router: {
-          sendToRoute: ({}, cbk) => {
+          sendToRouteV2: ({}, cbk) => {
             return cbk(null, {
               failure: {
                 channel_update: {
@@ -320,7 +320,7 @@ const tests = [
     args: {
       lnd: {
         default: {getInfo},
-        router: {sendToRoute: ({}, cbk) => cbk(null, {preimage})},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {preimage})},
       },
       routes: [{
         fee: 1,

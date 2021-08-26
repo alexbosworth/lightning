@@ -27,28 +27,28 @@ const tests = [
     error: 'ExpectedAuthenticatedLndToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRoute: ({}) => {}}}},
+    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}},
     description: 'Routes are required',
     error: 'ExpectedArrayOfPaymentRoutesToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRoute: ({}) => {}}}, routes: []},
+    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}, routes: []},
     description: 'Non empty routes are required',
     error: 'ExpectedArrayOfPaymentRoutesToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRoute: ({}) => {}}}, routes: [{}]},
+    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}, routes: [{}]},
     description: 'Route must have hops',
     error: 'ExpectedRouteHopsToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRoute: ({}) => {}}}, routes: [{hops: [{}]}]},
+    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}, routes: [{hops: [{}]}]},
     description: 'Hops must have public keys',
     error: 'ExpectedPublicKeyInPayViaRouteHops',
   },
   {
     args: {
-      lnd: {router: {sendToRoute: ({}) => {}}},
+      lnd: {router: {sendToRouteV2: ({}) => {}}},
       routes: [{hops: [{public_key: 'public_key'}]}],
     },
     description: 'Hops must have channel ids',
@@ -56,7 +56,7 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRoute: ({}) => {}}},
+      lnd: {router: {sendToRouteV2: ({}) => {}}},
       routes: [{hops: [{public_key: 'public_key'}]}],
     },
     description: 'Hops must have channel ids',
@@ -66,7 +66,7 @@ const tests = [
     args: {
       lnd: {
         router: {
-          sendToRoute: ({}, cbk) => cbk({details: 'unknown wire error'}),
+          sendToRouteV2: ({}, cbk) => cbk({details: 'unknown wire error'}),
         },
       },
       routes: [route],
@@ -78,7 +78,7 @@ const tests = [
     args: {
       lnd: {
         router: {
-          sendToRoute: ({}, cbk) => cbk({
+          sendToRouteV2: ({}, cbk) => cbk({
             details: 'payment attempt not completed before timeout',
           }),
         },
@@ -90,7 +90,7 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk('err')}},
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk('err')}},
       routes: [route],
     },
     description: 'An unexpected payment error is passed back',
@@ -101,7 +101,10 @@ const tests = [
     },
   },
   {
-    args: {lnd: {router: {sendToRoute: ({}, cbk) => cbk()}}, routes: [route]},
+    args: {
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk()}},
+      routes: [route],
+    },
     description: 'A result is expected from sendToRoute',
     expected: {
       attempts: [{route}],
@@ -112,7 +115,7 @@ const tests = [
   {
     args: {
       id: Buffer.alloc(32).toString('hex'),
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk(null, {
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
         preimage: Buffer.alloc(32),
       })}},
       routes: [route, route],
@@ -138,7 +141,7 @@ const tests = [
   {
     args: {
       id: Buffer.alloc(32).toString('hex'),
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk(null, {
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
         preimage: 'preimage',
       })}},
       routes: [route],
@@ -152,7 +155,7 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk(null, {
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
         failure: {
           chan_id: '1',
           code: 'UNKNOWN_FAILURE',
@@ -180,7 +183,7 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk(null, {
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
         failure: {
           chan_id: '1',
           code: 'UNKNOWN_FAILURE',
@@ -276,7 +279,7 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRoute: ({}, cbk) => cbk(null, {
+      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
         failure: {
           chan_id: '1',
           code: 'UNKNOWN_FAILURE',
@@ -307,7 +310,7 @@ const tests = [
     args: {
       lnd: {
         router: {
-          sendToRoute: ({}, cbk) => {
+          sendToRouteV2: ({}, cbk) => {
             return setTimeout(() => cbk({details: 'unknown wire error'}), 100);
           },
         },

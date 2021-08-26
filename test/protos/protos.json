@@ -1,7 +1,7 @@
 {
   "overrides": [
+    ["lightning", 3224],
     ["router", 100, 171],
-    ["rpc", 3222],
     ["walletkit", 3],
     ["walletunlocker", 2]
   ],
@@ -9,8 +9,8 @@
     ["autopilotrpc", "autopilot"],
     ["chainrpc", "chainnotifier"],
     ["invoicesrpc", "invoices"],
+    ["lightning"],
     ["routerrpc", "router"],
-    ["rpc"],
     ["signrpc", "signer"],
     ["stateservice"],
     ["verrpc", "verrpc"],
