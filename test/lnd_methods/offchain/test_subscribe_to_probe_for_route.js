@@ -34,7 +34,7 @@ const sendToRouteFailure = {
   failure_source_index: 1,
 };
 
-const makeLnd = ({count, getInfo, sendToRoute}) => {
+const makeLnd = ({count, getInfo, sendToRouteV2}) => {
   let returnedRoutes = 0;
 
   const defaultSendTo = ({}, cbk) => cbk(null, {faillure: sendToRouteFailure});
@@ -53,7 +53,7 @@ const makeLnd = ({count, getInfo, sendToRoute}) => {
       },
     },
     router: {
-      sendToRouteV2: sendToRoute || defaultSendTo,
+      sendToRouteV2: sendToRouteV2 || defaultSendTo,
     },
   };
 

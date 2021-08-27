@@ -1,5 +1,9 @@
 # Versions
 
+## 4.1.2
+
+- `lockUtxo`: Return correct error message when attempting to lock an unknown UTXO
+
 ## 4.1.1
 
 - Switch to `sendToRouteV2` to execute payments over a specific route

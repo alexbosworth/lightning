@@ -15,6 +15,7 @@ const method = 'leaseOutput';
 const minExpireSecs = 1;
 const type = 'wallet';
 const unsuppportedErr = /unknown/;
+const utxoNotFoundMessage = 'unknown output';
 
 /** Lock UTXO
 
@@ -75,6 +76,10 @@ module.exports = (args, cbk) => {
           },
         },
         (err, res) => {
+          if (!!err && err.details === utxoNotFoundMessage) {
+            return cbk([404, 'OutpointToLockNotFoundInUtxoSet']);
+          }
+
           if (!!err && unsuppportedErr.test(err.details)) {
             return cbk([501, 'BackingLndDoesNotSupportLockingUtxos']);
           }

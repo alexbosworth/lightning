@@ -40,6 +40,15 @@ const tests = [
     error: [501, 'BackingLndDoesNotSupportLockingUtxos'],
   },
   {
+    args: makeArgs({
+      lnd: {wallet: {leaseOutput: ({}, cbk) => cbk({
+        details: 'unknown output',
+      })}},
+    }),
+    description: 'Locking unknown output returns unknown output error',
+    error: [404, 'OutpointToLockNotFoundInUtxoSet'],
+  },
+  {
     args: makeArgs({lnd: {wallet: {leaseOutput: ({}, cbk) => cbk('err')}}}),
     description: 'LND errors are returned',
     error: [503, 'UnexpectedErrorLockingUtxo', {err: 'err'}],

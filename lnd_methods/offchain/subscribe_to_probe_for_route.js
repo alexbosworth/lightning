@@ -183,7 +183,7 @@ module.exports = args => {
     throw new Error('ExpectedIgnoreEdgesArrayInProbeSubscription');
   }
 
-  if (!isLnd({lnd: args.lnd, method: 'sendToRoute', type: 'router'})) {
+  if (!isLnd({lnd: args.lnd, method: 'sendToRouteV2', type: 'router'})) {
     throw new Error('ExpectedRouterRpcToSubscribeToProbe');
   }
 
