@@ -1,5 +1,9 @@
 # Versions
 
+## 4.1.3
+
+- `lockUtxo`: Fix issue when specifying the lock id, use correct encoding of id argument
+
 ## 4.1.2
 
 - `lockUtxo`: Return correct error message when attempting to lock an unknown UTXO
