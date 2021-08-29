@@ -17,7 +17,7 @@ export type GetChannelBalanceResult = {
   /** In-Flight Tokens */
   unsettled_balance?: number;
   /** In-Flight Millitokens */
-  unsettled_balance_mtokens?: number;
+  unsettled_balance_mtokens?: string;
 };
 
 /**

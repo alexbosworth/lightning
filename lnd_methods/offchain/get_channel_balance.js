@@ -33,7 +33,7 @@ const type = 'default';
     pending_balance: <Pending On-Chain Channels Balance Tokens Number>
     [pending_inbound]: <Pending On-Chain Inbound Liquidity Tokens Number>
     [unsettled_balance]: <In-Flight Tokens Number>
-    [unsettled_balance_mtokens]: <In-Flight Millitokens Number>
+    [unsettled_balance_mtokens]: <In-Flight Millitokens String>
   }
 */
 module.exports = ({lnd}, cbk) => {

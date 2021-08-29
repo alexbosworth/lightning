@@ -45,7 +45,7 @@ export type SubscribeToProbeForRouteArgs = AuthenticatedLightningArgs<{
   probe_timeout_ms?: number;
   routes?: {
     /** Base Routing Fee In Millitokens */
-    base_fee_mtokens?: number;
+    base_fee_mtokens?: string;
     /** Channel Capacity Tokens */
     channel_capacity?: number;
     /** Standard Format Channel Id */

@@ -45,7 +45,7 @@ const {nextTick} = process;
     [payment]: <Payment Identifier Hex Strimng>
     [probe_timeout_ms]: <Fail Entire Probe After Milliseconds Number>
     [routes]: [[{
-      [base_fee_mtokens]: <Base Routing Fee In Millitokens Number>
+      [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
       [channel_capacity]: <Channel Capacity Tokens Number>
       [channel]: <Standard Format Channel Id String>
       [cltv_delta]: <CLTV Blocks Delta Number>
