@@ -44,6 +44,8 @@ export type UpdateRoutingFeesArgs = AuthenticatedLightningArgs<
 /**
  * Update routing fees on a single channel or on all channels
  *
+ * Note: not setting a policy attribute will result in a minimal default used
+ *
  * Setting both `base_fee_tokens` and `base_fee_mtokens` is not supported
  *
  * Requires `offchain:write` permission

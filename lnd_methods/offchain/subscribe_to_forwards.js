@@ -3,8 +3,8 @@ const EventEmitter = require('events');
 const asyncDoUntil = require('async/doUntil');
 const {chanFormat} = require('bolt07');
 
-const {isLnd} = require('./../../lnd_requests');
 const {forwardFromHtlcEvent} = require('./../../lnd_responses');
+const {isLnd} = require('./../../lnd_requests');
 
 const event = 'forward';
 const method = 'subscribeHtlcEvents';

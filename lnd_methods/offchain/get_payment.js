@@ -43,6 +43,19 @@ const type = 'router';
       }]
       id: <Payment Hash Hex String>
       mtokens: <Total Millitokens Paid String>
+      paths: [{
+        fee_mtokens: <Total Fee Millitokens Paid String>
+        hops: [{
+          channel: <Standard Format Channel Id String>
+          channel_capacity: <Channel Capacity Tokens Number>
+          fee: <Fee Tokens Rounded Down Number>
+          fee_mtokens: <Fee Millitokens String>
+          forward_mtokens: <Forward Millitokens String>
+          public_key: <Public Key Hex String>
+          timeout: <Timeout Block Height Number>
+        }]
+        mtokens: <Total Millitokens Paid String>
+      }]
       safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>
       safe_tokens: <Payment Tokens Rounded Up Number>
       secret: <Payment Preimage Hex String>

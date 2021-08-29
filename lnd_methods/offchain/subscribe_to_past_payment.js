@@ -42,16 +42,6 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
   {
     fee: <Total Fee Tokens Paid Rounded Down Number>
     fee_mtokens: <Total Fee Millitokens Paid String>
-    hops: [{
-      channel: <First Route Standard Format Channel Id String>
-      channel_capacity: <First Route Channel Capacity Tokens Number>
-      fee: <First Route Fee Tokens Rounded Down Number>
-      fee_mtokens: <First Route Fee Millitokens String>
-      forward: <First Route Forward Tokens Number>
-      forward_mtokens: <First Route Forward Millitokens String>
-      public_key: <First Route Public Key Hex String>
-      timeout: <First Route Timeout Block Height Number>
-    }]
     id: <Payment Hash Hex String>
     mtokens: <Total Millitokens Paid String>
     paths: [{

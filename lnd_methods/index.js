@@ -104,6 +104,7 @@ const {subscribeToInvoice} = require('./invoices');
 const {subscribeToInvoices} = require('./invoices');
 const {subscribeToOpenRequests} = require('./offchain');
 const {subscribeToPastPayment} = require('./offchain');
+const {subscribeToPastPayments} = require('./offchain');
 const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
@@ -229,6 +230,7 @@ module.exports = {
   subscribeToInvoices,
   subscribeToOpenRequests,
   subscribeToPastPayment,
+  subscribeToPastPayments,
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,

@@ -1,5 +1,9 @@
 # Versions
 
+## 4.2.0
+
+- `subscribeToPastPayments`: Add method to subscribe to successful past payments
+
 ## 4.1.3
 
 - `lockUtxo`: Fix issue when specifying the lock id, use correct encoding of id argument

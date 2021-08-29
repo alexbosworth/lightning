@@ -36,6 +36,7 @@ const subscribeToForwardRequests = require('./subscribe_to_forward_requests');
 const subscribeToForwards = require('./subscribe_to_forwards');
 const subscribeToOpenRequests = require('./subscribe_to_open_requests');
 const subscribeToPastPayment = require('./subscribe_to_past_payment');
+const subscribeToPastPayments = require('./subscribe_to_past_payments');
 const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
 const subscribeToPayViaRequest = require('./subscribe_to_pay_via_request');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
@@ -85,6 +86,7 @@ module.exports = {
   subscribeToForwards,
   subscribeToOpenRequests,
   subscribeToPastPayment,
+  subscribeToPastPayments,
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
