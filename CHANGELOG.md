@@ -1,5 +1,9 @@
 # Versions
 
+## 4.3.1
+
+- `getPendingChannels`: Add typescript annotations to result
+
 ## 4.3.0
 
 - `getPendingChannels`: Add `is_timelocked` and `timelock_blocks` to force closes

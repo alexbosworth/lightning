@@ -13,6 +13,8 @@ export type GetPendingChannelsResult = {
     is_opening: boolean;
     /** Channel Partner Initiated Channel */
     is_partner_initiated?: boolean;
+    /** Channel Local Funds Constrained by Timelock */
+    is_timelocked: boolean;
     /** Channel Local Tokens Balance */
     local_balance: number;
     /** Channel Local Reserved Tokens */
@@ -43,6 +45,8 @@ export type GetPendingChannelsResult = {
     remote_reserve: number;
     /** Send Tokens */
     sent: number;
+    /** Timelock Blocks Remaining */
+    timelock_blocks?: number;
     /** Pending Tokens Block Height Timelock */
     timelock_expiration?: number;
     /** Funding Transaction Fee Tokens */
