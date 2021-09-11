@@ -265,6 +265,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Get notified on requests to open an inbound channel and interactively accept or reject them.
 - [subscribeToPastPayment](https://github.com/alexbosworth/ln-service#subscribetopastpayment):
     Get notified of the current and ongoing status of a past off-chain payment.
+- [subscribeToPastPayments](https://github.com/alexbosworth/ln-service#subscribetopastpayments):
+    Get notified of successful outgoing payments.
 - [subscribeToPayViaDetails](https://github.com/alexbosworth/ln-service#subscribetopayviadetails):
     Make an off-chain payment using payment details and subscribe to the status of that payment.
 - [subscribeToPayViaRequest](https://github.com/alexbosworth/ln-service#subscribetopayviarequest):

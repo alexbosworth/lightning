@@ -86,6 +86,7 @@ const outpointSeparator = ':';
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Initiated Channel Bool>
+      is_timelocked: <Channel Local Funds Constrained by Timelock Script Bool>
       local_balance: <Channel Local Tokens Balance Number>
       local_reserve: <Channel Local Reserved Tokens Number>
       partner_public_key: <Channel Peer Public Key String>
@@ -102,6 +103,7 @@ const outpointSeparator = ':';
       remote_balance: <Remote Tokens Balance Number>
       remote_reserve: <Channel Remote Reserved Tokens Number>
       sent: <Send Tokens Number>
+      [timelock_blocks]: <Timelock Blocks Remaining Number>
       [timelock_expiration]: <Pending Tokens Block Height Timelock Number>
       [transaction_fee]: <Commit Transaction Fee Tokens Number>
       transaction_id: <Channel Funding Transaction Id String>
@@ -205,6 +207,7 @@ module.exports = args => {
         };
       }),
       recovered_tokens: Number(pending.recovered_balance),
+      timelock_blocks: pending.blocks_til_maturity,
       timelock_expiration: pending.maturity_height,
     };
 
@@ -289,6 +292,7 @@ module.exports = args => {
       is_closing: !chanOpen,
       is_opening: !!chanOpen,
       is_partner_initiated: channel.initiator === remoteInitiator,
+      is_timelocked: forced.timelock_blocks !== undefined,
       local_balance: Number(channel.local_balance),
       local_reserve: Number(channel.local_chan_reserve_sat),
       partner_public_key: channel.remote_node_pub,
@@ -299,6 +303,7 @@ module.exports = args => {
       remote_balance: Number(channel.remote_balance),
       remote_reserve: Number(channel.remote_chan_reserve_sat),
       sent: Number(),
+      timelock_blocks: forced.timelock_blocks,
       timelock_expiration: forced.timelock_expiration || undefined,
       transaction_fee: !chanOpen ? null : chanOpen.transaction_fee,
       transaction_id: txId,

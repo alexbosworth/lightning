@@ -30,6 +30,7 @@ const type = 'default';
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Initiated Channel Bool>
+      is_timelocked: <Channel Local Funds Constrained by Timelock Script Bool>
       local_balance: <Channel Local Tokens Balance Number>
       local_reserve: <Channel Local Reserved Tokens Number>
       partner_public_key: <Channel Peer Public Key String>
@@ -46,6 +47,7 @@ const type = 'default';
       remote_balance: <Remote Tokens Balance Number>
       remote_reserve: <Channel Remote Reserved Tokens Number>
       sent: <Send Tokens Number>
+      [timelock_blocks]: <Timelock Blocks Remaining Number>
       [timelock_expiration]: <Pending Tokens Block Height Timelock Number>
       [transaction_fee]: <Commit Transaction Fee Tokens Number>
       transaction_id: <Channel Funding Transaction Id String>

@@ -2,7 +2,7 @@ const {join} = require('path');
 const {readFile} = require('fs').promises;
 
 const asyncMap = require('async/map');
-const fetch = require('node-fetch');
+const fetch = require('@alexbosworth/node-fetch');
 const {test} = require('@alexbosworth/tap');
 
 const {overrides} = require('./protos');
