@@ -291,7 +291,7 @@ module.exports = args => {
       is_anchor: channel.commitment_type === anchorChannelType,
       is_closing: !chanOpen,
       is_opening: !!chanOpen,
-      is_force_close: !!forced,
+      is_force_close: !!forceClosing[channel.channel_point],
       is_partner_initiated: channel.initiator === remoteInitiator,
       local_balance: Number(channel.local_balance),
       local_reserve: Number(channel.local_chan_reserve_sat),
