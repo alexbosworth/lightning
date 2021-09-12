@@ -53,6 +53,7 @@ const makeArgs = overrides => {
 
 const makeExpected = overrides => {
   const expected = {
+    confirmed_at: '1970-01-01T00:00:00.000Z',
     fee: 1,
     fee_mtokens: '1000',
     hops: [{

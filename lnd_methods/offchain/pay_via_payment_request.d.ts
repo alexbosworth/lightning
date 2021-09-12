@@ -37,6 +37,8 @@ export type PayViaPaymentRequestArgs = AuthenticatedLightningArgs<{
 }>;
 
 export type PayViaPaymentRequestResult = {
+  /** Payment Sent At ISO 8601 Date */
+  confirmed_at: string;
   /** Total Fee Tokens Paid Rounded Down */
   fee: number;
   /** Total Fee Millitokens Paid */

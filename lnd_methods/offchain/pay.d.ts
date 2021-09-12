@@ -79,6 +79,8 @@ export type PayArgs = AuthenticatedLightningArgs<{
 }>;
 
 export type PayResult = {
+  /** Payment Sent At ISO 8601 Date */
+  confirmed_at: string;
   /** Fee Paid Tokens */
   fee: number;
   /** Fee Paid Millitokens */

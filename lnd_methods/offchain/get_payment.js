@@ -29,6 +29,7 @@ const type = 'router';
     [is_failed]: <Payment Is Failed Bool>
     [is_pending]: <Payment Is Pending Bool>
     [payment]: {
+      confirmed_at: <Payment Confirmed At ISO 8601 Date String>
       fee: <Total Fees Paid Rounded Down Number>
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{

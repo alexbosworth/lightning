@@ -48,6 +48,8 @@ export type PayViaRoutesArgs = AuthenticatedLightningArgs<{
 }>;
 
 export type PayViaRoutesResult = {
+  /** Payment Sent At ISO 8601 Date */
+  confirmed_at: string;
   failures: LightningError[];
   /** Fee Paid Tokens */
   fee: number;

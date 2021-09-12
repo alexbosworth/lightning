@@ -55,6 +55,8 @@ export type GetPaymentsResult = {
         /** Error Message */
         message: string;
       };
+      /** Confirmed at ISO-8601 Date */
+      confirmed_at?: string;
       /** Payment Attempt Succeeded */
       is_confirmed: boolean;
       /** Payment Attempt Failed */
@@ -96,6 +98,8 @@ export type GetPaymentsResult = {
         total_mtokens?: string;
       };
     }[];
+    /** Confirmed at ISO-8601 Date */
+    confirmed_at: string;
     /** Payment at ISO-8601 Date */
     created_at: string;
     /** Destination Node Public Key Hex */

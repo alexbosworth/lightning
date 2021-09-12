@@ -73,6 +73,7 @@ const makeArgs = overrides => {
 const makeExpected = overrides => {
   const expected = {
     attempts: [{
+      confirmed_at: '1970-01-01T00:00:00.001Z',
       is_confirmed: false,
       is_failed: true,
       is_pending: false,
@@ -96,6 +97,7 @@ const makeExpected = overrides => {
         total_mtokens: '1000',
       },
     }],
+    confirmed_at: undefined,
     created_at: '1970-01-01T00:00:01.000Z',
     destination: Buffer.alloc(33).toString('hex'),
     fee: 1,
@@ -234,6 +236,7 @@ const tests = [
     description: 'A realistic successful payment is mapped to a payment',
     expected: makeExpected({
       attempts: [{
+        confirmed_at: '2020-04-20T19:17:16.160Z',
         is_confirmed: true,
         is_failed: false,
         is_pending: false,
@@ -257,6 +260,7 @@ const tests = [
           total_mtokens: '100000',
         },
       }],
+      confirmed_at: '2020-04-20T19:17:16.160Z',
       created_at: '2020-04-20T19:17:15.356Z',
       destination: '029860f8550e29316ee97460c79228d939b18d2a51dbef407f410e265c79b19073',
       fee: 0,

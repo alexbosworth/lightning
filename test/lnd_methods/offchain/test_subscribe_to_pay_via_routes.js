@@ -126,6 +126,7 @@ const tests = [
       failures: [],
       success: {
         route,
+        confirmed_at: undefined,
         fee: route.fee,
         fee_mtokens: route.fee_mtokens,
         hops: route.hops,

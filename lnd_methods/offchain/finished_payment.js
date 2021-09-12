@@ -5,6 +5,7 @@ const {returnResult} = require('asyncjs-util');
 
   {
     [confirmed]: {
+      confirmed_at: <Payment Confirmed At ISO 8601 Date String>
       fee: <Total Fee Tokens Paid Rounded Down Number>
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
@@ -66,6 +67,7 @@ const {returnResult} = require('asyncjs-util');
 
   @returns via cbk or Promise
   {
+    confirmed_at: <Payment Confirmed At ISO 8601 Date String>
     fee: <Fee Tokens Number>
     fee_mtokens: <Total Fee Millitokens To Pay String>
     hops: [{
@@ -134,6 +136,7 @@ module.exports = ({confirmed, failed}, cbk) => {
       // Return the payment resolution
       payment: ['checkFailure', ({}, cbk) => {
         return cbk(null, {
+          confirmed_at: confirmed.confirmed_at,
           fee: confirmed.fee,
           fee_mtokens: confirmed.fee_mtokens,
           hops: confirmed.hops,

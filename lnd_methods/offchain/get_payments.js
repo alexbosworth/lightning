@@ -55,6 +55,7 @@ const type = 'default';
           message: <Error Message String>
         }
         [index]: <Payment Add Index Number>
+        [confirmed_at]: <Payment Confirmed At ISO 8601 Date String>
         is_confirmed: <Payment Attempt Succeeded Bool>
         is_failed: <Payment Attempt Failed Bool>
         is_pending: <Payment Attempt is Waiting For Resolution Bool>
@@ -78,6 +79,7 @@ const type = 'default';
           [total_mtokens]: <Total Millitokens String>
         }
       }]
+      confirmed_at: <Payment Confirmed At ISO 8601 Date String>
       created_at: <Payment at ISO-8601 Date String>
       destination: <Destination Node Public Key Hex String>
       fee: <Paid Routing Fee Rounded Down Tokens Number>

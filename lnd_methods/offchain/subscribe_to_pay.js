@@ -84,6 +84,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
 
   @event 'confirmed'
   {
+    confirmed_at: <Payment Confirmed At ISO 8601 Date String>
     fee: <Total Fee Tokens Paid Rounded Down Number>
     fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{

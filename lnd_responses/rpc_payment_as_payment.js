@@ -194,8 +194,10 @@ module.exports = payment => {
 
   const hasPath = !!payment.path.length;
   const [attempt] = attempts;
+  const successes = attempts.filter(n => n.is_confirmed);
 
   const path = !hasPath ? routePublicKeys(attempt.route) : payment.path;
+  const [confirmedAt] = successes.map(n => n.confirmed_at).sort().reverse();
 
   const [destination, ...hops] = path.reverse();
 
@@ -211,6 +213,7 @@ module.exports = payment => {
   return {
     destination,
     attempts: payment.htlcs.map(htlc => rpcAttemptHtlcAsAttempt(htlc)),
+    confirmed_at: confirmedAt || undefined,
     created_at: new Date(creationDateEpochMs).toISOString(),
     fee: safeTokens({mtokens: payment.fee_msat}).tokens,
     fee_mtokens: payment.fee_msat,

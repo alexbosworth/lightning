@@ -2,6 +2,8 @@ const {attemptStates} = require('./constants');
 
 const rpcRouteAsRoute = require('./rpc_route_as_route');
 
+const nsAsMs = ns => Number(BigInt(ns) / BigInt(1e6));
+
 /** Payment attempt details from RPC HTLCAttempt message
 
   {
@@ -59,36 +61,10 @@ const rpcRouteAsRoute = require('./rpc_route_as_route');
 
   @returns
   {
+    confirmed_at: <Payment Succeeded At ISO 8601 Date String>
     is_confirmed: <Payment Attempt Succeeded Bool>
     is_failed: <Payment Attempt Failed Bool>
     is_pending: <Payment Attempt is Waiting For Resolution Bool>
-    [failure]: {
-      code: <Error Type Code Number>
-      [details]: {
-        [channel]: <Standard Format Channel Id String>
-        [height]: <Error Associated Block Height Number>
-        [index]: <Failed Hop Index Number>
-        [mtokens]: <Error Millitokens String>
-        [policy]: {
-          base_fee_mtokens: <Base Fee Millitokens String>
-          cltv_delta: <Locktime Delta Number>
-          fee_rate: <Fees Charged in Millitokens Per Million Number>
-          [is_disabled]: <Channel is Disabled Bool>
-          max_htlc_mtokens: <Maximum HLTC Millitokens Value String>
-          min_htlc_mtokens: <Minimum HTLC Millitokens Value String>
-          updated_at: <Updated At ISO 8601 Date String>
-        }
-        [timeout_height]: <Error CLTV Timeout Height Number>
-        [update]: {
-          chain: <Chain Id Hex String>
-          channel_flags: <Channel Flags Number>
-          extra_opaque_data: <Extra Opaque Data Hex String>
-          message_flags: <Message Flags Number>
-          signature: <Channel Update Signature Hex String>
-        }
-      }
-      message: <Error Message String>
-    }
     route: {
       fee: <Route Fee Tokens Number>
       fee_mtokens: <Route Fee Millitokens String>
@@ -115,6 +91,10 @@ module.exports = attempt => {
     throw new Error('ExpectedRpcAttemptDetailsToDeriveAttempt');
   }
 
+  if (!attempt.resolve_time_ns) {
+    throw new Error('ExpectedRpcAttemptResolveTimeNs');
+  }
+
   if (!attempt.route) {
     throw new Error('ExpectedRouteAttemptedInRpcAttemptDetails');
   }
@@ -124,6 +104,7 @@ module.exports = attempt => {
   }
 
   return {
+    confirmed_at: new Date(nsAsMs(attempt.resolve_time_ns)).toISOString(),
     is_confirmed: attempt.status === attemptStates.confirmed,
     is_failed: attempt.status === attemptStates.failed,
     is_pending: attempt.status === attemptStates.pending,

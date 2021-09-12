@@ -61,6 +61,8 @@ export type SubscribeToPayViaDetailsArgs = AuthenticatedLightningArgs<{
 }>;
 
 export type SubscribeToPayViaDetailsConfirmedEvent = {
+  /** Confirmed at ISO-8601 Date */
+  confirmed_at: string;
   /** Fee Tokens Paid */
   fee: number;
   /** Total Fee Millitokens Paid */

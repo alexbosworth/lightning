@@ -46,6 +46,7 @@ const notFound = -1;
 
   @returns via cbk or Promise
   {
+    confirmed_at: <Payment Confirmed At ISO 8601 Date String>
     failures: [[
       <Failure Code Number>
       <Failure Code Message String>
@@ -136,6 +137,7 @@ module.exports = (args, cbk) => {
 
           if (!!result.success) {
             return cbk(null, {
+              confirmed_at: result.success.confirmed_at,
               failures: result.failures,
               fee: result.success.fee,
               fee_mtokens: result.success.fee_mtokens,

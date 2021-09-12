@@ -5,6 +5,7 @@ const method = require('./../../../lnd_methods/offchain/finished_payment');
 const makeArgs = overrides => {
   const args = {
     confirmed: {
+      confirmed_at: new Date(1).toISOString(),
       fee: 1,
       fee_mtokens: '1000',
       hops: [{
@@ -91,6 +92,7 @@ const tests = [
     args: makeArgs({}),
     description: 'Successful payment details are returned',
     expected: {
+      confirmed_at: '1970-01-01T00:00:00.001Z',
       fee: 1,
       fee_mtokens: '1000',
       hops: [{

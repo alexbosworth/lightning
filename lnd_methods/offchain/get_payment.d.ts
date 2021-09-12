@@ -26,6 +26,8 @@ export type GetPaymentResult = {
   /** Payment Is Pending */
   is_pending?: boolean;
   payment?: {
+    /** Confirmed at ISO-8601 Date */
+    confirmed_at: string;
     /** Total Fee Millitokens To Pay */
     fee_mtokens: string;
     hops: {

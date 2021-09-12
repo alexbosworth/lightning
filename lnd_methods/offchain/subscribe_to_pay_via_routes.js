@@ -13,11 +13,13 @@ const {paymentFailure} = require('./../../lnd_responses');
 const routeFailureKeys = require('./../offchain/route_failure_keys');
 const {rpcRouteFromRoute} = require('./../../lnd_requests');
 
+const msAsISO = ms => new Date(ms).toISOString();
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 const method = 'sendToRouteV2';
 const notFoundIndex = -1;
 const {now} = Date;
+const nsAsMs = ns => Number(BigInt(ns) / BigInt(1e6));
 const payHashLength = Buffer.alloc(32).length;
 const timeoutError = 'payment attempt not completed before timeout';
 const unknownWireError = 'unknown wire error';
@@ -273,7 +275,13 @@ module.exports = args => {
             return cbk([503, 'ExpectedResponseFromLndWhenPayingViaRoute']);
           }
 
-          return cbk(null, {failure: res.failure, preimage: res.preimage});
+          const confAt = !!res.preimage ? res.resolve_time_ns : undefined;
+
+          return cbk(null, {
+            confirmed_at: !!confAt ? msAsISO(nsAsMs(confAt)) : undefined,
+            failure: res.failure,
+            preimage: res.preimage,
+          });
         });
       }],
 
@@ -317,6 +325,7 @@ module.exports = args => {
         isPayDone = true;
 
         return cbk(null, {
+          confirmed_at: attempt.confirmed_at,
           fee: route.fee,
           fee_mtokens: route.fee_mtokens,
           hops: route.hops,
@@ -369,6 +378,7 @@ module.exports = args => {
         emitter.emit('success', {
           id,
           route,
+          confirmed_at: success.confirmed_at,
           fee: success.fee,
           fee_mtokens: success.fee_mtokens,
           hops: success.hops,

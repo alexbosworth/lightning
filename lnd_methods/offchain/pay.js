@@ -64,6 +64,7 @@ const payViaRoutes = require('./pay_via_routes');
 
   @returns via cbk or Promise
   {
+    confirmed_at: <Payment Confirmed At ISO 8601 Date String>
     fee: <Fee Paid Tokens Number>
     fee_mtokens: <Fee Paid Millitokens String>
     hops: [{
@@ -166,6 +167,7 @@ module.exports = (args, cbk) => {
         const result = payViaRequest || payViaRoutes;
 
         return cbk(null, {
+          confirmed_at: result.confirmed_at,
           fee: result.fee,
           fee_mtokens: result.fee_mtokens,
           hops: result.hops,

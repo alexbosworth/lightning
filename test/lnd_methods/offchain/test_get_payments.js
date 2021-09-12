@@ -34,7 +34,7 @@ const makeLnd = args => {
               total_fees_msat: '1000',
               total_time_lock: 1,
             },
-            status: 'SETTLED',
+            status: 'SUCCEEDED',
           }],
           path: [Buffer.alloc(33, 2).toString('hex')],
           payment_hash: Buffer.alloc(32).toString('hex'),
@@ -64,7 +64,8 @@ const makeExpectedPayment = ({}) => {
   return {
     destination: '020202020202020202020202020202020202020202020202020202020202020202',
     attempts: [{
-      is_confirmed: false,
+      confirmed_at: '1970-01-01T00:00:00.000Z',
+      is_confirmed: true,
       is_failed: false,
       is_pending: false,
       route: {
@@ -87,6 +88,7 @@ const makeExpectedPayment = ({}) => {
         total_mtokens: undefined
       },
     }],
+    confirmed_at: '1970-01-01T00:00:00.000Z',
     created_at: '1970-01-01T00:00:00.000Z',
     fee: 1,
     fee_mtokens: '1000',

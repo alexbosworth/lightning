@@ -198,6 +198,8 @@ export type SubscribeToPayViaRoutesRoutingFailureEvent = {
 };
 
 export type SubscribeToPayViaRoutesSuccessEvent = {
+  /** Payment Sent At ISO 8601 Date */
+  confirmed_at: string;
   /** Fee Paid Tokens */
   fee: number;
   /** Fee Paid Millitokens */
