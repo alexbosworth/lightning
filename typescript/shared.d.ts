@@ -13,7 +13,9 @@ export type UnauthenticatedLightningArgs<TArgs = undefined> =
     ? {lnd: UnauthenticatedLnd}
     : TArgs & {lnd: UnauthenticatedLnd};
 
-export type LightningError<TDetails = any> = [number, string, TDetails];
+export type LightningError<TError = {err: Error}> = TError extends undefined
+  ? [number, string]
+  : [number, string, TError];
 
 export type LightningCallback<TResult = void, TErrorDetails = any> = (
   error: LightningError<TErrorDetails> | undefined | null,
