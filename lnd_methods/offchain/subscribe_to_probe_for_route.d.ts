@@ -63,7 +63,7 @@ export type SubscribeToProbeForRouteArgs = AuthenticatedLightningArgs<{
   total_mtokens?: string;
 }>;
 
-export type SubscribeToProbeForRouteErrorEvent = LightningError<never>;
+export type SubscribeToProbeForRouteErrorEvent = LightningError<undefined>;
 
 export type SubscribeToProbeForRouteProbeSuccessEvent = {
   route: {
