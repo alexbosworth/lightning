@@ -8,6 +8,7 @@ const method = 'subscribeState';
 const stateAbsent = 'NON_EXISTING';
 const stateActive = 'RPC_ACTIVE';
 const stateLocked = 'LOCKED';
+const stateReady = 'SERVER_ACTIVE';
 const stateStarting = 'UNLOCKED';
 const stateWaiting = 'WAITING_TO_START';
 const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
@@ -16,6 +17,8 @@ const type = 'status';
 /** Subscribe to wallet status events
 
   This method is not supported on LND 0.12.1 and below
+
+  `ready` is not supported on LND 0.13.1 and below
 
   {
     lnd: <Unauthenticated LND API Object>
@@ -39,6 +42,9 @@ const type = 'status';
 
   // The wallet is inactive because it is locked
   @event 'locked'
+
+  // The wallet is ready for all RPC server requests
+  @event 'ready'
 
   // The wallet is in the process of starting
   @event 'starting'
@@ -97,6 +103,9 @@ module.exports = ({lnd}) => {
 
     case stateLocked:
       return emitter.emit('locked', {});
+
+    case stateReady:
+      return emitter.emit('ready', {});
 
     case stateStarting:
       return emitter.emit('starting', {});

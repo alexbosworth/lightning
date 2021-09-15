@@ -15,7 +15,7 @@ const tests = [
   },
   {
     args: {lnd: {default: {deleteAllPayments: ({}, cbk) => cbk()}}},
-    description: 'Payments are deleted',
+    description: 'Payment is deleted',
   },
 ];
 

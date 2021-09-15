@@ -1,6 +1,6 @@
 {
   "overrides": [
-    ["lightning", 3229],
+    ["lightning", 3330],
     ["router", 100, 171],
     ["walletkit", 3],
     ["walletunlocker", 2]

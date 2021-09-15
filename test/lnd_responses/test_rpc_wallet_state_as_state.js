@@ -31,6 +31,11 @@ const tests = [
     expected: makeExpected({is_active: true}),
   },
   {
+    args: {state: 'SERVER_ACTIVE'},
+    description: 'Server is ready',
+    expected: makeExpected({is_active: true, is_ready: true}),
+  },
+  {
     args: {state: 'LOCKED'},
     description: 'Wallet file is encrypted',
     expected: makeExpected({is_locked: true}),

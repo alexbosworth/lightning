@@ -14,6 +14,8 @@ const unsupportedMessage = 'unknown service lnrpc.State';
 
   This method is not supported on LND 0.12.1 and below
 
+  `is_ready` is not supported on LND 0.13.1 and below
+
   {
     lnd: <Unauthenticated LND API Object>
   }
@@ -23,6 +25,7 @@ const unsupportedMessage = 'unknown service lnrpc.State';
     [is_absent]: <Wallet Not Created Bool>
     [is_active]: <Wallet Is Active Bool>
     [is_locked]: <Wallet File Encrypted And Wallet Not Active Bool>
+    [is_ready]: <Wallet Is Ready For RPC Calls Bool>
     [is_starting]: <Wallet Is Starting Up Bool>
     [is_waiting]: <Wallet Is Waiting To Start Bool>
   }

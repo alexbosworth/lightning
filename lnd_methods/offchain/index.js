@@ -3,6 +3,7 @@ const decodePaymentRequest = require('./decode_payment_request');
 const deleteFailedPayAttempts = require('./delete_failed_pay_attempts');
 const deleteFailedPayments = require('./delete_failed_payments');
 const deleteForwardingReputations = require('./delete_forwarding_reputations');
+const deletePayment = require('./delete_payment');
 const deletePayments = require('./delete_payments');
 const disableChannel = require('./disable_channel');
 const disconnectWatchtower = require('./disconnect_watchtower');
@@ -53,6 +54,7 @@ module.exports = {
   deleteFailedPayAttempts,
   deleteFailedPayments,
   deleteForwardingReputations,
+  deletePayment,
   deletePayments,
   disableChannel,
   disconnectWatchtower,

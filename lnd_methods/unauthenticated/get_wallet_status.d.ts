@@ -11,6 +11,9 @@ export type GetWalletStatusResult = {
   /** Is Wallet File Encrypted */
   is_locked?: boolean;
 
+  /** Is Wallet Ready For All RPC Calls */
+  is_ready?: boolean;
+
   /** Is Wallet Starting Up */
   is_starting?: boolean;
 

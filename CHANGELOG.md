@@ -1,5 +1,12 @@
 # Versions
 
+## 4.5.0
+
+- `deletePayment`: Add method to delete a single payment
+- `deleteFailedPayAttempts`: Add `id` argument to delete failed attempts for a payment
+- `getWalletStatus`: `is_ready`: Add wallet server ready status
+- `subscribeToWalletStatus`: Add `ready` event to indicate server ready status
+
 ## 4.4.0
 
 - `getPayment`: Add `confirmed_at` to indicate when payment resolved successfully
