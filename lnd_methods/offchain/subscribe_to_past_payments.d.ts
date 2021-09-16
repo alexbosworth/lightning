@@ -12,6 +12,8 @@ export type SubscribeToPastPaymentsErrorEvent = LightningError;
 export type SubscribeToPastPaymentsPaymentEvent = {
   /** Payment Confirmed At ISO 8601 Date String */
   confirmed_at: string;
+  /** Created at ISO-8601 Date */
+  created_at: string;
   /** Payment Destination Public Key Hex */
   destination: string;
   /** Paid Routing Fee Rounded Down Tokens Number */
@@ -48,6 +50,8 @@ export type SubscribeToPastPaymentsPaymentEvent = {
       mtokens: string;
     }
   ];
+  /** BOLT 11 Payment Request */
+  request?: string;
   /** Total Fee Tokens Paid Rounded Up Number */
   safe_fee: number;
   /** Total Tokens Paid, Rounded Up Number */

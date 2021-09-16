@@ -30,6 +30,7 @@ const type = 'router';
     [is_pending]: <Payment Is Pending Bool>
     [payment]: {
       confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+      created_at: <Payment Created At ISO 8601 Date String>
       destination: <Payment Destination Hex String>
       fee: <Total Fees Paid Rounded Down Number>
       fee_mtokens: <Total Fee Millitokens Paid String>
@@ -58,6 +59,7 @@ const type = 'router';
         }]
         mtokens: <Total Millitokens Paid String>
       }]
+      [request]: <BOLT 11 Encoded Payment Request String>
       safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>
       safe_tokens: <Payment Tokens Rounded Up Number>
       secret: <Payment Preimage Hex String>

@@ -41,6 +41,7 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
   @event 'payment'
   {
     confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+    created_at: <Payment Created At ISO 8601 Date String>
     destination: <Payment Destination Hex String>
     fee: <Paid Routing Fee Rounded Down Tokens Number>
     fee_mtokens: <Paid Routing Fee in Millitokens String>
@@ -59,6 +60,7 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
       }]
       mtokens: <Total Millitokens Paid String>
     }]
+    [request]: <BOLT 11 Encoded Payment Request String>
     safe_fee: <Total Fee Tokens Paid Rounded Up Number>
     safe_tokens: <Total Tokens Paid, Rounded Up Number>
     secret: <Payment Preimage Hex String>

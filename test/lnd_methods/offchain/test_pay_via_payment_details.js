@@ -306,7 +306,7 @@ const tests = [
   {
     args: makeArgs({lnd: makeLnd({data: {status: 'SUCCEEDED'}})}),
     description: 'A payment attempt is in flight',
-    error: [503, 'ExpectedPaymentFeeMillitokensAmountForPayment'],
+    error: [503, 'ExpectedPaymentCreationDateToDerivePaymentDetails'],
   },
 ];
 

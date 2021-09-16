@@ -28,6 +28,8 @@ export type GetPaymentResult = {
   payment?: {
     /** Confirmed at ISO-8601 Date */
     confirmed_at: string;
+    /** Created at ISO-8601 Date */
+    created_at: string;
     /** Payment Destination Public Key Hex */
     destination: string;
     /** Total Fee Millitokens To Pay */
@@ -54,6 +56,8 @@ export type GetPaymentResult = {
     id: string;
     /** Total Millitokens Paid */
     mtokens: string;
+    /** BOLT 11 Payment Request */
+    request?: string;
     /** Payment Forwarding Fee Rounded Up Tokens */
     safe_fee: number;
     /** Payment Tokens Rounded Up */

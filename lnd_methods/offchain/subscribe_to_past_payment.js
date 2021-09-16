@@ -41,6 +41,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
   @event 'confirmed'
   {
     confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+    created_at: <Payment Created At ISO 8601 Date String>
     destination: <Payment Destination Hex String>
     fee: <Total Fee Tokens Paid Rounded Down Number>
     fee_mtokens: <Total Fee Millitokens Paid String>
@@ -64,6 +65,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
       safe_tokens: <Total Tokens Paid, Rounded Up Number>
       timeout: <Expiration Block Height Number>
     }]
+    [request]: <BOLT 11 Encoded Payment Request String>
     safe_fee: <Total Fee Tokens Paid Rounded Up Number>
     safe_tokens: <Total Tokens Paid, Rounded Up Number>
     secret: <Payment Preimage Hex String>

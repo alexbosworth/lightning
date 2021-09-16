@@ -6,6 +6,7 @@ const {isArray} = Array;
 const is256Hex = n => !!n && /^[0-9A-F]{64}$/i.test(n);
 const {max} = Math;
 const mtokensAsTokens = mtokens => safeTokens({mtokens}).tokens;
+const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
 
 /** Calculate total payment details from RPC payment HTLC elements
 
@@ -65,6 +66,7 @@ const mtokensAsTokens = mtokens => safeTokens({mtokens}).tokens;
   @returns
   {
     confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+    created_at: <Payment Created At ISO 8601 Date String>
     destination: <Payment Destination Public Key Hex String>
     fee: <Total Fee Tokens Paid Rounded Down Number>
     fee_mtokens: <Total Fee Millitokens Paid String>
@@ -98,6 +100,7 @@ const mtokensAsTokens = mtokens => safeTokens({mtokens}).tokens;
       safe_tokens: <Total Tokens Paid, Rounded Up Number>
       timeout: <Expiration Block Height Number>
     }]
+    [request]: <BOLT 11 Encoded Payment Request String>
     safe_fee: <Total Fee Tokens Paid Rounded Up Number>
     safe_tokens: <Total Tokens Paid, Rounded Up Number>
     secret: <Payment Preimage Hex String>
@@ -108,6 +111,10 @@ const mtokensAsTokens = mtokens => safeTokens({mtokens}).tokens;
 module.exports = payment => {
   if (!payment) {
     throw new Error('ExpectedConfirmedPaymentToDeriveConfirmationDetails');
+  }
+
+  if (!payment.creation_time_ns) {
+    throw new Error('ExpectedPaymentCreationDateToDerivePaymentDetails');
   }
 
   if (!payment.fee_msat) {
@@ -147,12 +154,14 @@ module.exports = payment => {
   return {
     destination,
     confirmed_at: confirmedAt,
+    created_at: nsAsDate(payment.creation_time_ns).toISOString(),
     fee: safeTokens({mtokens: payment.fee_msat}).tokens,
     fee_mtokens: payment.fee_msat,
     hops: success.route.hops,
     id: payment.payment_hash,
     mtokens: mtokens.toString(),
     paths: successes.map(n => n.route),
+    request: payment.payment_request || undefined,
     safe_fee: safeTokens({mtokens: payment.fee_msat}).safe,
     safe_tokens: safeTokens({mtokens: mtokens.toString()}).safe,
     secret: payment.payment_preimage,

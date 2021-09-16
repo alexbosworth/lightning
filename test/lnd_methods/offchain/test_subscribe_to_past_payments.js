@@ -204,6 +204,7 @@ const tests = [
     description: 'A past payment is emitted',
     expected: {
       confirmed_at: '1970-01-01T00:00:00.000Z',
+      created_at: '1970-01-01T00:00:00.000Z',
       destination: '000000000000000000000000000000000000000000000000000000000000000000',
       fee: 1,
       fee_mtokens: '1000',
@@ -244,6 +245,7 @@ const tests = [
           total_mtokens: '1000',
         }
       ],
+      request: undefined,
       safe_fee: 1,
       safe_tokens: 2,
       secret: '0000000000000000000000000000000000000000000000000000000000000000',
