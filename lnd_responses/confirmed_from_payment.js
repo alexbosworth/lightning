@@ -65,6 +65,7 @@ const mtokensAsTokens = mtokens => safeTokens({mtokens}).tokens;
   @returns
   {
     confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+    destination: <Payment Destination Public Key Hex String>
     fee: <Total Fee Tokens Paid Rounded Down Number>
     fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{
@@ -141,7 +142,10 @@ module.exports = payment => {
   const [confirmedAt] = successes.map(n => n.confirmed_at).sort().reverse();
   const [success] = successes;
 
+  const [destination] = success.route.hops.map(n => n.public_key).reverse();
+
   return {
+    destination,
     confirmed_at: confirmedAt,
     fee: safeTokens({mtokens: payment.fee_msat}).tokens,
     fee_mtokens: payment.fee_msat,

@@ -41,6 +41,7 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
   @event 'payment'
   {
     confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+    destination: <Payment Destination Hex String>
     fee: <Paid Routing Fee Rounded Down Tokens Number>
     fee_mtokens: <Paid Routing Fee in Millitokens String>
     id: <Payment Preimage Hash String>

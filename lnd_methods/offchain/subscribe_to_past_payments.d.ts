@@ -12,6 +12,8 @@ export type SubscribeToPastPaymentsErrorEvent = LightningError;
 export type SubscribeToPastPaymentsPaymentEvent = {
   /** Payment Confirmed At ISO 8601 Date String */
   confirmed_at: string;
+  /** Payment Destination Public Key Hex */
+  destination: string;
   /** Paid Routing Fee Rounded Down Tokens Number */
   fee: number;
   /** Paid Routing Fee in Millitokens String */

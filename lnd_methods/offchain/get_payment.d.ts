@@ -28,6 +28,8 @@ export type GetPaymentResult = {
   payment?: {
     /** Confirmed at ISO-8601 Date */
     confirmed_at: string;
+    /** Payment Destination Public Key Hex */
+    destination: string;
     /** Total Fee Millitokens To Pay */
     fee_mtokens: string;
     hops: {

@@ -30,6 +30,7 @@ const type = 'router';
     [is_pending]: <Payment Is Pending Bool>
     [payment]: {
       confirmed_at: <Payment Confirmed At ISO 8601 Date String>
+      destination: <Payment Destination Hex String>
       fee: <Total Fees Paid Rounded Down Number>
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{

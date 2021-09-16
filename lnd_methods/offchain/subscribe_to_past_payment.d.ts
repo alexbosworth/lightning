@@ -11,6 +11,8 @@ export type SubscribeToPastPaymentArgs = AuthenticatedLightningArgs<{
 export type SubscribeToPastPaymentConfirmedEvent = {
   /** Confirmed at ISO-8601 Date */
   confirmed: string;
+  /** Payment Destination Public Key Hex */
+  destination: string;
   /** Payment Forwarding Fee Rounded Down Tokens */
   fee: number;
   /** Total Fee Millitokens To Pay */
