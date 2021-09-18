@@ -15,6 +15,7 @@ const {decodePaymentRequest} = require('./lnd_methods');
 const {deleteFailedPayAttempts} = require('./lnd_methods');
 const {deleteFailedPayments} = require('./lnd_methods');
 const {deleteForwardingReputations} = require('./lnd_methods');
+const {deletePayment} = require('./lnd_methods');
 const {deletePayments} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {disableChannel} = require('./lnd_methods');
@@ -145,6 +146,7 @@ module.exports = {
   deleteFailedPayAttempts,
   deleteFailedPayments,
   deleteForwardingReputations,
+  deletePayment,
   deletePayments,
   disableChannel,
   disconnectWatchtower,
