@@ -119,6 +119,7 @@ const {updateChainTransaction} = require('./onchain');
 const {updateConnectedWatchtower} = require('./offchain');
 const {updatePathfindingSettings} = require('./offchain');
 const {updateRoutingFees} = require('./offchain');
+const {verifyAccess} = require('./macaroon');
 const {verifyBackup} = require('./offchain');
 const {verifyBackups} = require('./offchain');
 const {verifyBytesSignature} = require('./signer');
@@ -246,6 +247,7 @@ module.exports = {
   updateConnectedWatchtower,
   updatePathfindingSettings,
   updateRoutingFees,
+  verifyAccess,
   verifyBackup,
   verifyBackups,
   verifyBytesSignature,
