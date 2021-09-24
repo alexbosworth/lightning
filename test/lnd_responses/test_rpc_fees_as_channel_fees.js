@@ -18,7 +18,7 @@ const makeArgs = override => {
 const tests = [
   {
     args: null,
-    description: 'Rpc fees are mapped to channel fees',
+    description: 'Rpc fees are needed to map to channel fees',
     error: 'ExpectedRpcChannelPolicyToDeriveChannelFees',
   },
   {

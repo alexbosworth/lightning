@@ -122,6 +122,14 @@ const makeLnd = ({data, err}) => {
         return emitter;
       },
     },
+    version: {
+      getVersion: ({}, cbk) => cbk(err, {
+        app_minor: 1,
+        app_patch: 1,
+        build_tags: ['autopilotrpc'],
+        commit_hash: Buffer.alloc(20).toString('hex'),
+      }),
+    },
   };
 };
 

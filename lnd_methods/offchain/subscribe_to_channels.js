@@ -5,12 +5,13 @@ const {rpcChannelAsChannel} = require('./../../lnd_responses');
 const {rpcClosedChannelAsClosed} = require('./../../lnd_responses');
 const {rpcOutpointAsUpdate} = require('./../../lnd_responses');
 
+const asError = msg => new Error(msg);
 const emptyTxId = Buffer.alloc(32).toString('hex');
-const method = 'subscribeChannelEvents';
 const eventActive = 'channel_active_changed';
 const eventClosed = 'channel_closed';
 const eventOpen = 'channel_opened';
 const eventOpening = 'channel_opening';
+const method = 'subscribeChannelEvents';
 const shutDownMessage = 'Cancelled';
 const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
 const type = 'default';
@@ -156,11 +157,11 @@ module.exports = ({lnd}) => {
 
   subscription.on('data', update => {
     if (!update) {
-      return emitError(new Error('ExpectedEventDetailsInChannelSubscription'));
+      return emitError(asError('ExpectedEventDetailsInChannelSubscription'));
     }
 
     if (!update.type || !update.type.toLowerCase) {
-      return emitError(new Error('ExpectedEventTypeInChannelSubscription'));
+      return emitError(asError('ExpectedEventTypeInChannelSubscription'));
     }
 
     const updateType = update.type.toLowerCase();
@@ -168,7 +169,7 @@ module.exports = ({lnd}) => {
     const details = update[updateType];
 
     if (!details) {
-      return emitError(new Error('ExpectedEventDetailsForTypeInChannelSub'));
+      return emitError(asError('ExpectedEventDetailsForTypeInChannelSub'));
     }
 
     try {

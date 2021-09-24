@@ -15,10 +15,12 @@ const policyFromChannelUpdate = require('./policy_from_channel_update');
 const routesFromQueryRoutes = require('./routes_from_query_routes');
 const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
 const rpcChannelAsChannel = require('./rpc_channel_as_channel');
+const rpcChannelAsOldRpcChannel = require('./rpc_channel_as_old_rpc_channel');
 const rpcChannelClosedAsClosed = require('./rpc_channel_closed_as_closed');
 const rpcChannelUpdateAsUpdate = require('./rpc_channel_update_as_update');
 const rpcClosedChannelAsClosed = require('./rpc_closed_channel_as_closed');
 const rpcConfAsConfirmation = require('./rpc_conf_as_confirmation');
+const rpcFailedPolicyAsFail = require('./rpc_failed_policy_as_fail');
 const rpcFeesAsChannelFees = require('./rpc_fees_as_channel_fees');
 const rpcForwardAsForward = require('./rpc_forward_as_forward');
 const rpcForwardAsForwardRequest = require('./rpc_forward_as_forward_request');
@@ -53,10 +55,12 @@ module.exports = {
   routesFromQueryRoutes,
   rpcAttemptHtlcAsAttempt,
   rpcChannelAsChannel,
+  rpcChannelAsOldRpcChannel,
   rpcChannelClosedAsClosed,
   rpcChannelUpdateAsUpdate,
   rpcClosedChannelAsClosed,
   rpcConfAsConfirmation,
+  rpcFailedPolicyAsFail,
   rpcFeesAsChannelFees,
   rpcForwardAsForward,
   rpcForwardAsForwardRequest,

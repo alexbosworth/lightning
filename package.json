@@ -27,8 +27,8 @@
   },
   "description": "Lightning Network client library",
   "devDependencies": {
-    "@alexbosworth/tap": "15.0.10",
     "@alexbosworth/node-fetch": "2.6.2",
+    "@alexbosworth/tap": "15.0.10",
     "tsd": "0.17.0",
     "typescript": "4.4.3",
     "ws": "8.2.2"
@@ -56,5 +56,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "4.7.1"
+  "version": "4.7.2"
 }

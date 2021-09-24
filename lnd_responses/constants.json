@@ -1,4 +1,9 @@
 {
+  "adjustedChannelTypes": {
+    "LEGACY": "STATIC_REMOTE_KEY",
+    "STATIC_REMOTE_KEY": "ANCHORS",
+    "UNKNOWN_COMMITMENT_TYPE": "LEGACY"
+  },
   "attemptStates": {
     "confirmed": "SUCCEEDED",
     "failed": "FAILED",
@@ -9,6 +14,7 @@
     "static_remote_key": "STATIC_REMOTE_KEY",
     "variable_remote_key": "LEGACY"
   },
+  "defaultChannelType": "UNKNOWN_COMMITMENT_TYPE",
   "failureReason": {
     "invalid_payment": "FAILURE_REASON_INCORRECT_PAYMENT_DETAILS",
     "insufficient_balance": "FAILURE_REASON_INSUFFICIENT_BALANCE",
@@ -25,11 +31,31 @@
     "receive": "RECEIVE",
     "send": "SEND"
   },
+  "oldChannelVersions": [
+    "0.10.0-beta",
+    "0.10.1-beta",
+    "0.10.2-beta",
+    "0.10.3-beta",
+    "0.10.4-beta",
+    "0.11.0-beta",
+    "0.11.1-beta",
+    "0.12.0-beta",
+    "0.12.1-beta",
+    "0.13.0-beta",
+    "0.13.1-beta",
+    "0.13.2-beta",
+    "0.13.3-beta"
+  ],
   "paymentStates": {
     "insufficient_balance": "FAILED_INSUFFICIENT_BALANCE",
     "invalid_payment": "FAILED_INCORRECT_PAYMENT_DETAILS",
     "pathfinding_routes_failed": "FAILED_NO_ROUTE",
     "pathfinding_timeout_failed": "FAILED_TIMEOUT"
+  },
+  "policyUpdateFailures": {
+    "invalid_policy": "UPDATE_FAILURE_INVALID_PARAMETER",
+    "pending_channel": "UPDATE_FAILURE_PENDING",
+    "unknown_channel": "UPDATE_FAILURE_NOT_FOUND"
   },
   "resolutionOutcomes": {
     "confirmed": "CLAIMED",

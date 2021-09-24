@@ -2,12 +2,14 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
+const {rpcFailedPolicyAsFail} = require('./../../lnd_responses');
 
 const defaultBaseFee = 1;
 const defaultCltvDelta = 40;
 const defaultRate = 1;
 const feeRatio = 1e6;
 const {floor} = Math;
+const {isArray} = Array;
 const method = 'updateChannelPolicy';
 const tokensAsMtokens = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
 const type = 'default';
@@ -17,6 +19,8 @@ const type = 'default';
   Note: not setting a policy attribute will result in a minimal default used
 
   Setting both `base_fee_tokens` and `base_fee_mtokens` is not supported
+
+  `failures` are not returned on LND 0.13.1 and below
 
   Requires `offchain:write` permission
 
@@ -33,6 +37,16 @@ const type = 'default';
   }
 
   @returns via cbk or Promise
+  {
+    failures: [{
+      failure: <Failure Reason String>
+      is_pending_channel: <Referenced Channel Is Still Pending Bool>
+      is_unknown_channel: <Referenced Channel is Unknown Bool>
+      is_invalid_policy: <Policy Arguments Are Invalid Bool>
+      transaction_id: <Funding Transaction Id Hex String>
+      transaction_vout: <Funding Transaction Output Index Number>
+    }]
+  }
 */
 module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
@@ -96,15 +110,29 @@ module.exports = (args, cbk) => {
           min_htlc_msat_specified: !!args.min_htlc_mtokens,
           time_lock_delta: args.cltv_delta || defaultCltvDelta,
         },
-        err => {
+        (err, res) => {
           if (!!err) {
             return cbk([503, 'UnexpectedErrorUpdatingRoutingFees', {err}]);
           }
 
-          return cbk();
+          if (!res) {
+            return cbk([503, 'ExpectedRoutingPolicyUpdateResponse']);
+          }
+
+          if (!isArray(res.failed_updates)) {
+            return cbk([503, 'ExpectedFailedUpdateArrayInUpdateResponse']);
+          }
+
+          try {
+            const failures = res.failed_updates.map(rpcFailedPolicyAsFail);
+
+            return cbk(null, {failures});
+          } catch (err) {
+            return cbk([503, err.message]);
+          }
         });
       }],
     },
-    returnResult({reject, resolve}, cbk));
+    returnResult({reject, resolve, of: 'updateFees'}, cbk));
   });
 };

@@ -1,6 +1,6 @@
 # Versions
 
-## 4.7.1
+## 4.7.2
 
 - `getPayment`: Add `created_at` to indicate the creation date of the payment
 - `getPayment`: Add `request` to indicate serialized payment request

@@ -4,6 +4,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 const {pendingAsPendingChannels} = require('./../../lnd_responses');
+const {rpcChannelAsOldRpcChannel} = require('./../../lnd_responses');
 
 const {isArray} = Array;
 const method = 'pendingChannels';

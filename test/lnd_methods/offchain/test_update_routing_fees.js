@@ -41,7 +41,7 @@ const makeLnd = ({err, policy}) => {
           return cbk('UnexpectedCltvDelta');
         }
 
-        return cbk();
+        return cbk(null, {failed_updates: []});
       },
     },
   };
@@ -88,6 +88,27 @@ const tests = [
     args: {lnd: makeLnd({err: 'err'})},
     description: 'Errors are returned',
     error: [503, 'UnexpectedErrorUpdatingRoutingFees', {err: 'err'}],
+  },
+  {
+    args: {lnd: {default: {updateChannelPolicy: ({}, cbk) => cbk()}}},
+    description: 'A response is expected',
+    error: [503, 'ExpectedRoutingPolicyUpdateResponse'],
+  },
+  {
+    args: {lnd: {default: {updateChannelPolicy: ({}, cbk) => cbk(null, {})}}},
+    description: 'Failures are expected',
+    error: [503, 'ExpectedFailedUpdateArrayInUpdateResponse'],
+  },
+  {
+    args: {
+      lnd: {
+        default: {
+          updateChannelPolicy: ({}, cbk) => cbk(null, {failed_updates: [{}]}),
+        },
+      },
+    },
+    description: 'Valid failures are expected',
+    error: [503, 'ExpectedFundingTransactionOutpointForPolicyFailDetails'],
   },
   {
     args: {
