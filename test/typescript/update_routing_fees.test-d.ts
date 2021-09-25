@@ -1,6 +1,6 @@
 import {expectError, expectType} from 'tsd';
 import {AuthenticatedLnd} from '../../lnd_grpc';
-import {updateRoutingFees} from '../../lnd_methods';
+import {updateRoutingFees, UpdateRoutingFeesResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const args = {
@@ -20,8 +20,16 @@ expectError(
 expectError(updateRoutingFees({lnd, transaction_id: '1'})); // A full chanpoint with vout is required for an update
 expectError(updateRoutingFees({lnd, transaction_vout: 0})); // A full chanpoint is required for a routing fee update
 
-expectType<void>(await updateRoutingFees({lnd}));
-expectType<void>(await updateRoutingFees({lnd, ...args}));
+expectType<UpdateRoutingFeesResult>(await updateRoutingFees({lnd}));
+expectType<UpdateRoutingFeesResult>(await updateRoutingFees({lnd, ...args}));
 
-expectType<void>(updateRoutingFees({lnd}, (error, result) => {}));
-expectType<void>(updateRoutingFees({lnd, ...args}, (error, result) => {}));
+expectType<void>(
+  updateRoutingFees({lnd}, (error, result) => {
+    expectType<UpdateRoutingFeesResult>(result);
+  })
+);
+expectType<void>(
+  updateRoutingFees({lnd, ...args}, (error, result) => {
+    expectType<UpdateRoutingFeesResult>(result);
+  })
+);
