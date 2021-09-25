@@ -41,6 +41,25 @@ export type UpdateRoutingFeesArgs = AuthenticatedLightningArgs<
     }
 >;
 
+export type UpdateRoutingFeesFailure = {
+  /** Failure Reason String */
+  failure: string;
+  /** Referenced Channel Is Still Pending Bool */
+  is_pending_channel: boolean;
+  /** Referenced Channel is Unknown Bool */
+  is_unknown_channel: boolean;
+  /** Policy Arguments Are Invalid Bool */
+  is_invalid_policy: boolean;
+  /** Funding Transaction Id Hex String */
+  transaction_id: string;
+  /** Funding Transaction Output Index Number */
+  transaction_vout: number;
+};
+
+export type UpdateRoutingFeesResult = {
+  failures?: UpdateRoutingFeesFailure[];
+};
+
 /**
  * Update routing fees on a single channel or on all channels
  *
@@ -48,6 +67,11 @@ export type UpdateRoutingFeesArgs = AuthenticatedLightningArgs<
  *
  * Setting both `base_fee_tokens` and `base_fee_mtokens` is not supported
  *
+ * `failures` are not returned on LND 0.13.1 and below
+ *
  * Requires `offchain:write` permission
  */
-export const updateRoutingFees: AuthenticatedLightningMethod<UpdateRoutingFeesArgs>;
+export const updateRoutingFees: AuthenticatedLightningMethod<
+  UpdateRoutingFeesArgs,
+  UpdateRoutingFeesResult
+>;
