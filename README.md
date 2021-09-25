@@ -89,6 +89,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Remove failed payments from the database.
 - [deleteForwardingReputations](https://github.com/alexbosworth/ln-service#deleteforwardingreputations)
     Clear pathfinding reputations of routing nodes and channels.
+- [deletePayment](https://github.com/alexbosworth/ln-service#deletepayment): Remove a
+    past payment record.
 - [deletePayments](https://github.com/alexbosworth/ln-service#deletepayments): Remove all
     past payment records.
 - [diffieHellmanComputeSecret](https://github.com/alexbosworth/ln-service#diffiehellmancomputesecret):
@@ -295,6 +297,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Edit the configuration for routing calculations
 - [updateRoutingFees](https://github.com/alexbosworth/ln-service#updateroutingfees): Set the
     forwarding fees or other routing policies for a channel or all channels.
+- [verifyAccess](https://github.com/alexbosworth/ln-service#verifyaccess): Confirm a macaroon
+    has permission to access a given resource.
 - [verifyBackup](https://github.com/alexbosworth/ln-service#verifybackup): Check if a channel fund
     recovery backup file is valid.
 - [verifyBackups](https://github.com/alexbosworth/ln-service#verifybackups): Check if multiple

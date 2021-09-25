@@ -1,5 +1,10 @@
 # Versions
 
+## 4.8.0
+
+- `updateRoutingFees`: Add `failures` to indicate failed policy updates
+- `verifyAccess`: Add method to confirm a macaroon has given permissions
+
 ## 4.7.2
 
 - `getPayment`: Add `created_at` to indicate the creation date of the payment
