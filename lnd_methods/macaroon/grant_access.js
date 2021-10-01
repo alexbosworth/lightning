@@ -3,8 +3,10 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 const permissions = require('./permissions');
+const urisForMethod = require('./uris_for_method');
 
 const accessDenied = 'permission denied';
+const flatten = arr => [].concat(...arr);
 const hexAsBase64 = hex => Buffer.from(hex, 'hex').toString('base64');
 const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const {keys} = Object;
@@ -12,6 +14,7 @@ const method = 'bakeMacaroon';
 const notSupported = 'unknown service lnrpc.Lightning';
 const permissionSeparator = ':';
 const type = 'default';
+const uriAsPermission = uri => `uri:${uri}`;
 
 /** Give access to the node by making a macaroon access credential
 
@@ -23,6 +26,8 @@ const type = 'default';
   and version differences in LND can result in expanded access.
 
   Note: `id` is not supported in LND versions 0.11.0 and below
+
+  `methods` is not supported in LND versions 0.11.0 and below
 
   {
     [id]: <Macaroon Id Positive Numeric String>
@@ -46,6 +51,7 @@ const type = 'default';
     [is_ok_to_verify_bytes_signatures]: <Can Verify Signatures of Bytes Bool>
     [is_ok_to_verify_messages]: <Can Verify Messages From Node Keys Bool>
     lnd: <Authenticated LND API Object>
+    [methods]: [<Method Name String>]
     [permissions]: [<Entity:Action String>]
   }
 
@@ -71,9 +77,23 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
+      // Derive URI permissions
+      uris: ['validate', ({}, cbk) => {
+        try {
+          const permissions = (args.methods || []).map(method => {
+            return urisForMethod({method}).uris.map(uriAsPermission);
+          });
+
+          return cbk(null, flatten(permissions));
+        } catch (err) {
+          return cbk([400, err.message]);
+        }
+      }],
+
       // Permissions to grant
-      permissions: ['validate', ({}, cbk) => {
+      permissions: ['uris', ({uris}, cbk) => {
         const access = []
+          .concat(uris)
           .concat(keys(permissions).filter(n => !!args[permissions[n]]))
           .concat(args.permissions || []);
 

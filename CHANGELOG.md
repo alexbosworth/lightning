@@ -1,5 +1,9 @@
 # Versions
 
+## 4.9.0
+
+- `grantAccess`: Add support for specifying `methods` for permissions
+
 ## 4.8.0
 
 - `updateRoutingFees`: Add `failures` to indicate failed policy updates

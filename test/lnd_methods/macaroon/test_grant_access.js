@@ -73,6 +73,14 @@ const tests = [
   },
   {
     args: {
+      lnd: {default: {bakeMacaroon: ({}, cbk) => cbk(null, {macaroon: '00'})}},
+      methods: ['unknownMethod'],
+    },
+    description: 'Unknown method is not supported',
+    error: [400, 'ExpectedKnownMethodNameToDeriveMacaroonUris'],
+  },
+  {
+    args: {
       is_ok_to_create_chain_addresses: true,
       lnd: {
         default: {
@@ -91,6 +99,14 @@ const tests = [
           },
         },
       },
+    },
+    description: 'Macaroon returned',
+    expected: {macaroon: 'AA=='},
+  },
+  {
+    args: {
+      lnd: {default: {bakeMacaroon: ({}, cbk) => cbk(null, {macaroon: '00'})}},
+      methods: ['grantAccess'],
     },
     description: 'Macaroon returned',
     expected: {macaroon: 'AA=='},

@@ -44,6 +44,8 @@ export type GrantAccessArgs = AuthenticatedLightningArgs<{
   is_ok_to_verify_bytes_signatures?: boolean;
   /** Can Verify Messages From Node Keys */
   is_ok_to_verify_messages?: boolean;
+  /** Method Name */
+  methods?: string[];
   /** Entity:Action */
   permissions?: string[];
 }>;

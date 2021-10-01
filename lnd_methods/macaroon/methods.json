@@ -1,0 +1,496 @@
+{
+  "addPeer": {
+    "method": "ConnectPeer",
+    "type": "default"
+  },
+  "broadcastChainTransaction": {
+    "method": "PublishTransaction",
+    "type": "wallet"
+  },
+  "cancelHodlInvoice": {
+    "method": "CancelInvoice",
+    "type": "invoices"
+  },
+  "cancelPendingChannel": {
+    "method": "FundingStateStep",
+    "type": "default"
+  },
+  "closeChannel": {
+    "depends_on": ["addPeer", "getChannel"],
+    "method": "CloseChannel",
+    "type": "default"
+  },
+  "connectWatchtower": {
+    "method": "AddTower",
+    "type": "tower_client"
+  },
+  "createChainAddress": {
+    "method": "NewAddress",
+    "type": "default"
+  },
+  "createHodlInvoice": {
+    "depends_on": ["createChainAddress"],
+    "method": "AddHoldInvoice",
+    "type": "invoices"
+  },
+  "createInvoice": {
+    "depends_on": ["createChainAddress", "getInvoice"],
+    "method": "AddInvoice",
+    "type": "default"
+  },
+  "decodePaymentRequest": {
+    "method": "DecodePayReq",
+    "type": "default"
+  },
+  "deleteFailedPayAttempts": {
+    "depends_on": ["deletePayment"],
+    "method": "DeleteAllPayments",
+    "type": "default"
+  },
+  "deleteFailedPayments": {
+    "method": "DeleteAllPayments",
+    "type": "default"
+  },
+  "deleteForwardingReputations": {
+    "method": "ResetMissionControl",
+    "type": "default"
+  },
+  "deletePayment": {
+    "method": "DeletePayment",
+    "type": "default"
+  },
+  "deletePayments": {
+    "method": "DeleteAllPayments",
+    "type": "default"
+  },
+  "diffieHellmanComputeSecret": {
+    "method": "DeriveSharedKey",
+    "type": "signer"
+  },
+  "disableChannel": {
+    "method": "UpdateChanStatus",
+    "type": "router"
+  },
+  "disconnectWatchtower": {
+    "method": "RemoveTower",
+    "type": "tower_client"
+  },
+  "enableChannel": {
+    "method": "UpdateChanStatus",
+    "type": "router"
+  },
+  "fundPendingChannels": {
+    "method": "FundingStateStep",
+    "type": "default"
+  },
+  "fundPsbt": {
+    "method": "FundPsbt",
+    "type": "wallet"
+  },
+  "getAccessIds": {
+    "method": "ListMacaroonIDs",
+    "type": "default"
+  },
+  "getAutopilot": {
+    "methods": ["QueryScores", "Status"],
+    "type": "autopilot"
+  },
+  "getBackup": {
+    "method": "ExportChannelBackup",
+    "type": "default"
+  },
+  "getBackups": {
+    "method": "ExportAllChannelBackups",
+    "type": "default"
+  },
+  "getChainBalance": {
+    "method": "WalletBalance",
+    "type": "default"
+  },
+  "getChainFeeEstimate": {
+    "method": "EstimateFee",
+    "type": "default"
+  },
+  "getChainFeeRate": {
+    "method": "EstimateFee",
+    "type": "wallet"
+  },
+  "getChainTransactions": {
+    "method": "GetTransactions",
+    "type": "default"
+  },
+  "getChannel": {
+    "method": "GetChanInfo",
+    "type": "default"
+  },
+  "getChannelBalance": {
+    "method": "ChannelBalance",
+    "type": "default"
+  },
+  "getChannels": {
+    "method": "ListChannels",
+    "type": "default"
+  },
+  "getClosedChannels": {
+    "method": "ClosedChannels",
+    "type": "default"
+  },
+  "getConnectedWatchtowers": {
+    "methods": ["ListTowers", "Policy", "Stats"],
+    "type": "tower_client"
+  },
+  "getFeeRates": {
+    "method": "FeeReport",
+    "type": "default"
+  },
+  "getForwardingConfidence": {
+    "method": "QueryProbability",
+    "type": "router"
+  },
+  "getForwardingReputations": {
+    "method": "QueryProbability",
+    "type": "router"
+  },
+  "getForwards": {
+    "method": "ForwardingHistory",
+    "type": "default"
+  },
+  "getHeight": {
+    "depends_on": ["getWalletInfo", "subscribeToBlocks"]
+  },
+  "getIdentity": {
+    "depends_on": ["getPublicKey", "getWalletInfo"]
+  },
+  "getInvoice": {
+    "method": "LookupInvoice",
+    "type": "default"
+  },
+  "getInvoices": {
+    "method": "ListInvoices",
+    "type": "default"
+  },
+  "getLockedUtxos": {
+    "method": "ListLeases",
+    "type": "wallet"
+  },
+  "getMethods": {
+    "method": "ListPermissions",
+    "type": "default"
+  },
+  "getNetworkCentrality": {
+    "method": "GetNodeMetrics",
+    "type": "default"
+  },
+  "getNetworkGraph": {
+    "method": "DescribeGraph",
+    "type": "default"
+  },
+  "getNetworkInfo": {
+    "method": "GetNetworkInfo",
+    "type": "default"
+  },
+  "getNode": {
+    "depends_on": ["getWalletVersion"],
+    "method": "GetNodeInfo",
+    "type": "default"
+  },
+  "getPathfindingSettings": {
+    "method": "GetMissionControlConfig",
+    "type": "router"
+  },
+  "getPayment": {
+    "method": "TrackPaymentV2",
+    "type": "router"
+  },
+  "getPayments": {
+    "method": "ListPayments",
+    "type": "default"
+  },
+  "getPeers": {
+    "method": "ListPeers",
+    "type": "default"
+  },
+  "getPendingChainBalance": {
+    "method": "WalletBalance",
+    "type": "default"
+  },
+  "getPendingChainBalance": {
+    "method": "PendingChannels",
+    "type": "default"
+  },
+  "getPublicKey": {
+    "methods": ["DeriveKey", "DeriveNextKey"],
+    "type": "wallet"
+  },
+  "getPublicKey": {
+    "methods": ["DeriveKey", "DeriveNextKey"],
+    "type": "wallet"
+  },
+  "getRouteConfidence": {
+    "depends_on": [
+      "getForwardingConfidence",
+      "getForwardingReputations",
+      "getIdentity"
+    ]
+  },
+  "getRouteThroughHops": {
+    "method": "BuildRoute",
+    "type": "router"
+  },
+  "getRouteToDestination": {
+    "depends_on": ["getHeight"],
+    "method": "QueryRoutes",
+    "type": "default"
+  },
+  "getSweepTransactions": {
+    "method": "ListSweeps",
+    "type": "default"
+  },
+  "getTowerServerInfo": {
+    "method": "GetInfo",
+    "type": "tower_server"
+  },
+  "getUtxos": {
+    "method": "ListUnspent",
+    "type": "default"
+  },
+  "getWalletInfo": {
+    "method": "GetInfo",
+    "type": "default"
+  },
+  "getWalletStatus": {
+    "method": "GetInfo",
+    "type": "default"
+  },
+  "getWalletVersion": {
+    "method": "GetVersion",
+    "type": "version"
+  },
+  "grantAccess": {
+    "method": "BakeMacaroon",
+    "type": "default"
+  },
+  "isDestinationPayable": {
+    "depends_on": ["subscribeToPayViaDetails"]
+  },
+  "lockUtxo": {
+    "method": "LeaseOutput",
+    "type": "wallet"
+  },
+  "openChannel": {
+    "method": "OpenChannel",
+    "type": "default"
+  },
+  "openChannels": {
+    "method": "OpenChannel",
+    "type": "default"
+  },
+  "payViaPaymentDetails": {
+    "depends_on": ["subscribeToPayViaDetails"]
+  },
+  "payViaPaymentRequest": {
+    "depends_on": ["subscribeToPayViaRequest"]
+  },
+  "payViaRoutes": {
+    "depends_on": ["subscribeToPayViaRoutes"]
+  },
+  "pay": {
+    "depends_on": ["payViaPaymentRequest", "payViaRoutes"]
+  },
+  "prepareForChannelProposal": {
+    "depends_on": ["getPublicKey"],
+    "method": "FundingStateStep",
+    "type": "default"
+  },
+  "probeForRoute": {
+    "depends_on": ["subscribeToProbeForRoute"]
+  },
+  "proposeChannel": {
+    "depends_on": ["getPublicKey"],
+    "method": "OpenChannel",
+    "type": "default"
+  },
+  "recoverFundsFromChannel": {
+    "method": "RestoreChannelBackups",
+    "type": "default"
+  },
+  "recoverFundsFromChannels": {
+    "method": "restoreChannelBackups",
+    "type": "default"
+  },
+  "removePeer": {
+    "method": "DisconnectPeer",
+    "type": "default"
+  },
+  "requestChainFeeIncrease": {
+    "method": "BumpFee",
+    "type": "wallet"
+  },
+  "revokeAccess": {
+    "method": "DeleteMacaroonId",
+    "type": "default"
+  },
+  "sendToChainAddress": {
+    "method": "SendCoins",
+    "type": "default"
+  },
+  "sendToChainAddresses": {
+    "method": "SendMany",
+    "type": "default"
+  },
+  "sendToChainOutputScripts": {
+    "method": "SendOutputs",
+    "type": "wallet"
+  },
+  "setAutopilot": {
+    "depends_on": ["getAutopilot"],
+    "methods": ["modifyStatus", "setScores"],
+    "type": "autopilot"
+  },
+  "settleHodlInvoice": {
+    "method": "SettleInvoice",
+    "type": "invoices"
+  },
+  "signBytes": {
+    "method": "SignMessage",
+    "type": "signer"
+  },
+  "signMessage": {
+    "method": "SignMessage",
+    "type": "default"
+  },
+  "signPsbt": {
+    "method": "FinalizePsbt",
+    "type": "wallet"
+  },
+  "signTransaction": {
+    "method": "SignOutputRaw",
+    "type": "signer"
+  },
+  "stopDaemon": {
+    "method": "StopDaemon",
+    "type": "default"
+  },
+  "subscribeToBackups": {
+    "method": "SubscribeChannelBackups",
+    "type": "default"
+  },
+  "subscribeToBlocks": {
+    "method": "RegisterBlockEpochNtfn",
+    "type": "chain"
+  },
+  "subscribeToChainAddress": {
+    "method": "RegisterConfirmationsNtfn",
+    "type": "chain"
+  },
+  "subscribeToChainSpend": {
+    "method": "RegisterSpendNtfn",
+    "type": "chain"
+  },
+  "subscribeToChannels": {
+    "method": "SubscribeChannelEvents",
+    "type": "default"
+  },
+  "subscribeToForwardRequests": {
+    "method": "HtlcInterceptor",
+    "type": "router"
+  },
+  "subscribeToForwards": {
+    "method": "SubscribeHtlcEvents",
+    "type": "router"
+  },
+  "subscribeToGraph": {
+    "method": "SubscribeChannelGraph",
+    "type": "default"
+  },
+  "subscribeToInvoice": {
+    "method": "SubscribeSingleInvoice",
+    "type": "invoices"
+  },
+  "subscribeToInvoices": {
+    "method": "SubscribeInvoices",
+    "type": "default"
+  },
+  "subscribeToOpenRequests": {
+    "method": "ChannelAcceptor",
+    "type": "default"
+  },
+  "subscribeToPastPayment": {
+    "method": "TrackPaymentV2",
+    "type": "router"
+  },
+  "subscribeToPastPayments": {
+    "depends_on": ["getPayment"],
+    "method": "SubscribeHtlcEvents",
+    "type": "router"
+  },
+  "subscribeToPayViaDetails": {
+    "depends_on": ["getHeight"],
+    "method": "SendPaymentV2",
+    "type": "router"
+  },
+  "subscribeToPayViaRequest": {
+    "depends_on": ["getHeight"],
+    "method": "SendPaymentV2",
+    "type": "router"
+  },
+  "subscribeToPayViaRoutes": {
+    "method": "sendToRouteV2",
+    "type": "router"
+  },
+  "subscribeToPeers": {
+    "method": "SubscribePeerEvents",
+    "type": "default"
+  },
+  "subscribeToProbeForRoute": {
+    "depends_on": [
+      "getIdentity",
+      "getRouteToDestination",
+      "subscribeToPayViaRoutes"
+    ]
+  },
+  "subscribeToTransactions": {
+    "method": "SubscribeTransactions",
+    "type": "default"
+  },
+  "unlockUtxo": {
+    "method": "releaseOutput",
+    "type": "wallet"
+  },
+  "updateConnectedWatchtower": {
+    "methods": ["addTower", "removeTower"],
+    "type": "tower_client"
+  },
+  "updateChainTransaction": {
+    "method": "labelTransaction",
+    "type": "wallet"
+  },
+  "updatePathfindingSettings": {
+    "method": "SetMissionControlConfig",
+    "type": "router"
+  },
+  "updateRoutingFees": {
+    "method": "UpdateChannelPolicy",
+    "type": "default"
+  },
+  "verifyAccess": {
+    "method": "CheckMacaroonPermissions",
+    "type": "default"
+  },
+  "verifyBackup": {
+    "method": "VerifyChanBackup",
+    "type": "default"
+  },
+  "verifyBackups": {
+    "method": "VerifyChanBackup",
+    "type": "default"
+  },
+  "verifyBytesSignature": {
+    "method": "VerifyMessage",
+    "type": "signer"
+  },
+  "verifyMessage": {
+    "method": "VerifyMessage",
+    "type": "default"
+  }
+}

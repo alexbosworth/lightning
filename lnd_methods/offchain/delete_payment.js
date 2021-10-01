@@ -38,8 +38,8 @@ module.exports = ({id, lnd}, cbk) => {
         return cbk();
       },
 
-      // Delete all payments
-      deletePayments: ['validate', ({}, cbk) => {
+      // Delete the payment
+      deletePayment: ['validate', ({}, cbk) => {
         return lnd[type][method]({payment_hash: hexAsBytes(id)}, err => {
           if (!!err && notSupported.test(err.details)) {
             return cbk([501, 'DeletePaymentMethodNotSupported']);
