@@ -60,6 +60,8 @@ export type GetChannelsResult = {
     local_reserve: number;
     /** Channel Partner Public Key */
     partner_public_key: string;
+    /** Past Channel States Count */
+    past_states: number;
     pending_payments: {
       /** Payment Preimage Hash Hex */
       id: string;

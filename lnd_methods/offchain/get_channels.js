@@ -50,6 +50,7 @@ const type = 'default';
       [local_min_htlc_mtokens]: <Local Minimum HTLC Millitokens String>
       local_reserve: <Local Reserved Tokens Number>
       partner_public_key: <Channel Partner Public Key String>
+      past_states: <Total Count of Past Channel States Number>
       pending_payments: [{
         id: <Payment Preimage Hash Hex String>
         [in_channel]: <Forward Inbound From Channel Id String>

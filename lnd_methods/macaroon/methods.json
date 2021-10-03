@@ -449,6 +449,10 @@
       "subscribeToPayViaRoutes"
     ]
   },
+  "subscribeToRpcRequests": {
+    "method": "RegisterRPCMiddleware",
+    "type": "default"
+  },
   "subscribeToTransactions": {
     "method": "SubscribeTransactions",
     "type": "default"

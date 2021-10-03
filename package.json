@@ -31,7 +31,7 @@
     "@alexbosworth/tap": "15.0.10",
     "tsd": "0.17.0",
     "typescript": "4.4.3",
-    "ws": "8.2.2"
+    "ws": "8.2.3"
   },
   "engines": {
     "node": ">=12"
@@ -56,5 +56,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "4.9.0"
+  "version": "4.10.0"
 }

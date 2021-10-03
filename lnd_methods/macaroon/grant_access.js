@@ -14,6 +14,7 @@ const method = 'bakeMacaroon';
 const notSupported = 'unknown service lnrpc.Lightning';
 const permissionSeparator = ':';
 const type = 'default';
+const uniq = arr => Array.from(new Set(arr));
 const uriAsPermission = uri => `uri:${uri}`;
 
 /** Give access to the node by making a macaroon access credential
@@ -80,11 +81,13 @@ module.exports = (args, cbk) => {
       // Derive URI permissions
       uris: ['validate', ({}, cbk) => {
         try {
-          const permissions = (args.methods || []).map(method => {
-            return urisForMethod({method}).uris.map(uriAsPermission);
+          const uris = (args.methods || []).map(method => {
+            return urisForMethod({method}).uris;
           });
 
-          return cbk(null, flatten(permissions));
+          const permissions = uniq(flatten(uris)).map(uriAsPermission);
+
+          return cbk(null, permissions);
         } catch (err) {
           return cbk([400, err.message]);
         }

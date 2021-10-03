@@ -31,6 +31,7 @@ const rpcNodeAsNode = require('./rpc_node_as_node');
 const rpcOutpointAsUpdate = require('./rpc_outpoint_as_update');
 const rpcPaymentAsPayment = require('./rpc_payment_as_payment');
 const rpcPeerAsPeer = require('./rpc_peer_as_peer');
+const rpcRequestUpdateAsEvent = require('./rpc_request_update_as_event');
 const rpcResolutionAsResolution = require('./rpc_resolution_as_resolution');
 const rpcRouteAsRoute = require('./rpc_route_as_route');
 const rpcTxAsTransaction = require('./rpc_tx_as_transaction');
@@ -71,6 +72,7 @@ module.exports = {
   rpcOutpointAsUpdate,
   rpcPaymentAsPayment,
   rpcPeerAsPeer,
+  rpcRequestUpdateAsEvent,
   rpcResolutionAsResolution,
   rpcRouteAsRoute,
   rpcTxAsTransaction,

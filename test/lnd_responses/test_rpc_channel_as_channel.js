@@ -85,6 +85,7 @@ const makeExpected = overrides => {
     local_min_htlc_mtokens: '1',
     local_reserve: 1,
     partner_public_key: '00',
+    past_states: 1,
     pending_payments: [{
       id: '0000000000000000000000000000000000000000000000000000000000000000',
       in_channel: undefined,
@@ -149,11 +150,6 @@ const tests = [
     args: makeArgs({commit_weight: undefined}),
     description: 'Channel commit weight is expected',
     error: 'ExpectedCommitWeightInChannelMessage',
-  },
-  {
-    args: makeArgs({commitment_type: undefined}),
-    description: 'Channel commit type is expected',
-    error: 'ExpectedCommitmentTypeInChannelMessage',
   },
   {
     args: makeArgs({fee_per_kw: undefined}),

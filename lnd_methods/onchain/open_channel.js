@@ -1,7 +1,7 @@
-const {addPeer} = require('./../peers');
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
+const {addPeer} = require('./../peers');
 const {isLnd} = require('./../../lnd_requests');
 
 const defaultMinConfs = 1;

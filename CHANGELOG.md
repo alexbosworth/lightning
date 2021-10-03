@@ -1,5 +1,10 @@
 # Versions
 
+## 4.10.0
+
+- `getChannels`: Add `past_states` to reflect the number of updates
+- `subscribeToChannels`: Add `past_states` to reflect to number of updates
+
 ## 4.9.0
 
 - `grantAccess`: Add support for specifying `methods` for permissions

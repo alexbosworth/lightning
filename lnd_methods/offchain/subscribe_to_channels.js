@@ -94,6 +94,7 @@ const updateOpening = 'pending_open_channel';
     local_given: <Local Initially Pushed Tokens Number>
     local_reserve: <Local Reserved Tokens Number>
     partner_public_key: <Channel Partner Public Key String>
+    past_states: <Total Count of Past Channel States Number>
     pending_payments: [{
       id: <Payment Preimage Hash Hex String>
       is_outgoing: <Payment Is Outgoing Bool>

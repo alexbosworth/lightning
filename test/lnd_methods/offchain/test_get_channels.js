@@ -27,6 +27,7 @@ const makeExpected = overrides => {
     local_max_pending_mtokens: '1',
     local_reserve: 1,
     partner_public_key: 'b',
+    past_states: 1,
     pending_payments: [{
       id: '0000000000000000000000000000000000000000000000000000000000000000',
       in_channel: undefined,

@@ -99,6 +99,8 @@ export type SubscribeToChannelsChannelOpenedEvent = {
   local_reserve: number;
   /** Channel Partner Public Key */
   partner_public_key: string;
+  /** Total Count of Past Channel States */
+  past_states: number;
   pending_payments: {
     /** Payment Preimage Hash Hex */
     id: string;

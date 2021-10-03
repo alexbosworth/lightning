@@ -260,6 +260,7 @@ const tests = [
             local_min_htlc_mtokens: '1',
             local_reserve: 1,
             partner_public_key: '000000000000000000000000000000000000000000000000000000000000000000',
+            past_states: 1,
             pending_payments: [],
             received: 1,
             remote_balance: 1,

@@ -90,6 +90,7 @@ const outpointDelimiter = ':';
     local_min_htlc_mtokens: <Local Minimum HTLC Millitokens String>
     local_reserve: <Local Reserved Tokens Number>
     partner_public_key: <Channel Partner Public Key String>
+    past_states: <Total Count of Past States Number>
     pending_payments: [{
       id: <Payment Preimage Hash Hex String>
       [in_channel]: <Forwarding from Channel Id String>
@@ -142,10 +143,6 @@ module.exports = args => {
 
   if (args.commit_weight === undefined) {
     throw new Error('ExpectedCommitWeightInChannelMessage');
-  }
-
-  if (!args.commitment_type) {
-    throw new Error('ExpectedCommitmentTypeInChannelMessage');
   }
 
   if (args.fee_per_kw === undefined) {
@@ -243,6 +240,7 @@ module.exports = args => {
     local_min_htlc_mtokens: own.min_htlc_msat,
     local_reserve: Number(own.chan_reserve_sat),
     partner_public_key: args.remote_pubkey,
+    past_states: Number(args.num_updates),
     pending_payments: args.pending_htlcs.map(rpcHtlcAsPayment),
     received: Number(args.total_satoshis_received),
     remote_balance: Number(args.remote_balance),
