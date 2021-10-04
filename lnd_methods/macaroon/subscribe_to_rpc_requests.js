@@ -22,7 +22,7 @@ const type = 'default';
 
   LND must be running with rpc middleware enabled: `rpcmiddleware.enable=1`
 
-  This method is not supported in LND 0.13.2 and below
+  This method is not supported in LND 0.13.3 and below
 
   {
     lnd: <Authenticated LND API Object>

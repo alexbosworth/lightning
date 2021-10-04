@@ -279,6 +279,8 @@ Methods exported by this library support typescript, but ln-service includes add
     disconnect and connect events.
 - [subscribeToProbeForRoute](https://github.com/alexbosworth/ln-service#subscribetoprobeforroute):
     Start an off-chain probe to find a payable route and get notified on the status of the probe.
+- [subscribeToRpcRequests](https://github.com/alexbosworth/ln-service#subscribetorpcrequests):
+    Intercept all incoming and outgoing traffic to the RPC
 - [subscribeToTransactions](https://github.com/alexbosworth/ln-service#subscribetotransactions):
     Get notified on on-chain transaction activity.
 - [subscribeToWalletStatus](https://github.com/alexbosworth/ln-service#subscribetowalletstatus):

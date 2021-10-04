@@ -20,7 +20,7 @@ const type = 'default';
 
   Setting both `base_fee_tokens` and `base_fee_mtokens` is not supported
 
-  `failures` are not returned on LND 0.13.1 and below
+  `failures` are not returned on LND 0.13.3 and below
 
   Requires `offchain:write` permission
 
