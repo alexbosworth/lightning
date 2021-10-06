@@ -1,10 +1,11 @@
 const methods = require('./methods');
 
+const {packageTypes} = require('./../../grpc');
 const {serviceTypes} = require('./../../grpc');
 
 const flatten = arr => arr.flat(Infinity);
 const type = n => [methods[n]].concat((methods[n].depends_on || []).map(type));
-const uriForMethod = (service, method) => `/lnrpc.${service}/${method}`;
+const uriForMethod = (rpc, service, method) => `/${rpc}.${service}/${method}`;
 
 /** Given a method, derive URI macaroon permission strings required
 
@@ -31,19 +32,21 @@ module.exports = ({method}) => {
 
   const requiredMethods = flatten(type(method)).filter(({type}) => type);
 
-  const uris = requiredMethods.map(({method, methods, type}) => {
+  const uris = flatten(requiredMethods.map(({method, methods, type}) => {
     const service = serviceTypes[type];
 
     if (!service) {
       throw new Error('ExpectedKnownMethodServiceToDeriveMacaroonUris');
     }
 
+    const rpc = packageTypes[service];
+
     return (methods || [method]).map(methodName => {
-      return uriForMethod(service, methodName);
+      return uriForMethod(rpc, service, methodName);
     });
-  });
+  }));
 
   uris.sort();
 
-  return {uris: flatten(uris)};
+  return {uris};
 };

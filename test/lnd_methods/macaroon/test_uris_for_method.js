@@ -10,6 +10,16 @@ const tests = [
     error: 'ExpectedMethodNameToDeriveMacaroonUris',
   },
   {
+    args: {method: 'unknown'},
+    description: 'A known method is required',
+    error: 'ExpectedKnownMethodNameToDeriveMacaroonUris',
+  },
+  {
+    args: {method: 'getPayment'},
+    description: 'Router server URI is returned',
+    expected: {uris: ['/routerrpc.Router/TrackPaymentV2']},
+  },
+  {
     args: {method: 'grantAccess'},
     description: 'Method URI is returned',
     expected: {uris: ['/lnrpc.Lightning/BakeMacaroon']},

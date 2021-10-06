@@ -214,7 +214,7 @@
     "method": "WalletBalance",
     "type": "default"
   },
-  "getPendingChainBalance": {
+  "getPendingChannels": {
     "method": "PendingChannels",
     "type": "default"
   },
@@ -344,7 +344,7 @@
   },
   "setAutopilot": {
     "depends_on": ["getAutopilot"],
-    "methods": ["modifyStatus", "setScores"],
+    "methods": ["ModifyStatus", "SetScores"],
     "type": "autopilot"
   },
   "settleHodlInvoice": {
@@ -435,7 +435,7 @@
     "type": "router"
   },
   "subscribeToPayViaRoutes": {
-    "method": "sendToRouteV2",
+    "method": "SendToRouteV2",
     "type": "router"
   },
   "subscribeToPeers": {
@@ -462,11 +462,11 @@
     "type": "wallet"
   },
   "updateConnectedWatchtower": {
-    "methods": ["addTower", "removeTower"],
+    "methods": ["AddTower", "RemoveTower"],
     "type": "tower_client"
   },
   "updateChainTransaction": {
-    "method": "labelTransaction",
+    "method": "LabelTransaction",
     "type": "wallet"
   },
   "updatePathfindingSettings": {
