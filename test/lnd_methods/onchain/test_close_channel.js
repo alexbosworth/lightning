@@ -44,7 +44,6 @@ const makeLnd = ({err, data}) => {
           }
         });
 
-
         return emitter;
       },
       connectPeer: ({}, cbk) => cbk(null, {}),

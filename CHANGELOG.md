@@ -1,6 +1,6 @@
 # Versions
 
-## 4.10.2
+## 4.10.3
 
 - `grantAccess`: Fix support for non-working methods
 
