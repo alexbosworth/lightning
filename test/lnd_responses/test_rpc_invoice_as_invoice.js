@@ -221,6 +221,40 @@ const tests = [
       request: undefined,
     }),
   },
+  {
+    args: makeInput({payment_addr: Buffer.alloc(32)}),
+    description: 'Empty payment address is not returned as a pay addr',
+    expected: makeExpected({}),
+  },
+  {
+    args: makeInput({is_keysend: false}),
+    description: 'Non keysend is not push',
+    expected: makeExpected({is_push: undefined}),
+  },
+  {
+    args: makeInput({payment_addr: Buffer.alloc(32, 1)}),
+    description: 'Pay addr is returned as a payment id',
+    expected: makeExpected({
+      payment: '0101010101010101010101010101010101010101010101010101010101010101',
+    }),
+  },
+  {
+    args: makeInput({
+      fallback_addr: '',
+      description_hash: Buffer.alloc(0),
+      is_amp: true,
+      is_keysend: false,
+      payment_request: '',
+      settle_index: '0',
+    }),
+    description: 'Values are undefined',
+    expected: makeExpected({
+      chain_address: undefined,
+      confirmed_index: undefined,
+      description_hash: undefined,
+      request: undefined,
+    }),
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

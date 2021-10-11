@@ -3,6 +3,7 @@ const {featureFlagDetails} = require('bolt09');
 const htlcAsPayment = require('./htlc_as_payment');
 
 const dateFrom = epoch => new Date(1e3 * epoch).toISOString();
+const emptyHash = Buffer.alloc(32).toString('hex');
 const {isArray} = Array;
 const {keys} = Object;
 const msPerSec = 1e3;
@@ -178,12 +179,13 @@ module.exports = args => {
   const createdAtEpochTime = Number(args.creation_date);
   const descHash = args.description_hash;
   const expiresInMs = Number(args.expiry) * msPerSec;
-  const isAmpPush = !args.request && !!args.is_amp;
+  const isAmpPush = !args.payment_request && !!args.is_amp;
   const mtok = (BigInt(args.value) * mtokensPerToken).toString();
   const payment = args.payment_addr.toString('hex');
   const settleDate = args.settle_date;
 
   const createdAtMs = createdAtEpochTime * msPerSec;
+  const hasPaymentId = !!payment && payment !== emptyHash;
 
   return {
     chain_address: args.fallback_addr || undefined,
@@ -208,7 +210,7 @@ module.exports = args => {
     is_private: args.private,
     is_push: isAmpPush || args.is_keysend || undefined,
     mtokens: args.value_msat === '0' ? mtok : args.value_msat,
-    payment: payment || undefined,
+    payment: hasPaymentId ? payment : undefined,
     payments: args.htlcs.map(htlcAsPayment),
     received: Number(args.amt_paid_sat),
     received_mtokens: args.amt_paid_msat,

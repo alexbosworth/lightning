@@ -1,5 +1,10 @@
 # Versions
 
+## 4.10.4
+
+- `getInvoice`, `getInvoices`, `subscribeToInvoice`, `subscribeToInvoices`:
+    Fix `payment` being set when undefined, correct `is_push` for AMP pushes
+
 ## 4.10.3
 
 - `grantAccess`: Fix support for non-working methods
