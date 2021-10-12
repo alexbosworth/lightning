@@ -53,6 +53,7 @@ const type = 'router';
           channel_capacity: <Channel Capacity Tokens Number>
           fee: <Fee Tokens Rounded Down Number>
           fee_mtokens: <Fee Millitokens String>
+          forward: <Forwarded Tokens Number>
           forward_mtokens: <Forward Millitokens String>
           public_key: <Public Key Hex String>
           timeout: <Timeout Block Height Number>
