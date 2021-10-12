@@ -1,5 +1,9 @@
 # Versions
 
+## 4.10.6
+
+- `getPayment`: Expand type definitions to match result data
+
 ## 4.10.5
 
 - `getInvoice`, `getInvoices`, `subscribeToInvoice`, `subscribeToInvoices`:
