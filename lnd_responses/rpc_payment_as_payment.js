@@ -1,6 +1,9 @@
+const {parsePaymentRequest} = require('invoices');
+
 const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
 const {safeTokens} = require('./../bolt00');
 
+const emptyHash = Buffer.alloc(32).toString('hex');
 const {isArray} = Array;
 const msPerSecond = 1e3;
 const nanoSecsPerMillisecond = BigInt(1e6);
@@ -129,9 +132,9 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
       }
     }]
     created_at: <Payment at ISO-8601 Date String>
-    destination: <Destination Node Public Key Hex String>
-    fee: <Paid Routing Fee Rounded Down Tokens Number>
-    fee_mtokens: <Paid Routing Fee in Millitokens String>
+    [destination]: <Destination Node Public Key Hex String>
+    [fee]: <Paid Routing Fee Rounded Down Tokens Number>
+    [fee_mtokens]: <Paid Routing Fee in Millitokens String>
     hops: [<First Route Hop Public Key Hex String>]
     id: <Payment Preimage Hash String>
     [index]: <Payment Add Index Number>
@@ -139,9 +142,9 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
     is_outgoing: <Transaction Is Outgoing Bool>
     mtokens: <Millitokens Sent to Destination String>
     [request]: <BOLT 11 Payment Request String>
-    safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>
-    safe_tokens: <Payment Tokens Rounded Up Number>
-    secret: <Payment Preimage Hex String>
+    [safe_fee]: <Payment Forwarding Fee Rounded Up Tokens Number>
+    safe_tokens: <Payment Tokens Sent to Destination Rounded Up Number>
+    [secret]: <Payment Preimage Hex String>
     tokens: <Rounded Down Tokens Sent to Destination Number>
   }
 */
@@ -186,21 +189,6 @@ module.exports = payment => {
     throw new Error('ExpectedPaymentValueInRpcPaymentDetails');
   }
 
-  const attempts = payment.htlcs.map(htlc => rpcAttemptHtlcAsAttempt(htlc));
-
-  if (!payment.path.length && !attempts.length) {
-    throw new Error('ExpectedAttemptInPaymentDetails');
-  }
-
-  const hasPath = !!payment.path.length;
-  const [attempt] = attempts;
-  const successes = attempts.filter(n => n.is_confirmed);
-
-  const path = !hasPath ? routePublicKeys(attempt.route) : payment.path;
-  const [confirmedAt] = successes.map(n => n.confirmed_at).sort().reverse();
-
-  const [destination, ...hops] = path.reverse();
-
   const creationDateEpochMs = (() => {
     // Exit early when creation time nanoseconds is not defined
     if (payment.creation_time_ns === Number().toString()) {
@@ -210,23 +198,85 @@ module.exports = payment => {
     return Number(BigInt(payment.creation_time_ns) / nanoSecsPerMillisecond);
   })();
 
+  const attempts = payment.htlcs.map(htlc => rpcAttemptHtlcAsAttempt(htlc));
+  const index = Number(payment.payment_index) || undefined;
+  const request = payment.payment_request || undefined;
+
+  // Exit early when there were no attempts
+  if (!attempts.length) {
+    const {destination} = !!request ? parsePaymentRequest({request}) : {};
+
+    return {
+      attempts,
+      destination,
+      index,
+      request,
+      confirmed_at: undefined,
+      created_at: new Date(creationDateEpochMs).toISOString(),
+      fee: undefined,
+      fee_mtokens: undefined,
+      hops: [],
+      id: payment.payment_hash,
+      is_confirmed: false,
+      is_outgoing: true,
+      mtokens: payment.value_msat,
+      safe_fee: undefined,
+      safe_tokens: safeTokens({mtokens: payment.value_msat}).safe,
+      secret: undefined,
+      tokens: safeTokens({mtokens: payment.value_msat}).tokens,
+    };
+  }
+
+  const hasPath = !!payment.path.length;
+  const hasPreimage = payment.payment_preimage !== emptyHash;
+  const [attempt] = attempts;
+  const successes = attempts.filter(n => n.is_confirmed);
+
+  const path = !hasPath ? routePublicKeys(attempt.route) : payment.path;
+  const [confirmedAt] = successes.map(n => n.confirmed_at).sort().reverse();
+
+  const [destination, ...hops] = path.reverse();
+
+  // Exit early when the payment was never settled
+  if (!hasPreimage) {
+    return {
+      attempts,
+      destination,
+      index,
+      request,
+      confirmed_at: undefined,
+      created_at: new Date(creationDateEpochMs).toISOString(),
+      fee: undefined,
+      fee_mtokens: undefined,
+      hops: hops.reverse(),
+      id: payment.payment_hash,
+      is_confirmed: false,
+      is_outgoing: true,
+      mtokens: payment.value_msat,
+      safe_fee: undefined,
+      safe_tokens: safeTokens({mtokens: payment.value_msat}).safe,
+      secret: undefined,
+      tokens: safeTokens({mtokens: payment.value_msat}).tokens,
+    };
+  }
+
   return {
+    attempts,
     destination,
-    attempts: payment.htlcs.map(htlc => rpcAttemptHtlcAsAttempt(htlc)),
+    index,
+    request,
     confirmed_at: confirmedAt || undefined,
     created_at: new Date(creationDateEpochMs).toISOString(),
     fee: safeTokens({mtokens: payment.fee_msat}).tokens,
     fee_mtokens: payment.fee_msat,
     hops: hops.reverse(),
     id: payment.payment_hash,
-    index: Number(payment.payment_index) || undefined,
-    is_confirmed: payment.value_msat !== Number().toString(),
+    is_confirmed: true,
     is_outgoing: true,
     mtokens: payment.value_msat,
-    request: payment.payment_request || undefined,
-    secret: payment.payment_preimage,
     safe_fee: safeTokens({mtokens: payment.fee_msat}).safe,
     safe_tokens: safeTokens({mtokens: payment.value_msat}).safe,
+    secret: payment.payment_preimage,
     tokens: safeTokens({mtokens: payment.value_msat}).tokens,
   };
 };

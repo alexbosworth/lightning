@@ -57,9 +57,9 @@ const makeArgs = overrides => {
     path: [Buffer.alloc(33).toString('hex'), Buffer.alloc(33).toString('hex')],
     payment_hash: Buffer.alloc(32).toString('hex'),
     payment_index: '1',
-    payment_preimage: Buffer.alloc(32).toString('hex'),
+    payment_preimage: Buffer.alloc(32, 1).toString('hex'),
     payment_request: 'lntb1500n1pdn4czkpp5ugdqer05qrrxuchrzkcue94th9w2xzasp9qm7d0yxcgp4uh4kn4qdpa2fjkzep6yprkcmmzv9kzqsmj09c8gmmrw4e8yetwvdujq5n9va6kcct5d9hkucqzysdlghdpua7uvjjkcfj49psxtlqzkp5pdncffdfk2cp3mp76thrl29qhqgzufm503pjj96586n5w6edgw3n66j4rxxs707y4zdjuhyt6qqe5weu4',
-    status: 'FAILED',
+    status: 'SETTLED',
     value: '1',
     value_msat: '1000',
     value_sat: '1',
@@ -111,7 +111,7 @@ const makeExpected = overrides => {
     request: 'lntb1500n1pdn4czkpp5ugdqer05qrrxuchrzkcue94th9w2xzasp9qm7d0yxcgp4uh4kn4qdpa2fjkzep6yprkcmmzv9kzqsmj09c8gmmrw4e8yetwvdujq5n9va6kcct5d9hkucqzysdlghdpua7uvjjkcfj49psxtlqzkp5pdncffdfk2cp3mp76thrl29qhqgzufm503pjj96586n5w6edgw3n66j4rxxs707y4zdjuhyt6qqe5weu4',
     safe_fee: 1,
     safe_tokens: 1,
-    secret: Buffer.alloc(32).toString('hex'),
+    secret: Buffer.alloc(32, 1).toString('hex'),
     tokens: 1,
   };
 
@@ -140,11 +140,6 @@ const tests = [
     args: makeArgs({htlcs: undefined}),
     description: 'HTLC array is expected to be present',
     error: 'ExpectedHtlcsArrayInRpcPaymentDetails',
-  },
-  {
-    args: makeArgs({htlcs: [], path: []}),
-    description: 'HTLC or path array is expected to be filled',
-    error: 'ExpectedAttemptInPaymentDetails',
   },
   {
     args: makeArgs({path: undefined}),
@@ -185,6 +180,46 @@ const tests = [
     args: makeArgs({payment_request: undefined}),
     description: 'A payment request is optional',
     expected: makeExpected({request: undefined}),
+  },
+  {
+    args: makeArgs({htlcs: []}),
+    description: 'Attempts are optional',
+    expected: makeExpected({
+      attempts: [],
+      destination: '02212d3ec887188b284dbb7b2e6eb40629a6e14fb049673f22d2a0aa05f902090e',
+      fee: undefined,
+      fee_mtokens: undefined,
+      hops: [],
+      is_confirmed: false,
+      safe_fee: undefined,
+      secret: undefined,
+    }),
+  },
+  {
+    args: makeArgs({htlcs: [], payment_request: ''}),
+    description: 'Payment requests are optional when there are no attempts',
+    expected: makeExpected({
+      attempts: [],
+      destination: undefined,
+      fee: undefined,
+      fee_mtokens: undefined,
+      hops: [],
+      is_confirmed: false,
+      request: undefined,
+      safe_fee: undefined,
+      secret: undefined,
+    }),
+  },
+  {
+    args: makeArgs({payment_preimage: Buffer.alloc(32).toString('hex')}),
+    description: 'Empty preimage means not settled',
+    expected: makeExpected({
+      fee: undefined,
+      fee_mtokens: undefined,
+      is_confirmed: false,
+      safe_fee: undefined,
+      secret: undefined,
+    }),
   },
   {
     args: makeArgs({

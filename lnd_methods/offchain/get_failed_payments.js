@@ -7,13 +7,14 @@ const {sortBy} = require('./../../arrays');
 
 const defaultLimit = 250;
 const {isArray} = Array;
+const isFailed = payment => !!payment && payment.status === 'FAILED';
 const lastPageFirstIndexOffset = 1;
 const method = 'listPayments';
 const {parse} = JSON;
 const {stringify} = JSON;
 const type = 'default';
 
-/** Get payments made through channels.
+/** Get failed payments made through channels.
 
   Requires `offchain:read` permission
 
@@ -79,22 +80,16 @@ const type = 'default';
           [total_mtokens]: <Total Millitokens String>
         }
       }]
-      confirmed_at: <Payment Confirmed At ISO 8601 Date String>
       created_at: <Payment at ISO-8601 Date String>
-      destination: <Destination Node Public Key Hex String>
-      fee: <Paid Routing Fee Rounded Down Tokens Number>
-      fee_mtokens: <Paid Routing Fee in Millitokens String>
-      hops: [<First Route Hop Public Key Hex String>]
+      [destination]: <Destination Node Public Key Hex String>
       id: <Payment Preimage Hash String>
       [index]: <Payment Add Index Number>
       is_confirmed: <Payment is Confirmed Bool>
       is_outgoing: <Transaction Is Outgoing Bool>
-      mtokens: <Millitokens Sent to Destination String>
+      mtokens: <Millitokens Attempted to Pay to Destination String>
       [request]: <BOLT 11 Payment Request String>
-      safe_fee: <Payment Forwarding Fee Rounded Up Tokens Number>
-      safe_tokens: <Payment Tokens Rounded Up Number>
-      secret: <Payment Preimage Hex String>
-      tokens: <Rounded Down Tokens Sent to Destination Number>
+      safe_tokens: <Payment Tokens Attempted to Pay Rounded Up Number>
+      tokens: <Rounded Down Tokens Attempted to Pay to Destination Number>
     }]
     [next]: <Next Opaque Paging Token String>
   }
@@ -105,11 +100,11 @@ module.exports = ({limit, lnd, token}, cbk) => {
       // Check arguments
       validate: cbk => {
         if (!!limit && !!token) {
-          return cbk([400, 'UnexpectedLimitWhenPagingPaymentsWithToken']);
+          return cbk([400, 'ExpectedNoLimitWhenPagingPayFailuresWithToken']);
         }
 
         if (!isLnd({lnd, method, type})) {
-          return cbk([400, 'ExpectedLndForGetPaymentsRequest']);
+          return cbk([400, 'ExpectedLndForGetFailedPaymentsRequest']);
         }
 
         return cbk();
@@ -127,27 +122,27 @@ module.exports = ({limit, lnd, token}, cbk) => {
             offset = pagingToken.offset;
             resultsLimit = pagingToken.limit;
           } catch (err) {
-            return cbk([400, 'ExpectedValidPagingTokenForPaymentReq', {err}]);
+            return cbk([400, 'ExpectedValidPagingTokenForGetFailed', {err}]);
           }
         }
 
         return lnd[type][method]({
-          include_incomplete: false,
+          include_incomplete: true,
           index_offset: offset || Number(),
           max_payments: resultsLimit,
           reversed: true,
         },
         (err, res) => {
           if (!!err) {
-            return cbk([503, 'UnexpectedGetPaymentsError', {err}]);
+            return cbk([503, 'UnexpectedGetFailedPaymentsError', {err}]);
           }
 
           if (!res || !isArray(res.payments)) {
-            return cbk([503, 'ExpectedPaymentsInListPaymentsResponse']);
+            return cbk([503, 'ExpectedFailedPaymentsInListPaymentsResponse']);
           }
 
           if (typeof res.last_index_offset !== 'string') {
-            return cbk([503, 'ExpectedLastIndexOffsetWhenRequestingPayments']);
+            return cbk([503, 'ExpectedLastIndexOffsetWhenRequestingFailed']);
           }
 
           const lastOffset = Number(res.last_index_offset);
@@ -156,7 +151,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
           const token = stringify({offset, limit: resultsLimit});
 
           return cbk(null, {
-            payments: res.payments,
+            payments: res.payments.filter(isFailed),
             token: offset === lastPageFirstIndexOffset ? undefined : token,
           });
         });
@@ -173,7 +168,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
         }
       }],
 
-      // Final found payments
+      // Final found failed payments
       payments: [
         'foundPayments',
         'listPayments',
@@ -185,7 +180,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
         });
 
         return cbk(null, {
-          next: !!foundPayments.length ? listPayments.token : undefined,
+          next: listPayments.token || undefined,
           payments: payments.sorted.reverse(),
         });
       }],

@@ -139,6 +139,10 @@
     "methods": ["ListTowers", "Policy", "Stats"],
     "type": "tower_client"
   },
+  "getFailedPayments": {
+    "method": "ListPayments",
+    "type": "default"
+  },
   "getFeeRates": {
     "method": "FeeReport",
     "type": "default"
