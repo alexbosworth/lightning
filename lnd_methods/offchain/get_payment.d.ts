@@ -32,6 +32,8 @@ export type GetPaymentResult = {
     created_at: string;
     /** Payment Destination Public Key Hex */
     destination: string;
+    /** Total Fee Tokens To Pay */
+    fee: number;
     /** Total Fee Millitokens To Pay */
     fee_mtokens: string;
     hops: {
@@ -56,6 +58,40 @@ export type GetPaymentResult = {
     id: string;
     /** Total Millitokens Paid */
     mtokens: string;
+    paths: {
+      /** Total Path Fee Tokens */
+      fee: number;
+      /** Total Path Fee Millitokens */
+      fee_mtokens: string;
+      hops: {
+        /** Standard Format Channel Id */
+        channel: string;
+        /** Channel Capacity Tokens */
+        channel_capacity: number;
+        /** Routing Fee Tokens */
+        fee: number;
+        /** Fee Millitokens */
+        fee_mtokens: string;
+        /** Forwarded Tokens */
+        forward: number;
+        /** Forward Millitokens */
+        forward_mtokens: string;
+        /** Public Key Hex */
+        public_key: string;
+        /** Timeout Block Height */
+        timeout: number;
+      }[];
+      /** Total Path Millitokens Paid */
+      mtokens: string;
+      /** MPP Payment Identifying Nonce */
+      payment: string;
+      /** Expiration Block Height */
+      timeout: number;
+      /** Path Tokens Paid */
+      tokens: number;
+      /** Total Millitokens Paid On All Paths */
+      total_mtokens: string;
+    }[]
     /** BOLT 11 Payment Request */
     request?: string;
     /** Payment Forwarding Fee Rounded Up Tokens */
