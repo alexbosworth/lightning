@@ -1,6 +1,6 @@
 # Versions
 
-## 4.10.6
+## 4.10.7
 
 - `getPayment`: Expand type definitions to match result data
 

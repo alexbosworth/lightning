@@ -8,7 +8,7 @@ const {sortBy} = require('./../../arrays');
 const defaultLimit = 250;
 const {isArray} = Array;
 const isFailed = payment => !!payment && payment.status === 'FAILED';
-const lastPageFirstIndexOffset = 1;
+const lastPageFirstIndexOffset = 0;
 const method = 'listPayments';
 const {parse} = JSON;
 const {stringify} = JSON;
