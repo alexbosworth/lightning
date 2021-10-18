@@ -37,6 +37,7 @@ const {getChannelBalance} = require('./lnd_methods');
 const {getChannels} = require('./lnd_methods');
 const {getClosedChannels} = require('./lnd_methods');
 const {getConnectedWatchtowers} = require('./lnd_methods');
+const {getFailedPayments} = require('./lnd_methods');
 const {getFeeRates} = require('./lnd_methods');
 const {getForwardingConfidence} = require('./lnd_methods');
 const {getForwardingReputations} = require('./lnd_methods');
@@ -114,6 +115,7 @@ const {subscribeToPayViaRequest} = require('./lnd_methods');
 const {subscribeToPayViaRoutes} = require('./lnd_methods');
 const {subscribeToPeers} = require('./lnd_methods');
 const {subscribeToProbeForRoute} = require('./lnd_methods');
+const {subscribeToRpcRequests} = require('./lnd_methods');
 const {subscribeToTransactions} = require('./lnd_methods');
 const {subscribeToWalletStatus} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
@@ -169,6 +171,7 @@ module.exports = {
   getChannels,
   getClosedChannels,
   getConnectedWatchtowers,
+  getFailedPayments,
   getFeeRates,
   getForwardingConfidence,
   getForwardingReputations,
@@ -246,6 +249,7 @@ module.exports = {
   subscribeToPayViaRoutes,
   subscribeToPeers,
   subscribeToProbeForRoute,
+  subscribeToRpcRequests,
   subscribeToTransactions,
   subscribeToWalletStatus,
   unauthenticatedLndGrpc,

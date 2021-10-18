@@ -34,7 +34,7 @@ export type ProposeChannelArgs = AuthenticatedLightningArgs<{
  * Channel proposals can allow for cooperative close delays or external funding
 flows.
  *
- * Requires `offchain:write`, `onchain:write` permissions
+ * Requires `address:read`, `offchain:write`, `onchain:write` permissions
  *
  * Requires LND compiled with `walletrpc` build tag
  */
