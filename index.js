@@ -115,6 +115,7 @@ const {subscribeToPayViaRequest} = require('./lnd_methods');
 const {subscribeToPayViaRoutes} = require('./lnd_methods');
 const {subscribeToPeers} = require('./lnd_methods');
 const {subscribeToProbeForRoute} = require('./lnd_methods');
+const {subscribeToRpcRequests} = require('./lnd_methods');
 const {subscribeToTransactions} = require('./lnd_methods');
 const {subscribeToWalletStatus} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
@@ -248,6 +249,7 @@ module.exports = {
   subscribeToPayViaRoutes,
   subscribeToPeers,
   subscribeToProbeForRoute,
+  subscribeToRpcRequests,
   subscribeToTransactions,
   subscribeToWalletStatus,
   unauthenticatedLndGrpc,
