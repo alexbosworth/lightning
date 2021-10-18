@@ -131,6 +131,8 @@ Methods exported by this library support typescript, but ln-service includes add
     channels on the node.
 - [getConnectedWatchtowers](https://github.com/alexbosworth/ln-service#getconnectedwatchtowers):
     List watchtowers that were added
+- [getFailedPayments](https://github.com/alexbosworth/ln-service#getfailedpayments): List out
+    past payments that failed.
 - [getFeeRates](https://github.com/alexbosworth/ln-service#getfeerates): List routing fee rates
     and routing policies of channels on the node.
 - [getForwardingConfidence](https://github.com/alexbosworth/ln-service#getforwardingconfidence):

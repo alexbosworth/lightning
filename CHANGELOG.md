@@ -1,5 +1,10 @@
 # Versions
 
+## 4.11.0
+
+- `getFailedPayments`: Add method to get past failed payments
+- `subscribeToRpcRequests`: Add method to listen to and interact with RPC requests
+
 ## 4.10.7
 
 - `getPayment`: Expand type definitions to match result data
