@@ -24,7 +24,9 @@ export type GetWalletStatusResult = {
 /**
  * Get wallet status.
  *
- * Requires `info:read` permission
+ * This method is not supported on LND 0.12.1 and below
+ *
+ * `is_ready` is not supported on LND 0.13.3 and below
  */
 export const getWalletStatus: UnauthenticatedLightningMethod<
   {lnd: UnauthenticatedLnd},
