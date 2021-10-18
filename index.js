@@ -37,6 +37,7 @@ const {getChannelBalance} = require('./lnd_methods');
 const {getChannels} = require('./lnd_methods');
 const {getClosedChannels} = require('./lnd_methods');
 const {getConnectedWatchtowers} = require('./lnd_methods');
+const {getFailedPayments} = require('./lnd_methods');
 const {getFeeRates} = require('./lnd_methods');
 const {getForwardingConfidence} = require('./lnd_methods');
 const {getForwardingReputations} = require('./lnd_methods');
@@ -169,6 +170,7 @@ module.exports = {
   getChannels,
   getClosedChannels,
   getConnectedWatchtowers,
+  getFailedPayments,
   getFeeRates,
   getForwardingConfidence,
   getForwardingReputations,
