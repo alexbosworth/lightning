@@ -84,6 +84,7 @@ const {recoverFundsFromChannels} = require('./offchain');
 const {removePeer} = require('./peers');
 const {requestChainFeeIncrease} = require('./onchain');
 const {revokeAccess} = require('./macaroon');
+const {sendMessageToPeer} = require('./offchain');
 const {sendToChainAddress} = require('./onchain');
 const {sendToChainAddresses} = require('./onchain');
 const {sendToChainOutputScripts} = require('./onchain');
@@ -110,6 +111,7 @@ const {subscribeToPastPayments} = require('./offchain');
 const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
+const {subscribeToPeerMessages} = require('./offchain');
 const {subscribeToPeers} = require('./peers');
 const {subscribeToProbeForRoute} = require('./offchain');
 const {subscribeToRpcRequests} = require('./macaroon');
@@ -214,6 +216,7 @@ module.exports = {
   removePeer,
   requestChainFeeIncrease,
   revokeAccess,
+  sendMessageToPeer,
   sendToChainAddress,
   sendToChainAddresses,
   sendToChainOutputScripts,
@@ -240,6 +243,7 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPeerMessages,
   subscribeToPeers,
   subscribeToProbeForRoute,
   subscribeToRpcRequests,

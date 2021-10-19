@@ -32,6 +32,7 @@ const payViaRoutes = require('./pay_via_routes');
 const probeForRoute = require('./probe_for_route');
 const recoverFundsFromChannel = require('./recover_funds_from_channel');
 const recoverFundsFromChannels = require('./recover_funds_from_channels');
+const sendMessageToPeer = require('./send_message_to_peer');
 const subscribeToBackups = require('./subscribe_to_backups');
 const subscribeToChannels = require('./subscribe_to_channels');
 const subscribeToForwardRequests = require('./subscribe_to_forward_requests');
@@ -42,6 +43,7 @@ const subscribeToPastPayments = require('./subscribe_to_past_payments');
 const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
 const subscribeToPayViaRequest = require('./subscribe_to_pay_via_request');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
+const subscribeToPeerMessages = require('./subscribe_to_peer_messages');
 const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
 const updateConnectedWatchtower = require('./update_connected_watchtower');
 const updatePathfindingSettings = require('./update_pathfinding_settings');
@@ -84,6 +86,7 @@ module.exports = {
   probeForRoute,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
+  sendMessageToPeer,
   subscribeToBackups,
   subscribeToChannels,
   subscribeToForwardRequests,
@@ -94,6 +97,7 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPeerMessages,
   subscribeToProbeForRoute,
   updateConnectedWatchtower,
   updatePathfindingSettings,

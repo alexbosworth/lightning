@@ -334,6 +334,10 @@
     "method": "DeleteMacaroonId",
     "type": "default"
   },
+  "sendMessageToPeer": {
+    "method": "SendCustomMessage",
+    "type": "default"
+  },
   "sendToChainAddress": {
     "method": "SendCoins",
     "type": "default"
@@ -441,6 +445,10 @@
   "subscribeToPayViaRoutes": {
     "method": "SendToRouteV2",
     "type": "router"
+  },
+  "subscribeToPeerMessages": {
+    "method": "SubscribeCustomMessages",
+    "type": "default"
   },
   "subscribeToPeers": {
     "method": "SubscribePeerEvents",
