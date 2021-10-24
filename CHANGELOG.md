@@ -1,5 +1,10 @@
 # Versions
 
+## 4.12.0
+
+- `probeForRoute`, `subscribeToProbeForRoute`, `subscribeToPayViaRoutes`,
+    `payViaRoutes`: When probing (no hash), delete the payment failure record after the probe
+
 ## 4.11.1
 
 - `getFailedPayments`: Add method to get past failed payments

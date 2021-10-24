@@ -4,6 +4,8 @@ const {getInfoResponse} = require('./../fixtures');
 const {queryRoutesResponse} = require('./../fixtures');
 const {subscribeToProbeForRoute} = require('./../../../');
 
+const deletePayment = ({}, cbk) => cbk();
+
 const expectedRoute = {
   confidence: 1000000,
   fee: 0,
@@ -41,6 +43,7 @@ const makeLnd = ({count, getInfo, sendToRouteV2}) => {
 
   const lnd = {
     default: {
+      deletePayment,
       getInfo: getInfo || (({}, cbk) => cbk(null, getInfoResponse)),
       queryRoutes: ({}, cbk) => {
         if (returnedRoutes === (count || 1)) {

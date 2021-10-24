@@ -2,6 +2,8 @@ const {test} = require('@alexbosworth/tap');
 
 const {subscribeToPayViaRoutes} = require('./../../../');
 
+const deletePayment = ({}, cbk) => cbk();
+
 const route = {
   fee: 1,
   fee_mtokens: '1000',
@@ -27,28 +29,39 @@ const tests = [
     error: 'ExpectedAuthenticatedLndToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}},
+    args: {
+      lnd: {default: {deletePayment}, router: {sendToRouteV2: ({}) => {}}},
+    },
     description: 'Routes are required',
     error: 'ExpectedArrayOfPaymentRoutesToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}, routes: []},
+    args: {
+      lnd: {default: {deletePayment}, router: {sendToRouteV2: ({}) => {}}},
+      routes: [],
+    },
     description: 'Non empty routes are required',
     error: 'ExpectedArrayOfPaymentRoutesToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}, routes: [{}]},
+    args: {
+      lnd: {default: {deletePayment}, router: {sendToRouteV2: ({}) => {}}},
+      routes: [{}],
+    },
     description: 'Route must have hops',
     error: 'ExpectedRouteHopsToPayViaRoutes',
   },
   {
-    args: {lnd: {router: {sendToRouteV2: ({}) => {}}}, routes: [{hops: [{}]}]},
+    args: {
+      lnd: {default: {deletePayment}, router: {sendToRouteV2: ({}) => {}}},
+      routes: [{hops: [{}]}],
+    },
     description: 'Hops must have public keys',
     error: 'ExpectedPublicKeyInPayViaRouteHops',
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}) => {}}},
+      lnd: {default: {deletePayment}, router: {sendToRouteV2: ({}) => {}}},
       routes: [{hops: [{public_key: 'public_key'}]}],
     },
     description: 'Hops must have channel ids',
@@ -56,7 +69,7 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}) => {}}},
+      lnd: {default: {deletePayment}, router: {sendToRouteV2: ({}) => {}}},
       routes: [{hops: [{public_key: 'public_key'}]}],
     },
     description: 'Hops must have channel ids',
@@ -65,6 +78,7 @@ const tests = [
   {
     args: {
       lnd: {
+        default: {deletePayment},
         router: {
           sendToRouteV2: ({}, cbk) => cbk({details: 'unknown wire error'}),
         },
@@ -77,6 +91,7 @@ const tests = [
   {
     args: {
       lnd: {
+        default: {deletePayment},
         router: {
           sendToRouteV2: ({}, cbk) => cbk({
             details: 'payment attempt not completed before timeout',
@@ -90,7 +105,10 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk('err')}},
+      lnd: {
+        default: {deletePayment},
+        router: {sendToRouteV2: ({}, cbk) => cbk('err')},
+      },
       routes: [route],
     },
     description: 'An unexpected payment error is passed back',
@@ -102,7 +120,10 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk()}},
+      lnd: {
+        default: {deletePayment},
+        router: {sendToRouteV2: ({}, cbk) => cbk()},
+      },
       routes: [route],
     },
     description: 'A result is expected from sendToRoute',
@@ -115,9 +136,14 @@ const tests = [
   {
     args: {
       id: Buffer.alloc(32).toString('hex'),
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
-        preimage: Buffer.alloc(32),
-      })}},
+      lnd: {
+        default: {deletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
+            preimage: Buffer.alloc(32),
+          }),
+        },
+      },
       routes: [route, route],
     },
     description: 'A success is returned',
@@ -142,9 +168,14 @@ const tests = [
   {
     args: {
       id: Buffer.alloc(32).toString('hex'),
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
-        preimage: 'preimage',
-      })}},
+      lnd: {
+        default: {deletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
+            preimage: 'preimage',
+          }),
+        },
+      },
       routes: [route],
     },
     description: 'A success is returned',
@@ -156,13 +187,18 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
-        failure: {
-          chan_id: '1',
-          code: 'UNKNOWN_FAILURE',
+      lnd: {
+        default: {deletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
+            failure: {
+              chan_id: '1',
+              code: 'UNKNOWN_FAILURE',
+            },
+            preimage: Buffer.alloc(Number()),
+          }),
         },
-        preimage: Buffer.alloc(Number()),
-      })}},
+      },
       routes: [route],
     },
     description: 'A routing failure is returned',
@@ -184,14 +220,19 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
-        failure: {
-          chan_id: '1',
-          code: 'UNKNOWN_FAILURE',
-          failure_source_index: 2,
+      lnd: {
+        default: {deletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
+            failure: {
+              chan_id: '1',
+              code: 'UNKNOWN_FAILURE',
+              failure_source_index: 2,
+            },
+            preimage: Buffer.alloc(Number()),
+          }),
         },
-        preimage: Buffer.alloc(Number()),
-      })}},
+      },
       routes: [
         {
           fee: 1,
@@ -280,14 +321,19 @@ const tests = [
   },
   {
     args: {
-      lnd: {router: {sendToRouteV2: ({}, cbk) => cbk(null, {
-        failure: {
-          chan_id: '1',
-          code: 'UNKNOWN_FAILURE',
-          failure_source_index: 1,
+      lnd: {
+        default: {deletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
+            failure: {
+              chan_id: '1',
+              code: 'UNKNOWN_FAILURE',
+              failure_source_index: 1,
+            },
+            preimage: Buffer.alloc(Number()),
+          }),
         },
-        preimage: Buffer.alloc(Number()),
-      })}},
+      },
       routes: [route],
     },
     description: 'A routing failure is returned from the destination',
@@ -310,6 +356,7 @@ const tests = [
   {
     args: {
       lnd: {
+        default: {deletePayment},
         router: {
           sendToRouteV2: ({}, cbk) => {
             return setTimeout(() => cbk({details: 'unknown wire error'}), 100);

@@ -16,6 +16,7 @@ const {rpcRouteFromRoute} = require('./../../lnd_requests');
 const msAsISO = ms => new Date(ms).toISOString();
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
+const hexAsBytes = hex => Buffer.from(hex, 'hex');
 const method = 'sendToRouteV2';
 const notFoundIndex = -1;
 const {now} = Date;
@@ -290,6 +291,27 @@ module.exports = args => {
         const {keys} = routeFailureKeys({route, failure: attempt.failure});
 
         return cbk(null, keys);
+      }],
+
+      // Attempt to clean up failed probe state
+      deleteProbe: ['attempt', ({attempt}, cbk) => {
+        // Exit early when the payment didn't fail
+        if (!attempt.failure) {
+          return cbk();
+        }
+
+        // Exit early when this is a real payment
+        if (!!args.id) {
+          return cbk();
+        }
+
+        args.lnd.default.deletePayment({
+          payment_hash: hexAsBytes(id),
+        },
+        err => {
+          // Ignore errors trying to clean up probe data
+          return cbk();
+        });
       }],
 
       // Parsed out failure

@@ -443,6 +443,7 @@
     "type": "router"
   },
   "subscribeToPayViaRoutes": {
+    "depends_on": ["deletePayment"],
     "method": "SendToRouteV2",
     "type": "router"
   },

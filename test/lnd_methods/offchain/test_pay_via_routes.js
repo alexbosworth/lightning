@@ -4,6 +4,8 @@ const {payViaRoutes} = require('./../../../');
 
 const preimage = Buffer.alloc(32);
 
+const deletePayment = ({}, cbk) => cbk();
+
 const getInfo = ({}, cbk) => {
   return cbk(null, {
     alias: '',
@@ -37,7 +39,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
     },
@@ -47,7 +49,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [],
@@ -58,7 +60,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [{
@@ -85,7 +87,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk('err')},
       },
       routes: [{
@@ -116,7 +118,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [{
@@ -142,7 +144,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
       routes: [{
@@ -169,7 +171,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {
           sendToRouteV2: ({}, cbk) => {
             return cbk(null, {
@@ -223,7 +225,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {
           sendToRouteV2: ({}, cbk) => {
             return cbk(null, {
@@ -319,7 +321,7 @@ const tests = [
   {
     args: {
       lnd: {
-        default: {getInfo},
+        default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {preimage})},
       },
       routes: [{
