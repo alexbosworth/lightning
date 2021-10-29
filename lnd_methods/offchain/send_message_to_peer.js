@@ -63,7 +63,6 @@ module.exports = (args, cbk) => {
           }
 
           if (!!err) {
-            console.log("ERR", err)
             return cbk([503, 'UnexpectedErrorSendingMessageToPeer', {err}]);
           }
 
