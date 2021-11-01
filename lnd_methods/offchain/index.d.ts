@@ -43,6 +43,7 @@ export * from './subscribe_to_past_payments';
 export * from './subscribe_to_pay_via_details';
 export * from './subscribe_to_pay_via_request';
 export * from './subscribe_to_pay_via_routes';
+export * from './subscribe_to_peer_messages';
 export * from './subscribe_to_probe_for_route';
 export * from './update_connected_watchtower';
 export * from './update_pathfinding_settings';

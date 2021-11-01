@@ -3,14 +3,17 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type SendMessageToPeerArgs = AuthenticatedLightningArgs<{
+export type LightningMessage = {
   /** Message Hex String */
   message: string;
   /** To Peer Public Key Hex String */
   public_key: string;
   /** Message Type Number */
   type?: number;
-}>;
+};
+
+export type SendMessageToPeerArgs =
+  AuthenticatedLightningArgs<LightningMessage>;
 
 /**
  * Send a custom message to a connected peer
