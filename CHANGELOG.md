@@ -1,5 +1,10 @@
 # Versions
 
+## 4.13.0
+
+- Add `sendMessageToPeer` to send a peer to peer message to a connected peer
+- Add `subscribeToPeerMessages` to listen to messages from connected peers
+
 ## 4.12.2
 
 - `probeForRoute`, `subscribeToProbeForRoute`, `subscribeToPayViaRoutes`,

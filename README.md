@@ -225,6 +225,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Ask for a CPFP chain fee rate increase on a pending confirm UTXO.
 - [revokeAccess](https://github.com/alexbosworth/ln-service#revokeaccess): Remove the access
     privileges of a previously issued access token macaroon credential.
+- [sendMessageToPeer](https://github.com/alexbosworth/ln-service#sendmessagetopeer): Send
+    message to a connected peer.
 - [sendToChainAddress](https://github.com/alexbosworth/ln-service#sendtochainaddress): Send
     funds on-chain to an address.
 - [sendToChainAddresses](https://github.com/alexbosworth/ln-service#sendtochainaddresses):
@@ -277,6 +279,8 @@ Methods exported by this library support typescript, but ln-service includes add
     Make an off-chain payment using a payment request and subscribe to the payment status.
 - [subscribeToPayViaRoutes](https://github.com/alexbosworth/ln-service#subscribetopayviaroutes):
     Start an off-chain payment using specific payment routes and subscribe to the payment result.
+- [subscribeToPeerMessages](https://github.com/alexbosworth/ln-service#subscribetopeermessages):
+    Listen for incoming peer messages.
 - [subscribeToPeers](https://github.com/alexbosworth/ln-service#subscribetopeers): Listen to peer
     disconnect and connect events.
 - [subscribeToProbeForRoute](https://github.com/alexbosworth/ln-service#subscribetoprobeforroute):
