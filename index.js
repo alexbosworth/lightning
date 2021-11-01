@@ -87,6 +87,7 @@ const {recoverFundsFromChannels} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {requestChainFeeIncrease} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
+const {sendMessageToPeer} = require('./lnd_methods');
 const {sendToChainAddress} = require('./lnd_methods');
 const {sendToChainAddresses} = require('./lnd_methods');
 const {sendToChainOutputScripts} = require('./lnd_methods');
@@ -221,6 +222,7 @@ module.exports = {
   removePeer,
   requestChainFeeIncrease,
   revokeAccess,
+  sendMessageToPeer,
   sendToChainAddress,
   sendToChainAddresses,
   sendToChainOutputScripts,

@@ -32,6 +32,7 @@ export * from './pay';
 export * from './probe_for_route';
 export * from './recover_funds_from_channel';
 export * from './recover_funds_from_channels';
+export * from './send_message_to_peer';
 export * from './subscribe_to_backups';
 export * from './subscribe_to_channels';
 export * from './subscribe_to_forward_requests';
