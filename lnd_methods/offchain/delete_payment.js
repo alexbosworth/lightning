@@ -13,7 +13,7 @@ const type = 'default';
 
   Requires `offchain:write` permission
 
-  Note: this method is not supported on LND 0.13.3 and below
+  Note: this method is not supported on LND 0.13.4 and below
 
   {
     id: <Payment Preimage Hash Hex String>

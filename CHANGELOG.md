@@ -1,6 +1,6 @@
 # Versions
 
-## 4.13.1
+## 4.13.2
 
 - Add `sendMessageToPeer` to send a peer to peer message to a connected peer
 - Add `subscribeToPeerMessages` to listen to messages from connected peers

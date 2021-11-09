@@ -69,6 +69,6 @@ export type SubscribeToPastPaymentsPaymentEvent = {
  *
  * Requires `offchain:read` permission
  *
- * Note: Method not supported on LND 0.13.3 and below
+ * Note: Method not supported on LND 0.13.4 and below
  */
 export const subscribeToPastPayments: AuthenticatedLightningSubscription<SubscribeToPastPaymentsArgs>;

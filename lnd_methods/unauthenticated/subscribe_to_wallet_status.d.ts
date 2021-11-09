@@ -25,6 +25,6 @@ export type SubscribeToWalletStatusStartingEvent = EmptyObject;
  *
  * This method is not supported on LND 0.12.1 and below
  *
- * `ready` is not supported on LND 0.13.3 and below
+ * `ready` is not supported on LND 0.13.4 and below
  */
 export const subscribeToWalletStatus: UnauthenticatedLightningSubscription;

@@ -7,6 +7,7 @@ const streamAuth = 'stream_auth';
 /** Derive request details from an RPC request update
 
   {
+    msg_id: <Message Id Number String>
     request_id: <Request Id Number String>
     raw_macaroon: <Raw Macaroon Buffer Object>
     custom_caveat_condition: <Custom Caveat Condition String>
@@ -33,6 +34,7 @@ const streamAuth = 'stream_auth';
 
   @returns
   {
+    call: <Call Id Number>
     [event]: <Event Type String>
     id: <Request Id Number>
     [macaroon]: <Base64 Encoded Macaroon String>
@@ -52,6 +54,10 @@ module.exports = args => {
     throw new Error('ExpectedInterceptTypeInRpcRequestUpdate');
   }
 
+  if (args.msg_id === undefined) {
+    throw new Error('ExpectedMessageIdInRpcRequestUpdate');
+  }
+
   if (!isBuffer(args.raw_macaroon)) {
     throw new Error('ExpectedCompleteMacaroonCredentialsInRequestUpdate');
   }
@@ -60,7 +66,8 @@ module.exports = args => {
     throw new Error('ExpectedRequestIdInRpcRequestUpdate');
   }
 
-  const id = Number(args.request_id);
+  const call = Number(args.request_id);
+  const id = Number(args.msg_id);
 
   switch (args.intercept_type) {
   // New subscription
@@ -74,6 +81,7 @@ module.exports = args => {
     }
 
     return {
+      call,
       id,
       event: request,
       macaroon: bufferAsBase64(args.raw_macaroon),
@@ -91,6 +99,7 @@ module.exports = args => {
     }
 
     return {
+      call,
       id,
       event: request,
       macaroon: bufferAsBase64(args.raw_macaroon),
@@ -108,6 +117,7 @@ module.exports = args => {
     }
 
     return {
+      call,
       id,
       event: response,
       macaroon: bufferAsBase64(args.raw_macaroon),
@@ -116,6 +126,6 @@ module.exports = args => {
 
   // Unknown update
   default:
-    return {id, macaroon: bufferAsBase64(args.raw_macaroon)};
+    return {call, id, macaroon: bufferAsBase64(args.raw_macaroon)};
   }
 };

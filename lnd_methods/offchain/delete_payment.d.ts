@@ -13,6 +13,6 @@ export type DeletePaymentArgs = AuthenticatedLightningArgs<{
  *
  * Requires `offchain:write` permission
  *
- * Note: this method is not supported on LND 0.13.3 and below
+ * Note: this method is not supported on LND 0.13.4 and below
  */
 export const deletePayment: AuthenticatedLightningMethod<DeletePaymentArgs>;

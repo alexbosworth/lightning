@@ -30,7 +30,7 @@ module.exports = ({id, subscription}, cbk) => {
 
       // Send accept feedback to the stream
       accept: ['validate', ({}, cbk) => {
-        return subscription.write({feedback, request_id: id}, err => {
+        return subscription.write({feedback, ref_msg_id: id}, err => {
           if (!!err) {
             return cbk([503, 'UnexpectedErrorAcceptingRpcRequest', {err}]);
           }

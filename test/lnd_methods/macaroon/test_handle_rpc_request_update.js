@@ -24,6 +24,7 @@ const tests = [
       },
       subscription: {},
       update: {
+        msg_id: '1',
         request_id: '1',
         raw_macaroon: Buffer.alloc(0),
         custom_caveat_condition: '',
@@ -79,6 +80,7 @@ const tests = [
       },
       subscription: {},
       update: {
+        msg_id: '1',
         request_id: '1',
         raw_macaroon: Buffer.alloc(0),
         custom_caveat_condition: '',
@@ -141,6 +143,7 @@ const tests = [
       },
       subscription: {},
       update: {
+        msg_id: '1',
         request_id: '1',
         raw_macaroon: Buffer.alloc(0),
         custom_caveat_condition: '',
@@ -189,6 +192,7 @@ const tests = [
     args: {
       subscription: {},
       update: {
+        msg_id: '1',
         request_id: '1',
         raw_macaroon: Buffer.alloc(0),
         custom_caveat_condition: '',

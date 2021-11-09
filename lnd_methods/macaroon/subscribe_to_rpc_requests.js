@@ -22,7 +22,7 @@ const type = 'default';
 
   LND must be running with "RPC middleware" enabled: `rpcmiddleware.enable=1`
 
-  This method is not supported in LND 0.13.3 and below
+  This method is not supported in LND 0.13.4 and below
 
   {
     [id]: <RPC Middleware Interception Name String>
@@ -41,7 +41,7 @@ const type = 'default';
   @event 'close_channel_request'
   {
     accept: ({}, [cbk]) => {}
-    id: <Request Id Number>
+    id: <Message Id Number>
     macaroon: <Base64 Encoded Macaroon String>
     reject: ({message: <Rejection String>}, [cbk]) => {}
     request: {
@@ -59,7 +59,7 @@ const type = 'default';
   @event 'open_channel_request'
   {
     accept: ({}, [cbk]) => {}
-    id: <Request Id Number>
+    id: <Message Id Number>
     macaroon: <Base64 Encoded Macaroon String>
     reject: ({message: <Rejection String>}, [cbk]) => {}
     request: {
@@ -80,7 +80,7 @@ const type = 'default';
   @event 'pay_via_route_request'
   {
     accept: ({}, [cbk]) => {}
-    id: <Request Id Number>
+    id: <Message Id Number>
     macaroon: <Base64 Encoded Macaroon String>
     reject: ({message: <Rejection String>}, [cbk]) => {}
     request: {
@@ -110,14 +110,16 @@ const type = 'default';
 
   @event 'request'
   {
-    id: <Request Id Number>
+    call: <Call Identifier Number>
+    id: <Message Id Number>
     [macaroon]: <Base64 Encoded Macaroon String>
     [uri]: <RPC URI String>
   }
 
   @event 'response'
   {
-    id: <Request Id Number>
+    call: <Call Identifier Number>
+    id: <Message Id Number>
     [macaroon]: <Base64 Encoded Macaroon String>
     [uri]: <RPC URI String>
   }

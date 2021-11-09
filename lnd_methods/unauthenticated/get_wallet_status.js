@@ -14,7 +14,7 @@ const unsupportedMessage = 'unknown service lnrpc.State';
 
   This method is not supported on LND 0.12.1 and below
 
-  `is_ready` is not supported on LND 0.13.3 and below
+  `is_ready` is not supported on LND 0.13.4 and below
 
   {
     lnd: <Unauthenticated LND API Object>

@@ -17,6 +17,7 @@ const isPayViaRoute = n => !!n && n === '/routerrpc.Router/SendToRouteV2';
     [is_intercepting_pay_via_routes_requests]: <Is Handling Route Reqs Bool>
     subscription: <Stream Subscription Object>
     update: {
+      msg_id: <Message Id Number String>
       request_id: <Request Id Number String>
       raw_macaroon: <Raw Macaroon Buffer Object>
       custom_caveat_condition: <Custom Caveat Condition String>
@@ -47,12 +48,13 @@ const isPayViaRoute = n => !!n && n === '/routerrpc.Router/SendToRouteV2';
     [accept]: ({}, cbk) => {}
     data: {
       [accept]: ({}, cbk) => {}
-      id: <Request Id Number>
+      call: <Call Id Number>
+      id: <Message Id Number>
       [macaroon]: <Base64 Encoded Macaroon String>
       [reject]: ({}, cbk) => {}
       [request]: {
         [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
-        [cooperative_close_address]: <Prefer Cooperative Close To Address String>
+        [cooperative_close_address]: <Prefer Cooperative Close Address String>
         [give_tokens]: <Tokens to Gift To Partner Number>
         [is_private]: <Channel is Private Bool>
         local_tokens: <Local Tokens Number>
@@ -72,6 +74,7 @@ module.exports = args => {
   const isInterceptOpenChans = !!args.is_intercepting_open_channel_requests;
   const isInterceptPayOnRoute = !!args.is_intercepting_pay_via_routes_requests;
 
+  const {call} = details;
   const {event} = details;
   const {id} = details;
   const {macaroon} = details;
@@ -144,5 +147,5 @@ module.exports = args => {
     };
   }
 
-  return {accept, event, data: {id, macaroon, uri}};
+  return {accept, event, data: {call, id, macaroon, uri}};
 };

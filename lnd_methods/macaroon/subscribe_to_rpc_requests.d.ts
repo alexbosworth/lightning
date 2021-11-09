@@ -21,7 +21,9 @@ export type SubscribeToRpcRequestsResult = {
 };
 
 export type SubscribeToRpcRequestsCommonEvent = {
-  /** Request Id Number */
+  /** Call Id Number */
+  call: number;
+  /** Message Id Number */
   id: number;
   /** Base64 Encoded Macaroon String */
   macaroon?: string;
@@ -135,7 +137,7 @@ export type SubscribeToRpcRequestsResponseEvent =
  *
  * LND must be running with "RPC middleware" enabled: `rpcmiddleware.enable=1`
  *
- * This method is not supported in LND 0.13.3 and below
+ * This method is not supported in LND 0.13.4 and below
  */
 export const subscribeToRpcRequests: AuthenticatedLightningMethod<
   SubscribeToRpcRequestsArgs,

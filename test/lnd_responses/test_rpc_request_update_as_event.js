@@ -4,6 +4,7 @@ const method = require('./../../lnd_responses/rpc_request_update_as_event');
 
 const makeArgs = overrides => {
   const args = {
+    msg_id: '1',
     request_id: '1',
     raw_macaroon: Buffer.alloc(0),
     custom_caveat_condition: '',
@@ -16,7 +17,7 @@ const makeArgs = overrides => {
 };
 
 const makeExpected = overrides => {
-  const expected = {id: 1, macaroon: undefined};
+  const expected = {call: 1, id: 1, macaroon: undefined};
 
   Object.keys(overrides).forEach(k => expected[k] = overrides[k]);
 
@@ -38,6 +39,11 @@ const tests = [
     args: makeArgs({intercept_type: undefined}),
     description: 'An intercept type is expected',
     error: 'ExpectedInterceptTypeInRpcRequestUpdate',
+  },
+  {
+    args: makeArgs({msg_id: undefined}),
+    description: 'A message id is expected',
+    error: 'ExpectedMessageIdInRpcRequestUpdate',
   },
   {
     args: makeArgs({raw_macaroon: undefined}),

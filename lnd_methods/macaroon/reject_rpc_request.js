@@ -36,7 +36,7 @@ module.exports = ({id, message, subscription}, cbk) => {
             error: message || defaultRejectMessage,
             replace_response: false,
           },
-          request_id: id,
+          ref_msg_id: id,
         },
         err => {
           if (!!err) {

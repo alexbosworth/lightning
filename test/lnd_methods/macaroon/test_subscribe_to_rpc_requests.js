@@ -18,6 +18,7 @@ const makeArgs = overrides => {
 
           process.nextTick(() => {
             emitter.emit('data', {
+              msg_id: '1',
               request_id: '1',
               raw_macaroon: Buffer.alloc(0),
               custom_caveat_condition: '',
@@ -86,6 +87,7 @@ const tests = [
 
             process.nextTick(() => {
               emitter.emit('data', {
+                msg_id: '1',
                 request_id: '1',
                 raw_macaroon: Buffer.alloc(0),
                 custom_caveat_condition: '',
@@ -102,7 +104,7 @@ const tests = [
     description: 'RPC write errors are passed back',
     expected: {
       events: [
-        {id: 1, macaroon: undefined, uri: 'method_full_uri'},
+        {call: 1, id: 1, macaroon: undefined, uri: 'method_full_uri'},
         [503, 'UnexpectedErrorAcceptingRpcRequest', {err: 'err'}],
       ],
     },
@@ -112,7 +114,7 @@ const tests = [
     description: 'RPC request subscription is returned',
     expected: {
       events: [
-        {id: 1, macaroon: undefined, uri: 'method_full_uri'},
+        {call: 1, id: 1, macaroon: undefined, uri: 'method_full_uri'},
         [503, 'ExpectedCustomCaveatConditionInRpcRequestUpdate'],
         {details: 'Cancelled on client'},
       ],
@@ -161,6 +163,7 @@ const tests = [
 
             process.nextTick(() => {
               emitter.emit('data', {
+                msg_id: '1',
                 request_id: '1',
                 raw_macaroon: Buffer.alloc(0),
                 custom_caveat_condition: '',

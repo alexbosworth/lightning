@@ -16,7 +16,7 @@ const type = 'default';
 
   Requires `offchain:read` permission
 
-  This method is not supported in LND 0.13.3 and below
+  This method is not supported in LND 0.13.4 and below
 
   {
     lnd: <Authenticated LND API Object>

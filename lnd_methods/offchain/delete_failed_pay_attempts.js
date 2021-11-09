@@ -16,7 +16,7 @@ const type = 'default';
 
   Method not supported on LND 0.12.1 or below
 
-  `id` is not supported on LND 0.13.3 or below
+  `id` is not supported on LND 0.13.4 or below
 
   {
     [id]: <Delete Only Failed Attempt Records For Payment With Hash Hex String>

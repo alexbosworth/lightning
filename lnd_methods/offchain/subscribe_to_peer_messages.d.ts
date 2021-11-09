@@ -13,6 +13,6 @@ export type SubscribeToPeerMessagesMessageReceivedEvent =
  *
  * Requires `offchain:read` permission
  *
- * This method is not supported in LND 0.13.3 and below
+ * This method is not supported in LND 0.13.4 and below
  */
 export const subscribeToPeerMessages: AuthenticatedLightningSubscription;

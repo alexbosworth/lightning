@@ -23,6 +23,6 @@ module.exports = ({channel, version}) => {
 
   const type = adjustedChannelTypes[channel.commitment_type];
 
-  // Versions of LND 0.13.3 and before use a different channel type value
+  // Versions of LND 0.13.4 and before use a different channel type value
   return assign(channel, {commitment_type: type || defaultChannelType});
 };
