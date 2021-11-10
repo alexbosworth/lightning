@@ -3,6 +3,8 @@ const {failureFromPayment} = require('./../../lnd_responses');
 const {pendingFromPayment} = require('./../../lnd_responses');
 const {states} = require('./payment_states');
 
+const {isArray} = Array;
+
 /** Emit payment from payment event
 
   {
@@ -22,6 +24,13 @@ module.exports = ({data, emitter}) => {
       return emitter.emit('failed', failureFromPayment(data));
 
     case states.paying:
+      const hasHtlcs = !!data && isArray(data.htlcs) && !!data.htlcs.length;
+
+      // Exit early when no HTLCs are attached
+      if (!hasHtlcs) {
+        return;
+      }
+
       return emitter.emit('paying', pendingFromPayment(data));
 
     default:
