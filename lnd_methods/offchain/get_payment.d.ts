@@ -105,6 +105,60 @@ export type GetPaymentResult = {
     /** Total Tokens Paid */
     tokens: number;
   };
+  pending?: {
+    /** Created at ISO-8601 Date */
+    created_at: string;
+    /** Payment Destination Public Key Hex */
+    destination: string;
+    /** Payment Hash Hex */
+    id: string;
+    /** Total Millitokens Pending */
+    mtokens: string;
+    paths: {
+      /** Total Path Fee Tokens */
+      fee: number;
+      /** Total Path Fee Millitokens */
+      fee_mtokens: string;
+      hops: {
+        /** Standard Format Channel Id */
+        channel: string;
+        /** Channel Capacity Tokens */
+        channel_capacity: number;
+        /** Routing Fee Tokens */
+        fee: number;
+        /** Fee Millitokens */
+        fee_mtokens: string;
+        /** Forwarded Tokens */
+        forward: number;
+        /** Forward Millitokens */
+        forward_mtokens: string;
+        /** Public Key Hex */
+        public_key: string;
+        /** Timeout Block Height */
+        timeout: number;
+      }[];
+      /** Total Path Millitokens Paid */
+      mtokens: string;
+      /** MPP Payment Identifying Nonce */
+      payment: string;
+      /** Expiration Block Height */
+      timeout: number;
+      /** Path Tokens Paid */
+      tokens: number;
+      /** Total Millitokens Pending */
+      total_mtokens: string;
+    }[]
+    /** BOLT 11 Payment Request */
+    request?: string;
+    /** Payment Tokens Rounded Up */
+    safe_tokens: number;
+    /** Payment Preimage Hex */
+    secret: string;
+    /** Expiration Block Height */
+    timeout?: number;
+    /** Total Tokens Pending */
+    tokens: number;
+  };
 };
 
 /**

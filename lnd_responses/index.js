@@ -11,6 +11,7 @@ const nodeInfoAsNode = require('./node_info_as_node');
 const paymentFailure = require('./payment_failure');
 const paymentRequestDetails = require('./payment_request_details');
 const pendingAsPendingChannels = require('./pending_as_pending_channels');
+const pendingFromPayment = require('./pending_from_payment');
 const policyFromChannelUpdate = require('./policy_from_channel_update');
 const routesFromQueryRoutes = require('./routes_from_query_routes');
 const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
@@ -53,6 +54,7 @@ module.exports = {
   paymentFailure,
   paymentRequestDetails,
   pendingAsPendingChannels,
+  pendingFromPayment,
   policyFromChannelUpdate,
   routesFromQueryRoutes,
   rpcAttemptHtlcAsAttempt,

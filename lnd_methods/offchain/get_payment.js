@@ -67,6 +67,30 @@ const type = 'router';
       timeout: <Expiration Block Height Number>
       tokens: <Total Tokens Paid Number>
     }
+    [pending]: {
+      created_at: <Payment Created At ISO 8601 Date String>
+      destination: <Payment Destination Hex String>
+      id: <Payment Hash Hex String>
+      mtokens: <Total Millitokens Pending String>
+      paths: [{
+        fee_mtokens: <Total Fee Millitokens Paid String>
+        hops: [{
+          channel: <Standard Format Channel Id String>
+          channel_capacity: <Channel Capacity Tokens Number>
+          fee: <Fee Tokens Rounded Down Number>
+          fee_mtokens: <Fee Millitokens String>
+          forward: <Forwarded Tokens Number>
+          forward_mtokens: <Forward Millitokens String>
+          public_key: <Public Key Hex String>
+          timeout: <Timeout Block Height Number>
+        }]
+        mtokens: <Total Millitokens Pending String>
+      }]
+      [request]: <BOLT 11 Encoded Payment Request String>
+      safe_tokens: <Payment Tokens Rounded Up Number>
+      [timeout]: <Expiration Block Height Number>
+      tokens: <Total Tokens Pending Number>
+    }
   }
 */
 module.exports = ({id, lnd}, cbk) => {
@@ -102,6 +126,7 @@ module.exports = ({id, lnd}, cbk) => {
             is_failed: !!res.failed,
             is_pending: !res.payment && !res.failed,
             payment: res.payment || undefined,
+            pending: res.pending || undefined,
           });
         };
 
@@ -109,7 +134,7 @@ module.exports = ({id, lnd}, cbk) => {
         sub.once('end', () => cbk([503, 'UnknownStatusOfPayment']));
         sub.once('error', err => finished(err));
         sub.once('failed', failed => finished(null, {failed}));
-        sub.once('paying', () => finished(null, {}));
+        sub.once('paying', pending => finished(null, {pending}));
 
         return;
       }],

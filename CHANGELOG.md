@@ -1,5 +1,9 @@
 # Versions
 
+## 4.14.0
+
+- `getPayment`, `subscribeToPastPayment`: Add `pending` for pending payment details
+
 ## 4.13.3
 
 - Add `sendMessageToPeer` to send a peer to peer message to a connected peer
