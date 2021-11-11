@@ -1,6 +1,6 @@
 # Versions
 
-## 4.14.1
+## 4.14.2
 
 - `getPayment`, `subscribeToPastPayment`: Add `pending` for pending payment details
 
