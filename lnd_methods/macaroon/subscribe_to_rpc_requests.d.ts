@@ -21,8 +21,6 @@ export type SubscribeToRpcRequestsResult = {
 };
 
 export type SubscribeToRpcRequestsCommonEvent = {
-  /** Call Id Number */
-  call: number;
   /** Message Id Number */
   id: number;
   /** Base64 Encoded Macaroon String */
@@ -122,11 +120,17 @@ export type SubscribeToRpcRequestsPayViaRouteRequestEvent =
     };
   }>;
 
+export type SubscribeToRpcRequestsRequestOrResponseEvent =
+  SubscribeToRpcRequestsCommonEvent & {
+    /** Call Id Number */
+    call: number;
+  };
+
 export type SubscribeToRpcRequestsRequestEvent =
-  SubscribeToRpcRequestsCommonEvent;
+  SubscribeToRpcRequestsRequestOrResponseEvent;
 
 export type SubscribeToRpcRequestsResponseEvent =
-  SubscribeToRpcRequestsCommonEvent;
+  SubscribeToRpcRequestsRequestOrResponseEvent;
 
 /**
  * Subscribe to RPC requests and their responses
