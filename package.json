@@ -15,7 +15,7 @@
     "@types/ws": "8.2.0",
     "async": "3.2.2",
     "asyncjs-util": "1.2.7",
-    "bitcoinjs-lib": "5.2.0",
+    "bitcoinjs-lib": "6.0.0",
     "bn.js": "5.2.0",
     "body-parser": "1.19.0",
     "bolt07": "1.7.4",

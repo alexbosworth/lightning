@@ -1,8 +1,10 @@
 const {confirmedFromPayment} = require('./../../lnd_responses');
 const {failureFromPayment} = require('./../../lnd_responses');
 const {pendingFromPayment} = require('./../../lnd_responses');
+const {routingFailureFromHtlc} = require('./../../lnd_responses');
 const {states} = require('./payment_states');
 
+const failedStatus = 'FAILED';
 const {isArray} = Array;
 
 /** Emit payment from payment event
@@ -28,6 +30,16 @@ module.exports = ({data, emitter}) => {
 
       // Exit early when no HTLCs are attached
       if (!hasHtlcs) {
+        return;
+      }
+
+      // Emit routing failures
+      data.htlcs.filter(n => n.status === failedStatus).forEach(htlc => {
+        return emitter.emit('routing_failure', routingFailureFromHtlc(htlc));
+      });
+
+      // Exit early when the HTLCs have no pending payments
+      if (!data.htlcs.find(n => n.status === states.paying)) {
         return;
       }
 
