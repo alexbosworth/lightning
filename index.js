@@ -75,10 +75,10 @@ const {lndGateway} = require('./lnd_gateway');
 const {lockUtxo} = require('./lnd_methods');
 const {openChannel} = require('./lnd_methods');
 const {openChannels} = require('./lnd_methods');
+const {pay} = require('./lnd_methods');
 const {payViaPaymentDetails} = require('./lnd_methods');
 const {payViaPaymentRequest} = require('./lnd_methods');
 const {payViaRoutes} = require('./lnd_methods');
-const {pay} = require('./lnd_methods');
 const {prepareForChannelProposal} = require('./lnd_methods');
 const {probeForRoute} = require('./lnd_methods');
 const {proposeChannel} = require('./lnd_methods');
@@ -123,8 +123,8 @@ const {subscribeToWalletStatus} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {unlockUtxo} = require('./lnd_methods');
 const {unlockWallet} = require('./lnd_methods');
-const {updateConnectedWatchtower} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
+const {updateConnectedWatchtower} = require('./lnd_methods');
 const {updatePathfindingSettings} = require('./lnd_methods');
 const {updateRoutingFees} = require('./lnd_methods');
 const {verifyAccess} = require('./lnd_methods');
@@ -211,10 +211,10 @@ module.exports = {
   lockUtxo,
   openChannel,
   openChannels,
+  pay,
   payViaPaymentDetails,
   payViaPaymentRequest,
   payViaRoutes,
-  pay,
   prepareForChannelProposal,
   probeForRoute,
   proposeChannel,
@@ -259,8 +259,8 @@ module.exports = {
   unauthenticatedLndGrpc,
   unlockUtxo,
   unlockWallet,
-  updateConnectedWatchtower,
   updateChainTransaction,
+  updateConnectedWatchtower,
   updatePathfindingSettings,
   updateRoutingFees,
   verifyAccess,

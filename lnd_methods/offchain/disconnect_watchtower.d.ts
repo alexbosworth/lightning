@@ -6,8 +6,6 @@ import {
 export type DisconnectWatchtowerArgs = AuthenticatedLightningArgs<{
   /** Watchtower Public Key Hex String */
   public_key: string;
-  /** Retry Delay Milliseconds Number */
-  retry_delay?: number;
 }>;
 
 /**

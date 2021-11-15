@@ -10,13 +10,7 @@ expectError(disconnectWatchtower());
 expectError(disconnectWatchtower({}));
 expectError(disconnectWatchtower({lnd}));
 expectError(disconnectWatchtower({public_key}));
-expectError(disconnectWatchtower({retry_delay}));
-expectError(disconnectWatchtower({lnd, retry_delay}));
 
 expectType<void>(await disconnectWatchtower({lnd, public_key}));
-expectType<void>(await disconnectWatchtower({lnd, public_key, retry_delay}));
 
 expectType<void>(disconnectWatchtower({lnd, public_key}, () => {}));
-expectType<void>(
-  disconnectWatchtower({lnd, public_key, retry_delay}, () => {})
-);

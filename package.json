@@ -22,7 +22,7 @@
     "bolt09": "0.2.0",
     "cbor": "8.1.0",
     "express": "4.17.1",
-    "invoices": "2.0.1",
+    "invoices": "2.0.2",
     "psbt": "1.1.10"
   },
   "description": "Lightning Network client library",

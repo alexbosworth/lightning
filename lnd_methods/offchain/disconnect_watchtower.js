@@ -17,7 +17,6 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service wtclientrpc.Watcht
   {
     lnd: <Authenticated LND API Object>
     public_key: <Watchtower Public Key Hex String>
-    [retry_delay]: <Retry Delay Milliseconds Number>
   }
 
   @returns via cbk or Promise
