@@ -52,6 +52,8 @@ const makeLnd = args => {
         };
         const emitter = new EventEmitter();
 
+        emitter.cancel = () => {};
+
         if (!!args.is_end) {
           process.nextTick(() => emitter.emit('end'));
         } else if (!!args.err) {

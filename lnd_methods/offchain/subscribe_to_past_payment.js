@@ -8,10 +8,12 @@ const {confirmedFromPayment} = require('./../../lnd_responses');
 const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
 const emitPayment = require('./emit_payment');
 const {failureFromPayment} = require('./../../lnd_responses');
+const {handleRemoveListener} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 const {safeTokens} = require('./../../bolt00');
 const {states} = require('./payment_states');
 
+const events = ['confirmed', 'failed', 'paying'];
 const hexToBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
@@ -140,6 +142,9 @@ module.exports = args => {
   };
 
   const sub = args.lnd[type][method]({payment_hash: hash});
+
+  // Terminate subscription when all listeners are removed
+  handleRemoveListener({emitter, events, subscription: sub});
 
   sub.on('data', data => emitPayment({data, emitter}));
   sub.on('end', () => emitter.emit('end'));
