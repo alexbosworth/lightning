@@ -18,7 +18,7 @@ export type VerifyAccessResult = {
 /**
  * Verify an access token has a given set of permissions
  *
- * Note: this method is not supported in LND versions 0.13.3 and below
+ * Note: this method is not supported in LND versions 0.13.4 and below
  *
  * Requires `macaroon:read` permission
  */

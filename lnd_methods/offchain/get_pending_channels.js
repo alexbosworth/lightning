@@ -27,7 +27,6 @@ const type = 'default';
     pending_channels: [{
       [close_transaction_id]: <Channel Closing Transaction Id String>
       is_active: <Channel Is Active Bool>
-      is_anchor: <Channel Is Anchor Channel Type Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Initiated Channel Bool>

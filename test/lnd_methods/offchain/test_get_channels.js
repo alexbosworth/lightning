@@ -11,13 +11,10 @@ const makeExpected = overrides => {
     cooperative_close_delay_height: undefined,
     id: '0x0x1',
     is_active: true,
-    is_anchor: false,
     is_closing: false,
     is_opening: false,
     is_partner_initiated: false,
     is_private: true,
-    is_static_remote_key: false,
-    is_variable_remote_key: true,
     local_balance: 1,
     local_csv: 1,
     local_dust: 1,
@@ -250,8 +247,6 @@ const tests = [
     expected: {
       channel: makeExpected({
         cooperative_close_delay_height: 1,
-        is_static_remote_key: true,
-        is_variable_remote_key: false,
       }),
     },
   },
@@ -261,8 +256,6 @@ const tests = [
     expected: {
       channel: makeExpected({
         cooperative_close_delay_height: 5e5,
-        is_anchor: true,
-        is_variable_remote_key: false,
       }),
     },
   },

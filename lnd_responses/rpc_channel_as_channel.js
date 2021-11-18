@@ -74,13 +74,10 @@ const outpointDelimiter = ':';
     [cooperative_close_delay_height]: <Prevent Coop Close Until Height Number>
     id: <Standard Format Channel Id String>
     is_active: <Channel Active Bool>
-    is_anchor: <Channel Supports Anchor Outputs Bool>
     is_closing: <Channel Is Closing Bool>
     is_opening: <Channel Is Opening Bool>
     is_partner_initiated: <Channel Partner Opened Channel Bool>
     is_private: <Channel Is Private Bool>
-    is_static_remote_key: <Remote Key Is Static Bool>
-    is_variable_remote_key: <Remote Key Is Variable Bool>
     local_balance: <Local Balance Tokens Number>
     local_csv: <Local CSV Blocks Delay Number>
     local_dust: <Remote Non-Enforceable Amount Tokens Number>
@@ -224,13 +221,10 @@ module.exports = args => {
     cooperative_close_delay_height: height,
     id: chanFormat({number: args.chan_id}).channel,
     is_active: args.active,
-    is_anchor: chanType === commitmentTypes.anchor,
     is_closing: false,
     is_opening: false,
     is_partner_initiated: !args.initiator,
     is_private: args.private,
-    is_static_remote_key: chanType === commitmentTypes.static_remote_key,
-    is_variable_remote_key: chanType === commitmentTypes.variable_remote_key,
     local_balance: Number(args.local_balance),
     local_csv: own.csv_delay,
     local_dust: Number(own.dust_limit_sat),

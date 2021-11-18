@@ -12,7 +12,7 @@ export type CreateChainAddressArgs = AuthenticatedLightningArgs<{
 
 export type CreateChainAddressResult = {
   /** Chain Address */
-  address: string;
+  address?: string;
 };
 
 /**

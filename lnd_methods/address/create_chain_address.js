@@ -5,6 +5,7 @@ const addressFormats = require('./address_formats');
 const {isLnd} = require('./../../lnd_requests');
 
 const connectFailMessage = '14 UNAVAILABLE: Connect Failed';
+const defaultAddressFormat = 'p2wpkh';
 const method = 'newAddress';
 const type = 'default';
 
@@ -13,7 +14,7 @@ const type = 'default';
   Requires `address:write` permission
 
   {
-    format: <Receive Address Type String> // "np2wpkh" || "p2wpkh"
+    [format]: <Receive Address Type String> // "np2wpkh" || "p2wpkh"
     [is_unused]: <Get As-Yet Unused Address Bool>
     lnd: <Authenticated LND API Object>
   }
@@ -28,7 +29,7 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!args.format || addressFormats[args.format] === undefined) {
+        if (!!args.format && addressFormats[args.format] === undefined) {
           return cbk([400, 'ExpectedKnownAddressFormat']);
         }
 
@@ -41,11 +42,13 @@ module.exports = (args, cbk) => {
 
       // Type
       type: ['validate', ({}, cbk) => {
+        const format = args.format || defaultAddressFormat;
+
         if (!args.is_unused) {
-          return cbk(null, addressFormats[args.format]);
+          return cbk(null, addressFormats[format]);
         }
 
-        return cbk(null, addressFormats[`unused_${args.format}`]);
+        return cbk(null, addressFormats[`unused_${format}`]);
       }],
 
       // Get the address

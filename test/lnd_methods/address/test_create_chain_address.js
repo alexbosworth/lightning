@@ -4,11 +4,6 @@ const {createChainAddress} = require('./../../../');
 
 const tests = [
   {
-    args: {},
-    description: 'An address format is required',
-    error: [400, 'ExpectedKnownAddressFormat'],
-  },
-  {
     args: {format: 'foo'},
     description: 'A known address format is required',
     error: [400, 'ExpectedKnownAddressFormat'],

@@ -82,7 +82,6 @@ const outpointSeparator = ':';
     pending_channels: [{
       [close_transaction_id]: <Channel Closing Transaction Id String>
       is_active: <Channel Is Active Bool>
-      is_anchor: <Channel Is Anchor Channel Type Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Initiated Channel Bool>
@@ -288,7 +287,6 @@ module.exports = args => {
     return {
       close_transaction_id: endTx || undefined,
       is_active: false,
-      is_anchor: channel.commitment_type === anchorChannelType,
       is_closing: !chanOpen,
       is_opening: !!chanOpen,
       is_partner_initiated: channel.initiator === remoteInitiator,

@@ -40,8 +40,6 @@ export type GetChannelsResult = {
     is_partner_initiated: boolean;
     /** Channel Is Private */
     is_private: boolean;
-    /** Remote Key Is Static */
-    is_static_remote_key: boolean;
     /** Local Balance Tokens */
     local_balance: number;
     /** Local CSV Blocks Delay */
