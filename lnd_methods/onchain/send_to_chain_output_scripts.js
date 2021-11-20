@@ -11,8 +11,11 @@ const initialConfirmationCount = 0;
 const {isArray} = Array;
 const {isBuffer} = Buffer;
 const method = 'sendOutputs';
+const minFeeRate = 1;
 const unconfirmedConfCount = 0;
 const type = 'wallet';
+const weightPerKWeight = 1e3;
+const weightPerVByte = 4;
 
 /** Send on-chain funds to multiple output scripts
 
@@ -58,6 +61,10 @@ module.exports = (args, cbk) => {
       },
 
       send: ['validate', ({}, cbk) => {
+        const feePerVByte = args.fee_tokens_per_vbyte || minFeeRate;
+
+        const feePerKw = feePerVByte * weightPerKWeight / weightPerVByte;
+
         return args.lnd[type][method]({
           label: args.description || undefined,
           min_confs: args.utxo_confirmations || undefined,
@@ -65,7 +72,7 @@ module.exports = (args, cbk) => {
             pk_script: hexAsBuffer(output.script),
             value: output.tokens.toString(),
           })),
-          sat_per_byte: args.fee_tokens_per_vbyte || undefined,
+          sat_per_kw: feePerKw,
           spend_unconfirmed: args.utxo_confirmations === unconfirmedConfCount,
         },
         (err, res) => {
@@ -78,7 +85,7 @@ module.exports = (args, cbk) => {
           }
 
           try {
-            fromBuffer(res.raw_tx).getId()
+            fromBuffer(res.raw_tx).getId();
           } catch (err) {
             return cbk([500, 'ExpectedRawTransactionInSendToOutputsResponse']);
           }
