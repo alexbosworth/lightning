@@ -5,6 +5,7 @@
 - Removed support for determining the type of channel to support LND 0.14.0.
 
 - `createChainAddress`: Make address format optional and add p2wpkh as default
+- `sendToChainOutputScripts`: Fix specification of `fee_tokens_per_vbyte`
 
 ### Breaking Changes
 
