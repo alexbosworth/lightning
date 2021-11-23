@@ -2,75 +2,83 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningSubscription,
 } from '../../typescript';
+import {Xor} from '../../typescript/util';
 
-type SubscribeToPayWithDestination = {
+export type SubscribeToPayWithDestinationArgs = {
   /** Destination Public Key String> */
   destination: string;
   /** Payment Request Hash Hex String> */
   id: string;
   /** Final CLTV Delta Number> */
   cltv_delta?: number;
-  request?: never;
 };
 
-type SubscribeToPayWithRequest = {
+export type SubscribeToPayWithRequestArgs = {
   /** BOLT 11 Payment Request String> */
   request: string;
-  cltv_delta?: never;
+};
+
+export type SubscribeToPayWithDestinationOrRequestArgs = Xor<
+  SubscribeToPayWithDestinationArgs,
+  SubscribeToPayWithRequestArgs
+>;
+
+export type SubscribeToPayOptionsArgs = {
+  features?: {
+    /** Feature Bit Number> */
+    bit: number;
+  }[];
+  /** Pay Through Specific Final Hop Public Key Hex String> */
+  incoming_peer?: string;
+  /** Maximum Fee Tokens To Pay Number> */
+  max_fee?: number;
+  /** Maximum Fee Millitokens to Pay String> */
+  max_fee_mtokens?: string;
+  /** Maximum Millitokens For A Multi-Path Path */
+  max_path_mtokens?: string;
+  /** Maximum Simultaneous Paths Number> */
+  max_paths?: number;
+  /** Maximum Height of Payment Timeout Number> */
+  max_timeout_height?: number;
+  messages?: {
+    /** Message Type Number String> */
+    type: string;
+    /** Message Raw Value Hex Encoded String> */
+    value: string;
+  }[];
+  /** Millitokens to Pay String> */
+  mtokens?: string;
+  /** Pay Out of Outgoing Channel Id String> */
+  outgoing_channel?: string;
+  /** Pay Out of Outgoing Channel Ids String> */
+  outgoing_channels?: string[];
+  /** Time to Spend Finding a Route Milliseconds Number> */
+  pathfinding_timeout?: number;
+  /** Payment Identifier Hex String> */
+  payment?: string;
+  routes?: {
+    /** Base Routing Fee In Millitokens String> */
+    base_fee_mtokens?: string;
+    /** Standard Format Channel Id String> */
+    channel?: string;
+    /** CLTV Blocks Delta Number> */
+    cltv_delta?: number;
+    /** Fee Rate In Millitokens Per Million Number> */
+    fee_rate?: number;
+    /** Forward Edge Public Key Hex String> */
+    public_key: string;
+  }[][];
+  /** Tokens to Pay Number> */
+  tokens?: number;
 };
 
 export type SubscribeToPayArgs = AuthenticatedLightningArgs<
-  (SubscribeToPayWithDestination | SubscribeToPayWithRequest) & {
-    features?: {
-      /** Feature Bit Number> */
-      bit: number;
-    }[];
-    /** Pay Through Specific Final Hop Public Key Hex String> */
-    incoming_peer?: string;
-    /** Maximum Fee Tokens To Pay Number> */
-    max_fee?: number;
-    /** Maximum Fee Millitokens to Pay String> */
-    max_fee_mtokens?: string;
-    /** Maximum Millitokens For A Multi-Path Path */
-    max_path_mtokens?: string;
-    /** Maximum Simultaneous Paths Number> */
-    max_paths?: number;
-    /** Maximum Height of Payment Timeout Number> */
-    max_timeout_height?: number;
-    messages?: {
-      /** Message Type Number String> */
-      type: string;
-      /** Message Raw Value Hex Encoded String> */
-      value: string;
-    }[];
-    /** Millitokens to Pay String> */
-    mtokens?: string;
-    /** Pay Out of Outgoing Channel Id String> */
-    outgoing_channel?: string;
-    /** Pay Out of Outgoing Channel Ids String> */
-    outgoing_channels?: string[];
-    /** Time to Spend Finding a Route Milliseconds Number> */
-    pathfinding_timeout?: number;
-    /** Payment Identifier Hex String> */
-    payment?: string;
-    routes?: {
-      /** Base Routing Fee In Millitokens String> */
-      base_fee_mtokens?: string;
-      /** Standard Format Channel Id String> */
-      channel?: string;
-      /** CLTV Blocks Delta Number> */
-      cltv_delta?: number;
-      /** Fee Rate In Millitokens Per Million Number> */
-      fee_rate?: number;
-      /** Forward Edge Public Key Hex String> */
-      public_key: string;
-    }[][];
-    /** Tokens to Probe Number> */
-    tokens?: number;
-  }
+  SubscribeToPayWithDestinationOrRequestArgs & SubscribeToPayOptionsArgs
 >;
 
 export type SubscribeToPayConfirmedEvent = {
+  /** Payment Confirmed At ISO 8601 Date String */
+  confirmed_at: string;
   /** Total Fee Tokens Paid Rounded Down Number> */
   fee: number;
   /** Total Fee Millitokens Paid String> */
@@ -174,7 +182,103 @@ export type SubscribeToPayFailedEvent = {
   };
 };
 
-export type SubscribeToPayPayingEvent = {[key: string]: never};
+export type SubscribeToPayPayingEvent = {
+  /** Payment Created At ISO 8601 Date String> */
+  created_at: string;
+  /** Payment Destination Hex String> */
+  destination: string;
+  /** Payment Hash Hex String> */
+  id: string;
+  /** Total Millitokens Pending String> */
+  mtokens: string;
+  paths: {
+    /** Total Fee Tokens Pending Number> */
+    fee: number;
+    /** Total Fee Millitokens Pending String> */
+    fee_mtokens: string;
+    hops: {
+      /** Standard Format Channel Id String> */
+      channel: string;
+      /** Channel Capacity Tokens Number> */
+      channel_capacity: number;
+      /** Fee Tokens Rounded Down Number> */
+      fee: number;
+      /** Fee Millitokens String> */
+      fee_mtokens: string;
+      /** Forward Tokens Number> */
+      forward: number;
+      /** Forward Millitokens String> */
+      forward_mtokens: string;
+      /** Public Key Hex String> */
+      public_key: string;
+      /** Timeout Block Height Number> */
+      timeout: number;
+    }[];
+    /** Total Millitokens Pending String> */
+    mtokens: string;
+    /** Total Fee Tokens Pending Rounded Up Number> */
+    safe_fee: number;
+    /** Total Tokens Pending, Rounded Up Number> */
+    safe_tokens: number;
+    /** Expiration Block Height Number> */
+    timeout: number;
+  }[];
+  /** BOLT 11 Encoded Payment Request String> */
+  request?: string;
+  /** Total Tokens Pending, Rounded Up Number> */
+  safe_tokens: number;
+  /** Expiration Block Height Number> */
+  timeout?: number;
+  /** Total Tokens Pending Rounded Down Number> */
+  tokens: number;
+};
+
+export type SubscribeToRoutingFailureEvent = {
+  /** Standard Format Channel Id String> */
+  channel?: string;
+  /** Failure Index Number> */
+  index: number;
+  /** Millitokens String> */
+  mtokens?: string;
+  /** Public Key Hex String> */
+  public_key?: string;
+  /** Failure Reason String> */
+  reason: string;
+  route: {
+    /** Total Route Fee Tokens To Pay Number> */
+    fee: number;
+    /** Total Route Fee Millitokens To Pay String> */
+    fee_mtokens: string;
+    hops: {
+      /** Standard Format Channel Id String> */
+      channel: string;
+      /** Channel Capacity Tokens Number> */
+      channel_capacity: number;
+      /** Fee Number> */
+      fee: number;
+      /** Fee Millitokens String> */
+      fee_mtokens: string;
+      /** Forward Tokens Number> */
+      forward: number;
+      /** Forward Millitokens String> */
+      forward_mtokens: string;
+      /** Public Key Hex String> */
+      public_key: string;
+      /** Timeout Block Height Number> */
+      timeout: number;
+    }[];
+    /** Total Route Millitokens String> */
+    mtokens: string;
+    /** Payment Identifier Hex String> */
+    payment?: string;
+    /** Expiration Block Height Number> */
+    timeout: number;
+    /** Total Route Tokens Number> */
+    tokens: number;
+    /** Total Millitokens String> */
+    total_mtokens?: string;
+  };
+};
 
 /**
  * Initiate and subscribe to the outcome of a payment
