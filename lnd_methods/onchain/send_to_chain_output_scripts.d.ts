@@ -2,7 +2,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
 export type SendToChainOutputScriptsArgs = AuthenticatedLightningArgs<{
   /** Transaction Label String */

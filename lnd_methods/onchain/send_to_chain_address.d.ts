@@ -4,9 +4,9 @@ import {
   AuthenticatedLightningMethod,
   LightningError,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
-type ExpectedNoTokensSpecifiedWhenSendingAllFunds = Xor<
+type ExpectedNoTokensSpecifiedWhenSendingAllFunds = MergeExclusive<
   {
     /** Tokens To Send */
     tokens: number;
@@ -16,7 +16,7 @@ type ExpectedNoTokensSpecifiedWhenSendingAllFunds = Xor<
     is_send_all: true;
   }
 >;
-type ExpectedLogFunctionForChainSendSocketAnnounce = Xor<
+type ExpectedLogFunctionForChainSendSocketAnnounce = MergeExclusive<
   {
     /** Web Socket Servers */
     wss: ws.Server[];

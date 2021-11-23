@@ -2,7 +2,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
 export type FundPsbtArgs = AuthenticatedLightningArgs<
   {
@@ -20,7 +20,7 @@ export type FundPsbtArgs = AuthenticatedLightningArgs<
 
     /** Confirmations To Wait */
     target_confirmations?: number;
-  } & Xor<
+  } & MergeExclusive<
     {
       /** Existing PSBT Hex */
       psbt: string;

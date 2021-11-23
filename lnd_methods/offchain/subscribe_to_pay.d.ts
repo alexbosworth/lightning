@@ -2,7 +2,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningSubscription,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
 export type SubscribeToPayWithDestinationArgs = {
   /** Destination Public Key String> */
@@ -18,7 +18,7 @@ export type SubscribeToPayWithRequestArgs = {
   request: string;
 };
 
-export type SubscribeToPayWithDestinationOrRequestArgs = Xor<
+export type SubscribeToPayWithDestinationOrRequestArgs = MergeExclusive<
   SubscribeToPayWithDestinationArgs,
   SubscribeToPayWithRequestArgs
 >;

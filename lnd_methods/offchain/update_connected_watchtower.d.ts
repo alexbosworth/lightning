@@ -2,13 +2,13 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
 export type UpdateConnectedWatchtowerArgs = AuthenticatedLightningArgs<
   {
     /** Watchtower Public Key Hex String */
     public_key: string;
-  } & Xor<
+  } & MergeExclusive<
     {
       /** Add Socket String */
       add_socket: string;

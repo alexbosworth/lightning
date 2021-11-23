@@ -2,9 +2,9 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
-type Tokens = Xor<
+type Tokens = MergeExclusive<
   {
     /** Millitokens to Send */
     mtokens?: string;

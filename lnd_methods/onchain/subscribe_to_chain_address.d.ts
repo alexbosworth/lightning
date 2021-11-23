@@ -2,10 +2,10 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningSubscription,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 import {ScriptFromChainAddressArgs} from './script_from_chain_address';
 
-type ExpectedChainAddressToSubscribeForConfirmationEvents = Xor<
+type ExpectedChainAddressToSubscribeForConfirmationEvents = MergeExclusive<
   {
     /** Output Script Hex */
     output_script: string;

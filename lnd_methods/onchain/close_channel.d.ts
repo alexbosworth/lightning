@@ -2,9 +2,9 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
-type ExpectedIdOfChannelToClose = Xor<
+type ExpectedIdOfChannelToClose = MergeExclusive<
   {
     /** Standard Format Channel Id String */
     id: string;
@@ -17,7 +17,7 @@ type ExpectedIdOfChannelToClose = Xor<
   }
 >;
 
-type UnexpectedTokensPerVbyteForChannelClose = Xor<
+type UnexpectedTokensPerVbyteForChannelClose = MergeExclusive<
   {
     /** Confirmation Target Number */
     target_confirmations?: number;
@@ -28,7 +28,7 @@ type UnexpectedTokensPerVbyteForChannelClose = Xor<
   }
 >;
 
-type ExpectedBothPublicKeyAndSocketForChannelClose = Xor<
+type ExpectedBothPublicKeyAndSocketForChannelClose = MergeExclusive<
   {
     /** Peer Public Key String */
     public_key: string;
@@ -53,7 +53,10 @@ export type CoopCloseChannelArgs = AuthenticatedLightningArgs<
     UnexpectedTokensPerVbyteForChannelClose
 >;
 
-export type CloseChannelArgs = Xor<ForceCloseChannelArgs, CoopCloseChannelArgs>;
+export type CloseChannelArgs = MergeExclusive<
+  ForceCloseChannelArgs,
+  CoopCloseChannelArgs
+>;
 
 export type CloseChannelResult = {
   /** Closing Transaction Id Hex */
