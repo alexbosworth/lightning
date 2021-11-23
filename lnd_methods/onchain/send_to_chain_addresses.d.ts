@@ -4,9 +4,9 @@ import {
   AuthenticatedLightningMethod,
   LightningError,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
-type ExpectedLogForChainSendWebSocketAnnouncement = Xor<
+type ExpectedLogForChainSendWebSocketAnnouncement = MergeExclusive<
   {
     /** Web Socket Servers */
     wss: ws.Server[];

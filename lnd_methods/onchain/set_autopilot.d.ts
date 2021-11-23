@@ -2,7 +2,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
 export type CandidateNode = {
   /** Node Public Key Hex */
@@ -22,7 +22,10 @@ type ExpectedNodesOrEnabledSettingToAdjustAutopilot =
     };
 
 export type SetAutopilotArgs = AuthenticatedLightningArgs<
-  Xor<ExpectedNodesOrEnabledSettingToAdjustAutopilot, {is_enabled: false}>
+  MergeExclusive<
+    ExpectedNodesOrEnabledSettingToAdjustAutopilot,
+    {is_enabled: false}
+  >
 >;
 
 /**

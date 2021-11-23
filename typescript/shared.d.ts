@@ -1,6 +1,6 @@
 import * as events from 'events';
+import {MergeExclusive} from 'type-fest';
 import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
-import {Xor} from './util';
 
 export type EmptyObject = {[key: string]: never};
 
@@ -84,7 +84,7 @@ export type PaymentState =
   | 'FAILED_TIMEOUT';
 export type PaymentStatus = CommonStatus | 'UNKNOWN';
 
-export type PaginationArgs = Xor<
+export type PaginationArgs = MergeExclusive<
   {
     /** Page Result Limit */
     limit?: number;

@@ -2,7 +2,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
 export type RequestChainFeeIncreaseArgs = AuthenticatedLightningArgs<
   {
@@ -10,7 +10,7 @@ export type RequestChainFeeIncreaseArgs = AuthenticatedLightningArgs<
     transaction_id: string;
     /** Unconfirmed UTXO Transaction Index Number */
     transaction_vout: number;
-  } & Xor<
+  } & MergeExclusive<
     {
       /** Chain Fee Tokens Per Virtual Byte Number */
       fee_tokens_per_vbyte: number;

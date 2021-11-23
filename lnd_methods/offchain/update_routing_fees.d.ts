@@ -2,9 +2,9 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
-type BaseFeeTokens = Xor<
+type BaseFeeTokens = MergeExclusive<
   {
     /** Base Fee Millitokens Charged */
     base_fee_mtokens?: string;

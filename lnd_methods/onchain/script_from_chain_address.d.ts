@@ -1,11 +1,11 @@
-import {Xor} from '../../typescript/util';
+import {MergeExclusive} from 'type-fest';
 
-export type ScriptFromChainAddressArgs = Xor<
+export type ScriptFromChainAddressArgs = MergeExclusive<
   {
     /** Address String */
     bech32_address: string;
   },
-  Xor<
+  MergeExclusive<
     {
       /** Address String */
       p2pkh_address: string;
