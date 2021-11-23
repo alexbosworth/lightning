@@ -172,15 +172,15 @@ export type SubscribeToPayViaRoutesRoutingFailureEvent = {
     }[];
     /** Total Millitokens To Pay */
     mtokens: string;
+    /** Payment Forwarding Fee Rounded Up Tokens Number */
+    safe_fee: number;
+    /** Payment Tokens Rounded Up Number */
+    safe_tokens: number;
     /** Expiration Block Height */
     timeout: number;
     /** Total Tokens To Pay */
     tokens: number;
   };
-  /** Payment Forwarding Fee Rounded Up Tokens */
-  safe_fee: number;
-  /** Payment Tokens Rounded Up */
-  safe_tokens: number;
   /** Failure Related CLTV Timeout Height */
   timeout_height?: number;
   update?: {
@@ -198,8 +198,6 @@ export type SubscribeToPayViaRoutesRoutingFailureEvent = {
 };
 
 export type SubscribeToPayViaRoutesSuccessEvent = {
-  /** Payment Sent At ISO 8601 Date */
-  confirmed_at: string;
   /** Fee Paid Tokens */
   fee: number;
   /** Fee Paid Millitokens */
@@ -249,6 +247,10 @@ export type SubscribeToPayViaRoutesSuccessEvent = {
     }[];
     /** Total Millitokens To Pay */
     mtokens: string;
+    /** Payment Forwarding Fee Rounded Up Tokens Number */
+    safe_fee: number;
+    /** Payment Tokens Rounded Up Number */
+    safe_tokens: number;
     /** Expiration Block Height */
     timeout: number;
     /** Total Tokens To Pay */
