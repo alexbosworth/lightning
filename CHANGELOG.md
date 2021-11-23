@@ -1,5 +1,9 @@
 # Versions
 
+## 5.0.1
+
+- `createChainAddress`: Fix type hints to reflect optionality of `format`
+
 ## 5.0.0
 
 - Removed support for determining the type of channel to support LND 0.14.0.

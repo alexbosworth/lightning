@@ -24,7 +24,7 @@
     "express": "4.17.1",
     "invoices": "2.0.2",
     "psbt": "1.1.10",
-    "type-fest": "^0.8.1"
+    "type-fest": "2.6.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -57,5 +57,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "5.0.0"
+  "version": "5.0.1"
 }
