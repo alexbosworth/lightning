@@ -52,10 +52,6 @@ To access unauthenticated methods like the wallet unlocker, use
 
 ## Methods
 
-There are two libraries, [ln-service](https://github.com/alexbosworth/ln-service) and this library.
-
-Methods exported by this library support typescript, but ln-service includes additional metthods.
-
 - [addPeer](https://github.com/alexbosworth/ln-service#addpeer): Connect to a new peer
 - [authenticatedLndGrpc](https://github.com/alexbosworth/ln-service#authenticatedlndgrpc): 
     Instantiate connection to authenticated lnd methods.

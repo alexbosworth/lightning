@@ -22,6 +22,8 @@ export type OpenChannelsArgs = AuthenticatedLightningArgs<{
     /** Peer Connection Host:Port */
     partner_socket?: string;
   }[];
+  /** Do not broadcast any channel funding transactions */
+  is_avoiding_broadcast?: boolean;
 }>;
 
 export type OpenChannelsResult = {

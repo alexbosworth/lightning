@@ -1,5 +1,10 @@
 # Versions
 
+## 5.1.0
+
+- Add support for LND 0.14.1
+- `openChannels`: Add `is_avoiding_broadcast` to avoid all funding broadcast
+
 ## 5.0.1
 
 - `createChainAddress`: Fix type hints to reflect optionality of `format`

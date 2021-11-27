@@ -29,6 +29,9 @@ const type = 'default';
   If you do not fund the channels, be sure to `cancelPendingChannel` on each
   channel that was not funded.
 
+  Use `is_avoiding_broadcast` only when self-publishing the raw transaction
+  after the funding step.
+
   {
     channels: [{
       capacity: <Channel Capacity Tokens Number>
@@ -40,6 +43,7 @@ const type = 'default';
       [partner_csv_delay]: <Peer Output CSV Delay Number>
       [partner_socket]: <Peer Connection Host:Port String>
     }]
+    is_avoiding_broadcast: <Avoid Broadcast of All Channels Bool>
     lnd: <Authenticated LND API Object>
   }
 
@@ -52,28 +56,28 @@ const type = 'default';
     }]
   }
 */
-module.exports = ({channels, lnd}, cbk) => {
+module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!isArray(channels)) {
+        if (!isArray(args.channels)) {
           return cbk([400, 'ExpectedChannelsToOpenChannels']);
         }
 
-        if (channels.filter(n => !!n).length !== channels.length) {
+        if (args.channels.filter(n => !!n).length !== args.channels.length) {
           return cbk([400, 'ExpectedChannelDetailsToOpenChannels']);
         }
 
-        if (!!channels.find(n => !n.capacity)) {
+        if (!!args.channels.find(n => !n.capacity)) {
           return cbk([400, 'ExpectedCapacityOfChannelsToOpenChannels']);
         }
 
-        if (!!channels.find(n => !isPublicKey(n.partner_public_key))) {
+        if (!!args.channels.find(n => !isPublicKey(n.partner_public_key))) {
           return cbk([400, 'ExpectedPeerPublicKeyToOpenChannels']);
         }
 
-        if (!isLnd({lnd, method, type})) {
+        if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedAuthenticatedLndToOpenChannels']);
         }
 
@@ -82,7 +86,7 @@ module.exports = ({channels, lnd}, cbk) => {
 
       // Channels to open
       toOpen: ['validate', ({}, cbk) => {
-        return cbk(null, channels.map(channel => ({
+        return cbk(null, args.channels.map(channel => ({
           capacity: channel.capacity,
           id: makeId(),
           cooperative_close_address: channel.cooperative_close_address,
@@ -101,11 +105,12 @@ module.exports = ({channels, lnd}, cbk) => {
 
         return asyncMap(toOpen, (channel, cbk) => {
           let isDone = false;
+          const isSelfPublish = !!args.is_avoiding_broadcast;
 
-          const channelOpen = lnd[type][method]({
+          const channelOpen = args.lnd[type][method]({
             funding_shim: {
               psbt_shim: {
-                no_publish: !channel.id.equals(lastChannel),
+                no_publish: !!isSelfPublish || !channel.id.equals(lastChannel),
                 pending_chan_id: channel.id,
               },
             },
@@ -183,7 +188,7 @@ module.exports = ({channels, lnd}, cbk) => {
         return asyncEach(toOpen, (channel, cbk) => {
           const id = hexFromBuffer(channel.id);
 
-          return cancelPendingChannel({id, lnd}, () => cbk());
+          return cancelPendingChannel({id, lnd: args.lnd}, () => cbk());
         },
         () => {
           return cbk([503, 'UnexpectedErrorOpeningChannels', {err}]);
