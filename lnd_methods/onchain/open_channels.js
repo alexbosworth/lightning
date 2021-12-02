@@ -43,7 +43,7 @@ const type = 'default';
       [partner_csv_delay]: <Peer Output CSV Delay Number>
       [partner_socket]: <Peer Connection Host:Port String>
     }]
-    is_avoiding_broadcast: <Avoid Broadcast of All Channels Bool>
+    [is_avoiding_broadcast]: <Avoid Broadcast of All Channels Bool>
     lnd: <Authenticated LND API Object>
   }
 
@@ -108,6 +108,7 @@ module.exports = (args, cbk) => {
           const isSelfPublish = !!args.is_avoiding_broadcast;
 
           const channelOpen = args.lnd[type][method]({
+            close_address: channel.cooperative_close_address || undefined,
             funding_shim: {
               psbt_shim: {
                 no_publish: !!isSelfPublish || !channel.id.equals(lastChannel),
