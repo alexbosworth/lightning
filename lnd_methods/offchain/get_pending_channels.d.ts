@@ -3,6 +3,8 @@ import {AuthenticatedLnd} from '../../lnd_grpc';
 
 export type GetPendingChannelsResult = {
   pending_channels: {
+    /** Channel Capacity Tokens */
+    capacity: number;
     /** Channel Closing Transaction Id */
     close_transaction_id?: string;
     /** Channel Is Active */
