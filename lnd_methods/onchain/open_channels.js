@@ -39,8 +39,8 @@ const type = 'default';
       [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
       [is_private]: <Channel is Private Bool> // Defaults to false
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
-      partner_public_key: <Public Key Hex String>
       [partner_csv_delay]: <Peer Output CSV Delay Number>
+      partner_public_key: <Public Key Hex String>
       [partner_socket]: <Peer Connection Host:Port String>
     }]
     [is_avoiding_broadcast]: <Avoid Broadcast of All Channels Bool>

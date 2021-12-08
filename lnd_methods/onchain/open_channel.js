@@ -26,11 +26,11 @@ const type = 'default';
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
     [is_private]: <Channel is Private Bool> // Defaults to false
     lnd: <Authenticated LND API Object>
-    local_tokens: <Local Tokens Number>
+    local_tokens: <Total Channel Capacity Tokens Number>
     [min_confirmations]: <Spend UTXOs With Minimum Confirmations Number>
     [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
-    partner_public_key: <Public Key Hex String>
     [partner_csv_delay]: <Peer Output CSV Delay Number>
+    partner_public_key: <Public Key Hex String>
     [partner_socket]: <Peer Connection Host:Port String>
   }
 

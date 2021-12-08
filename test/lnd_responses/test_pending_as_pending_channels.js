@@ -99,6 +99,7 @@ const makeArgs = overrides => {
 
 const makeExpectedPending = overrides => {
   const res = {
+    capacity: 1,
     close_transaction_id: Buffer.alloc(32).toString('hex'),
     is_active: false,
     is_closing: true,

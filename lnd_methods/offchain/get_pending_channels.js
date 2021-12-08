@@ -25,6 +25,7 @@ const type = 'default';
   @returns via cbk or Promise
   {
     pending_channels: [{
+      capacity: <Channel Capacity Tokens Number>
       [close_transaction_id]: <Channel Closing Transaction Id String>
       is_active: <Channel Is Active Bool>
       is_closing: <Channel Is Closing Bool>
@@ -68,6 +69,7 @@ module.exports = ({lnd}, cbk) => {
         return cbk();
       },
 
+      // Get pending channels
       getPending: ['validate', ({}, cbk) => {
         return lnd[type][method]({}, (err, res) => {
           if (!!err) {

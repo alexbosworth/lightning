@@ -1,5 +1,9 @@
 # Versions
 
+## 5.2.0
+
+- `getPendingChannels`: Add support for channel `capacity`
+
 ## 5.1.1
 
 - `openChannels`: Fix `cooperative_close_address` not being set on channels

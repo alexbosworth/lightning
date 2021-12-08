@@ -80,6 +80,7 @@ const outpointSeparator = ':';
   @returns
   {
     pending_channels: [{
+      capacity: <Channel Capacity Tokens Number>
       [close_transaction_id]: <Channel Closing Transaction Id String>
       is_active: <Channel Is Active Bool>
       is_closing: <Channel Is Closing Bool>
@@ -285,6 +286,7 @@ module.exports = args => {
     const pendingTokens = wait.pending_balance || forced.pending_balance;
 
     return {
+      capacity: Number(channel.capacity),
       close_transaction_id: endTx || undefined,
       is_active: false,
       is_closing: !chanOpen,
