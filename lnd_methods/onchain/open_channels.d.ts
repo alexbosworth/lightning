@@ -19,8 +19,6 @@ export type OpenChannelsArgs = AuthenticatedLightningArgs<{
     partner_public_key: string;
     /** Peer Output CSV Delay */
     partner_csv_delay?: number;
-    /** Peer Connection Host:Port */
-    partner_socket?: string;
   }[];
   /** Do not broadcast any channel funding transactions */
   is_avoiding_broadcast?: boolean;

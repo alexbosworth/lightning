@@ -28,6 +28,7 @@ const type = 'default';
   Invoice `payment` is not supported on LND 0.11.1 and below
 
   {
+    [is_unconfirmed]: <Omit Canceled and Settled Invoices Bool>
     [limit]: <Page Result Limit Number>
     lnd: <Authenticated LND API Object>
     [token]: <Opaque Paging Token String>
@@ -87,16 +88,16 @@ const type = 'default';
     [next]: <Next Opaque Paging Token String>
   }
 */
-module.exports = ({limit, lnd, token}, cbk) => {
+module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Validate arguments
       validate: cbk => {
-        if (!!limit && !!token) {
+        if (!!args.limit && !!args.token) {
           return cbk([400, 'UnexpectedLimitWhenPagingInvoicesWithToken']);
         }
 
-        if (!isLnd({lnd, method, type})) {
+        if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndForInvoiceListing']);
         }
 
@@ -106,12 +107,12 @@ module.exports = ({limit, lnd, token}, cbk) => {
       // Get the list of invoices
       listInvoices: ['validate', ({}, cbk) => {
         let offset;
-        let resultsLimit = limit || defaultLimit;
+        let resultsLimit = args.limit || defaultLimit;
 
         // When there is a token, parse it out into an offset and a limit
-        if (!!token) {
+        if (!!args.token) {
           try {
-            const pagingToken = parse(token);
+            const pagingToken = parse(args.token);
 
             offset = pagingToken.offset;
             resultsLimit = pagingToken.limit;
@@ -121,9 +122,10 @@ module.exports = ({limit, lnd, token}, cbk) => {
         }
 
         return asyncRetry({}, cbk => {
-          return lnd[type][method]({
+          return args.lnd[type][method]({
             index_offset: offset || Number(),
             num_max_invoices: resultsLimit,
+            pending_only: args.is_unconfirmed === true || undefined,
             reversed: true,
           },
           (err, res) => {

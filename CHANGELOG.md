@@ -1,5 +1,9 @@
 # Versions
 
+## 5.3.0
+
+- `getInvoices`: Add `is_unconfirmed` to filter out canceled/settled invoices
+
 ## 5.2.1
 
 - `getPendingChannels`: Add support for channel `capacity`

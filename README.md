@@ -15,6 +15,7 @@ Methods for working with the Lightning Network
 - [Thunderhub](https://www.thunderhub.io/) - https://github.com/apotdevin/thunderhub
 - [Lightning Roulette](https://lightning-roulette.com/) - https://github.com/igreshev/lightning-roulette
 - [Lightning Poker](https://lightning-poker.com/) - https://github.com/igreshev/lightning-poker
+- [p2plnbot](https://telegram.me/lnp2pbot) - https://github.com/grunch/p2plnbot
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
 - [Suredbits API](https://suredbits.com/) - https://github.com/Suredbits/sb-api-lnd
 

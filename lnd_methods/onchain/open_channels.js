@@ -41,7 +41,6 @@ const type = 'default';
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
       [partner_csv_delay]: <Peer Output CSV Delay Number>
       partner_public_key: <Public Key Hex String>
-      [partner_socket]: <Peer Connection Host:Port String>
     }]
     [is_avoiding_broadcast]: <Avoid Broadcast of All Channels Bool>
     lnd: <Authenticated LND API Object>
@@ -95,7 +94,6 @@ module.exports = (args, cbk) => {
           min_htlc_mtokens: channel.min_htlc_mtokens,
           partner_public_key: channel.partner_public_key,
           partner_csv_delay: channel.partner_csv_delay,
-          partner_socket: channel.partner_socket,
         })));
       }],
 
