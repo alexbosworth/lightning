@@ -1,6 +1,6 @@
 # Versions
 
-## 5.3.0
+## 5.3.1
 
 - `getInvoices`: Add `is_unconfirmed` to filter out canceled/settled invoices
 

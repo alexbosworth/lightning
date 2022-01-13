@@ -5,6 +5,7 @@ const deleteFailedPayments = require('./delete_failed_payments');
 const deleteForwardingReputations = require('./delete_forwarding_reputations');
 const deletePayment = require('./delete_payment');
 const deletePayments = require('./delete_payments');
+const deletePendingChannel = require('./delete_pending_channel');
 const disableChannel = require('./disable_channel');
 const disconnectWatchtower = require('./disconnect_watchtower');
 const enableChannel = require('./enable_channel');
@@ -59,6 +60,7 @@ module.exports = {
   deleteForwardingReputations,
   deletePayment,
   deletePayments,
+  deletePendingChannel,
   disableChannel,
   disconnectWatchtower,
   enableChannel,
