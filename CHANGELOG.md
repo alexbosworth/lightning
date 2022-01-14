@@ -1,5 +1,9 @@
 # Versions
 
+## 5.3.2
+
+- `pay`, `payViaPaymentRequest`: Fix support for `outgoing_channels` constraint
+
 ## 5.3.1
 
 - `getInvoices`: Add `is_unconfirmed` to filter out canceled/settled invoices

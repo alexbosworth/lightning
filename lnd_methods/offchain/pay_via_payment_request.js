@@ -99,6 +99,7 @@ module.exports = (args, cbk) => {
           messages: args.messages,
           mtokens: args.mtokens,
           outgoing_channel: args.outgoing_channel,
+          outgoing_channels: args.outgoing_channels,
           pathfinding_timeout: args.pathfinding_timeout,
           request: args.request,
           tokens: args.tokens,
