@@ -30,7 +30,13 @@ const tests = [
   },
   {
     args: {
-      lnd: {unlocker: {initWallet: ({}, cbk) => cbk()}},
+      lnd: {
+        unlocker: {
+          initWallet: ({}, cbk) => cbk(null, {
+            admin_macaroon: Buffer.alloc(1),
+          }),
+        },
+      },
       password: 'pass',
       seed: 'seed',
     },

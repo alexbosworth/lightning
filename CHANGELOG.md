@@ -1,6 +1,6 @@
 # Versions
 
-## 5.3.2
+## 5.3.3
 
 - `pay`, `payViaPaymentRequest`: Fix support for `outgoing_channels` constraint
 

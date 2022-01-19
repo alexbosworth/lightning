@@ -3,6 +3,8 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const bufferAsBase64 = buffer => buffer.toString('base64');
+const {isBuffer} = Buffer;
 const method = 'initWallet';
 const type = 'unlocker';
 const utf8AsBuf = utf8 => Buffer.from(utf8, 'utf8');
@@ -19,6 +21,9 @@ const utf8AsBuf = utf8 => Buffer.from(utf8, 'utf8');
   }
 
   @returns via cbk or Promise
+  {
+    macaroon: <Base64 Encoded Admin Macaroon String>
+  }
 */
 module.exports = ({lnd, passphrase, password, seed}, cbk) => {
   return new Promise((resolve, reject) => {
@@ -47,12 +52,20 @@ module.exports = ({lnd, passphrase, password, seed}, cbk) => {
           cipher_seed_mnemonic: seed.split(' '),
           wallet_password: utf8AsBuf(password),
         },
-        err => {
+        (err, res) => {
           if (!!err) {
             return cbk([503, 'UnexpectedInitWalletError', {err}]);
           }
 
-          return cbk();
+          if (!res) {
+            return cbk([503, 'ExpectedResponseForInitWallet']);
+          }
+
+          if (!isBuffer(res.admin_macaroon)) {
+            return cbk([503, 'ExpectedAdminMacaroonToCrateWallet']);
+          }
+
+          return cbk(null, bufferAsBase64(res.admin_macaroon));
         });
       }],
     },
