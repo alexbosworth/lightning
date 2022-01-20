@@ -8,7 +8,7 @@ const {sortBy} = require('./../../arrays');
 const defaultLimit = 250;
 const {isArray} = Array;
 const isFailed = payment => !!payment && payment.status === 'FAILED';
-const lastPageFirstIndexOffset = 0;
+const lastPageFirstIndexOffset = 1;
 const method = 'listPayments';
 const {parse} = JSON;
 const {stringify} = JSON;
@@ -152,7 +152,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
 
           return cbk(null, {
             payments: res.payments.filter(isFailed),
-            token: offset === lastPageFirstIndexOffset ? undefined : token,
+            token: offset <= lastPageFirstIndexOffset ? undefined : token,
           });
         });
       }],

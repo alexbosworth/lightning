@@ -157,7 +157,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
 
           return cbk(null, {
             payments: res.payments,
-            token: offset === lastPageFirstIndexOffset ? undefined : token,
+            token: offset <= lastPageFirstIndexOffset ? undefined : token,
           });
         });
       }],
