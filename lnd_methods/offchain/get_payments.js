@@ -185,7 +185,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
         });
 
         return cbk(null, {
-          next: !!foundPayments.length ? listPayments.token : undefined,
+          next: listPayments.token || undefined,
           payments: payments.sorted.reverse(),
         });
       }],
