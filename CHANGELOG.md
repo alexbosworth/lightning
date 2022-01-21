@@ -1,5 +1,9 @@
 # Versions
 
+## 5.3.4
+
+- `getPayments`: Correct paging issue that prevented paging through all results
+
 ## 5.3.3
 
 - `pay`, `payViaPaymentRequest`: Fix support for `outgoing_channels` constraint
