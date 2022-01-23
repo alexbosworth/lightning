@@ -4,7 +4,12 @@ import {
   PaginationArgs,
 } from '../../typescript';
 
-export type GetInvoicesArgs = AuthenticatedLightningArgs<PaginationArgs>;
+export type GetInvoicesArgs = AuthenticatedLightningArgs<
+  PaginationArgs & {
+    /** Omit Canceled and Settled Invoices Bool */
+    is_unconfirmed?: boolean;
+  }
+>;
 
 export type GetInvoicesResult = {
   invoices: {
