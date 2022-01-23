@@ -5,6 +5,7 @@ export * from './delete_failed_payments';
 export * from './delete_forwarding_reputations';
 export * from './delete_payment';
 export * from './delete_payments';
+export * from './delete_pending_channel';
 export * from './disable_channel';
 export * from './disconnect_watchtower';
 export * from './enable_channel';
