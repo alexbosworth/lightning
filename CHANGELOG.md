@@ -1,5 +1,10 @@
 # Versions
 
+## 5.4.0
+
+- `deletePendingChannel`: Add method to delete a stuck pending channel
+- `getInvoices`: Fill in type definition for `is_unconfirmed`
+
 ## 5.3.4
 
 - `getPayments`: Correct paging issue that prevented paging through all results
