@@ -76,6 +76,7 @@ const {lndGateway} = require('./lnd_gateway');
 const {lockUtxo} = require('./lnd_methods');
 const {openChannel} = require('./lnd_methods');
 const {openChannels} = require('./lnd_methods');
+const {partiallySignPsbt} = require('./lnd_methods');
 const {pay} = require('./lnd_methods');
 const {payViaPaymentDetails} = require('./lnd_methods');
 const {payViaPaymentRequest} = require('./lnd_methods');
@@ -213,6 +214,7 @@ module.exports = {
   lockUtxo,
   openChannel,
   openChannels,
+  partiallySignPsbt,
   pay,
   payViaPaymentDetails,
   payViaPaymentRequest,

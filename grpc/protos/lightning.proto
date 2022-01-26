@@ -1210,13 +1210,13 @@ enum CommitmentType {
     /*
     Returned when the commitment type isn't known or unavailable.
     */
-    UNKNOWN_COMMITMENT_TYPE = 999;
+    UNKNOWN_COMMITMENT_TYPE = 0;
 
     /*
     A channel using the legacy commitment format having tweaked to_remote
     keys.
     */
-    LEGACY = 0;
+    LEGACY = 1;
 
     /*
     A channel that uses the modern commitment format where the key in the
@@ -1224,14 +1224,14 @@ enum CommitmentType {
     up and recovery easier as when the channel is closed, the funds go
     directly to that key.
     */
-    STATIC_REMOTE_KEY = 1;
+    STATIC_REMOTE_KEY = 2;
 
     /*
     A channel that uses a commitment format that has anchor outputs on the
     commitments, allowing fee bumping after a force close transaction has
     been broadcast.
     */
-    ANCHORS = 2;
+    ANCHORS = 3;
 
     /*
     A channel that uses a commitment type that builds upon the anchors
@@ -2312,6 +2312,12 @@ message PendingChannelsResponse {
 
         // Total number of forwarding packages created in this channel.
         int64 num_forwarding_packages = 10;
+
+        // A set of flags showing the current state of the channel.
+        string chan_status_flags = 11;
+
+        // Whether this channel is advertised to the network or not.
+        bool private = 12;
     }
 
     message PendingOpenChannel {
@@ -2353,6 +2359,9 @@ message PendingChannelsResponse {
         this point.
         */
         Commitments commitments = 3;
+
+        // The transaction id of the closing transaction
+        string closing_txid = 4;
     }
 
     message Commitments {

@@ -72,6 +72,7 @@ const {isDestinationPayable} = require('./offchain');
 const {lockUtxo} = require('./onchain');
 const {openChannel} = require('./onchain');
 const {openChannels} = require('./onchain');
+const {partiallySignPsbt} = require('./onchain');
 const {pay} = require('./offchain');
 const {payViaPaymentDetails} = require('./offchain');
 const {payViaPaymentRequest} = require('./offchain');
@@ -205,6 +206,7 @@ module.exports = {
   lockUtxo,
   openChannel,
   openChannels,
+  partiallySignPsbt,
   pay,
   payViaPaymentDetails,
   payViaPaymentRequest,

@@ -14,6 +14,7 @@ const getUtxos = require('./get_utxos');
 const lockUtxo = require('./lock_utxo');
 const openChannel = require('./open_channel');
 const openChannels = require('./open_channels');
+const partiallySignPsbt = require('./partially_sign_psbt');
 const prepareForChannelProposal = require('./prepare_for_channel_proposal');
 const proposeChannel = require('./propose_channel');
 const requestChainFeeIncrease = require('./request_chain_fee_increase');
@@ -46,6 +47,7 @@ module.exports = {
   lockUtxo,
   openChannel,
   openChannels,
+  partiallySignPsbt,
   prepareForChannelProposal,
   proposeChannel,
   requestChainFeeIncrease,

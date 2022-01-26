@@ -10,7 +10,7 @@
     "@grpc/grpc-js": "1.5.3",
     "@grpc/proto-loader": "0.6.9",
     "@types/express": "4.17.13",
-    "@types/node": "17.0.10",
+    "@types/node": "17.0.12",
     "@types/request": "2.48.8",
     "@types/ws": "8.2.2",
     "async": "3.2.3",
@@ -23,7 +23,7 @@
     "cbor": "8.1.0",
     "express": "4.17.2",
     "invoices": "2.0.3",
-    "psbt": "1.1.10",
+    "psbt": "1.1.11",
     "type-fest": "2.10.0"
   },
   "description": "Lightning Network client library",
@@ -57,5 +57,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "5.4.0"
+  "version": "5.4.1"
 }

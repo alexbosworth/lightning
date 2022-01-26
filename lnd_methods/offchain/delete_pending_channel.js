@@ -4,6 +4,7 @@ const {Transaction} = require('bitcoinjs-lib');
 
 const {fromHex} = Transaction;
 const method = 'abandonChannel';
+const methodUnsupported = 'AbandonChannel RPC call only available in dev builds';
 const txIdAsHash = id => Buffer.from(id, 'hex').reverse();
 const type = 'default';
 
@@ -96,6 +97,10 @@ module.exports = (args, cbk) => {
           i_know_what_i_am_doing: true,
         },
         err => {
+          if (!!err && err.details === methodUnsupported) {
+            return cbk([501, 'DeletePendingChannelMethodNotSupported']);
+          }
+
           if (!!err) {
             return cbk([503, 'UnexpectedErrorDeletingPendingChannel', {err}]);
           }

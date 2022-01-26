@@ -68,6 +68,13 @@ const tests = [
     error: [400, 'FailedToFindConflictingInputInConfirmedTx'],
   },
   {
+    args: makeArgs({lnd: {default: {abandonChannel: ({}, cbk) => cbk({
+      details: 'AbandonChannel RPC call only available in dev builds',
+    })}}}),
+    description: 'Method unsupported error is returned',
+    error: [501, 'DeletePendingChannelMethodNotSupported'],
+  },
+  {
     args: makeArgs({lnd: {default: {abandonChannel: ({}, cbk) => cbk('er')}}}),
     description: 'A server error is passed back',
     error: [503, 'UnexpectedErrorDeletingPendingChannel', {err: 'er'}],
