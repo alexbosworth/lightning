@@ -293,6 +293,10 @@
     "method": "OpenChannel",
     "type": "default"
   },
+  "partiallySignPsbt": {
+    "method": "SignPsbt",
+    "type": "wallet"
+  },
   "payViaPaymentDetails": {
     "depends_on": ["subscribeToPayViaDetails"]
   },

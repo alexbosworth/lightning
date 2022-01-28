@@ -31,7 +31,7 @@ const type = 'default';
       }]
       is_inbound: <Is Inbound Peer Bool>
       [is_sync_peer]: <Is Syncing Graph Data Bool>
-      [last_reconnected]: <Peer Last Reconnected At ISO 8601 Date String>
+      [last_reconnection]: <Peer Last Reconnected At ISO 8601 Date String>
       ping_time: <Ping Latency Milliseconds Number>
       public_key: <Node Identity Public Key String>
       [reconnection_rate]: <Count of Reconnections Over Time Number>

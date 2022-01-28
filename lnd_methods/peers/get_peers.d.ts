@@ -22,7 +22,7 @@ export type GetPeersResult = {
     /** Is Syncing Graph Data */
     is_sync_peer?: boolean;
     /** Peer Last Reconnected At ISO 8601 Date */
-    last_reconnected?: string;
+    last_reconnection?: string;
     /** Ping Latency Milliseconds */
     ping_time: number;
     /** Node Identity Public Key */

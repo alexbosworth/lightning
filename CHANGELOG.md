@@ -1,6 +1,6 @@
 # Versions
 
-## 5.4.1
+## 5.4.2
 
 - `deletePendingChannel`: Add method to delete a stuck pending channel
 - `getInvoices`: Fill in type definition for `is_unconfirmed`
