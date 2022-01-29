@@ -206,8 +206,10 @@ To access unauthenticated methods like the wallet unlocker, use
     chosen to be spent.
 - [openChannel](https://github.com/alexbosworth/ln-service#openchannel): Create a new channel
     to another node.
-- [openChannels](https://github.com/alexbosworth/ln-service#openchannels): Open multiple
-    channels in a single on-chain transaction batch.
+- [openChannels](https://github.com/alexbosworth/ln-service#openchannels): Open
+     multiple channels in a single on-chain transaction batch.
+- [partiallySignPsbt](https://github.com/alexbosworth/ln-service#partiallysignpsbt):
+    Add a partial signature to a PSBT
 - [pay](https://github.com/alexbosworth/ln-service#pay): Make an off-chain payment.
 - [payViaPaymentDetails](https://github.com/alexbosworth/ln-service#payviapaymentdetails): Pay
     off-chain using details about a destination invoice.

@@ -1,5 +1,9 @@
 # Versions
 
+## 5.5.0
+
+- `partiallySignPsbt`: Add method to partially sign a PSBT
+
 ## 5.4.2
 
 - `deletePendingChannel`: Add method to delete a stuck pending channel
