@@ -14,6 +14,7 @@ export * from './get_utxos';
 export * from './lock_utxo';
 export * from './open_channel';
 export * from './open_channels';
+export * from './partially_sign_psbt';
 export * from './prepare_for_channel_proposal';
 export * from './propose_channel';
 export * from './request_chain_fee_increase';

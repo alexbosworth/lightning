@@ -12,9 +12,17 @@ export type CreateWalletArgs = UnauthenticatedLightningArgs<{
   seed: string;
 }>;
 
+export type CreateWalletResult = {
+  /** Base64 Encoded Admin Macaroon String */
+  macaroon: string;
+};
+
 /**
  * Create a wallet
  *
  * Requires unlocked lnd and unauthenticated LND
  */
-export const createWallet: UnauthenticatedLightningMethod<CreateWalletArgs>;
+export const createWallet: UnauthenticatedLightningMethod<
+  CreateWalletArgs,
+  CreateWalletResult
+>;
