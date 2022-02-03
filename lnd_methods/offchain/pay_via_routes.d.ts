@@ -27,6 +27,12 @@ export type PayViaRoutesArgs = AuthenticatedLightningArgs<{
       forward: number;
       /** Forward Millitokens */
       forward_mtokens: string;
+      messages?: {
+        /** Message Type number */
+        type: string;
+        /** Message Raw Value Hex Encoded */
+        value: string;
+      }[];
       /** Public Key Hex */
       public_key?: string;
       /** Timeout Block Height */

@@ -14,6 +14,10 @@ const isNumber = n => !isNaN(n);
       fee_mtokens: <Fee Millitokens String>
       forward: <Forward Tokens Number>
       forward_mtokens: <Forward Millitokens String>
+      [messages]: [{
+        type: <Message Type Number String>
+        value: <Message Raw Value Hex Encoded String>
+      }]
       [public_key]: <Forward Edge Public Key Hex String>
       timeout: <Timeout Block Height Number>
     }]
@@ -38,6 +42,7 @@ const isNumber = n => !isNaN(n);
       amt_to_forward_msat: <Millitokens to Forward String>
       chan_id: <Numeric Format Channel Id String>
       chan_capacity: <Channel Capacity Number>
+      [custom_records]: {<TLV Type Number String>: <TLV Value Buffer Object>}
       expiry: <Timeout Chain Height Number>
       fee: <Fee in Tokens Number>
       fee_msat: <Fee in Millitokens Number>
@@ -79,7 +84,7 @@ module.exports = args => {
     };
   }
 
-  // Set custom TLV payload records
+  // Set custom TLV payload records on the final hop
   if (!!args.messages && !!args.messages.length) {
     hops[finalHopIndex].tlv_payload = true;
 
@@ -88,7 +93,7 @@ module.exports = args => {
 
       return tlv;
     },
-    {});
+    hops[finalHopIndex].custom_records || {});
   }
 
   return {

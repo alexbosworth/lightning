@@ -41,6 +41,32 @@ const tests = [
       pub_key: 'public_key',
     },
   },
+  {
+    args: {
+      channel: '0x0x1',
+      channel_capacity: 1,
+      fee: 1,
+      fee_mtokens: '1000',
+      forward: '1',
+      forward_mtokens: '1000',
+      messages: [{type: '12', value: '34'}],
+      public_key: 'public_key',
+      timeout: 1,
+    },
+    description: 'Hop is mapped to RPC hop',
+    expected: {
+      amt_to_forward: '1',
+      amt_to_forward_msat: '1000',
+      chan_id: '1',
+      chan_capacity: '1',
+      custom_records: {'12': Buffer.from('34', 'hex')},
+      expiry: 1,
+      fee: '1',
+      fee_msat: '1000',
+      pub_key: 'public_key',
+      tlv_payload: true,
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

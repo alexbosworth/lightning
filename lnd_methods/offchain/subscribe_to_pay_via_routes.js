@@ -43,6 +43,10 @@ const unknownWireError = 'unknown wire error';
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
         forward_mtokens: <Forward Millitokens String>
+        [messages]: [{
+          type: <Message Type Number String>
+          value: <Message Raw Value Hex Encoded String>
+        }]
         public_key: <Public Key Hex String>
         timeout: <Timeout Block Height Number>
       }]

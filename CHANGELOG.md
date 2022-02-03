@@ -1,5 +1,9 @@
 # Versions
 
+## 5.6.0
+
+- `payViaRoutes`, `subscribeToPayViaRoutes`: Add support for relay messages
+
 ## 5.5.0
 
 - `partiallySignPsbt`: Add method to partially sign a PSBT
