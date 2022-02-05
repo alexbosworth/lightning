@@ -1,6 +1,7 @@
 const asyncAuto = require('async/auto');
 const {decodePsbt} = require('psbt');
 const {returnResult} = require('asyncjs-util');
+const tinysecp = require('tiny-secp256k1');
 const {Transaction} = require('bitcoinjs-lib');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -67,6 +68,9 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
 module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
+      // Import ECPair library
+      ecp: async () => (await import('ecpair')).ECPairFactory(tinysecp),
+
       // Check arguments
       validate: cbk => {
         if (!isLnd({method, type, lnd: args.lnd})) {
@@ -201,11 +205,11 @@ module.exports = (args, cbk) => {
       }],
 
       // Derive the raw transaction from the funded PSBT
-      tx: ['fund', ({fund}, cbk) => {
+      tx: ['fund', ({ecp, fund}, cbk) => {
         const {psbt} = fund;
 
         try {
-          const tx = fromHex(decodePsbt({psbt}).unsigned_transaction);
+          const tx = fromHex(decodePsbt({ecp, psbt}).unsigned_transaction);
 
           return cbk(null, tx);
         } catch (err) {
