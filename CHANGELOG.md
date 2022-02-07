@@ -1,6 +1,6 @@
 # Versions
 
-## 5.6.2
+## 5.6.3
 
 - `payViaRoutes`, `subscribeToPayViaRoutes`: Add support for relay messages
 

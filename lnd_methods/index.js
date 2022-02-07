@@ -46,6 +46,7 @@ const {getIdentity} = require('./info');
 const {getInvoice} = require('./invoices');
 const {getInvoices} = require('./invoices');
 const {getLockedUtxos} = require('./onchain');
+const {getMasterPublicKeys} = require('./onchain');
 const {getMethods} = require('./info');
 const {getNetworkCentrality} = require('./info');
 const {getNetworkGraph} = require('./info');
@@ -180,6 +181,7 @@ module.exports = {
   getInvoice,
   getInvoices,
   getLockedUtxos,
+  getMasterPublicKeys,
   getMethods,
   getNetworkCentrality,
   getNetworkGraph,

@@ -42,8 +42,8 @@ Run `base64` on the tls.cert and admin.macaroon files to get the encoded
 authentication data to create the LND connection. You can find these files in
 the LND directory. (~/.lnd or ~/Library/Application Support/Lnd)
 
-    base64 ~/.lnd/tls.cert | tr -d '\n'
-    base64 ~/.lnd/data/chain/bitcoin/mainnet/admin.macaroon | tr -d '\n'
+    base64 -w0 ~/.lnd/tls.cert
+    base64 -w0 ~/.lnd/data/chain/bitcoin/mainnet/admin.macaroon
 
 You can then use these to interact with your LND node directly:
 

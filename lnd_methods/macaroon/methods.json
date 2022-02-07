@@ -181,6 +181,10 @@
     "method": "ListLeases",
     "type": "wallet"
   },
+  "getMasterPublicKeys": {
+    "method": "ListAccounts",
+    "type": "wallet"
+  },
   "getMethods": {
     "method": "ListPermissions",
     "type": "default"
