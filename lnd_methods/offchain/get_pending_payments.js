@@ -100,7 +100,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
       // Check arguments
       validate: cbk => {
         if (!!limit && !!token) {
-          return cbk([400, 'ExpectedNoLimitWhenPagingPayFailuresWithToken']);
+          return cbk([400, 'ExpectedNoLimitWhenPagingPendingPaymentsWithToken']);
         }
 
         if (!isLnd({lnd, method, type})) {
@@ -142,7 +142,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
           }
 
           if (typeof res.last_index_offset !== 'string') {
-            return cbk([503, 'ExpectedLastIndexOffsetWhenRequestingFailed']);
+            return cbk([503, 'ExpectedLastIndexOffsetWhenRequestingPending']);
           }
 
           const lastOffset = Number(res.last_index_offset);

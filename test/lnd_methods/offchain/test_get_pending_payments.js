@@ -64,7 +64,7 @@ const tests = [
   {
     args: makeArgs({limit: 1, token: 'token'}),
     description: 'A limit cannot be passed with a token',
-    error: [400, 'ExpectedNoLimitWhenPagingPayFailuresWithToken'],
+    error: [400, 'ExpectedNoLimitWhenPagingPendingPaymentsWithToken'],
   },
   {
     args: makeArgs({lnd: undefined}),
@@ -98,7 +98,7 @@ const tests = [
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {payments: []})}},
     }),
     description: 'A response with payments and last index is expected',
-    error: [503, 'ExpectedLastIndexOffsetWhenRequestingFailed'],
+    error: [503, 'ExpectedLastIndexOffsetWhenRequestingPending'],
   },
   {
     args: makeArgs({
