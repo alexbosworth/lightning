@@ -7,7 +7,7 @@ const {sortBy} = require('./../../arrays');
 
 const defaultLimit = 250;
 const {isArray} = Array;
-const isPending = payment => !!payment && payment.status !== 'SUCCEEDED' && payment.status !== 'FAILED';
+const isPending = payment => !!payment && payment.status === 'IN_FLIGHT';
 const lastPageFirstIndexOffset = 1;
 const method = 'listPayments';
 const {parse} = JSON;
