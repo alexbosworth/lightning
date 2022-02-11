@@ -1,6 +1,6 @@
 const {test} = require('@alexbosworth/tap');
 
-const {getPayments} = require('./../../../');
+const {getFailedPayments} = require('./../../../');
 
 const makeLnd = args => {
   return {
@@ -64,41 +64,41 @@ const tests = [
   {
     args: makeArgs({limit: 1, token: 'token'}),
     description: 'A limit cannot be passed with a token',
-    error: [400, 'UnexpectedLimitWhenPagingPaymentsWithToken'],
+    error: [400, 'ExpectedNoLimitWhenPagingPayFailuresWithToken'],
   },
   {
     args: makeArgs({lnd: undefined}),
     description: 'LND is required',
-    error: [400, 'ExpectedLndForGetPaymentsRequest'],
+    error: [400, 'ExpectedLndForGetFailedPaymentsRequest'],
   },
   {
     args: makeArgs({token: 'token'}),
     description: 'A valid token is required',
-    error: [400, 'ExpectedValidPagingTokenForPaymentReq'],
+    error: [400, 'ExpectedValidPagingTokenForGetFailed'],
   },
   {
     args: makeArgs({lnd: {default: {listPayments: ({}, cbk) => cbk('err')}}}),
     description: 'Errors from LND are passed back',
-    error: [503, 'UnexpectedGetPaymentsError', {err: 'err'}],
+    error: [503, 'UnexpectedGetFailedPaymentsError', {err: 'err'}],
   },
   {
     args: makeArgs({lnd: {default: {listPayments: ({}, cbk) => cbk()}}}),
     description: 'A response is expected from LND',
-    error: [503, 'ExpectedPaymentsInListPaymentsResponse'],
+    error: [503, 'ExpectedFailedPaymentsInListPaymentsResponse'],
   },
   {
     args: makeArgs({
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {})}},
     }),
     description: 'A response with payments is expected from LND',
-    error: [503, 'ExpectedPaymentsInListPaymentsResponse'],
+    error: [503, 'ExpectedFailedPaymentsInListPaymentsResponse'],
   },
   {
     args: makeArgs({
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {payments: []})}},
     }),
     description: 'A response with payments and last index is expected',
-    error: [503, 'ExpectedLastIndexOffsetWhenRequestingPayments'],
+    error: [503, 'ExpectedLastIndexOffsetWhenRequestingFailed'],
   },
   {
     args: makeArgs({
@@ -106,7 +106,7 @@ const tests = [
         default: {
           listPayments: ({}, cbk) => cbk(null, {
             last_index_offset: '1',
-            payments: [{}],
+            payments: [{ status: 'FAILED' }],
           }),
         },
       },
@@ -146,9 +146,9 @@ const tests = [
 tests.forEach(({args, description, error, expected}) => {
   return test(description, async ({end, rejects,  strictSame}) => {
     if (!!error) {
-      await rejects(() => getPayments(args), error, 'Got expected error');
+      await rejects(() => getFailedPayments(args), error, 'Got expected error');
     } else {
-      const {payments} = await getPayments(args);
+      const {payments} = await getFailedPayments(args);
 
       const [payment] = payments;
 
