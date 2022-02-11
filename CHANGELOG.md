@@ -1,5 +1,9 @@
 # Versions
 
+## 5.7.0
+
+- `getPendingPayments`: Add method to get a list of in-flight payments
+
 ## 5.6.3
 
 - `payViaRoutes`, `subscribeToPayViaRoutes`: Add support for relay messages
