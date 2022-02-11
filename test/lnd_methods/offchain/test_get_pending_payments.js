@@ -64,7 +64,7 @@ const tests = [
   {
     args: makeArgs({limit: 1, token: 'token'}),
     description: 'A limit cannot be passed with a token',
-    error: [400, 'ExpectedNoLimitWhenPagingPendingPaymentsWithToken'],
+    error: [400, 'ExpectedNoLimitPagingPendingPaymentsWithToken'],
   },
   {
     args: makeArgs({lnd: undefined}),
@@ -106,7 +106,7 @@ const tests = [
         default: {
           listPayments: ({}, cbk) => cbk(null, {
             last_index_offset: '1',
-            payments: [{ status: 'IN_FLIGHT' }],
+            payments: [{status: 'IN_FLIGHT'}],
           }),
         },
       },
@@ -146,7 +146,7 @@ const tests = [
 tests.forEach(({args, description, error, expected}) => {
   return test(description, async ({end, rejects,  strictSame}) => {
     if (!!error) {
-      await rejects(() => getPendingPayments(args), error, 'Got expected error');
+      await rejects(() => getPendingPayments(args), error, 'Got error');
     } else {
       const {payments} = await getPendingPayments(args);
 

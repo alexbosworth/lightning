@@ -100,7 +100,7 @@ module.exports = ({limit, lnd, token}, cbk) => {
       // Check arguments
       validate: cbk => {
         if (!!limit && !!token) {
-          return cbk([400, 'ExpectedNoLimitWhenPagingPendingPaymentsWithToken']);
+          return cbk([400, 'ExpectedNoLimitPagingPendingPaymentsWithToken']);
         }
 
         if (!isLnd({lnd, method, type})) {

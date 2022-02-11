@@ -8,7 +8,7 @@ const token = 'token';
 
 expectError(getPendingPayments());
 expectError(getPendingPayments({}));
-expectError(getPendingPayments({lnd, limit, token})); // ExpectedNoLimitWhenPagingPendingPaymentsWithToken
+expectError(getPendingPayments({lnd, limit, token})); // ExpectedNoLimitPagingPendingPaymentsWithToken
 
 expectType<GetPendingPaymentsResult>(await getPendingPayments({lnd}));
 expectType<GetPendingPaymentsResult>(await getPendingPayments({lnd, limit}));
