@@ -58,6 +58,7 @@ const {getPayments} = require('./offchain');
 const {getPeers} = require('./peers');
 const {getPendingChainBalance} = require('./onchain');
 const {getPendingChannels} = require('./offchain');
+const {getPendingPayments} = require('./offchain');
 const {getPublicKey} = require('./address');
 const {getRouteConfidence} = require('./generic');
 const {getRouteThroughHops} = require('./offchain');
@@ -193,6 +194,7 @@ module.exports = {
   getPeers,
   getPendingChainBalance,
   getPendingChannels,
+  getPendingPayments,
   getPublicKey,
   getRouteConfidence,
   getRouteThroughHops,

@@ -230,6 +230,10 @@
     "method": "PendingChannels",
     "type": "default"
   },
+  "getPendingPayments": {
+    "method": "ListPayments",
+    "type": "default"
+  },
   "getPublicKey": {
     "methods": ["DeriveKey", "DeriveNextKey"],
     "type": "wallet"
