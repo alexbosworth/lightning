@@ -24,6 +24,7 @@ export * from './get_pathfinding_settings';
 export * from './get_payment';
 export * from './get_payments';
 export * from './get_pending_channels';
+export * from './get_pending_payments';
 export * from './get_route_through_hops';
 export * from './is_destination_payable';
 export * from './pay_via_payment_details';

@@ -1,6 +1,6 @@
 const {test} = require('@alexbosworth/tap');
 
-const {getFailedPayments} = require('./../../../');
+const {getPendingPayments} = require('./../../../');
 
 const makeLnd = args => {
   return {
@@ -19,7 +19,7 @@ const makeLnd = args => {
           payment_index: '1',
           payment_preimage: Buffer.alloc(32).toString('hex'),
           payment_request: '',
-          status: 'FAILED',
+          status: 'IN_FLIGHT',
           value: '1',
           value_msat: '1000',
           value_sat: '1',
@@ -64,41 +64,41 @@ const tests = [
   {
     args: makeArgs({limit: 1, token: 'token'}),
     description: 'A limit cannot be passed with a token',
-    error: [400, 'ExpectedNoLimitWhenPagingPayFailuresWithToken'],
+    error: [400, 'ExpectedNoLimitWhenPagingPendingPaymentsWithToken'],
   },
   {
     args: makeArgs({lnd: undefined}),
     description: 'LND is required',
-    error: [400, 'ExpectedLndForGetFailedPaymentsRequest'],
+    error: [400, 'ExpectedLndForGetPendingPaymentsRequest'],
   },
   {
     args: makeArgs({token: 'token'}),
     description: 'A valid token is required',
-    error: [400, 'ExpectedValidPagingTokenForGetFailed'],
+    error: [400, 'ExpectedValidPagingTokenForGetPending'],
   },
   {
     args: makeArgs({lnd: {default: {listPayments: ({}, cbk) => cbk('err')}}}),
     description: 'Errors from LND are passed back',
-    error: [503, 'UnexpectedGetFailedPaymentsError', {err: 'err'}],
+    error: [503, 'UnexpectedGetPendingPaymentsError', {err: 'err'}],
   },
   {
     args: makeArgs({lnd: {default: {listPayments: ({}, cbk) => cbk()}}}),
     description: 'A response is expected from LND',
-    error: [503, 'ExpectedFailedPaymentsInListPaymentsResponse'],
+    error: [503, 'ExpectedPendingPaymentsInListPaymentsResponse'],
   },
   {
     args: makeArgs({
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {})}},
     }),
     description: 'A response with payments is expected from LND',
-    error: [503, 'ExpectedFailedPaymentsInListPaymentsResponse'],
+    error: [503, 'ExpectedPendingPaymentsInListPaymentsResponse'],
   },
   {
     args: makeArgs({
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {payments: []})}},
     }),
     description: 'A response with payments and last index is expected',
-    error: [503, 'ExpectedLastIndexOffsetWhenRequestingFailed'],
+    error: [503, 'ExpectedLastIndexOffsetWhenRequestingPending'],
   },
   {
     args: makeArgs({
@@ -106,7 +106,7 @@ const tests = [
         default: {
           listPayments: ({}, cbk) => cbk(null, {
             last_index_offset: '1',
-            payments: [{ status: 'FAILED' }],
+            payments: [{ status: 'IN_FLIGHT' }],
           }),
         },
       },
@@ -146,9 +146,9 @@ const tests = [
 tests.forEach(({args, description, error, expected}) => {
   return test(description, async ({end, rejects,  strictSame}) => {
     if (!!error) {
-      await rejects(() => getFailedPayments(args), error, 'Got expected error');
+      await rejects(() => getPendingPayments(args), error, 'Got expected error');
     } else {
-      const {payments} = await getFailedPayments(args);
+      const {payments} = await getPendingPayments(args);
 
       const [payment] = payments;
 

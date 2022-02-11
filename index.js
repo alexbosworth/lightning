@@ -60,6 +60,7 @@ const {getPayments} = require('./lnd_methods');
 const {getPeers} = require('./lnd_methods');
 const {getPendingChainBalance} = require('./lnd_methods');
 const {getPendingChannels} = require('./lnd_methods');
+const {getPendingPayments} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
 const {getRouteConfidence} = require('./lnd_methods');
 const {getRouteThroughHops} = require('./lnd_methods');
@@ -199,6 +200,7 @@ module.exports = {
   getPeers,
   getPendingChainBalance,
   getPendingChannels,
+  getPendingPayments,
   getPublicKey,
   getRouteConfidence,
   getRouteThroughHops,
