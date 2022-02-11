@@ -178,6 +178,8 @@ To access unauthenticated methods like the wallet unlocker, use
     Calculate the unconfirmed on-chain balance.
 - [getPendingChannels](https://github.com/alexbosworth/ln-service#getpendingchannels): List
     details of opening or closing channels.
+- [getPendingPayments](https://github.com/alexbosworth/ln-service#getpendingpayments): List out
+    past pending payments.
 - [getPublicKey](https://github.com/alexbosworth/ln-service#getpublickey): Derive a public key at
     a given index.
 - [getRouteConfidence](https://github.com/alexbosworth/ln-service#getrouteconfidence): Check a

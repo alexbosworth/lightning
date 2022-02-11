@@ -24,6 +24,7 @@ const getPathfindingSettings = require('./get_pathfinding_settings');
 const getPayment = require('./get_payment');
 const getPayments = require('./get_payments');
 const getPendingChannels = require('./get_pending_channels');
+const getPendingPayments = require('./get_pending_payments');
 const getRouteThroughHops = require('./get_route_through_hops');
 const isDestinationPayable = require('./is_destination_payable');
 const pay = require('./pay');
@@ -79,6 +80,7 @@ module.exports = {
   getPayment,
   getPayments,
   getPendingChannels,
+  getPendingPayments,
   getRouteThroughHops,
   isDestinationPayable,
   pay,
