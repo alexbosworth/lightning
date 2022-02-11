@@ -23,8 +23,8 @@ const type = 'default';
 
   Requires `offchain:write`, `onchain:write` permissions
 
-  After getting the addresses and tokens to fund, use `fundChannels` within ten
-  minutes to fund the channels.
+  After getting the addresses and tokens to fund, use `fundPendingChannels`
+  within ten minutes to fund the channels.
 
   If you do not fund the channels, be sure to `cancelPendingChannel` on each
   channel that was not funded.
