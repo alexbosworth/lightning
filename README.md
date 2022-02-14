@@ -157,6 +157,8 @@ To access unauthenticated methods like the wallet unlocker, use
     open invoices and received payments.
 - [getLockedUtxos](https://github.com/alexbosworth/ln-service#getlockedutxos): List the UTXOs
     that are currently reserved and unavailable to coin selection.
+- [getMasterPublicKeys](https://github.com/alexbosworth/ln-service#getmasterpublickeys):
+    List out master seed derived extended public keys and derivation paths.
 - [getMethods](https://github.com/alexbosworth/ln-service#getmethods): List RPC methods and
     permissions required to use them.
 - [getNetworkCentrality](https://github.com/alexbosworth/ln-service#getnetworkcentrality):

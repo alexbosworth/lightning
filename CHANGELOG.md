@@ -1,5 +1,9 @@
 # Versions
 
+## 5.8.0
+
+- `getMasterPublicKeys`: Add method to lookup wallet extended public keys
+
 ## 5.7.1
 
 - `fundPsbt`: Correct ECPair import dependency in control flow
