@@ -1,5 +1,9 @@
 # Versions
 
+## 5.7.1
+
+- `fundPsbt`: Correct ECPair import dependency in control flow
+
 ## 5.7.0
 
 - `getPendingPayments`: Add method to get a list of in-flight payments

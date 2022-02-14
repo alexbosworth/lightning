@@ -205,7 +205,7 @@ module.exports = (args, cbk) => {
       }],
 
       // Derive the raw transaction from the funded PSBT
-      tx: ['fund', ({ecp, fund}, cbk) => {
+      tx: ['ecp', 'fund', ({ecp, fund}, cbk) => {
         const {psbt} = fund;
 
         try {
