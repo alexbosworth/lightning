@@ -8,6 +8,7 @@ export * from './get_chain_fee_estimate';
 export * from './get_chain_fee_rate';
 export * from './get_chain_transactions';
 export * from './get_locked_utxos';
+export * from './get_master_public_keys';
 export * from './get_pending_chain_balance';
 export * from './get_sweep_transactions';
 export * from './get_utxos';
