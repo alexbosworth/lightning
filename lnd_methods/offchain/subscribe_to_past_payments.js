@@ -96,6 +96,11 @@ module.exports = ({lnd}) => {
           return;
         }
 
+        // Exit early when there is no payment
+        if (!res.payment) {
+          return;
+        }
+
         // Emit payment details
         return emitter.emit(event, res.payment);
       });
