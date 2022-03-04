@@ -1,6 +1,6 @@
 # Versions
 
-## 5.8.1
+## 5.8.2
 
 - `getMasterPublicKeys`: Add method to lookup wallet extended public keys
 

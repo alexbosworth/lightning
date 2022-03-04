@@ -51,8 +51,6 @@ module.exports = ({lnd}) => {
 
     subscription.cancel();
 
-    subscription.removeAllListeners();
-
     return;
   });
 

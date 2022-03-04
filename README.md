@@ -6,6 +6,8 @@ Methods for working with the Lightning Network
 
 ## Selected Projects using Lightning
 
+- [bitpay.com crypto-rpc](https://bitpay.com/) -
+    https://github.com/bitpay/crypto-rpc
 - [coinos.io](https://coinos.io/) - https://github.com/coinos/coinos-server
 - [Lightning Shell](https://lightningshell.app/) -
     https://github.com/ibz/lightning-shell
@@ -27,6 +29,8 @@ Methods for working with the Lightning Network
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
 - [Suredbits API](https://suredbits.com/) -
     https://github.com/Suredbits/sb-api-lnd
+- [Synonym demo server](https://synonym.to) -
+    https://github.com/synonymdev/slash-pay-demo-server
 
 ## LND Authentication
 

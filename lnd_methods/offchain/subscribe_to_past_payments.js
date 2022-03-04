@@ -21,6 +21,8 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
 
 /** Subscribe to successful outgoing payments
 
+  Payments may be omitted if LND does not finalize the payment record
+
   Requires `offchain:read` permission
 
   Note: Method not supported on LND 0.13.4 and below
