@@ -5,6 +5,8 @@ const {test} = require('@alexbosworth/tap');
 const {openChannels} = require('./../../../lnd_methods');
 
 const emitter = new EventEmitter();
+const nodeKey1 = Buffer.alloc(33).toString('hex');
+const nodeKey2 = Buffer.alloc(33, 2).toString('hex');
 
 const makeChannels = ({}) => {
   return [{
@@ -126,6 +128,57 @@ const tests = [
   {
     args: {channels: makeChannels({}), lnd: makeLnd({})},
     description: 'Channels are pending',
+    expected: {pending: {address: 'funding_address', tokens: 1}},
+  },
+  {
+    args: {
+      channels: [
+        {capacity: 1, partner_public_key: nodeKey1},
+        {capacity: 2, partner_public_key: nodeKey2},
+      ],
+      lnd: {
+        default: {
+          fundingStateStep: ({}, cbk) => cbk(),
+          openChannel: args => {
+            const eventEmitter = new EventEmitter();
+
+            const key = args.node_pubkey.toString('hex');
+
+            if (key === nodeKey1 && !args.funding_shim.psbt_shim.no_publish) {
+              throw new Error('ExpectedFirstKeyIsNoPublish');
+            }
+
+            if (key === nodeKey2 && !!args.funding_shim.psbt_shim.no_publish) {
+              throw new Error('TheSecondChannelShouldPublish');
+            }
+
+            process.nextTick(() => {
+              eventEmitter.emit('data', {});
+
+              eventEmitter.emit('data', {
+                psbt_fund: {
+                  funding_address: 'funding_address',
+                  funding_amount: '1',
+                },
+                update: 'psbt_fund',
+              });
+
+              // Emit twice to make sure that cbk isn't called twice
+              eventEmitter.emit('data', {
+                psbt_fund: {
+                  funding_address: 'funding_address',
+                  funding_amount: '1',
+                },
+                update: 'psbt_fund',
+              });
+            });
+
+            return eventEmitter;
+          },
+        },
+      },
+    },
+    description: 'Multiple channels are pending',
     expected: {pending: {address: 'funding_address', tokens: 1}},
   },
 ];
