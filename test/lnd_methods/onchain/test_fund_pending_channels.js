@@ -3,6 +3,7 @@ const {test} = require('@alexbosworth/tap');
 const {fundPendingChannels} = require('./../../../lnd_methods');
 
 const id = Buffer.alloc(32).toString('hex');
+const id2 = Buffer.alloc(32, 1).toString('hex');
 
 const makeLnd = ({finalizeErr, verifyErr}) => {
   return {
@@ -74,6 +75,35 @@ const tests = [
   {
     args: makeArgs({}),
     description: 'Channel funding is executed',
+  },
+  {
+    args: makeArgs({
+      channels: [id, id2],
+      lnd: {
+        default: {
+          fundingStateStep: (args, cbk) => {
+            const finalize = args.psbt_finalize;
+
+            if (!finalize) {
+              return cbk();
+            }
+
+            const pendingId = finalize.pending_chan_id.toString('hex');
+
+            if (pendingId === id && finalize.no_publish !== true) {
+              return cbk('ExpectedFirstChannelIsNoPublish');
+            }
+
+            if (pendingId === id2 && finalize.no_publish !== false) {
+              return cbk('ExpectedLastChannelIsNotNoPublish');
+            }
+
+            return cbk();
+          },
+        },
+      },
+    }),
+    description: 'Channel funding across multiple channels is executed',
   },
 ];
 
