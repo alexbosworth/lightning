@@ -76,6 +76,8 @@ export type GetInvoiceResult = {
     mtokens: string;
     /** Pending Payment Channel HTLC Index */
     pending_index?: number;
+    /** HTLC CLTV Timeout Height Number */
+    timeout: number;
     /** Payment Tokens */
     tokens: number;
   }[];
