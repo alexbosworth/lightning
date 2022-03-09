@@ -1,5 +1,9 @@
 # Versions
 
+## 5.8.3
+
+- `getInvoice`: Add typescript timeout field on individual payment HTLCs
+
 ## 5.8.2
 
 - `getMasterPublicKeys`: Add method to lookup wallet extended public keys
