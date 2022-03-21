@@ -42,7 +42,7 @@ export type PayViaPaymentDetailsArgs = AuthenticatedLightningArgs<{
   pathfinding_timeout?: number;
   /** Payment Identifier Hex String */
   payment?: string;
-  routes: {
+  routes?: {
     /** Base Routing Fee In Millitokens */
     base_fee_mtokens?: string;
     /** Standard Format Channel Id */

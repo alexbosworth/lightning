@@ -44,7 +44,6 @@ expectError(payViaPaymentDetails({destination}));
 expectError(payViaPaymentDetails({destination, routes}));
 expectError(payViaPaymentDetails({routes}));
 expectError(payViaPaymentDetails({lnd}));
-expectError(payViaPaymentDetails({lnd, destination}));
 expectError(payViaPaymentDetails({lnd, routes}));
 
 expectType<PayViaPaymentDetailsResult>(
