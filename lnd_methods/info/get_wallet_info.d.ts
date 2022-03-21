@@ -34,6 +34,8 @@ export type GetWalletInfoResult = {
   pending_channels_count: number;
   /** Public Key */
   public_key: string;
+  /** Version String */
+  version: string;
 };
 
 /**
