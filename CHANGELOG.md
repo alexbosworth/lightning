@@ -1,5 +1,9 @@
 # Versions
 
+## 5.8.4
+
+- `getWalletInfo`, `payViaPaymentDetails`: Correct typescript fields
+
 ## 5.8.3
 
 - `getInvoice`: Add typescript timeout field on individual payment HTLCs

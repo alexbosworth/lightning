@@ -113,7 +113,7 @@ module.exports = args => {
       return;
     }
 
-    eventEmitter.emit('error', new Error('UnexpectedErrInTxSubscription'));
+    eventEmitter.emit('error', err);
 
     return;
   });
