@@ -13,7 +13,7 @@ const type = 'default';
 
   Requires `address:write` permission
 
-  LND 0.14.3 below do not support p2tr addresses
+  LND 0.14.3 and below do not support p2tr addresses
 
   {
     [format]: <Receive Address Type String> // "np2wpkh" || "p2tr" || "p2wpkh"
