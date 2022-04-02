@@ -1,6 +1,6 @@
 # Versions
 
-## 5.8.5
+## 5.8.6
 
 - `getWalletInfo`, `payViaPaymentDetails`: Correct typescript fields
 
