@@ -5,7 +5,7 @@ import {
 
 export type CreateChainAddressArgs = AuthenticatedLightningArgs<{
   /** Receive Address Type */
-  format?: 'np2wpkh' | 'p2wpkh';
+  format?: 'np2wpkh' | 'p2tr' | 'p2wpkh';
   /** Get As-Yet Unused Address */
   is_unused?: boolean;
 }>;

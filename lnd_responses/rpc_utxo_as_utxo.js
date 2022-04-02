@@ -1,4 +1,6 @@
-const formats = {np2wpkh: 'NESTED_PUBKEY_HASH', p2wpkh: 'WITNESS_PUBKEY_HASH'};
+const constants = require('./constants');
+
+const formats = constants.addressFormats;
 const {keys} = Object;
 
 /** Derive UTXO details from RPC UTXO details

@@ -1,5 +1,10 @@
 # Versions
 
+## 5.9.0
+
+- `createChainAddress`: Add support for creating P2TR addresses
+- `getUtxos`: Add support for showing P2TR address types
+
 ## 5.8.6
 
 - `getWalletInfo`, `payViaPaymentDetails`: Correct typescript fields

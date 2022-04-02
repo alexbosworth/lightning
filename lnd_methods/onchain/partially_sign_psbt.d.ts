@@ -20,7 +20,7 @@ export type PartiallySignPsbtResult = {
  *
  * Requires LND built with `walletrpc` tag
  *
- * This method is not supported in LND 0.14.2 and below
+ * This method is not supported in LND 0.14.3 and below
  */
 export const partiallySignPsbt: AuthenticatedLightningMethod<
   PartiallySignPsbtArgs,

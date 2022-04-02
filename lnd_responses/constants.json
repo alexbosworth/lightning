@@ -1,4 +1,9 @@
 {
+  "addressFormats": {
+    "np2wpkh": "NESTED_PUBKEY_HASH",
+    "p2tr": "TAPROOT_PUBKEY",
+    "p2wpkh": "WITNESS_PUBKEY_HASH"
+  },
   "adjustedChannelTypes": {
     "LEGACY": "STATIC_REMOTE_KEY",
     "STATIC_REMOTE_KEY": "ANCHORS",
