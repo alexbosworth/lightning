@@ -14,17 +14,17 @@
     "@types/request": "2.48.8",
     "@types/ws": "8.5.3",
     "async": "3.2.3",
-    "asyncjs-util": "1.2.8",
+    "asyncjs-util": "1.2.9",
     "bitcoinjs-lib": "6.0.1",
     "bn.js": "5.2.0",
-    "body-parser": "1.19.2",
-    "bolt07": "1.8.0",
-    "bolt09": "0.2.2",
+    "body-parser": "1.20.0",
+    "bolt07": "1.8.1",
+    "bolt09": "0.2.3",
     "cbor": "8.1.0",
     "ecpair": "2.0.1",
     "express": "4.17.3",
-    "invoices": "2.0.4",
-    "psbt": "2.0.0",
+    "invoices": "2.0.5",
+    "psbt": "2.0.1",
     "tiny-secp256k1": "2.2.1",
     "type-fest": "2.12.2"
   },
@@ -59,5 +59,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "5.9.0"
+  "version": "5.9.1"
 }

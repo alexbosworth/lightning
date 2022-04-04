@@ -1,6 +1,6 @@
 # Versions
 
-## 5.9.0
+## 5.9.1
 
 - `createChainAddress`: Add support for creating P2TR addresses
 - `getUtxos`: Add support for showing P2TR address types

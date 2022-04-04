@@ -82,6 +82,8 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
+  args.restart_delay_ms = 1;
+
   return test(description, async ({end, equal, match, strictSame, throws}) => {
     if (!!error) {
       throws(() => subscribeToInvoices(args), new Error(error), 'Got error');

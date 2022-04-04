@@ -5,18 +5,26 @@ const scriptFromChainAddress = require('./script_from_chain_address');
 
 const bufferAsHex = buffer => buffer.toString('hex');
 const dummyTxId = Buffer.alloc(32).toString('hex');
+const events = ['confirmation', 'reorg'];
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isBuffer} = Buffer;
 const method = 'registerSpendNtfn';
+const shutDownMessage = 'chain notifier shutting down';
+const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
 const type = 'chain';
 
 /** Subscribe to confirmations of a spend
 
   A chain address or raw output script is required
 
+  When specifying a P2TR output script, `transaction_id` and `transaction_vout`
+  are required.
+
   Requires LND built with `chainrpc` build tag
 
   Requires `onchain:read` permission
+
+  Subscribing to P2TR outputs is not supported in LND 0.14.3 and below
 
   {
     [bech32_address]: <Bech32 P2WPKH or P2WSH Address String>
@@ -74,11 +82,33 @@ module.exports = args => {
     script: hexAsBuffer(script || args.output_script),
   });
 
+  // Cancel the subscription when all listeners are removed
+  eventEmitter.on('removeListener', () => {
+    const listenerCounts = events.map(n => eventEmitter.listenerCount(n));
+
+    // Exit early when there are still listeners
+    if (!!sumOf(listenerCounts)) {
+      return;
+    }
+
+    subscription.cancel();
+
+    return;
+  });
+
   subscription.on('end', () => eventEmitter.emit('end'));
   subscription.on('status', n => eventEmitter.emit('status', n));
 
   subscription.on('error', err => {
-    eventEmitter.emit('error', new Error('UnexpectedErrInSpendSubscription'));
+    if (err.details === shutDownMessage) {
+      subscription.removeAllListeners();
+    }
+
+    if (!eventEmitter.listenerCount('error')) {
+      return;
+    }
+
+    eventEmitter.emit('error', err);
 
     return;
   });
