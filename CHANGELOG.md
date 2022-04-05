@@ -1,5 +1,9 @@
 # Versions
 
+## 5.10.0
+
+- `signTransaction`: Add `spending` attribute for specifying external inputs
+
 ## 5.9.1
 
 - `createChainAddress`: Add support for creating P2TR addresses

@@ -25,7 +25,7 @@ const type = 'chain';
 
   {
     [bech32_address]: <Address String>
-    lnd: <Chain RPC LND API Object>
+    lnd: <Authenticated LND API Object>
     [min_confirmations]: <Minimum Confirmations Number>
     min_height: <Minimum Transaction Inclusion Blockchain Height Number>
     [output_script]: <Output Script Hex String>

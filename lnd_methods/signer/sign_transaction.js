@@ -3,15 +3,23 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const bufferAsHex = buffer => buffer.toString('hex');
+const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;
+const method = 'signOutputRaw';
 const notFound = -1;
+const type = 'signer';
 const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
 
 /** Sign transaction
 
+  `spending` is required for non-internal inputs for a Taproot signature
+
   Requires LND built with `signrpc` build tag
 
   Requires `signer:generate` permission
+
+  `spending` is not supported in LND 0.14.3 and below
 
   {
     inputs: [{
@@ -24,6 +32,10 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
       witness_script: <Witness Script Hex String>
     }]
     lnd: <Authenticated LND API Object>
+    [spending]: [{
+      output_script: <Non-Internal Spend Output Script Hex String>
+      output_tokens: <Non-Internal Spend Output Tokens Number>
+    }]
     transaction: <Unsigned Transaction Hex String>
   }
 
@@ -32,7 +44,7 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
     signatures: [<Signature Hex String>]
   }
 */
-module.exports = ({inputs, lnd, transaction}, cbk) => {
+module.exports = ({inputs, lnd, spending, transaction}, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Check arguments
@@ -41,7 +53,7 @@ module.exports = ({inputs, lnd, transaction}, cbk) => {
           return cbk([400, 'ExpectedInputsToSignTransaction']);
         }
 
-        if (!isLnd({lnd, method: 'signOutputRaw', type: 'signer'})) {
+        if (!isLnd({lnd, method, type})) {
           return cbk([400, 'ExpectedAuthenticatedLndToSignTransaction']);
         }
 
@@ -54,8 +66,12 @@ module.exports = ({inputs, lnd, transaction}, cbk) => {
 
       // Get signatures
       signTransaction: ['validate', ({}, cbk) => {
-        return lnd.signer.signOutputRaw({
-          raw_tx_bytes: Buffer.from(transaction, 'hex'),
+        return lnd[type][method]({
+          prev_outputs: [].concat(inputs).concat(spending || []).map(utxo => ({
+            pk_script: hexAsBuffer(utxo.output_script),
+            value: utxo.output_tokens,
+          })),
+          raw_tx_bytes: hexAsBuffer(transaction),
           sign_descs: inputs.map(input => ({
             input_index: input.vin,
             key_desc: {
@@ -65,11 +81,11 @@ module.exports = ({inputs, lnd, transaction}, cbk) => {
               },
             },
             output: {
-              pk_script: Buffer.from(input.output_script, 'hex'),
+              pk_script: hexAsBuffer(input.output_script),
               value: input.output_tokens,
             },
             sighash: input.sighash,
-            witness_script: Buffer.from(input.witness_script, 'hex'),
+            witness_script: hexAsBuffer(input.witness_script),
           })),
         },
         (err, res) => {
@@ -93,9 +109,7 @@ module.exports = ({inputs, lnd, transaction}, cbk) => {
             return cbk([503, 'ExpectedSignatureBuffersInSignResponse']);
           }
 
-          return cbk(null, {
-            signatures: res.raw_sigs.map(n => n.toString('hex'))
-          });
+          return cbk(null, {signatures: res.raw_sigs.map(bufferAsHex)});
         });
       }],
     },
