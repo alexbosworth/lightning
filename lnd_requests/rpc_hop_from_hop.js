@@ -60,15 +60,13 @@ module.exports = args => {
     fee: millitokensAsTokens(args.fee_mtokens).toString(),
     fee_msat: args.fee_mtokens,
     pub_key: args.public_key,
+    tlv_payload: true,
   };
 
   // Exit early when there are no messages to encode in this hop
   if (!args.messages || !args.messages.length) {
     return hop;
   }
-
-  // Set custom TLV payload records for this hop
-  hop.tlv_payload = true;
 
   hop.custom_records = args.messages.reduce((tlv, n) => {
     tlv[n.type] = hexAsBuffer(n.value);

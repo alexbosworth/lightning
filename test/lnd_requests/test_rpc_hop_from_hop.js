@@ -39,6 +39,7 @@ const tests = [
       fee: '1',
       fee_msat: '1000',
       pub_key: 'public_key',
+      tlv_payload: true,
     },
   },
   {

@@ -1,5 +1,9 @@
 # Versions
 
+## 5.10.1
+
+- Always use TLV when paying along routes
+
 ## 5.10.0
 
 - `signTransaction`: Add `spending` attribute for specifying external inputs
