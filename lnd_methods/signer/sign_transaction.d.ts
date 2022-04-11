@@ -20,6 +20,12 @@ export type SignTransactionArgs = AuthenticatedLightningArgs<{
     /** Witness Script Hex String */
     witness_script: string;
   }[];
+  spending?: {
+    /** Non-Internal Spend Output Script Hex String */
+    output_script: string;
+    /** Non-Internal Spend Output Tokens Number */
+    output_tokens: number;
+  }[];
   /** Unsigned Transaction Hex String */
   transaction: string;
 }>;
@@ -35,6 +41,8 @@ export type SignTransactionResult = {
  * Requires LND built with `signrpc` build tag
  *
  * Requires `signer:generate` permission
+ *
+ * `spending` is not supported in LND 0.14.3 and below
  */
 export const signTransaction: AuthenticatedLightningMethod<
   SignTransactionArgs,

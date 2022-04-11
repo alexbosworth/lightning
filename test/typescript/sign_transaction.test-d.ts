@@ -14,6 +14,12 @@ const inputs = [
     witness_script: '00',
   },
 ];
+const spending = [
+  {
+    output_script: 'script',
+    output_tokens: 0,
+  },
+];
 const transaction = '00';
 
 expectError(signTransaction());
@@ -32,9 +38,22 @@ expectType<SignTransactionResult>(
     transaction,
   })
 );
+expectType<SignTransactionResult>(
+  await signTransaction({
+    lnd,
+    inputs,
+    transaction,
+    spending,
+  })
+);
 
 expectType<void>(
   signTransaction({lnd, inputs, transaction}, (error, result) => {
+    expectType<SignTransactionResult>(result);
+  })
+);
+expectType<void>(
+  signTransaction({lnd, inputs, transaction, spending}, (error, result) => {
     expectType<SignTransactionResult>(result);
   })
 );
