@@ -11,7 +11,7 @@ const type = 'peers';
 
   Note: this method is not supported in LND versions 0.14.3 and below
 
-  Requires LND built with `signrpc` build tag
+  Requires LND built with `peersrpc` build tag
 
   Requires `peers:write` permissions
 
