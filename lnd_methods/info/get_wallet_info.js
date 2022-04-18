@@ -12,6 +12,8 @@ const noConnectionMessage = 'No connection established';
 
 /** Get overall wallet info.
 
+  Requires `info:read` permission
+
   {
     lnd: <Authenticated LND API Object>
   }

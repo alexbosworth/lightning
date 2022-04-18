@@ -1,5 +1,10 @@
 # Versions
 
+## 5.11.0
+
+- `updateAlias`: Add method to update the node graph announcement alias
+- `updateColor`: Add method to update the node graph announcement color
+
 ## 5.10.1
 
 - Always use TLV when paying along routes

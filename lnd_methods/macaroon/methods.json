@@ -490,13 +490,21 @@
     "method": "releaseOutput",
     "type": "wallet"
   },
-  "updateConnectedWatchtower": {
-    "methods": ["AddTower", "RemoveTower"],
-    "type": "tower_client"
+  "updateAlias": {
+    "method": "updateNodeAnnouncement",
+    "type": "peers"
   },
   "updateChainTransaction": {
     "method": "LabelTransaction",
     "type": "wallet"
+  },
+  "updateColor": {
+    "method": "updateNodeAnnouncement",
+    "type": "peers"
+  },
+  "updateConnectedWatchtower": {
+    "methods": ["AddTower", "RemoveTower"],
+    "type": "tower_client"
   },
   "updatePathfindingSettings": {
     "method": "SetMissionControlConfig",

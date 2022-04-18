@@ -127,7 +127,9 @@ const {subscribeToWalletStatus} = require('./lnd_methods');
 const {unauthenticatedLndGrpc} = require('./lnd_grpc');
 const {unlockUtxo} = require('./lnd_methods');
 const {unlockWallet} = require('./lnd_methods');
+const {updateAlias} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
+const {updateColor} = require('./lnd_methods');
 const {updateConnectedWatchtower} = require('./lnd_methods');
 const {updatePathfindingSettings} = require('./lnd_methods');
 const {updateRoutingFees} = require('./lnd_methods');
@@ -267,6 +269,8 @@ module.exports = {
   unauthenticatedLndGrpc,
   unlockUtxo,
   unlockWallet,
+  updateAlias,
+  updateColor,
   updateChainTransaction,
   updateConnectedWatchtower,
   updatePathfindingSettings,

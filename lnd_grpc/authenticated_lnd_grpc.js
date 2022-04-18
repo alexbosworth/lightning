@@ -37,6 +37,7 @@ const pathForProto = proto => join(__dirname, protosDir, proto);
       chain: <ChainNotifier API Methods Object>
       default: <Default API Methods Object>
       invoices: <Invoices API Methods Object>
+      peers: <Peers API Methods Object>
       router: <Router API Methods Object>
       signer: <Signer Methods API Object>
       tower_client: <Watchtower Client Methods Object>

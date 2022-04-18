@@ -16,7 +16,7 @@ const type = 'wallet';
 
   Requires LND built with `walletrpc` tag
 
-  This method is not supported in LND 0.14.3 and below
+  This method is not supported in LND 0.14.1 and below
 
   {
     lnd: <Authenticated LND API Object>

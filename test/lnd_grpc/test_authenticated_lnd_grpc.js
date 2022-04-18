@@ -7,6 +7,7 @@ const expectedServices = [
   'chain',
   'default',
   'invoices',
+  'peers',
   'router',
   'signer',
   'tower_client',

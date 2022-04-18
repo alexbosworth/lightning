@@ -123,7 +123,9 @@ const {subscribeToTransactions} = require('./onchain');
 const {subscribeToWalletStatus} = require('./unauthenticated');
 const {unlockUtxo} = require('./onchain');
 const {unlockWallet} = require('./unauthenticated');
+const {updateAlias} = require('./peers');
 const {updateChainTransaction} = require('./onchain');
+const {updateColor} = require('./peers');
 const {updateConnectedWatchtower} = require('./offchain');
 const {updatePathfindingSettings} = require('./offchain');
 const {updateRoutingFees} = require('./offchain');
@@ -259,7 +261,9 @@ module.exports = {
   subscribeToWalletStatus,
   unlockUtxo,
   unlockWallet,
+  updateAlias,
   updateChainTransaction,
+  updateColor,
   updateConnectedWatchtower,
   updatePathfindingSettings,
   updateRoutingFees,

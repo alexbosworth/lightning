@@ -9,28 +9,28 @@ Methods for working with the Lightning Network
 - [bitpay.com crypto-rpc](https://bitpay.com/) -
     https://github.com/bitpay/crypto-rpc
 - [coinos.io](https://coinos.io/) - https://github.com/coinos/coinos-server
+- [Galoy](https://galoy.io/) - https://github.com/GaloyMoney/galoy
+- [Lightning Poker](https://lightning-poker.com/) -
+    https://github.com/igreshev/lightning-poker
+- [Lightning Roulette](https://lightning-roulette.com/) -
+    https://github.com/igreshev/lightning-roulette
 - [Lightning Shell](https://lightningshell.app/) -
     https://github.com/ibz/lightning-shell
 - [LNMarkets](https://twitter.com/lnmarkets) -
     https://github.com/lnmarkets/umbrel
-- [Galoy](https://galoy.io/) - https://github.com/GaloyMoney/galoy
-- [Tarnhelm](https://www.tarnhelm.app/) - https://github.com/bkiac/tarnhelm
-- [tbtcswaps](https://tbtcswaps.com/) -
-    https://github.com/keep-community/tbtcswaps
-- [stackernews](https://stacker.news/) -
-    https://github.com/stackernews/stacker.news
-- [Thunderhub](https://www.thunderhub.io/) -
-    https://github.com/apotdevin/thunderhub
-- [Lightning Roulette](https://lightning-roulette.com/) -
-    https://github.com/igreshev/lightning-roulette
-- [Lightning Poker](https://lightning-poker.com/) -
-    https://github.com/igreshev/lightning-poker
 - [p2plnbot](https://telegram.me/lnp2pbot) - https://github.com/grunch/p2plnbot
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
+- [stackernews](https://stacker.news/) -
+    https://github.com/stackernews/stacker.news
 - [Suredbits API](https://suredbits.com/) -
     https://github.com/Suredbits/sb-api-lnd
 - [Synonym demo server](https://synonym.to) -
     https://github.com/synonymdev/slash-pay-demo-server
+- [Tarnhelm](https://www.tarnhelm.app/) - https://github.com/bkiac/tarnhelm
+- [tbtcswaps](https://tbtcswaps.com/) -
+    https://github.com/keep-community/tbtcswaps
+- [Thunderhub](https://www.thunderhub.io/) -
+    https://github.com/apotdevin/thunderhub
 
 ## LND Authentication
 
