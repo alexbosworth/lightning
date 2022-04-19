@@ -16,7 +16,7 @@ const type = 'peers';
   Requires `peers:write` permissions
 
   {
-    color: <Node Color #000000 String>
+    alias: <Node Alias String>
     lnd: <Authenticated LND API Object>
   }
 
