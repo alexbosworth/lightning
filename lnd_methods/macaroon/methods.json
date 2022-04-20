@@ -1,4 +1,8 @@
 {
+  "addExternalSocket": {
+    "method": "updateNodeAnnouncement",
+    "type": "peers"
+  },
   "addPeer": {
     "method": "ConnectPeer",
     "type": "default"
@@ -337,6 +341,10 @@
   "recoverFundsFromChannels": {
     "method": "restoreChannelBackups",
     "type": "default"
+  },
+  "removeExternalSocket": {
+    "method": "updateNodeAnnouncement",
+    "type": "peers"
   },
   "removePeer": {
     "method": "DisconnectPeer",

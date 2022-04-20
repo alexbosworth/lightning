@@ -1,3 +1,4 @@
+const {addExternalSocket} = require('./lnd_methods');
 const {addPeer} = require('./lnd_methods');
 const {authenticatedLndGrpc} = require('./lnd_grpc');
 const {broadcastChainTransaction} = require('./lnd_methods');
@@ -88,6 +89,7 @@ const {probeForRoute} = require('./lnd_methods');
 const {proposeChannel} = require('./lnd_methods');
 const {recoverFundsFromChannel} = require('./lnd_methods');
 const {recoverFundsFromChannels} = require('./lnd_methods');
+const {removeExternalSocket} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {requestChainFeeIncrease} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
@@ -140,6 +142,7 @@ const {verifyBytesSignature} = require('./lnd_methods');
 const {verifyMessage} = require('./lnd_methods');
 
 module.exports = {
+  addExternalSocket,
   addPeer,
   authenticatedLndGrpc,
   broadcastChainTransaction,
@@ -230,6 +233,7 @@ module.exports = {
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
+  removeExternalSocket,
   removePeer,
   requestChainFeeIncrease,
   revokeAccess,

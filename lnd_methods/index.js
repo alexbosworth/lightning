@@ -1,3 +1,4 @@
+const {addExternalSocket} = require('./peers');
 const {addPeer} = require('./peers');
 const {broadcastChainTransaction} = require('./onchain');
 const {cancelHodlInvoice} = require('./invoices');
@@ -85,6 +86,7 @@ const {probeForRoute} = require('./offchain');
 const {proposeChannel} = require('./onchain');
 const {recoverFundsFromChannel} = require('./offchain');
 const {recoverFundsFromChannels} = require('./offchain');
+const {removeExternalSocket} = require('./peers');
 const {removePeer} = require('./peers');
 const {requestChainFeeIncrease} = require('./onchain');
 const {revokeAccess} = require('./macaroon');
@@ -136,6 +138,7 @@ const {verifyBytesSignature} = require('./signer');
 const {verifyMessage} = require('./message');
 
 module.exports = {
+  addExternalSocket,
   addPeer,
   broadcastChainTransaction,
   cancelHodlInvoice,
@@ -223,6 +226,7 @@ module.exports = {
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
+  removeExternalSocket,
   removePeer,
   requestChainFeeIncrease,
   revokeAccess,
