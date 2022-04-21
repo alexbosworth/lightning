@@ -6,6 +6,7 @@ const {isLnd} = require('./../../lnd_requests');
 const bufferAsHex = buffer => buffer.toString('hex');
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;
+const isV1 = scriptHex => scriptHex.length === 68 && /5120/.test(scriptHex);
 const method = 'signOutputRaw';
 const notFound = -1;
 const type = 'signer';
@@ -64,13 +65,27 @@ module.exports = ({inputs, lnd, spending, transaction}, cbk) => {
         return cbk();
       },
 
+      // Derive the previous outputs set
+      previousOutputs: ['validate', ({}, cbk) => {
+        const outputs = [].concat(inputs).concat(spending || []).map(utxo => ({
+          pk_script: hexAsBuffer(utxo.output_script),
+          value: utxo.output_tokens,
+        }));
+
+        const v1Spends = outputs.filter(n => isV1(bufferAsHex(n.pk_script)));
+
+        // Exit early when there is no need to provide prev outs, non-taproot
+        if (!v1Spends.length) {
+          return cbk();
+        }
+
+        return cbk(null, outputs);
+      }],
+
       // Get signatures
-      signTransaction: ['validate', ({}, cbk) => {
+      signTransaction: ['previousOutputs', ({previousOutputs}, cbk) => {
         return lnd[type][method]({
-          prev_outputs: [].concat(inputs).concat(spending || []).map(utxo => ({
-            pk_script: hexAsBuffer(utxo.output_script),
-            value: utxo.output_tokens,
-          })),
+          prev_outputs: previousOutputs,
           raw_tx_bytes: hexAsBuffer(transaction),
           sign_descs: inputs.map(input => ({
             input_index: input.vin,

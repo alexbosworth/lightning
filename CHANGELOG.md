@@ -1,5 +1,9 @@
 # Versions
 
+## 5.13.1
+
+- `signTransaction`: Fix multi-input signing for upcoming Taproot API changes
+
 ## 5.13.0
 
 - `addExternalSocket`: Add method to add a socket to graph announcements
