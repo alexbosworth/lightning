@@ -16,6 +16,7 @@ const {routeHintFromRoute} = require('./../../lnd_requests');
 const {safeTokens} = require('./../../bolt00');
 const {states} = require('./payment_states');
 
+const asTimePreference = n => n === undefined ? n : ((n * 2) - 1e6) / 1e6;
 const cltvBuf = 3;
 const cltvLimit = (limit, height) => !limit ? undefined : limit - height;
 const cltvLimitErr = /cltv limit \d+ should be greater than \d+/;
@@ -24,6 +25,7 @@ const defaultMaxPaths = 1;
 const defaultTimeoutSeconds = 25;
 const hexToBuf = hex => !hex ? undefined : Buffer.from(hex, 'hex');
 const {isArray} = Array;
+const isConfidence = n => !isNaN(n) && n >= 0 && n <= 1e6;
 const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const maxTokens = '4294967296';
 const method = 'sendPaymentV2';
@@ -42,8 +44,11 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
 
   `max_path_mtokens` is not supported in LND 0.12.0 or below
 
+  Preferred `confidence` is not supported on LND 0.14.3 and below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
+    [confidence]: <Preferred Route Confidence Number Out of One Million Number>
     [destination]: <Destination Public Key String>
     [features]: [{
       bit: <Feature Bit Number>
@@ -206,6 +211,10 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
 module.exports = args => {
   if (!!args.cltv_delta && !!args.request) {
     throw new Error('UnexpectedCltvDeltaWhenSubscribingToPayPaymentRequest');
+  }
+
+  if (args.confidence !== undefined && !isConfidence(args.confidence)) {
+    throw new Error('ExpectedConfidencePartsPerMillionForPaymentReq');
   }
 
   if (!args.destination && !args.request) {
@@ -378,6 +387,7 @@ module.exports = args => {
         payment_hash: !args.id ? undefined : hexToBuf(args.id),
         payment_request: !args.request ? undefined : args.request,
         route_hints: !hints.length ? undefined : hints,
+        time_pref: asTimePreference(args.confidence),
         timeout_seconds: timeoutSecs || defaultTimeoutSeconds,
       });
     }],

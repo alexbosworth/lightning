@@ -17,8 +17,11 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
   Requires `offchain:write` permission
 
+  Preferred `confidence` is not supported on LND 0.14.3 and below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
+    [confidence]: <Preferred Route Confidence Number Out of One Million Number>
     destination: <Destination Public Key Hex String>
     [features]: [{
       bit: <Feature Bit Number>
@@ -117,6 +120,7 @@ module.exports = (args, cbk) => {
 
         const sub = subscribeToProbeForRoute({
           cltv_delta: args.cltv_delta,
+          confidence: args.confidence,
           destination: args.destination,
           features: args.features,
           ignore: args.ignore,

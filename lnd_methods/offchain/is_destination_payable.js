@@ -9,8 +9,11 @@ const defaultTokens = 1;
 
   Requires `offchain:write` permission
 
+  Preferred `confidence` is not supported on LND 0.14.3 and below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
+    [confidence]: <Preferred Route Confidence Number Out of One Million Number>
     destination: <Pay to Node with Public Key Hex String>
     [incoming_peer]: <Pay Through Specific Final Hop Public Key Hex String>
     lnd: <Authenticated LND API Object>
@@ -57,6 +60,7 @@ module.exports = (args, cbk) => {
 
         const sub = subscribeToPayViaDetails({
           cltv_delta: args.cltv_delta,
+          confidence: args.confidence,
           destination: args.destination,
           lnd: args.lnd,
           max_fee: args.max_fee,

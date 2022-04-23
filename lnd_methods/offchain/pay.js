@@ -17,7 +17,10 @@ const payViaRoutes = require('./pay_via_routes');
 
   `max_path_mtokens` is not supported in LND 0.12.0 or below
 
+  Preferred `confidence` is not supported on LND 0.14.3 and below
+
   {
+    [confidence]: <Preferred Route Confidence Number Out of One Million Number>
     [incoming_peer]: <Pay Through Specific Final Hop Public Key Hex String>
     lnd: <Authenticated LND API Object>
     [max_fee]: <Maximum Additional Fee Tokens To Pay Number>
@@ -124,6 +127,7 @@ module.exports = (args, cbk) => {
         }
 
         return payViaPaymentRequest({
+          confidence: args.confidence,
           incoming_peer: args.incoming_peer,
           lnd: args.lnd,
           max_fee: args.max_fee,

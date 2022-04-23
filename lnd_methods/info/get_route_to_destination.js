@@ -17,6 +17,7 @@ const {pathNotFoundErrors} = require('./constants');
 const {routeHintFromRoute} = require('./../../lnd_requests');
 const {routesFromQueryRoutes} = require('./../../lnd_responses');
 
+const asTimePreference = n => n === undefined ? n : ((n * 2) - 1e6) / 1e6;
 const bufFromHex = hex => !hex ? null : Buffer.from(hex, 'hex');
 const {concat} = Buffer;
 const defaultRetryInterval = retryCount => 50 * Math.pow(2, retryCount);
@@ -24,6 +25,7 @@ const defaultMaxFee = Number.MAX_SAFE_INTEGER;
 const errorFilter = err => Array.isArray(err) && err.slice().shift() === 429;
 const internalServerError = /internal.server.error/i;
 const {isArray} = Array;
+const isConfidence = n => !isNaN(n) && n >= 0 && n <= 1e6;
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const mtokensByteLength = 8;
 const networkBusyError = /device.or.resource.busy/;
@@ -41,8 +43,11 @@ const trimByte = 0;
 
   Requires `info:read` permission
 
+  Preferred `confidence` is not supported on LND 0.14.3 and below
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
+    [confidence]: <Preferred Route Confidence Number Out of One Million Number>
     destination: <Final Send Destination Hex Encoded Public Key String>
     [features]: [{
       bit: <Feature Bit Number>
@@ -112,6 +117,10 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
+        if (args.confidence !== undefined && !isConfidence(args.confidence)) {
+          return cbk([400, 'ExpectedConfidenceInPartsPerMillionForQuery']);
+        }
+
         if (!args.destination || !isHex(args.destination)) {
           return cbk([400, 'ExpectedDestinationKeyToGetRouteToDestination']);
         }
@@ -261,6 +270,7 @@ module.exports = (args, cbk) => {
             pub_key: args.destination,
             route_hints: routeHints || undefined,
             source_pub_key: args.start || undefined,
+            time_pref: asTimePreference(args.confidence),
             use_mission_control: !args.is_ignoring_past_failures,
           },
           (err, response) => {
