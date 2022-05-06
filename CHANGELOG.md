@@ -1,5 +1,11 @@
 # Versions
 
+## 5.15.0
+
+- `beginGroupSigningSession`: Add method to start a MuSig2 signing session
+- `endGroupSigningSession`: Add method to complete a MuSig2 signing session
+- `updateGroupSigningSession`: Add method to add nonces to a MuSig2 session
+
 ## 5.14.0
 
 - `getRouteToDestination`, `isDestinationPayable`, `pay`,

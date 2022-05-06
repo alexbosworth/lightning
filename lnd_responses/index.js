@@ -26,6 +26,7 @@ const rpcFailedPolicyAsFail = require('./rpc_failed_policy_as_fail');
 const rpcFeesAsChannelFees = require('./rpc_fees_as_channel_fees');
 const rpcForwardAsForward = require('./rpc_forward_as_forward');
 const rpcForwardAsForwardRequest = require('./rpc_forward_as_forward_request');
+const rpcGroupSessionAsSession = require('./rpc_group_session_as_session');
 const rpcHopAsHop = require('./rpc_hop_as_hop');
 const rpcInvoiceAsInvoice = require('./rpc_invoice_as_invoice');
 const rpcNetworkAsNetworkInfo = require('./rpc_network_as_network_info');
@@ -70,6 +71,7 @@ module.exports = {
   rpcFeesAsChannelFees,
   rpcForwardAsForward,
   rpcForwardAsForwardRequest,
+  rpcGroupSessionAsSession,
   rpcHopAsHop,
   rpcInvoiceAsInvoice,
   rpcNetworkAsNetworkInfo,

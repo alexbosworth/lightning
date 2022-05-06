@@ -7,6 +7,11 @@
     "method": "ConnectPeer",
     "type": "default"
   },
+  "beginGroupSigningSession": {
+    "depends_on": ["getPublicKey"],
+    "method": "MuSig2CreateSession",
+    "type": "signer"
+  },
   "broadcastChainTransaction": {
     "method": "PublishTransaction",
     "type": "wallet"
@@ -86,6 +91,10 @@
   "enableChannel": {
     "method": "UpdateChanStatus",
     "type": "router"
+  },
+  "endGroupSigningSession": {
+    "methods": ["MuSig2Cleanup", "MuSig2CombineSig"],
+    "type": "signer"
   },
   "fundPendingChannels": {
     "method": "FundingStateStep",
@@ -513,6 +522,10 @@
   "updateConnectedWatchtower": {
     "methods": ["AddTower", "RemoveTower"],
     "type": "tower_client"
+  },
+  "updateGroupSigningSession": {
+    "methods": ["MuSig2RegisterNonces", "MuSig2Sign"],
+    "type": "signer"
   },
   "updatePathfindingSettings": {
     "method": "SetMissionControlConfig",

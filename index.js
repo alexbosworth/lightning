@@ -1,6 +1,7 @@
 const {addExternalSocket} = require('./lnd_methods');
 const {addPeer} = require('./lnd_methods');
 const {authenticatedLndGrpc} = require('./lnd_grpc');
+const {beginGroupSigningSession} = require('./lnd_methods');
 const {broadcastChainTransaction} = require('./lnd_methods');
 const {cancelHodlInvoice} = require('./lnd_methods');
 const {cancelPendingChannel} = require('./lnd_methods');
@@ -24,6 +25,7 @@ const {disableChannel} = require('./lnd_methods');
 const {disconnectWatchtower} = require('./lnd_methods');
 const {emitGrpcEvents} = require('./lnd_gateway');
 const {enableChannel} = require('./lnd_methods');
+const {endGroupSigningSession} = require('./lnd_methods');
 const {fundPendingChannels} = require('./lnd_methods');
 const {fundPsbt} = require('./lnd_methods');
 const {getAccessIds} = require('./lnd_methods');
@@ -133,6 +135,7 @@ const {updateAlias} = require('./lnd_methods');
 const {updateChainTransaction} = require('./lnd_methods');
 const {updateColor} = require('./lnd_methods');
 const {updateConnectedWatchtower} = require('./lnd_methods');
+const {updateGroupSigningSession} = require('./lnd_methods');
 const {updatePathfindingSettings} = require('./lnd_methods');
 const {updateRoutingFees} = require('./lnd_methods');
 const {verifyAccess} = require('./lnd_methods');
@@ -145,6 +148,7 @@ module.exports = {
   addExternalSocket,
   addPeer,
   authenticatedLndGrpc,
+  beginGroupSigningSession,
   broadcastChainTransaction,
   cancelHodlInvoice,
   cancelPendingChannel,
@@ -166,6 +170,7 @@ module.exports = {
   disableChannel,
   disconnectWatchtower,
   enableChannel,
+  endGroupSigningSession,
   diffieHellmanComputeSecret,
   emitGrpcEvents,
   fundPendingChannels,
@@ -277,6 +282,7 @@ module.exports = {
   updateColor,
   updateChainTransaction,
   updateConnectedWatchtower,
+  updateGroupSigningSession,
   updatePathfindingSettings,
   updateRoutingFees,
   verifyAccess,

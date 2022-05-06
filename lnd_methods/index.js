@@ -1,5 +1,6 @@
 const {addExternalSocket} = require('./peers');
 const {addPeer} = require('./peers');
+const {beginGroupSigningSession} = require('./signer');
 const {broadcastChainTransaction} = require('./onchain');
 const {cancelHodlInvoice} = require('./invoices');
 const {cancelPendingChannel} = require('./onchain');
@@ -22,6 +23,7 @@ const {diffieHellmanComputeSecret} = require('./signer');
 const {disableChannel} = require('./offchain');
 const {disconnectWatchtower} = require('./offchain');
 const {enableChannel} = require('./offchain');
+const {endGroupSigningSession} = require('./signer');
 const {fundPendingChannels} = require('./onchain');
 const {fundPsbt} = require('./onchain');
 const {getAccessIds} = require('./macaroon');
@@ -129,6 +131,7 @@ const {updateAlias} = require('./peers');
 const {updateChainTransaction} = require('./onchain');
 const {updateColor} = require('./peers');
 const {updateConnectedWatchtower} = require('./offchain');
+const {updateGroupSigningSession} = require('./signer');
 const {updatePathfindingSettings} = require('./offchain');
 const {updateRoutingFees} = require('./offchain');
 const {verifyAccess} = require('./macaroon');
@@ -140,6 +143,7 @@ const {verifyMessage} = require('./message');
 module.exports = {
   addExternalSocket,
   addPeer,
+  beginGroupSigningSession,
   broadcastChainTransaction,
   cancelHodlInvoice,
   cancelPendingChannel,
@@ -162,6 +166,7 @@ module.exports = {
   disableChannel,
   disconnectWatchtower,
   enableChannel,
+  endGroupSigningSession,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
@@ -269,6 +274,7 @@ module.exports = {
   updateChainTransaction,
   updateColor,
   updateConnectedWatchtower,
+  updateGroupSigningSession,
   updatePathfindingSettings,
   updateRoutingFees,
   verifyAccess,

@@ -33,7 +33,9 @@ const tests = [
       override: {
         lnd: {
           signer: {
-            deriveSharedKey: ({}, cbk) => cbk({details: 'unknown service signrpc.Signer'}),
+            deriveSharedKey: ({}, cbk) => cbk({
+              details: 'unknown service signrpc.Signer',
+            }),
           },
         },
       },

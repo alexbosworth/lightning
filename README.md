@@ -24,8 +24,8 @@ Methods for working with the Lightning Network
     https://github.com/stackernews/stacker.news
 - [Suredbits API](https://suredbits.com/) -
     https://github.com/Suredbits/sb-api-lnd
-- [Synonym demo server](https://synonym.to) -
-    https://github.com/synonymdev/slash-pay-demo-server
+- [Synonym Blocktank server](https://synonym.to) -
+    https://github.com/synonymdev/blocktank-server/
 - [Tarnhelm](https://www.tarnhelm.app/) - https://github.com/bkiac/tarnhelm
 - [tbtcswaps](https://tbtcswaps.com/) -
     https://github.com/keep-community/tbtcswaps
