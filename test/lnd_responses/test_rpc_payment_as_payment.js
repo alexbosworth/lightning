@@ -73,7 +73,9 @@ const makeArgs = overrides => {
 const makeExpected = overrides => {
   const expected = {
     attempts: [{
-      confirmed_at: '1970-01-01T00:00:00.001Z',
+      confirmed_at: undefined,
+      created_at: '1970-01-01T00:00:00.001Z',
+      failed_at: '1970-01-01T00:00:00.001Z',
       is_confirmed: false,
       is_failed: true,
       is_pending: false,
@@ -272,6 +274,8 @@ const tests = [
     expected: makeExpected({
       attempts: [{
         confirmed_at: '2020-04-20T19:17:16.160Z',
+        created_at: '2020-04-20T19:17:15.428Z',
+        failed_at: undefined,
         is_confirmed: true,
         is_failed: false,
         is_pending: false,

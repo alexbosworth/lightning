@@ -61,7 +61,9 @@ const nsAsMs = ns => Number(BigInt(ns) / BigInt(1e6));
 
   @returns
   {
-    confirmed_at: <Payment Succeeded At ISO 8601 Date String>
+    [confirmed_at]: <Payment Attempt Succeeded At ISO 8601 Date String>
+    created_at: <Attempt Was Started At ISO 8601 Date String>
+    [failed_at]: <Payment Attempt Failed At ISO 8601 Date String>
     is_confirmed: <Payment Attempt Succeeded Bool>
     is_failed: <Payment Attempt Failed Bool>
     is_pending: <Payment Attempt is Waiting For Resolution Bool>
@@ -91,6 +93,10 @@ module.exports = attempt => {
     throw new Error('ExpectedRpcAttemptDetailsToDeriveAttempt');
   }
 
+  if (!attempt.attempt_time_ns) {
+    throw new Error('ExpectedRpcAttemptStartTimeNs');
+  }
+
   if (!attempt.resolve_time_ns) {
     throw new Error('ExpectedRpcAttemptResolveTimeNs');
   }
@@ -103,11 +109,39 @@ module.exports = attempt => {
     throw new Error('ExpectedAttemptStatusInRpcAttemptDetails');
   }
 
+  const route = rpcRouteAsRoute(attempt.route);
+
+  if (attempt.status === attemptStates.confirmed) {
+    return {
+      route,
+      confirmed_at: new Date(nsAsMs(attempt.resolve_time_ns)).toISOString(),
+      created_at: new Date(nsAsMs(attempt.attempt_time_ns)).toISOString(),
+      failed_at: undefined,
+      is_confirmed: true,
+      is_failed: false,
+      is_pending: false,
+    };
+  }
+
+  if (attempt.status === attemptStates.failed) {
+    return {
+      route,
+      confirmed_at: undefined,
+      created_at: new Date(nsAsMs(attempt.attempt_time_ns)).toISOString(),
+      failed_at: new Date(nsAsMs(attempt.resolve_time_ns)).toISOString(),
+      is_confirmed: false,
+      is_failed: true,
+      is_pending: false,
+    };
+  }
+
   return {
-    confirmed_at: new Date(nsAsMs(attempt.resolve_time_ns)).toISOString(),
-    is_confirmed: attempt.status === attemptStates.confirmed,
-    is_failed: attempt.status === attemptStates.failed,
+    route,
+    confirmed_at: undefined,
+    created_at: new Date(nsAsMs(attempt.attempt_time_ns)).toISOString(),
+    failed_at: undefined,
+    is_confirmed: false,
+    is_failed: false,
     is_pending: attempt.status === attemptStates.pending,
-    route: rpcRouteAsRoute(attempt.route),
   };
 };

@@ -65,6 +65,8 @@ const makeExpectedPayment = ({}) => {
     destination: '020202020202020202020202020202020202020202020202020202020202020202',
     attempts: [{
       confirmed_at: '1970-01-01T00:00:00.000Z',
+      created_at: '1970-01-01T00:00:00.000Z',
+      failed_at: undefined,
       is_confirmed: true,
       is_failed: false,
       is_pending: false,

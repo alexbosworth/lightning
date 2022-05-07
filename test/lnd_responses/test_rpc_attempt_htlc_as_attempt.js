@@ -19,7 +19,12 @@ const route = {
 };
 
 const makeArgs = overrides => {
-  const args = {route, resolve_time_ns: '1', status: 'IN_FLIGHT'};
+  const args = {
+    route,
+    attempt_time_ns: '1',
+    resolve_time_ns: '1',
+    status: 'IN_FLIGHT',
+  };
 
   Object.keys(overrides).forEach(k => args[k] = overrides[k]);
 
@@ -29,6 +34,8 @@ const makeArgs = overrides => {
 const makeExpected = overrides => {
   const attempt = {
     confirmed_at: '1970-01-01T00:00:00.000Z',
+    created_at: '1970-01-01T00:00:00.000Z',
+    failed_at: undefined,
     is_confirmed: false,
     is_failed: false,
     is_pending: false,
@@ -65,6 +72,11 @@ const tests = [
     error: 'ExpectedRpcAttemptDetailsToDeriveAttempt',
   },
   {
+    args: makeArgs({attempt_time_ns: undefined}),
+    description: 'Expected attempt time in rpc attempt details',
+    error: 'ExpectedRpcAttemptStartTimeNs',
+  },
+  {
     args: makeArgs({resolve_time_ns: undefined}),
     description: 'Expected resolve time in rpc attempt details',
     error: 'ExpectedRpcAttemptResolveTimeNs',
@@ -82,7 +94,7 @@ const tests = [
   {
     args: makeArgs({}),
     description: 'An in flight rpc attempt is mapped to an attempt',
-    expected: makeExpected({is_pending: true}),
+    expected: makeExpected({confirmed_at: undefined, is_pending: true}),
   },
   {
     args: makeArgs({status: 'SUCCEEDED'}),
@@ -92,7 +104,11 @@ const tests = [
   {
     args: makeArgs({status: 'FAILED'}),
     description: 'An rpc attempt is mapped to an attempt',
-    expected: makeExpected({is_failed: true}),
+    expected: makeExpected({
+      confirmed_at: undefined,
+      failed_at: '1970-01-01T00:00:00.000Z',
+      is_failed: true,
+    }),
   },
 ];
 

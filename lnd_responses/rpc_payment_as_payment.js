@@ -81,6 +81,9 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
   @returns
   {
     attempts: [{
+      [confirmed_at]: <Payment Attempt Succeeded At ISO 8601 Date String>
+      created_at: <Attempt Was Started At ISO 8601 Date String>
+      [failed_at]: <Payment Attempt Failed At ISO 8601 Date String>
       [failure]: {
         code: <Error Type Code Number>
         [details]: {
@@ -108,6 +111,9 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
         }
         message: <Error Message String>
       }
+      [confirmed_at]: <Payment Attempt Succeeded At ISO 8601 Date String>
+      created_at: <Attempt Was Started At ISO 8601 Date String>
+      [failed_at]: <Payment Attempt Failed At ISO 8601 Date String>
       is_confirmed: <Payment Attempt Succeeded Bool>
       is_failed: <Payment Attempt Failed Bool>
       is_pending: <Payment Attempt is Waiting For Resolution Bool>
