@@ -8,6 +8,7 @@ const socket = 'socket';
 expectError(addExternalSocket());
 expectError(addExternalSocket({}));
 expectError(addExternalSocket({lnd}));
+expectError(addExternalSocket({socket}));
 
 expectType<void>(await addExternalSocket({lnd, socket}));
 expectType<void>(addExternalSocket({lnd, socket}, () => {}));
