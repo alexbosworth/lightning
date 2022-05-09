@@ -1,3 +1,4 @@
+export * from './add_external_socket';
 export * from './add_peer';
 export * from './get_peers';
 export * from './remove_peer';
