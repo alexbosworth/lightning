@@ -5,3 +5,4 @@ export * from './remove_external_socket';
 export * from './remove_peer';
 export * from './subscribe_to_peers';
 export * from './update_alias';
+export * from './update_color';
