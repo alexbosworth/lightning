@@ -71,6 +71,11 @@ const makeArgs = override => {
 
 const tests = [
   {
+    args: makeArgs({confidence: NaN}),
+    description: 'Valid confidence is required',
+    error: [400, 'ExpectedConfidenceInPartsPerMillionForQuery'],
+  },
+  {
     args: makeArgs({destination: undefined}),
     description: 'A destination is required',
     error: [400, 'ExpectedDestinationKeyToGetRouteToDestination'],
@@ -84,6 +89,11 @@ const tests = [
     args: makeArgs({lnd: undefined}),
     description: 'LND is required',
     error: [400, 'ExpectedLndApiObjectToGetRouteToDestination'],
+  },
+  {
+    args: makeArgs({outgoing_channel: 12345}),
+    description: 'Outgoing channel is expected in standard format',
+    error: [400, 'ExpectedStandardFormatChannelIdForOutChannel'],
   },
   {
     args: makeArgs({payment: undefined}),
@@ -131,6 +141,11 @@ const tests = [
     }),
     description: 'No route is found with error',
     expected: {},
+  },
+  {
+    args: makeArgs({lnd: makeLnd({err: {details: 'is too large'}})}),
+    description: 'Payment cannot exceed maximum size',
+    error: [400, 'PaymentTooLargeToFindRoute'],
   },
   {
     args: makeArgs({lnd: makeLnd({res: {routes: []}})}),
