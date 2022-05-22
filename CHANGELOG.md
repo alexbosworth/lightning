@@ -1,6 +1,10 @@
 # Versions
 
-## 5.15.1
+## 5.16.0
+
+- `signTransaction`: Add `root_hash` to support Taproot signatures with scripts
+
+## 5.15.2
 
 - `getFailedPayments`, `getPayments`, `getPendingPayments`: Remove
     `confirmed_at` date when a payment is not confirmed, add `created_at` and

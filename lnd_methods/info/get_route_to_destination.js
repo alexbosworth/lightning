@@ -129,6 +129,14 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedLndApiObjectToGetRouteToDestination']);
         }
 
+        if (!!args.outgoing_channel) {
+          try {
+            chanNumber({channel: args.outgoing_channel});
+          } catch (err) {
+            return cbk([400, 'ExpectedStandardFormatChannelIdForOutChannel']);
+          }
+        }
+
         if (!!args.total_mtokens && !args.payment) {
           return cbk([400, 'ExpectedTotalMtokensWithPaymentIdentifier']);
         }

@@ -66,9 +66,13 @@ To access unauthenticated methods like the wallet unlocker, use
 
 ## Methods
 
+- [addExternalSocket](https://github.com/alexbosworth/ln-service#addexternalsocket):
+    Add a new LN p2p network socket to node advertisement
 - [addPeer](https://github.com/alexbosworth/ln-service#addpeer): Connect to a new peer
 - [authenticatedLndGrpc](https://github.com/alexbosworth/ln-service#authenticatedlndgrpc): 
     Instantiate connection to authenticated lnd methods.
+- [beginGroupSigningSession](https://github.com/alexbosworth/ln-service#begingroupsigningsession):
+    Start a new MuSig2 signing session
 - [broadcastChainTransaction](https://github.com/alexbosworth/ln-service#broadcastchaintransaction):
     Publish an on-chain transaction to the network.
 - [cancelHodlInvoice](https://github.com/alexbosworth/ln-service#cancelhodlinvoice): Cancel an
@@ -111,6 +115,8 @@ To access unauthenticated methods like the wallet unlocker, use
     Remove a connected watchtower
 - [enableChannel](https://github.com/alexbosworth/ln-service#enablechannel): Signal forwarding
     enabled towards a peer.
+- [endGroupSigningSession](https://github.com/alexbosworth/ln-service#endgroupsigningsession):
+    End a MuSig2 signing session
 - [fundPendingChannels](https://github.com/alexbosworth/ln-service#fundpendingchannels):
     Provide a signed funding source for opening channels.
 - [fundPsbt](https://github.com/alexbosworth/ln-service#fundpsbt): Make a PSBT with funds and
@@ -235,6 +241,8 @@ To access unauthenticated methods like the wallet unlocker, use
     Attempt to recover channel funds from a specific channel backup.
 - [recoverFundsFromChannels](https://github.com/alexbosworth/ln-service#recoverfundsfromchannels):
     Attempt to recover funds from multiple channels using a multiple channel backup.
+- [removeExternalSocket](https://github.com/alexbosworth/ln-service#removeexternalsocket):
+    Remove a LN p2p network socket from the node advertisement
 - [removePeer](https://github.com/alexbosworth/ln-service#removepeer): Disconnect from a
     connected peer.
 - [requestChainFeeIncrease](https://github.com/alexbosworth/ln-service#requestchainfeeincrease):
@@ -313,10 +321,16 @@ To access unauthenticated methods like the wallet unlocker, use
     UTXO to allow it to be selected for spending again.
 - [unlockWallet](https://github.com/alexbosworth/ln-service#unlockwallet): Decrypt the wallet and
     start the daemon
+- [updateAlias](https://github.com/alexbosworth/ln-service#updatealias):
+    Update the advertised node alias
 - [updateChainTransaction](https://github.com/alexbosworth/ln-service#updatechaintransaction):
     Edit the metadata of an on-chain transaction record.
+- [updateColor](https://github.com/alexbosworth/ln-service#updatecolor):
+    Update the advertised node color
 - [updateConnectedWatchtower](https://github.com/alexbosworth/ln-service#updateconnectedwatchtower):
     Edit the settings on an added watchtower
+- [updateGroupSigningSession](https://github.com/alexbosworth/ln-service#updategroupsigningsession):
+    Update a MuSig2 signing session with nonces and get a partial signature
 - [updatePathfindingSettings](https://github.com/alexbosworth/ln-service#updatepathfindingsettings):
     Edit the configuration for routing calculations
 - [updateRoutingFees](https://github.com/alexbosworth/ln-service#updateroutingfees): Set the
