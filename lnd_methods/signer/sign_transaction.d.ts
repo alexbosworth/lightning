@@ -18,7 +18,7 @@ export type SignTransactionArgs = AuthenticatedLightningArgs<{
     /** Input Index To Sign */
     vin: number;
     /** Witness Script Hex String */
-    witness_script: string;
+    witness_script?: string;
   }[];
   spending?: {
     /** Non-Internal Spend Output Script Hex String */

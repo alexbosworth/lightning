@@ -11,7 +11,6 @@ const inputs = [
     output_tokens: 1,
     sighash: 1,
     vin: 0,
-    witness_script: '00',
   },
 ];
 const spending = [
