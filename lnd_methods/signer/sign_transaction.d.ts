@@ -13,12 +13,14 @@ export type SignTransactionArgs = AuthenticatedLightningArgs<{
     output_script: string;
     /** Output Tokens */
     output_tokens: number;
+    /** Taproot Root Hash Hex String */
+    root_hash?: string;
     /** Sighash Type */
     sighash: number;
     /** Input Index To Sign */
     vin: number;
     /** Witness Script Hex String */
-    witness_script: string;
+    witness_script?: string;
   }[];
   spending?: {
     /** Non-Internal Spend Output Script Hex String */
