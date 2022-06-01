@@ -6,7 +6,11 @@ const {isLnd} = require('./../../lnd_requests');
 
 const connectFailMessage = '14 UNAVAILABLE: Connect Failed';
 const defaultAddressFormat = 'p2wpkh';
+const {isArray} = Array;
+const isNeedingDerivationsCheck = format => format === 'p2tr';
+const isTrSupported = n => !!n.find(n => n.address_type === 'TAPROOT_PUBKEY');
 const method = 'newAddress';
+const notSupported = /unknown.*walletrpc.WalletKit/;
 const type = 'default';
 
 /** Create a new receive address.
@@ -42,6 +46,38 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
+      // Get account derivations to confirm P2TR support
+      checkFormat: ['validate', ({}, cbk) => {
+        // Exit early when there is no need to check the derivations
+        if (!isNeedingDerivationsCheck(args.format)) {
+          return cbk();
+        }
+
+        return args.lnd.wallet.listAccounts({}, (err, res) => {
+          if (!!err && notSupported.test(err.details)) {
+            return cbk([501, 'CreationOfTaprootAddressesUnsupported']);
+          }
+
+          if (!!err) {
+            return cbk([503, 'UnexpectedErrorCheckingTaprootSupport', {err}]);
+          }
+
+          if (!res) {
+            return cbk([503, 'ExpectedResultForDerivationPathsRequest']);
+          }
+
+          if (!isArray(res.accounts)) {
+            return cbk([503, 'ExpectedAccountsInDerivationPathsResult']);
+          }
+
+          if (!isTrSupported(res.accounts)) {
+            return cbk([501, 'ExpectedTaprootSupportingLndToCreateAddress']);
+          }
+
+          return cbk();
+        });
+      }],
+
       // Type
       type: ['validate', ({}, cbk) => {
         const format = args.format || defaultAddressFormat;
@@ -54,7 +90,7 @@ module.exports = (args, cbk) => {
       }],
 
       // Get the address
-      createAddress: ['type', ({type}, cbk) => {
+      createAddress: ['checkFormat', 'type', ({type}, cbk) => {
         return args.lnd.default.newAddress({type}, (err, res) => {
           if (!!err && err.message === connectFailMessage) {
             return cbk([503, 'FailedToConnectToDaemonToCreateChainAddress']);

@@ -68,6 +68,93 @@ const tests = [
   },
   {
     args: {
+      lnd: {default: {newAddress: ({}, cbk) => cbk(null, {address: 'addr'})}},
+    },
+    description: 'The default address is p2wpkh',
+    expected: {address: 'addr'},
+  },
+  {
+    args: {
+      format: 'p2tr',
+      lnd: {
+        default: {
+          newAddress: ({}, cbk) => cbk(null, {address: 'addr'}),
+        },
+        wallet: {
+          listAccounts: ({}, cbk) => cbk({
+            details: 'unknown.service.walletrpc.WalletKit',
+          }),
+        },
+      },
+    },
+    description: 'Taproot requires TR account',
+    error: [501, 'CreationOfTaprootAddressesUnsupported'],
+  },
+  {
+    args: {
+      format: 'p2tr',
+      lnd: {
+        default: {newAddress: ({}, cbk) => cbk(null, {address: 'addr'})},
+        wallet: {listAccounts: ({}, cbk) => cbk('err')},
+      },
+    },
+    description: 'Taproot check errors are passed back',
+    error: [503, 'UnexpectedErrorCheckingTaprootSupport'],
+  },
+  {
+    args: {
+      format: 'p2tr',
+      lnd: {
+        default: {newAddress: ({}, cbk) => cbk(null, {address: 'addr'})},
+        wallet: {listAccounts: ({}, cbk) => cbk()},
+      },
+    },
+    description: 'Taproot requires account result',
+    error: [503, 'ExpectedResultForDerivationPathsRequest'],
+  },
+  {
+    args: {
+      format: 'p2tr',
+      lnd: {
+        default: {newAddress: ({}, cbk) => cbk(null, {address: 'addr'})},
+        wallet: {listAccounts: ({}, cbk) => cbk(null, {})},
+      },
+    },
+    description: 'Taproot accounts are expected',
+    error: [503, 'ExpectedAccountsInDerivationPathsResult'],
+  },
+  {
+    args: {
+      format: 'p2tr',
+      lnd: {
+        default: {newAddress: ({}, cbk) => cbk(null, {address: 'addr'})},
+        wallet: {listAccounts: ({}, cbk) => cbk(null, {accounts: []})},
+      },
+    },
+    description: 'Taproot supporting account is expected',
+    error: [501, 'ExpectedTaprootSupportingLndToCreateAddress'],
+  },
+  {
+    args: {
+      format: 'p2tr',
+      lnd: {
+        default: {
+          newAddress: ({}, cbk) => cbk(null, {
+            address: 'taproot_address',
+          }),
+        },
+        wallet: {
+          listAccounts: ({}, cbk) => cbk(null, {
+            accounts: [{address_type: 'TAPROOT_PUBKEY'}],
+          }),
+        },
+      },
+    },
+    description: 'Taproot supporting account',
+    expected: {address: 'taproot_address'},
+  },
+  {
+    args: {
       format: 'p2wpkh',
       is_unused: true,
       lnd: {

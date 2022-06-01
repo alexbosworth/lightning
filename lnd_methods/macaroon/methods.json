@@ -34,6 +34,7 @@
     "type": "tower_client"
   },
   "createChainAddress": {
+    "depends_on": ["getMasterPublicKeys"],
     "method": "NewAddress",
     "type": "default"
   },
