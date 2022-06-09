@@ -105,6 +105,10 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedArrayOfRoutesToPayViaRoutes']);
         }
 
+        if (!!args.routes.filter(n => !n).length) {
+          return cbk([400, 'ExpectedArrayOfRoutesToAttemptPayingOver']);
+        }
+
         if (args.routes.findIndex(n => !isArray(n.hops)) !== notFound) {
           return cbk([400, 'ExpectedArrayOfHopsForPayViaRoute']);
         }

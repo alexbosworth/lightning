@@ -63,6 +63,28 @@ const tests = [
         default: {deletePayment, getInfo},
         router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
       },
+      routes: [null],
+    },
+    description: 'An array of non-empty routes is expected',
+    error: [400, 'ExpectedArrayOfRoutesToAttemptPayingOver'],
+  },
+  {
+    args: {
+      lnd: {
+        default: {deletePayment, getInfo},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
+      },
+      routes: [{}],
+    },
+    description: 'Routes are expected to have hops',
+    error: [400, 'ExpectedArrayOfHopsForPayViaRoute'],
+  },
+  {
+    args: {
+      lnd: {
+        default: {deletePayment, getInfo},
+        router: {sendToRouteV2: ({}, cbk) => cbk(null, {})},
+      },
       routes: [{
         fee: 1,
         fee_mtokens: '1000',
