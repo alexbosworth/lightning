@@ -23,7 +23,7 @@
     "cbor": "8.1.0",
     "ecpair": "2.0.1",
     "express": "4.18.1",
-    "invoices": "2.0.7",
+    "invoices": "2.1.0",
     "psbt": "2.6.0",
     "tiny-secp256k1": "2.2.1",
     "type-fest": "2.13.0"
