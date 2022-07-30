@@ -67,7 +67,9 @@ To access unauthenticated methods like the wallet unlocker, use
 
 ## Debugging
 
-If you encounter any issues connecting and wish to view detailed information about the underlying grpc calls, you can run Node with these environment variables set:
+If you encounter any issues connecting and wish to view detailed information
+about the underlying grpc calls, you can run Node with these environment
+variables set:
 
     GRPC_VERBOSITY=DEBUG GRPC_TRACE=all node YOURSCRIPTNAME.js
 
