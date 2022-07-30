@@ -44,7 +44,7 @@ export type GetChannelsResult = {
     local_balance: number;
     /** Local CSV Blocks Delay */
     local_csv?: number;
-    /** Remote Non-Enforceable Amount Tokens */
+    /** Local Non-Enforceable Amount Tokens */
     local_dust?: number;
     /** Local Initially Pushed Tokens */
     local_given?: number;

@@ -2,10 +2,12 @@ const EventEmitter = require('events');
 
 const asyncDoUntil = require('async/doUntil');
 
-const {rpcInvoiceAsInvoice} = require('./../../lnd_responses');
+const {handleRemoveListener} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
+const {rpcInvoiceAsInvoice} = require('./../../lnd_responses');
 
 const connectionFailureMessage = 'failed to connect to all addresses';
+const events = ['end', 'error', 'invoice_updated', 'status'];
 const msPerSec = 1e3;
 const restartSubscriptionMs = 1000 * 30;
 const updateEvent = 'invoice_updated';
@@ -93,6 +95,9 @@ module.exports = args => {
       add_index: !!addIndex ? addIndex.toString() : undefined,
       settle_index: !!confirmedAfter ? confirmedAfter.toString() : undefined,
     });
+
+    // Terminate subscription when all listeners are removed
+    handleRemoveListener({subscription, events, emitter: eventEmitter});
 
     // Subscription finished callback
     const finished = err => {

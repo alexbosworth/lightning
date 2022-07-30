@@ -7,6 +7,8 @@ const {subscribeToInvoices} = require('./../../../');
 
 const emitter = new EventEmitter();
 
+emitter.cancel = () => {};
+
 const makeLnd = ({err}) => ({default: {subscribeInvoices: ({}) => emitter}});
 
 const tests = [

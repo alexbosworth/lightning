@@ -1,5 +1,9 @@
 # Versions
 
+## 5.16.5
+
+- `subscribeToInvoices`: Cancel subscription when there are no event listeners
+
 ## 5.16.4
 
 - `signTransaction`: Add `root_hash` to support Taproot signatures with scripts
