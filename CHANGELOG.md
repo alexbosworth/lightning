@@ -1,6 +1,6 @@
 # Versions
 
-## 5.16.5
+## 5.16.6
 
 - `subscribeToInvoices`: Cancel subscription when there are no event listeners
 
