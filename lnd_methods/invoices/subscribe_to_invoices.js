@@ -87,6 +87,9 @@ module.exports = args => {
   const eventEmitter = new EventEmitter();
 
   asyncDoUntil(cbk => {
+    // Allow loop to end
+    let isEnded = false
+
     // Safeguard the callback from being fired multiple times
     let isFinished = false;
 
@@ -98,6 +101,18 @@ module.exports = args => {
 
     // Terminate subscription when all listeners are removed
     handleRemoveListener({subscription, events, emitter: eventEmitter});
+    eventEmitter.on("removeListener", () => {
+      const count = events.reduce(
+        (acc, event) => acc + eventEmitter.listenerCount(event),
+        0,
+      );
+      if (count === 0) {
+        isEnded = true;
+        cbk(null, {
+          listener_count: 0,
+        });
+      }
+    })
 
     // Subscription finished callback
     const finished = err => {
@@ -133,16 +148,18 @@ module.exports = args => {
 
         return;
       } catch (err) {
-        return finished([503, err.message]);
+        return !isEnded ? finished([503, err.message]) : undefined;
       }
     });
 
     // Subscription finished will trigger a re-subscribe
-    subscription.on('end', () => finished());
+    subscription.on('end', () => !isEnded ? finished() : undefined);
 
     // Subscription errors fail the subscription, trigger subscription restart
     subscription.on('error', err => {
-      return finished([503, 'UnexpectedInvoiceSubscriptionError', {err}]);
+      return !isEnded
+        ? finished([503, 'UnexpectedInvoiceSubscriptionError', {err}])
+        : undefined;
     });
 
     // Relay status messages
