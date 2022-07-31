@@ -10,6 +10,7 @@ const connectionFailureMessage = 'failed to connect to all addresses';
 const events = ['end', 'error', 'invoice_updated', 'status'];
 const msPerSec = 1e3;
 const restartSubscriptionMs = 1000 * 30;
+const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
 const updateEvent = 'invoice_updated';
 
 /** Subscribe to invoices
@@ -87,9 +88,6 @@ module.exports = args => {
   const eventEmitter = new EventEmitter();
 
   asyncDoUntil(cbk => {
-    // Allow loop to end
-    let isEnded = false
-
     // Safeguard the callback from being fired multiple times
     let isFinished = false;
 
@@ -101,18 +99,6 @@ module.exports = args => {
 
     // Terminate subscription when all listeners are removed
     handleRemoveListener({subscription, events, emitter: eventEmitter});
-    eventEmitter.on("removeListener", () => {
-      const count = events.reduce(
-        (acc, event) => acc + eventEmitter.listenerCount(event),
-        0,
-      );
-      if (count === 0) {
-        isEnded = true;
-        cbk(null, {
-          listener_count: 0,
-        });
-      }
-    })
 
     // Subscription finished callback
     const finished = err => {
@@ -127,13 +113,29 @@ module.exports = args => {
 
       isFinished = true;
 
+      const listenerCount = eventEmitter.listenerCount(updateEvent);
+
+      // Exit early when there are no listeners
+      if (!listenerCount) {
+        return cbk(null, {listener_count: listenerCount});
+      }
+
+      // Delay restart when there are listeners
       return setTimeout(() => {
-        return cbk(null, {
-          listener_count: eventEmitter.listenerCount(updateEvent),
-        });
+        return cbk(null, {listener_count: listenerCount});
       },
       args.restart_delay_ms || restartSubscriptionMs);
     };
+
+    // Finish early when all listeners are removed
+    eventEmitter.on('removeListener', () => {
+      // Exit early when there are still active listeners
+      if (!!sumOf(events.map(n => eventEmitter.listenerCount(n)))) {
+        return;
+      }
+
+      return finished();
+    });
 
     // Relay invoice updates to the emitter
     subscription.on('data', invoice => {
@@ -148,18 +150,16 @@ module.exports = args => {
 
         return;
       } catch (err) {
-        return !isEnded ? finished([503, err.message]) : undefined;
+        return finished([503, err.message]);
       }
     });
 
     // Subscription finished will trigger a re-subscribe
-    subscription.on('end', () => !isEnded ? finished() : undefined);
+    subscription.on('end', () => finished());
 
     // Subscription errors fail the subscription, trigger subscription restart
     subscription.on('error', err => {
-      return !isEnded
-        ? finished([503, 'UnexpectedInvoiceSubscriptionError', {err}])
-        : undefined;
+      return finished([503, 'UnexpectedInvoiceSubscriptionError', {err}]);
     });
 
     // Relay status messages
