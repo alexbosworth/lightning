@@ -9,9 +9,19 @@ const tests = [
     expected: {},
   },
   {
+    args: {tokens: 0},
+    description: 'Tokens can be zero',
+    expected: {mtokens: '0'},
+  },
+  {
     args: {tokens: 1},
     description: 'Tokens are converted to mtokens',
     expected: {mtokens: '1000'},
+  },
+  {
+    args: {tokens: 'invalid number'},
+    description: 'Tokens must be a valid number',
+    error: 'ExpectedEitherTokensNumberOrMtokensStringForAmountValue',
   },
   {
     args: {mtokens: '1000'},
