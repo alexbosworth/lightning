@@ -19,6 +19,8 @@ const type = 'default';
 
   LND 0.11.1 and below do not support `accept` or `reject` arguments
 
+  LND 0.15.0 and below do not support `is_trusted_funding`
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -33,6 +35,7 @@ const type = 'default';
   {
     accept: <Accept Request Function> ({
       [cooperative_close_address]: <Restrict Coop Close To Address String>
+      [is_trusted_funding]: <Accept Funding as Trusted Bool>
       [min_confirmations]: <Required Confirmations Before Channel Open Number>
       [remote_csv]: <Peer Unilateral Balance Output CSV Delay Number>
       [remote_reserve]: <Minimum Tokens Peer Must Keep On Their Side Number>
@@ -46,6 +49,7 @@ const type = 'default';
     csv_delay: <CSV Delay Blocks Number>
     id: <Request Id Hex String>
     is_private: <Incoming Channel Is Private Bool>
+    is_trusted_funding: <Request Immediate Trusted Funding Bool>
     local_balance: <Channel Local Tokens Balance Number>
     local_reserve: <Channel Local Reserve Tokens Number>
     max_pending_mtokens: <Maximum Millitokens Pending In Channel String>
@@ -94,6 +98,7 @@ module.exports = ({lnd}) => {
             accept: true,
             csv_delay: params.remote_csv || undefined,
             in_flight_max_msat: params.remote_max_pending_mtokens || undefined,
+            zero_conf: params.is_trusted_funding || undefined,
             max_htlc_count: params.remote_max_htlcs || undefined,
             min_accept_depth: params.min_confirmations || undefined,
             min_htlc_in: params.remote_min_htlc_mtokens || undefined,
@@ -108,6 +113,7 @@ module.exports = ({lnd}) => {
         csv_delay: request.csv_delay,
         id: request.id,
         is_private: request.is_private,
+        is_trusted_funding: request.is_trusted_funding,
         local_balance: request.local_balance,
         local_reserve: request.local_reserve,
         max_pending_mtokens: request.max_pending_mtokens,

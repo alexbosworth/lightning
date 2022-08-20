@@ -570,6 +570,13 @@ service Lightning {
     */
     rpc SubscribeCustomMessages (SubscribeCustomMessagesRequest)
         returns (stream CustomMessage);
+
+    /* lncli: `listaliases`
+    ListAliases returns the set of all aliases that have ever existed with
+    their confirmed SCID (if it exists) and/or the base SCID (in the case of
+    zero conf).
+    */
+    rpc ListAliases (ListAliasesRequest) returns (ListAliasesResponse);
 }
 
 message SubscribeCustomMessagesRequest {
@@ -915,6 +922,14 @@ message ChannelAcceptRequest {
 
     // The commitment type the initiator wishes to use for the proposed channel.
     CommitmentType commitment_type = 14;
+
+    // Whether the initiator wants to open a zero-conf channel via the channel
+    // type.
+    bool wants_zero_conf = 15;
+
+    // Whether the initiator wants to use the scid-alias channel type. This is
+    // separate from the feature bit.
+    bool wants_scid_alias = 16;
 }
 
 message ChannelAcceptResponse {
@@ -975,6 +990,13 @@ message ChannelAcceptResponse {
     The number of confirmations we require before we consider the channel open.
     */
     uint32 min_accept_depth = 10;
+
+    /*
+    Whether the responder wants this to be a zero-conf channel. This will fail
+    if either side does not have the scid-alias feature bit set. The minimum
+    depth field must be zero if this is true.
+    */
+    bool zero_conf = 11;
 }
 
 message ChannelPoint {
@@ -1458,6 +1480,18 @@ message Channel {
 
     // List constraints for the remote node.
     ChannelConstraints remote_constraints = 30;
+
+    /*
+    This lists out the set of alias short channel ids that exist for a channel.
+    This may be empty.
+    */
+    repeated uint64 alias_scids = 31;
+
+    // Whether or not this is a zero-conf channel.
+    bool zero_conf = 32;
+
+    // This is the confirmed / on-chain zero-conf SCID.
+    uint64 zero_conf_confirmed_scid = 33;
 }
 
 message ListChannelsRequest {
@@ -1475,6 +1509,22 @@ message ListChannelsRequest {
 message ListChannelsResponse {
     // The list of active channels
     repeated Channel channels = 11;
+}
+
+message AliasMap {
+    /*
+    For non-zero-conf channels, this is the confirmed SCID. Otherwise, this is
+    the first assigned "base" alias.
+    */
+    uint64 base_scid = 1;
+
+    // The set of all aliases stored for the base SCID.
+    repeated uint64 aliases = 2;
+}
+message ListAliasesRequest {
+}
+message ListAliasesResponse {
+    repeated AliasMap alias_maps = 1;
 }
 
 enum Initiator {
@@ -1541,6 +1591,15 @@ message ChannelCloseSummary {
     Initiator close_initiator = 12;
 
     repeated Resolution resolutions = 13;
+
+    /*
+    This lists out the set of alias short channel ids that existed for the
+    closed channel. This may be empty.
+    */
+    repeated uint64 alias_scids = 14;
+
+    //  The confirmed SCID for a zero-conf channel.
+    uint64 zero_conf_confirmed_scid = 15 [jstype = JS_STRING];
 }
 
 enum ResolutionType {
@@ -2097,6 +2156,17 @@ message OpenChannelRequest {
     the remote peer supports explicit channel negotiation.
     */
     CommitmentType commitment_type = 18;
+
+    /*
+    If this is true, then a zero-conf channel open will be attempted.
+    */
+    bool zero_conf = 19;
+
+    /*
+    If this is true, then an option-scid-alias channel-type open will be
+    attempted.
+    */
+    bool scid_alias = 20;
 }
 message OpenStatusUpdate {
     oneof update {

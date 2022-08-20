@@ -157,6 +157,10 @@
     "methods": ["ListTowers", "Policy", "Stats"],
     "type": "tower_client"
   },
+  "getEphemeralChannelIds": {
+    "method": "ListAliases",
+    "type": "default"
+  },
   "getFailedPayments": {
     "method": "ListPayments",
     "type": "default"

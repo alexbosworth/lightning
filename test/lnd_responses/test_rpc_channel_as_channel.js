@@ -5,6 +5,7 @@ const {rpcChannelAsChannel} = require('./../../lnd_responses');
 const makeArgs = overrides => {
   const args = {
     active: true,
+    alias_scids: [],
     capacity: '1',
     chan_id: '1',
     channel_point: '00:1',
@@ -73,6 +74,7 @@ const makeExpected = overrides => {
     is_opening: false,
     is_partner_initiated: true,
     is_private: true,
+    is_trusted_funding: undefined,
     local_balance: 1,
     local_csv: 1,
     local_dust: 1,
@@ -81,6 +83,7 @@ const makeExpected = overrides => {
     local_max_pending_mtokens: '1',
     local_min_htlc_mtokens: '1',
     local_reserve: 1,
+    other_ids: [],
     partner_public_key: '00',
     past_states: 1,
     pending_payments: [{
@@ -122,6 +125,11 @@ const tests = [
     args: makeArgs({active: undefined}),
     description: 'Channel active is expected',
     error: 'ExpectedChannelActiveStateInChannelMessage',
+  },
+  {
+    args: makeArgs({alias_scids: undefined}),
+    description: 'Alias scids are expected',
+    error: 'ExpectedArrayOfAliasShortChannelIdsInChannelMessage',
   },
   {
     args: makeArgs({capacity: undefined}),
@@ -227,6 +235,11 @@ const tests = [
     args: makeArgs({}),
     description: 'RPC channel is mapped to channel',
     expected: makeExpected({}),
+  },
+  {
+    args: makeArgs({alias_scids: ['2', '3'], zero_conf_confirmed_scid: '2'}),
+    description: 'RPC channel is mapped to channel with scids',
+    expected: makeExpected({id: '0x0x2', other_ids: ['0x0x3']}),
   },
   {
     args: makeArgs({commitment_type: 'STATIC_REMOTE_KEY', initiator: true}),

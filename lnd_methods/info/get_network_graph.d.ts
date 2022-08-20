@@ -8,7 +8,7 @@ export type GetNetworkGraphResult = {
     /** Standard Format Channel Id */
     id: string;
     policies: {
-      /** Bae Fee Millitokens */
+      /** Base Fee Millitokens */
       base_fee_mtokens?: string;
       /** CLTV Height Delta */
       cltv_delta?: number;

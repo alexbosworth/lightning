@@ -82,6 +82,7 @@ const tests = [
             csv_delay: 1,
             id: '0000000000000000000000000000000000000000000000000000000000000000',
             is_private: true,
+            is_trusted_funding: false,
             local_balance: 1,
             local_reserve: 1,
             max_pending_mtokens: '1000',

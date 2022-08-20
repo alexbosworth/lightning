@@ -156,6 +156,8 @@ variables set:
     channels on the node.
 - [getConnectedWatchtowers](https://github.com/alexbosworth/ln-service#getconnectedwatchtowers):
     List watchtowers that were added
+- [getEphemeralChannelIds](https://github.com/alexbosworth/ln-service#getephemeralchannelids):
+    List other channel ids for channels
 - [getFailedPayments](https://github.com/alexbosworth/ln-service#getfailedpayments): List out
     past payments that failed.
 - [getFeeRates](https://github.com/alexbosworth/ln-service#getfeerates): List routing fee rates

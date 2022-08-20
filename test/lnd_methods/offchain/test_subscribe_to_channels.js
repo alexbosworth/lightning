@@ -32,6 +32,7 @@ const makeLnd = ({data, err}) => {
 
           emitter.emit('data', {
             closed_channel: {
+              alias_scids: [],
               capacity: '1',
               chan_id: '1',
               channel_point: '00:0',
@@ -57,6 +58,7 @@ const makeLnd = ({data, err}) => {
           emitter.emit('data', {
             open_channel: {
               active: false,
+              alias_scids: [],
               capacity: '1',
               chan_id: '1',
               channel_point: `${Buffer.alloc(32).toString('hex')}:0`,
@@ -221,6 +223,7 @@ const tests = [
             is_partner_closed: undefined,
             is_partner_initiated: false,
             is_remote_force_close: false,
+            other_ids: [],
             partner_public_key: '000000000000000000000000000000000000000000000000000000000000000000',
             transaction_id: '00',
             transaction_vout: 0,
@@ -248,6 +251,7 @@ const tests = [
             is_opening: false,
             is_partner_initiated: false,
             is_private: false,
+            is_trusted_funding: undefined,
             local_balance: 1,
             local_csv: 1,
             local_dust: 1,
@@ -256,6 +260,7 @@ const tests = [
             local_max_pending_mtokens: '1',
             local_min_htlc_mtokens: '1',
             local_reserve: 1,
+            other_ids: [],
             partner_public_key: '000000000000000000000000000000000000000000000000000000000000000000',
             past_states: 1,
             pending_payments: [],

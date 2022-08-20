@@ -1,5 +1,14 @@
 # Versions
 
+## 5.17.0
+
+- `getChannels`: Add support for `is_trusted_funding` and `other_ids`
+- `getClosedChannels`: Add support for `other_ids`
+- `getEphemeralChannelIds`: Add method to get other channel ids
+- `openChannels`: Add support for `is_trusted_funding` for instant opening
+- `subscribeToChannels`: Add support for `is_trusted_funding`, `other_ids`
+- `subscribeToOpenRequests`: Add support for `is_trusted_funding`
+
 ## 5.16.6
 
 - `subscribeToInvoices`: Cancel subscription when there are no event listeners

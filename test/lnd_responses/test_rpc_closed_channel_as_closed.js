@@ -4,6 +4,7 @@ const {rpcClosedChannelAsClosed} = require('./../../lnd_responses');
 
 const makeArgs = overrides => {
   const args = {
+    alias_scids: [],
     capacity: '1',
     chan_id: '1',
     channel_point: '0102:0',
@@ -59,6 +60,7 @@ const makeExpected = overrides => {
     is_partner_closed: false,
     is_partner_initiated: undefined,
     is_remote_force_close: false,
+    other_ids: [],
     partner_public_key: Buffer.alloc(33).toString('hex'),
     transaction_id: '0102',
     transaction_vout: 0,
@@ -74,6 +76,11 @@ const tests = [
     args: undefined,
     description: 'Channel close details expected',
     error: 'ExpectedChannelCloseDetailsToDeriveClosedChannel',
+  },
+  {
+    args: makeArgs({alias_scids: undefined}),
+    description: 'Alias scids are expected',
+    error: 'ExpectedArrayOfAliasShortChannelIdsInClosedChannel',
   },
   {
     args: makeArgs({capacity: undefined}),
@@ -119,6 +126,14 @@ const tests = [
     args: makeArgs({}),
     description: 'Local channel closed mapped to closed channel',
     expected: makeExpected({}),
+  },
+  {
+    args: makeArgs({
+      alias_scids: ['2', '3'],
+      zero_conf_confirmed_scid: '2',
+    }),
+    description: 'Alias scids are mapped to other ids',
+    expected: makeExpected({id: '0x0x2', other_ids: ['0x0x3']}),
   },
   {
     args: makeArgs({

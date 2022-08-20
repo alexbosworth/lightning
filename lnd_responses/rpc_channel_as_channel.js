@@ -12,6 +12,7 @@ const outpointDelimiter = ':';
 
   {
     active: <Channel Is Active Bool>
+    alias_scids: [<Channel Id Number String>]
     capacity: <Capacity Tokens String>
     chan_id: <Numeric Format Channel String>
     channel_point: <Channel Funding Outpoint String>
@@ -60,6 +61,7 @@ const outpointDelimiter = ':';
     total_satoshis_sent: <Total Tokens Transferred Outbound String>
     unsettled_balance: <Balance In Transaction Tokens String>
     uptime: <Channel Internal Monitoring Channel Active Seconds Number>
+    zero_conf_confirmed_scid: <Trusted Channel Confirmed Id Number String>
   }
 
   @throws
@@ -78,6 +80,7 @@ const outpointDelimiter = ':';
     is_opening: <Channel Is Opening Bool>
     is_partner_initiated: <Channel Partner Opened Channel Bool>
     is_private: <Channel Is Private Bool>
+    [is_trusted_funding]: <Funding Output is Trusted Bool>
     local_balance: <Local Balance Tokens Number>
     local_csv: <Local CSV Blocks Delay Number>
     local_dust: <Remote Non-Enforceable Amount Tokens Number>
@@ -86,6 +89,7 @@ const outpointDelimiter = ':';
     local_max_pending_mtokens: <Local Maximum Pending Millitokens String>
     local_min_htlc_mtokens: <Local Minimum HTLC Millitokens String>
     local_reserve: <Local Reserved Tokens Number>
+    other_ids: [<Other Channel Id String>]
     partner_public_key: <Channel Partner Public Key String>
     past_states: <Total Count of Past States Number>
     pending_payments: [{
@@ -120,6 +124,10 @@ const outpointDelimiter = ':';
 module.exports = args => {
   if (args.active === undefined) {
     throw new Error('ExpectedChannelActiveStateInChannelMessage');
+  }
+
+  if (!isArray(args.alias_scids)) {
+    throw new Error('ExpectedArrayOfAliasShortChannelIdsInChannelMessage');
   }
 
   if (args.capacity === undefined) {
@@ -210,8 +218,14 @@ module.exports = args => {
   const pushAmount = Number(args.push_amount_sat) || Number();
   const [transactionId, vout] = args.channel_point.split(outpointDelimiter);
   const uptime = Number(args.uptime) * msPerSec;
+  const zeroConfRealId = args.zero_conf_confirmed_scid;
 
+  const channelId = !!Number(zeroConfRealId) ? zeroConfRealId : args.chan_id;
   const downtime = Number(args.lifetime) * msPerSec - uptime;
+
+  const otherIds = args.alias_scids
+    .filter(n => n !== channelId)
+    .map(number => chanFormat({number}));
 
   return {
     capacity: Number(args.capacity),
@@ -219,12 +233,13 @@ module.exports = args => {
     commit_transaction_weight: commitWeight,
     cooperative_close_address: args.close_address || undefined,
     cooperative_close_delay_height: height,
-    id: chanFormat({number: args.chan_id}).channel,
+    id: chanFormat({number: channelId}).channel,
     is_active: args.active,
     is_closing: false,
     is_opening: false,
     is_partner_initiated: !args.initiator,
     is_private: args.private,
+    is_trusted_funding: args.zero_conf || undefined,
     local_balance: Number(args.local_balance),
     local_csv: own.csv_delay,
     local_dust: Number(own.dust_limit_sat),
@@ -233,6 +248,7 @@ module.exports = args => {
     local_max_pending_mtokens: own.max_pending_amt_msat,
     local_min_htlc_mtokens: own.min_htlc_msat,
     local_reserve: Number(own.chan_reserve_sat),
+    other_ids: otherIds.map(n => n.channel),
     partner_public_key: args.remote_pubkey,
     past_states: Number(args.num_updates),
     pending_payments: args.pending_htlcs.map(rpcHtlcAsPayment),

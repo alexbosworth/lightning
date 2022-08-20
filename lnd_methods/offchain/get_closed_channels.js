@@ -17,6 +17,8 @@ const outpointSeparator = ':';
 
   Requires `offchain:read` permission
 
+  `other_ids is not supported on LND 0.15.0 and below
+
   {
     [is_breach_close]: <Only Return Breach Close Channels Bool>
     [is_cooperative_close]: <Only Return Cooperative Close Channels Bool>
@@ -54,6 +56,7 @@ const outpointSeparator = ':';
       [is_partner_closed]: <Channel Was Closed By Channel Peer Bool>
       [is_partner_initiated]: <Channel Was Initiated By Channel Peer Bool>
       is_remote_force_close: <Is Remote Force Close Bool>
+      other_ids: [<Other Channel Id String>]
       partner_public_key: <Partner Public Key Hex String>
       transaction_id: <Channel Funding Transaction Id Hex String>
       transaction_vout: <Channel Funding Output Index Number>
@@ -101,6 +104,10 @@ module.exports = (args, cbk) => {
       // Map channels
       mapChannels: ['getClosedChannels', ({getClosedChannels}, cbk) => {
         return asyncMapSeries(getClosedChannels, (chan, cbk) => {
+          if (!isArray(chan.alias_scids)) {
+            return cbk([503, 'ExpectedArrayOfAliasShortChannelIds']);
+          }
+
           if (!chan.capacity) {
             return cbk([503, 'ExpectedCloseChannelCapacity']);
           }
@@ -133,6 +140,10 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedFinalTimeLockedBalanceForClosedChan']);
           }
 
+          const otherIds = chan.alias_scids
+            .filter(n => n !== chan.zero_conf_confirmed_scid)
+            .map(number => chanFormat({number}));
+
           const closer = chan.close_initiator;
           const finalTimeLock = Number(chan.time_locked_balance);
           const hasCloseTx = chan.closing_tx_hash !== emptyTxId;
@@ -141,11 +152,14 @@ module.exports = (args, cbk) => {
           let isPartnerClosed;
           let isPartnerInitiated;
           const [txId, vout] = chan.channel_point.split(outpointSeparator);
+          const zeroConfId = chan.zero_conf_confirmed_scid;
 
-          const chanId = !hasId ? null : chanFormat({number: chan.chan_id});
           const closeTxId = !hasCloseTx ? undefined : chan.closing_tx_hash;
           const isLocalCooperativeClose = closer === 'INITIATOR_LOCAL';
           const isRemoteCooperativeClose = closer === 'INITIATOR_REMOTE';
+          const number = !!Number(zeroConfId) ? zeroConfId : chan.chan_id;
+
+          const chanId = !hasId ? null : chanFormat({number});
 
           // Try and determine if the channel was opened by our peer
           if (chan.open_initiator === 'INITIATOR_LOCAL') {
@@ -197,6 +211,7 @@ module.exports = (args, cbk) => {
             is_partner_closed: isPartnerClosed,
             is_partner_initiated: isPartnerInitiated,
             is_remote_force_close: chan.close_type === 'REMOTE_FORCE_CLOSE',
+            other_ids: otherIds.map(n => n.channel),
             partner_public_key: chan.remote_pubkey,
             transaction_id: txId,
             transaction_vout: Number(vout),

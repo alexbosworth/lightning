@@ -15,6 +15,8 @@ const type = 'default';
   `in_channel`, `in_payment`, `is_forward`, `out_channel`, `out_payment`,
   `payment` are not supported on LND 0.11.1 and below
 
+  `is_trusted_funding` is not supported on LND 0.15.0 and below
+
   {
     [is_active]: <Limit Results To Only Active Channels Bool> // false
     [is_offline]: <Limit Results To Only Offline Channels Bool> // false
@@ -38,6 +40,7 @@ const type = 'default';
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Opened Channel Bool>
       is_private: <Channel Is Private Bool>
+      [is_trusted_funding]: <Funding Output is Trusted Bool>
       local_balance: <Local Balance Tokens Number>
       [local_csv]: <Local CSV Blocks Delay Number>
       [local_dust]: <Local Non-Enforceable Amount Tokens Number>
@@ -46,6 +49,7 @@ const type = 'default';
       [local_max_pending_mtokens]: <Local Maximum Pending Millitokens String>
       [local_min_htlc_mtokens]: <Local Minimum HTLC Millitokens String>
       local_reserve: <Local Reserved Tokens Number>
+      other_ids: [<Other Channel Id String>]
       partner_public_key: <Channel Partner Public Key String>
       past_states: <Total Count of Past Channel States Number>
       pending_payments: [{

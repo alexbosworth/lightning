@@ -15,6 +15,7 @@ const makeExpected = overrides => {
     is_opening: false,
     is_partner_initiated: false,
     is_private: true,
+    is_trusted_funding: undefined,
     local_balance: 1,
     local_csv: 1,
     local_dust: 1,
@@ -23,6 +24,7 @@ const makeExpected = overrides => {
     local_max_htlcs: 1,
     local_max_pending_mtokens: '1',
     local_reserve: 1,
+    other_ids: [],
     partner_public_key: 'b',
     past_states: 1,
     pending_payments: [{
@@ -62,6 +64,7 @@ const makeExpected = overrides => {
 const makeLnd = overrides => {
   const channel = {
     active: true,
+    alias_scids: [],
     capacity: 1,
     chan_id: '1',
     channel_point: '00:1',

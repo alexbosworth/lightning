@@ -32,12 +32,17 @@ const type = 'default';
   Use `is_avoiding_broadcast` only when self-publishing the raw transaction
   after the funding step.
 
+  `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
+  `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
+  as well as a channel open request listener to accept the trusted funding.
+
   {
     channels: [{
       capacity: <Channel Capacity Tokens Number>
       [cooperative_close_address]: <Restrict Coop Close To Address String>
       [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
       [is_private]: <Channel is Private Bool> // Defaults to false
+      [is_trusted_funding]: <Peer Should Avoid Waiting For Confirmation Bool>
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
       [partner_csv_delay]: <Peer Output CSV Delay Number>
       partner_public_key: <Public Key Hex String>
@@ -91,6 +96,7 @@ module.exports = (args, cbk) => {
           cooperative_close_address: channel.cooperative_close_address,
           give_tokens: channel.give_tokens,
           is_private: channel.is_private,
+          is_trusted_funding: channel.is_trusted_funding,
           min_htlc_mtokens: channel.min_htlc_mtokens,
           partner_public_key: channel.partner_public_key,
           partner_csv_delay: channel.partner_csv_delay,
@@ -107,6 +113,7 @@ module.exports = (args, cbk) => {
 
           const channelOpen = args.lnd[type][method]({
             close_address: channel.cooperative_close_address || undefined,
+            commitment_type: channel.is_trusted_funding ? 'ANCHORS' : undefined,
             funding_shim: {
               psbt_shim: {
                 no_publish: !!isSelfPublish || !channel.id.equals(lastChannel),
@@ -119,6 +126,8 @@ module.exports = (args, cbk) => {
             private: !!channel.is_private,
             push_sat: channel.give_tokens || undefined,
             remote_csv_delay: channel.partner_csv_delay || undefined,
+            scid_alias: channel.is_trusted_funding && channel.is_private,
+            zero_conf: channel.is_trusted_funding || undefined,
           });
 
           const done = (err, res) => {

@@ -23,6 +23,7 @@ const weightPerVByte = 4;
     node_pubkey: <Peer Public Key Bytes Buffer Object>
     pending_chan_id: <Temporary Pending Id Bytes Buffer Object>
     push_amt: <Gifted Millitokens From Peer String>
+    wants_zero_conf: <Request Is Trusted Funding Bool>
   }
 
   @throws
@@ -36,6 +37,7 @@ const weightPerVByte = 4;
     csv_delay: <CSV Delay Blocks Number>
     id: <Request Id Hex String>
     is_private: <Incoming Channel Is Private Bool>
+    is_trusted_funding: <Accept Funding as Trusted Bool>
     local_balance: <Channel Local Tokens Balance Number>
     local_reserve: <Channel Local Reserve Tokens Number>
     max_pending_mtokens: <Maximum Millitokens Pending In Channel String>
@@ -115,6 +117,7 @@ module.exports = data => {
     csv_delay: data.csv_delay,
     id: bufferAsHex(data.pending_chan_id),
     is_private: !(data.channel_flags & privateChannel),
+    is_trusted_funding: !!data.wants_zero_conf,
     local_balance: millitokensAsTokens(data.push_amt),
     local_reserve: Number(data.channel_reserve),
     max_pending_mtokens: data.max_value_in_flight,

@@ -29,6 +29,8 @@ const updateOpening = 'pending_open_channel';
     lnd: <Authenticated LND API Object>
   }
 
+  `is_trusted_funding`, `other_ids` are not supported on LND 0.15.0 and below
+
   @throws
   <Error>
 
@@ -69,6 +71,7 @@ const updateOpening = 'pending_open_channel';
     is_partner_closed: <Channel Was Closed By Channel Peer Bool>
     is_partner_initiated: <Channel Was Initiated By Channel Peer Bool>
     is_remote_force_close: <Is Remote Force Close Bool>
+    other_ids: [<Other Channel Id String>]
     partner_public_key: <Partner Public Key Hex String>
     transaction_id: <Channel Funding Transaction Id Hex String>
     transaction_vout: <Channel Funding Output Index Number>
@@ -87,6 +90,7 @@ const updateOpening = 'pending_open_channel';
     is_opening: <Channel Is Opening Bool>
     is_partner_initiated: <Channel Partner Opened Channel Bool>
     is_private: <Channel Is Private Bool>
+    [is_trusted_funding]: <Funding Output is Trusted Bool>
     local_balance: <Local Balance Tokens Number>
     local_given: <Local Initially Pushed Tokens Number>
     local_reserve: <Local Reserved Tokens Number>

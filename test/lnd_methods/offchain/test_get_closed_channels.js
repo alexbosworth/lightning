@@ -4,6 +4,7 @@ const {getClosedChannels} = require('./../../../');
 
 const makeLnd = (err, override, response) => {
   const channel = {
+    alias_scids: [],
     capacity: '1',
     chan_id: '1',
     channel_point: '00:1',
@@ -56,6 +57,7 @@ const makeExpectedChannel = ({override}) => {
     is_partner_closed: true,
     is_partner_initiated: false,
     is_remote_force_close: false,
+    other_ids: [],
     partner_public_key: 'b',
     transaction_id: '00',
     transaction_vout: 1,
@@ -86,6 +88,11 @@ const tests = [
     args: makeArgs({override: {lnd: makeLnd(null, null, {})}}),
     description: 'A response with channels is expected',
     error: [503, 'ExpectedChannels'],
+  },
+  {
+    args: makeArgs({override: {lnd: makeLnd(null, {alias_scids: undefined})}}),
+    description: 'Alias scids are expected',
+    error: [503, 'ExpectedArrayOfAliasShortChannelIds'],
   },
   {
     args: makeArgs({override: {lnd: makeLnd(null, {capacity: undefined})}}),
@@ -143,6 +150,22 @@ const tests = [
     args: makeArgs({}),
     description: 'Closed channels are returned',
     expected: {channels: [makeExpectedChannel({})]},
+  },
+  {
+    args: makeArgs({
+      override: {
+        lnd: makeLnd(null, {
+          alias_scids: ['2', '3'],
+          zero_conf_confirmed_scid: '2',
+        }),
+      },
+    }),
+    description: 'Closed channels with alias scids is returned',
+    expected: {
+      channels: [
+        makeExpectedChannel({override: {id: '0x0x2', other_ids: ['0x0x3']}}),
+      ],
+    },
   },
   {
     args: makeArgs({
