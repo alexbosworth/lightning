@@ -6,12 +6,13 @@ const makeLnd = (err, res) => {
   return {signer: {signMessage: ({}, cbk) => cbk(err, res)}};
 };
 
-const makeArgs = ({override}) => {
+const makeArgs = ({override, signature}) => {
   const args = {
     key_family: 0,
     key_index: 0,
-    lnd: makeLnd(null, {signature: '00'}),
+    lnd: makeLnd(null, {signature: Buffer.from(signature || '00', 'hex')}),
     preimage: '00',
+    type: 'ecdsa',
   };
 
   Object.keys(override || {}).forEach(key => args[key] = override[key]);
@@ -39,6 +40,11 @@ const tests = [
     args: makeArgs({override: {preimage: undefined}}),
     description: 'A preimage to hash and sign is required',
     error: [400, 'ExpectedHexDataToSignBytes'],
+  },
+  {
+    args: makeArgs({override: {type: 'type'}}),
+    description: 'A known signature type is required',
+    error: [400, 'ExpectedKnownSignatureTypeToSignBytes'],
   },
   {
     args: makeArgs({
@@ -72,9 +78,21 @@ const tests = [
     error: [503, 'ExpectedSignatureInSignBytesResponse'],
   },
   {
+    args: makeArgs({override: {type: 'schnorr'}}),
+    description: 'Schnorr signature is expected to be schnorr sized',
+    error: [503, 'UnexpectedSignatureLengthInSignBytesResponse'],
+  },
+  {
     args: makeArgs({}),
     description: 'Signature is returned for preimage',
     expected: {signature: '00'},
+  },
+  {
+    args: makeArgs({
+      override: {type: 'schnorr'}, signature: Buffer.alloc(64).toString('hex'),
+    }),
+    description: 'Schnorr signature is supported',
+    expected: {signature: Buffer.alloc(64).toString('hex')},
   },
 ];
 

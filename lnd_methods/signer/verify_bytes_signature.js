@@ -4,13 +4,18 @@ const {returnResult} = require('asyncjs-util');
 const {isLnd} = require('./../../lnd_requests');
 
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
+const isSchnorrSignatureLength = signature => signature.length === 128;
 const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
 
 /** Verify signature of arbitrary bytes
 
+  When passing a schnorr signature, a BIP-340 x-only public key should be given
+
   Requires LND built with `signrpc` build tag
 
   Requires `signer:read` permission
+
+  Validating `schnorr` signatures is unsupported in LND 0.15.0 and below
 
   {
     lnd: <Authenticated LND API Object>
@@ -51,6 +56,7 @@ module.exports = (args, cbk) => {
       // Verify signature
       verify: ['validate', ({}, cbk) => {
         return args.lnd.signer.verifyMessage({
+          is_schnorr_sig: isSchnorrSignatureLength(args.signature),
           msg: Buffer.from(args.preimage, 'hex'),
           pubkey: Buffer.from(args.public_key, 'hex'),
           signature: Buffer.from(args.signature, 'hex'),
