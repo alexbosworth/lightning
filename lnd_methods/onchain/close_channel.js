@@ -15,17 +15,23 @@ const type = 'default';
 
   If cooperatively closing, pass a public key and socket to connect
 
-  Requires info:read, offchain:write, onchain:write, peers:write permissions
+  `max_tokens_per_vbyte` will be ignored when closing a peer initiated channel
+
+  Requires `info:read`, `offchain:write`, `onchain:write`, `peers:write`
+  permissions
+
+  `max_tokens_per_vbyte` is not supported in LND 0.15.0 and below
 
   {
     [address]: <Request Sending Local Channel Funds To Address String>
     [id]: <Standard Format Channel Id String>
     [is_force_close]: <Is Force Close Bool>
     lnd: <Authenticated LND API Object>
+    [max_tokens_per_vbyte]: <Fail Cooperative Close Above Fee Rate Number>
     [public_key]: <Peer Public Key String>
     [socket]: <Peer Socket String>
     [target_confirmations]: <Confirmation Target Number>
-    [tokens_per_vbyte]: <Tokens Per Virtual Byte Number>
+    [tokens_per_vbyte]: <Target Tokens Per Virtual Byte Number>
     [transaction_id]: <Transaction Id Hex String>
     [transaction_vout]: <Transaction Output Index Number>
   }
@@ -115,6 +121,7 @@ module.exports = (args, cbk) => {
           },
           delivery_address: args.address || undefined,
           force: !!args.is_force_close,
+          max_fee_per_vbyte: args.max_tokens_per_vbyte || undefined,
           sat_per_byte: !!tokensPerVByte ? tokensPerVByte : undefined,
           target_conf: args.target_confirmations || undefined,
         });

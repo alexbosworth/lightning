@@ -9,6 +9,16 @@ const makeTx = override => {
     block_height: 1,
     dest_addresses: ['address'],
     num_confirmations: 1,
+    previous_outpoints: [
+      {
+        is_our_output: true,
+        outpoint: `${Buffer.alloc(32).toString('hex')}:1`,
+      },
+      {
+        is_our_output: true,
+        outpoint: `${Buffer.alloc(32, 1).toString('hex')}:1`,
+      },
+    ],
     raw_tx_hex: '00',
     time_stamp: '1',
     total_fees: '1',
@@ -57,6 +67,39 @@ const tests = [
     error: 'ExpectedChainTransactionConfirmationsCount',
   },
   {
+    args: makeTx({previous_outpoints: undefined}),
+    description: 'Previous outpoints are expected',
+    error: 'ExpectedArrayOfPreviousOutpointsInRpcTransaction',
+  },
+  {
+    args: makeTx({previous_outpoints: [{}]}),
+    description: 'An outpoint spend is expected',
+    error: 'ExpectedPreviousOutpointInRpcTransaction',
+  },
+  {
+    args: makeTx({previous_outpoints: [{outpoint: '00'}]}),
+    description: 'An outpoint with a tx id is expected',
+    error: 'ExpectedOutpointSpendingTransactionIdInRpcTx',
+  },
+  {
+    args: makeTx({
+      previous_outpoints: [{
+        outpoint: `${Buffer.alloc(32, 1).toString('hex')}`,
+      }],
+    }),
+    description: 'An outpoint with a tx vout is expected',
+    error: 'ExpectedOutpointSpendingTransactionVoutInRpcTx',
+  },
+  {
+    args: makeTx({
+      previous_outpoints: [{
+        outpoint: `${Buffer.alloc(32, 1).toString('hex')}:1`,
+      }],
+    }),
+    description: 'Local status for spend is expected',
+    error: 'ExpectedOutpointOwnershipBooleanInRpcTransaction',
+  },
+  {
     args: makeTx({time_stamp: undefined}),
     description: 'A time stamp is expected',
     error: 'ExpectedChainTransactionTimestamp',
@@ -82,6 +125,11 @@ const tests = [
       description: undefined,
       fee: 1,
       id: Buffer.alloc(32).toString('hex'),
+      inputs: [{
+        is_local: true,
+        transaction_id: '0101010101010101010101010101010101010101010101010101010101010101',
+        transaction_vout: 1,
+      }],
       is_confirmed: true,
       is_outgoing: false,
       output_addresses: ['address'],
@@ -95,6 +143,7 @@ const tests = [
       block_hash: '',
       block_height: 0,
       num_confirmations: 0,
+      previous_outpoints: [],
       raw_tx_hex: '',
       total_fees: '0',
     }),
@@ -107,6 +156,7 @@ const tests = [
       description: undefined,
       fee: undefined,
       id: Buffer.alloc(32).toString('hex'),
+      inputs: [],
       is_confirmed: false,
       is_outgoing: true,
       output_addresses: ['address'],

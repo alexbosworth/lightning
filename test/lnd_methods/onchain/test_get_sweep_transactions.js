@@ -13,6 +13,7 @@ const makeDefault = overrides => {
           block_height: 1,
           dest_addresses: ['address'],
           num_confirmations: 1,
+          previous_outpoints: [],
           raw_tx_hex: (new Transaction()).toHex(),
           time_stamp: '1',
           total_fees: '1',

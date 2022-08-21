@@ -59,10 +59,6 @@ module.exports = (args, cbk) => {
           },
         },
         err => {
-          if (!!err && unsuppportedErr.test(err.details)) {
-            return cbk([501, 'BackingLndDoesNotSupportUnlockingUtxos']);
-          }
-
           if (!!err) {
             return cbk([503, 'UnexpectedErrorUnlockingUtxo', {err}]);
           }

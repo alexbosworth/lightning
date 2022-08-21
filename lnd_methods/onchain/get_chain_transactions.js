@@ -13,10 +13,12 @@ const type = 'default';
 
   Requires `onchain:read` permission
 
+  `inputs` are not supported on LND 0.15.0 and below
+
   {
     [after]: <Confirmed After Current Best Chain Block Height Number>
     [before]: <Confirmed Before Current Best Chain Block Height Number>
-    lnd: <Authenticated LND Object>
+    lnd: <Authenticated LND API Object>
   }
 
   @returns via cbk or Promise
@@ -29,6 +31,11 @@ const type = 'default';
       [description]: <Transaction Label String>
       [fee]: <Fees Paid Tokens Number>
       id: <Transaction Id String>
+      inputs: [{
+        is_local: <Spent Outpoint is Local Bool>
+        transaction_id: <Transaction Id Hex String>
+        transaction_vout: <Transaction Output Index Number>
+      }]
       is_confirmed: <Is Confirmed Bool>
       is_outgoing: <Transaction Outbound Bool>
       output_addresses: [<Address String>]

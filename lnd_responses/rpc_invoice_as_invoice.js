@@ -167,10 +167,6 @@ module.exports = args => {
     throw new Error('ExpectedPreimageInLookupInvoiceResponse');
   }
 
-  if (args.settled !== false && args.settled !== true) {
-    throw new Error('ExpectedSettledStateInLookupInvoiceResponse');
-  }
-
   if (args.value === undefined) {
     throw new Error('ExpectedTokensValueInLookupInvoiceResponse');
   }
@@ -180,6 +176,7 @@ module.exports = args => {
   const descHash = args.description_hash;
   const expiresInMs = Number(args.expiry) * msPerSec;
   const isAmpPush = !args.payment_request && !!args.is_amp;
+  const isConfirmed = args.state === 'SETTLED';
   const mtok = (BigInt(args.value) * mtokensPerToken).toString();
   const payment = args.payment_addr.toString('hex');
   const settleDate = args.settle_date;
@@ -190,7 +187,7 @@ module.exports = args => {
   return {
     chain_address: args.fallback_addr || undefined,
     cltv_delta: Number(args.cltv_expiry),
-    confirmed_at: !args.settled ? undefined : dateFrom(settleDate),
+    confirmed_at: isConfirmed ? dateFrom(settleDate) : undefined,
     confirmed_index: confirmedIndex || undefined,
     created_at: new Date(createdAtMs).toISOString(),
     description: args.memo,
@@ -205,7 +202,7 @@ module.exports = args => {
     id: args.r_hash.toString('hex'),
     index: Number(args.add_index),
     is_canceled: args.state === 'CANCELED' || undefined,
-    is_confirmed: args.settled,
+    is_confirmed: isConfirmed,
     is_held: args.state === 'ACCEPTED' || undefined,
     is_private: args.private,
     is_push: isAmpPush || args.is_keysend || undefined,

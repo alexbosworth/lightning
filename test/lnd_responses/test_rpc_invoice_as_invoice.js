@@ -49,7 +49,6 @@ const makeInput = overrides => {
     }],
     settle_date: '1',
     settle_index: '1',
-    settled: false,
     state: 'STATE',
     value: '1',
     value_msat: '1000',
@@ -180,11 +179,6 @@ const tests = [
     error: 'ExpectedPreimageInLookupInvoiceResponse',
   },
   {
-    args: makeInput({settled: undefined}),
-    description: 'Settled is expected',
-    error: 'ExpectedSettledStateInLookupInvoiceResponse',
-  },
-  {
     args: makeInput({value: undefined}),
     description: 'Value is expected',
     error: 'ExpectedTokensValueInLookupInvoiceResponse',
@@ -199,7 +193,7 @@ const tests = [
       is_amp: true,
       is_keysend: false,
       payment_request: undefined,
-      settled: true,
+      state: 'SETTLED',
     }),
     description: 'AMP invoice mapped to invoice',
     expected: makeExpected({
@@ -211,7 +205,7 @@ const tests = [
   {
     args: makeInput({
       payment_request: undefined,
-      settled: true,
+      state: 'SETTLED',
       value_msat: '0',
     }),
     description: 'Unsettled zero RPC invoice mapped to invoice',

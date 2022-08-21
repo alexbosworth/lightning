@@ -12,6 +12,8 @@ const type = 'default';
 
   Requires `onchain:read` permission
 
+  `inputs` are not supported on LND 0.15.0 and below
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -30,6 +32,11 @@ const type = 'default';
     created_at: <Created ISO 8601 Date String>
     [fee]: <Fees Paid Tokens Number>
     id: <Transaction Id String>
+    inputs: [{
+      is_local: <Spent Outpoint is Local Bool>
+      transaction_id: <Transaction Id Hex String>
+      transaction_vout: <Transaction Output Index Number>
+    }]
     is_confirmed: <Is Confirmed Bool>
     is_outgoing: <Transaction Outbound Bool>
     output_addresses: [<Address String>]
