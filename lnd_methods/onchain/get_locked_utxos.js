@@ -6,6 +6,7 @@ const {isLnd} = require('./../../lnd_requests');
 const asMs = sec => Number(sec) * 1e3;
 const bufferAsHex = buffer => buffer.toString('hex');
 const {isArray} = Array;
+const {isBuffer} = Buffer;
 const method = 'listLeases';
 const type = 'wallet';
 const unsuppportedErr = /unknown/;
@@ -18,6 +19,8 @@ const unsuppportedErr = /unknown/;
 
   This method is not supported on LND 0.12.1 and below
 
+  `output_script`, `tokens` are not supported on LND 0.15.0 and below
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -27,6 +30,8 @@ const unsuppportedErr = /unknown/;
     utxos: [{
       lock_expires_at: <Lock Expires At ISO 8601 Date String>
       lock_id: <Locking Id Hex String>
+      [output_script]: <Outpoint Output Script Hex String>
+      [tokens]: <Token Value of Outpoint Number>
       transaction_id: <Transaction Id Hex String>
       transaction_vout: <Transaction Output Index Number>
     }]
@@ -64,10 +69,16 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'ExpectedExpirationDateForLockedUtxo']);
           }
 
+          if (!!res.locked_utxos.filter(n => !isBuffer(n.pk_script)).length) {
+            return cbk([503, 'ExpectedPkScriptForLockedUtxosInResponse']);
+          }
+
           try {
             const utxos = res.locked_utxos.map(lock => ({
               lock_expires_at: new Date(asMs(lock.expiration)).toISOString(),
               lock_id: bufferAsHex(lock.id),
+              output_script: bufferAsHex(lock.pk_script) || undefined,
+              tokens: Number(lock.value) || undefined,
               transaction_id: lock.outpoint.txid_str,
               transaction_vout: lock.outpoint.output_index,
             }));
