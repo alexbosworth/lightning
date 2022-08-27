@@ -40,6 +40,8 @@ export type GetChannelsResult = {
     is_partner_initiated: boolean;
     /** Channel Is Private */
     is_private: boolean;
+    /** Funding Output is Trusted */
+    is_trusted_funding?: boolean;
     /** Local Balance Tokens */
     local_balance: number;
     /** Local CSV Blocks Delay */
@@ -56,6 +58,8 @@ export type GetChannelsResult = {
     local_min_htlc_mtokens?: string;
     /** Local Reserved Tokens */
     local_reserve: number;
+    /** Other Channel Ids */
+    other_ids: string[];
     /** Channel Partner Public Key */
     partner_public_key: string;
     /** Past Channel States Count */
@@ -122,6 +126,8 @@ export type GetChannelsResult = {
  * 
  * `in_channel`, `in_payment`, `is_forward`, `out_channel`, `out_payment`,
 `payment` are not supported on LND 0.11.1 and below
+ * 
+ * `is_trusted_funding` is not supported on LND 0.15.0 and below
  */
 export const getChannels: AuthenticatedLightningMethod<
   GetChannelsArgs,
