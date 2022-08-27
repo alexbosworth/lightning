@@ -13,6 +13,8 @@ export type OpenChannelsArgs = AuthenticatedLightningArgs<{
     give_tokens?: number;
     /** Channel is Private */
     is_private?: boolean;
+    /** Peer Should Avoid Waiting For Confirmation */
+    is_trusted_funding?: boolean;
     /** Minimum HTLC Millitokens */
     min_htlc_mtokens?: string;
     /** Public Key Hex */
@@ -45,6 +47,13 @@ minutes to fund the channels.
  *
  * If you do not fund the channels, be sure to `cancelPendingChannel`s on each
 channel that was not funded.
+
+  Use `is_avoiding_broadcast` only when self-publishing the raw transaction
+  after the funding step.
+
+  `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
+  `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
+  as well as a channel open request listener to accept the trusted funding.
  */
 export const openChannels: AuthenticatedLightningMethod<
   OpenChannelsArgs,
