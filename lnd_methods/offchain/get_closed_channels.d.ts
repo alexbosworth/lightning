@@ -66,6 +66,8 @@ export type GetClosedChannelsResult = {
     is_partner_initiated?: boolean;
     /** Is Remote Force Close */
     is_remote_force_close: boolean;
+    /** Other Channel Ids */
+    other_ids: string[];
     /** Partner Public Key Hex */
     partner_public_key: string;
     /** Channel Funding Transaction Id Hex */
@@ -81,6 +83,8 @@ export type GetClosedChannelsResult = {
  * Multiple close type flags are supported.
  *
  * Requires `offchain:read` permission
+ *
+ * `other_ids is not supported on LND 0.15.0 and below
  */
 export const getClosedChannels: AuthenticatedLightningMethod<
   GetClosedChannelsArgs,
