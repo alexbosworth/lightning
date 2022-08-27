@@ -3,14 +3,14 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type GetChannelsArgs = AuthenticatedLightningArgs;
+export type GetEphemeralChannelIdsArgs = AuthenticatedLightningArgs;
 
 export type GetEphemeralChannelIdsResult = {
   channels: {
     /** Channel Identifiers */
     other_ids: string[];
     /** Top Level Channel Identifier */
-    reference_id;
+    reference_id: string;
   }[];
 };
 
