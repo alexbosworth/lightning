@@ -10,6 +10,8 @@ export type SignBytesArgs = AuthenticatedLightningArgs<{
   key_index: number;
   /** Bytes To Hash and Sign Hex Encoded String */
   preimage: string;
+  /** Signature Type */
+  type?: 'ecdsa' | 'schnorr';
 }>;
 
 export type SignBytesResult = {
@@ -23,6 +25,8 @@ export type SignBytesResult = {
  * Requires LND built with `signrpc` build tag
  *
  * Requires `signer:generate` permission
+ *
+ * `schnorr` signature type is not supported on LND 0.15.0 and below
  */
 export const signBytes: AuthenticatedLightningMethod<
   SignBytesArgs,
