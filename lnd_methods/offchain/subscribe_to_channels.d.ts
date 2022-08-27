@@ -58,6 +58,8 @@ export type SubscribeToChannelsChannelClosedEvent = {
   is_partner_initiated?: boolean;
   /** Is Remote Force Close */
   is_remote_force_close: boolean;
+  /** Other Channel Ids */
+  other_ids: string[];
   /** Partner Public Key Hex */
   partner_public_key: string;
   /** Channel Funding Transaction Id Hex */
@@ -89,6 +91,8 @@ export type SubscribeToChannelsChannelOpenedEvent = {
   is_partner_initiated: boolean;
   /** Channel Is Private */
   is_private: boolean;
+  /** Funding Output is Trusted */
+  is_trusted_funding: boolean;
   /** Local Balance Tokens */
   local_balance: number;
   /** Local Initially Pushed Tokens */
@@ -138,5 +142,7 @@ export type SubscribeToChannelsChannelOpeningEvent = {
  * Subscribe to channel updates
  *
  * Requires `offchain:read` permission
+ *
+ * `is_trusted_funding`, `other_ids` are not supported on LND 0.15.0 and below
  */
 export const subscribeToChannels: AuthenticatedLightningSubscription;
