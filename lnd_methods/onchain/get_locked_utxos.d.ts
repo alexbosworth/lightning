@@ -12,6 +12,10 @@ export type GetLockedUtxosResult = {
     lock_expires_at: string;
     /** Locking Id Hex String */
     lock_id: string;
+    /** Outpoint Output Script Hex */
+    output_script?: string;
+    /** Token Value of Outpoint */
+    tokens?: number;
     /** Transaction Id Hex String */
     transaction_id: string;
     /** Transaction Output Index Number */
@@ -27,6 +31,8 @@ export type GetLockedUtxosResult = {
  * Requires LND built with `walletrpc` build tag
  *
  * This method is not supported on LND 0.12.1 and below
+ *
+ * `output_script`, `tokens` are not supported on LND 0.15.0 and below
  */
 export const getLockedUtxos: AuthenticatedLightningMethod<
   GetLockedUtxosArgs,
