@@ -1,7 +1,4 @@
-import {
-  AuthenticatedLightningSubscription,
-  TransactionInput,
-} from '../../typescript';
+import {AuthenticatedLightningSubscription} from '../../typescript';
 import {ChainTransaction} from './get_chain_transactions';
 
 export type SubscribeToTransactionsChainTransactionEvent = Omit<

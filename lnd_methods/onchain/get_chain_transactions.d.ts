@@ -1,7 +1,6 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
-  TransactionInput,
 } from '../../typescript';
 
 export type GetChainTransactionsArgs = AuthenticatedLightningArgs<{
