@@ -1,5 +1,9 @@
 # Versions
 
+## 5.21.1
+
+- Update typescript definitions
+
 ## 5.20.0
 
 - `getLockedUtxos`: Add support for returning script, value of locked utxos
