@@ -49,6 +49,8 @@ export type CoopCloseChannelArgs = AuthenticatedLightningArgs<
     is_force_close?: false;
     /** Request Sending Local Channel Funds To Address String */
     address?: string;
+    /** Fail Cooperative Close Above Fee Rate */
+    max_tokens_per_vbyte?: number;
   } & ExpectedBothPublicKeyAndSocketForChannelClose &
     UnexpectedTokensPerVbyteForChannelClose
 >;
@@ -72,7 +74,11 @@ export type CloseChannelResult = {
  *
  * If cooperatively closing, pass a public key and socket to connect
  *
+ * `max_tokens_per_vbyte` will be ignored when closing a peer initiated channel
+ *
  * Requires `info:read`, `offchain:write`, `onchain:write`, `peers:write` permissions
+ *
+ * `max_tokens_per_vbyte` is not supported in LND 0.15.0 and below
  */
 export const closeChannel: AuthenticatedLightningMethod<
   CloseChannelArgs,
