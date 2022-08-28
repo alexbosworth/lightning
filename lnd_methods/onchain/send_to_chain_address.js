@@ -5,6 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const initialConfirmationCount = 0;
 const {isArray} = Array;
+const {isInteger} = Number;
 const lowBalanceErr = 'insufficient funds available to construct transaction';
 const method = 'sendCoins';
 const OPEN = 1;
@@ -51,6 +52,10 @@ module.exports = (args, cbk) => {
 
         if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndForChainSendRequest']);
+        }
+
+        if (!!args.tokens && !isInteger(args.tokens)) {
+          return cbk([400, 'ExpectedWholeNumberAmountToSendFundsOnChain']);
         }
 
         if (!args.tokens && !args.is_send_all) {

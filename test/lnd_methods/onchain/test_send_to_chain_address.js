@@ -37,6 +37,11 @@ const tests = [
     error: [400, 'MissingTokensToSendOnChain'],
   },
   {
+    args: makeArgs({tokens: 0.1}),
+    description: 'Expected non-fractional tokens to send to chain address',
+    error: [400, 'ExpectedWholeNumberAmountToSendFundsOnChain'],
+  },
+  {
     args: makeArgs({is_send_all: true, tokens: 1}),
     description: 'Expected either send all or tokens to send to chain address',
     error: [400, 'ExpectedNoTokensSpecifiedWhenSendingAllFunds'],
