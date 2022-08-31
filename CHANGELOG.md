@@ -1,6 +1,10 @@
 # Versions
 
-## 5.21.1
+## 5.20.2
+
+- `getWalletInfo`: Add support for detecting lnd versions 0.15.0 and 0.15.1
+
+## 5.20.1
 
 - Update typescript definitions
 
