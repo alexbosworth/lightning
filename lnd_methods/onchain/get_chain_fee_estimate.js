@@ -8,6 +8,7 @@ const {isArray} = Array;
 const method = 'estimateFee';
 const notFound = -1;
 const type = 'default';
+const unconfirmedConfCount = 0;
 
 /** Get a chain fee estimate for a prospective chain send
 
@@ -20,6 +21,7 @@ const type = 'default';
       tokens: <Tokens Number>
     }]
     [target_confirmations]: <Target Confirmations Number>
+    [utxo_confirmations]: <Minimum Confirmations for UTXO Selection Number>
   }
 
   @returns via cbk or Promise
@@ -65,6 +67,8 @@ module.exports = (args, cbk) => {
         return args.lnd[type][method]({
           AddrToAmount,
           target_conf: args.target_confirmations || undefined,
+          min_confs: args.utxo_confirmations || undefined,
+          spend_unconfirmed: args.utxo_confirmations === unconfirmedConfCount,
         },
         (err, res) => {
           if (!!err) {

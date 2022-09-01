@@ -12,6 +12,8 @@ export type GetChainFeeEstimateArgs = AuthenticatedLightningArgs<{
   }[];
   /** Target Confirmations */
   target_confirmations?: number;
+  /** Minimum Confirmations for UTXO Selection */
+  utxo_confirmations?: number;
 }>;
 
 export type GetChainFeeEstimateResult = {
