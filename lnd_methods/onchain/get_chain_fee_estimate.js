@@ -14,6 +14,8 @@ const unconfirmedConfCount = 0;
 
   Requires `onchain:read` permission
 
+  Specifying 0 for `min_confirmations` is not supported in LND 0.13.0 and below
+
   {
     lnd: <Authenticated LND API Object>
     send_to: [{
