@@ -1,5 +1,9 @@
 # Versions
 
+## 5.21.0
+
+- `getChainFeeEstimate`: Add support for specifying min `utxo_confirmations`
+
 ## 5.20.2
 
 - `getWalletInfo`: Add support for detecting lnd versions 0.15.0 and 0.15.1
