@@ -18,6 +18,7 @@ Methods for working with the Lightning Network
     https://github.com/ibz/lightning-shell
 - [LNMarkets](https://twitter.com/lnmarkets) -
     https://github.com/lnmarkets/umbrel
+- [LNPingBot](https://github.com/swissrouting/lnpingbot) - https://github.com/swissrouting/lnpingbot
 - [mempool.space](https://mempool.space/) - https://github.com/mempool/mempool
 - [p2plnbot](https://telegram.me/lnp2pbot) - https://github.com/grunch/p2plnbot
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
