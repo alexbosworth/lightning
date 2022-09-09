@@ -1,6 +1,6 @@
 # Versions
 
-## 5.21.0
+## 5.21.1
 
 - `getChainFeeEstimate`: Add support for specifying min `utxo_confirmations`
 
