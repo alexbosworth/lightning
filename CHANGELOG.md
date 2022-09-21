@@ -1,5 +1,11 @@
 # Versions
 
+## 6.0.0
+
+### Breaking Changes
+
+- Node.js version 14 or higher is now required
+
 ## 5.21.2
 
 - `getChainFeeEstimate`: Add support for specifying min `utxo_confirmations`
