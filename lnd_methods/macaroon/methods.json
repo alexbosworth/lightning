@@ -485,6 +485,10 @@
     "method": "SendToRouteV2",
     "type": "router"
   },
+  "subscribeToPayments": {
+    "method": "TrackPayments",
+    "type": "router"
+  },
   "subscribeToPeerMessages": {
     "method": "SubscribeCustomMessages",
     "type": "default"

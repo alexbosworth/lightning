@@ -49,7 +49,6 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
       }
       status: <HTLC Status String>
     }]
-    path: [<Hop Public Key Hex String>]
     payment_hash: <Preimage SHA256 Hash Hex String>
     payment_index: <Payment Index String>
     payment_preimage: <Payment Secret Preimage Hex String>

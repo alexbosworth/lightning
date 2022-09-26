@@ -315,6 +315,8 @@ variables set:
     Make an off-chain payment using a payment request and subscribe to the payment status.
 - [subscribeToPayViaRoutes](https://github.com/alexbosworth/ln-service#subscribetopayviaroutes):
     Start an off-chain payment using specific payment routes and subscribe to the payment result.
+- [subscribeToPayments](https://github.com/alexbosworth/ln-service#subscribetopayments):
+    Subscribe to off-chain payments going out and being resolved
 - [subscribeToPeerMessages](https://github.com/alexbosworth/ln-service#subscribetopeermessages):
     Listen for incoming peer messages.
 - [subscribeToPeers](https://github.com/alexbosworth/ln-service#subscribetopeers): Listen to peer

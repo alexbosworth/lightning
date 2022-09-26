@@ -120,6 +120,7 @@ const {subscribeToPastPayments} = require('./offchain');
 const {subscribeToPayViaDetails} = require('./offchain');
 const {subscribeToPayViaRequest} = require('./offchain');
 const {subscribeToPayViaRoutes} = require('./offchain');
+const {subscribeToPayments} = require('./offchain');
 const {subscribeToPeerMessages} = require('./offchain');
 const {subscribeToPeers} = require('./peers');
 const {subscribeToProbeForRoute} = require('./offchain');
@@ -264,6 +265,7 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPayments,
   subscribeToPeerMessages,
   subscribeToPeers,
   subscribeToProbeForRoute,

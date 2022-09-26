@@ -64,7 +64,6 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
       }
       status: <HTLC Status String>
     }]
-    path: [<Hop Public Key Hex String>]
     payment_hash: <Preimage SHA256 Hash Hex String>
     payment_index: <Payment Index String>
     payment_preimage: <Payment Secret Preimage Hex String>
@@ -171,18 +170,6 @@ module.exports = payment => {
     throw new Error('ExpectedHtlcsArrayInRpcPaymentDetails');
   }
 
-  if (!isArray(payment.path)) {
-    throw new Error('ExpectedPaymentPathInRpcPaymentDetails');
-  }
-
-  payment.path.forEach(key => {
-    if (!key) {
-      throw new Error('ExpectedPathHopKeyInRpcPaymentDetails');
-    }
-
-    return;
-  });
-
   if (!payment.payment_hash) {
     throw new Error('ExpectedPaymentHashInRpcPaymentDetails');
   }
@@ -233,13 +220,12 @@ module.exports = payment => {
     };
   }
 
-  const hasPath = !!payment.path.length;
   const hasPreimage = payment.payment_preimage !== emptyHash;
   const [attempt] = attempts;
   const successes = attempts.filter(n => n.is_confirmed);
 
-  const path = !hasPath ? routePublicKeys(attempt.route) : payment.path;
   const [confirmedAt] = successes.map(n => n.confirmed_at).sort().reverse();
+  const path = routePublicKeys(attempt.route);
 
   const [destination, ...hops] = path.reverse();
 

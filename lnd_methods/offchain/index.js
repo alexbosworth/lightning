@@ -46,6 +46,7 @@ const subscribeToPastPayments = require('./subscribe_to_past_payments');
 const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
 const subscribeToPayViaRequest = require('./subscribe_to_pay_via_request');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
+const subscribeToPayments = require('./subscribe_to_payments');
 const subscribeToPeerMessages = require('./subscribe_to_peer_messages');
 const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
 const updateConnectedWatchtower = require('./update_connected_watchtower');
@@ -103,6 +104,7 @@ module.exports = {
   subscribeToPayViaDetails,
   subscribeToPayViaRequest,
   subscribeToPayViaRoutes,
+  subscribeToPayments,
   subscribeToPeerMessages,
   subscribeToProbeForRoute,
   updateConnectedWatchtower,

@@ -1,5 +1,9 @@
 # Versions
 
+## 6.1.0
+
+- `subscribeToPayments`: Add method to listen to all outgoing payments
+
 ## 6.0.0
 
 ### Breaking Changes
