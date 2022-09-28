@@ -33,7 +33,7 @@
     "@alexbosworth/node-fetch": "2.6.2",
     "@alexbosworth/tap": "15.0.11",
     "tsd": "0.24.1",
-    "typescript": "4.8.3",
+    "typescript": "4.8.4",
     "ws": "8.9.0"
   },
   "engines": {
@@ -59,5 +59,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "6.1.1"
+  "version": "6.1.2"
 }

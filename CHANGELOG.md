@@ -1,5 +1,9 @@
 # Versions
 
+## 6.1.2
+
+- `subscribeToRpcRequests`: Fix support for LND 0.15.1
+
 ## 6.1.1
 
 - `subscribeToPayments`: Add method to listen to all outgoing payments

@@ -166,6 +166,11 @@ module.exports = (args, cbk) => {
         subscription.on('status', n => emitter.emit('status', n));
 
         subscription.on('data', update => {
+          // Exit early on notification of registration complete
+          if (update.intercept_type === 'reg_complete') {
+            return;
+          }
+
           try {
             const {accept, data, event} = handleRpcRequestUpdate({
               subscription,
