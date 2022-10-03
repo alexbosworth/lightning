@@ -20,9 +20,14 @@ const type = 'default';
 
   External funding requires LND compiled with `walletrpc` build tag
 
+  `base_fee_mtokens` is not supported on LND 0.15.2 and below
+  `fee_rate` is not supported on LND 0.15.2 and below
+
   {
+    [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
+    [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
     [is_private]: <Channel is Private Bool> // Defaults to false
     lnd: <Authenticated LND API Object>
@@ -92,6 +97,8 @@ module.exports = (args, cbk) => {
         let isAnnounced = false;
 
         const options = {
+          base_fee: args.base_fee_mtokens || undefined,
+          fee_rate: args.fee_rate,
           local_funding_amount: args.local_tokens,
           min_confs: minConfs,
           min_htlc_msat: args.min_htlc_mtokens || defaultMinHtlcMtokens,
@@ -99,7 +106,9 @@ module.exports = (args, cbk) => {
           private: !!args.is_private,
           remote_csv_delay: args.partner_csv_delay || undefined,
           spend_unconfirmed: !minConfs,
-        }
+          use_base_fee: args.base_fee_mtokens !== undefined,
+          use_fee_rate: args.fee_rate !== undefined,
+        };
 
         if (!!args.chain_fee_tokens_per_vbyte) {
           options.sat_per_byte = args.chain_fee_tokens_per_vbyte;

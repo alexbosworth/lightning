@@ -8,6 +8,7 @@ const {returnResult} = require('asyncjs-util');
 const cancelPendingChannel = require('./cancel_pending_channel');
 const {isLnd} = require('./../../lnd_requests');
 
+const anchors = 'ANCHORS';
 const bufferFromHex = hex => Buffer.from(hex, 'hex');
 const defaultMinHtlcMtokens = '1';
 const fundEvent = 'psbt_fund';
@@ -36,10 +37,15 @@ const type = 'default';
   `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
   as well as a channel open request listener to accept the trusted funding.
 
+  `base_fee_mtokens` is not supported on LND 0.15.2 and below
+  `fee_rate` is not supported on LND 0.15.2 and below
+
   {
     channels: [{
+      [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
       capacity: <Channel Capacity Tokens Number>
       [cooperative_close_address]: <Restrict Coop Close To Address String>
+      [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
       [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
       [is_private]: <Channel is Private Bool> // Defaults to false
       [is_trusted_funding]: <Peer Should Avoid Waiting For Confirmation Bool>
@@ -91,7 +97,9 @@ module.exports = (args, cbk) => {
       // Channels to open
       toOpen: ['validate', ({}, cbk) => {
         return cbk(null, args.channels.map(channel => ({
+          base_fee_mtokens: channel.base_fee_mtokens,
           capacity: channel.capacity,
+          fee_rate: channel.fee_rate,
           id: makeId(),
           cooperative_close_address: channel.cooperative_close_address,
           give_tokens: channel.give_tokens,
@@ -112,8 +120,10 @@ module.exports = (args, cbk) => {
           const isSelfPublish = !!args.is_avoiding_broadcast;
 
           const channelOpen = args.lnd[type][method]({
+            base_fee: channel.base_fee_mtokens || undefined,
             close_address: channel.cooperative_close_address || undefined,
-            commitment_type: channel.is_trusted_funding ? 'ANCHORS' : undefined,
+            commitment_type: channel.is_trusted_funding ? anchors : undefined,
+            fee_rate: channel.fee_rate,
             funding_shim: {
               psbt_shim: {
                 no_publish: !!isSelfPublish || !channel.id.equals(lastChannel),
@@ -127,6 +137,8 @@ module.exports = (args, cbk) => {
             push_sat: channel.give_tokens || undefined,
             remote_csv_delay: channel.partner_csv_delay || undefined,
             scid_alias: channel.is_trusted_funding && channel.is_private,
+            use_base_fee: channel.base_fee_mtokens !== undefined,
+            use_fee_rate: channel.fee_rate !== undefined,
             zero_conf: channel.is_trusted_funding || undefined,
           });
 
