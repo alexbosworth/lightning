@@ -1,6 +1,6 @@
 # Versions
 
-## 6.2.0
+## 6.2.1
 
 - `openChannel`, `openChannels`: Add `base_fee_mtokens`, `fee_rate` to set
     initial routing fee rate.
