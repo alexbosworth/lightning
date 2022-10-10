@@ -3,11 +3,15 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type OpenChannelArgs = AuthenticatedLightningArgs<{
+export type ChannelOpenOptions = {
+  /** Routing Base Fee Millitokens Charged String */
+  base_fee_mtokens?: string;
   /** Chain Fee Tokens Per VByte */
   chain_fee_tokens_per_vbyte?: number;
   /** Restrict Cooperative Close To Address */
   cooperative_close_address?: string;
+  /** Routing Fee Rate In Millitokens Per Million Number */
+  fee_rate?: number;
   /** Tokens to Gift To Partner */
   give_tokens?: number;
   /** Channel is Private */
@@ -24,7 +28,9 @@ export type OpenChannelArgs = AuthenticatedLightningArgs<{
   partner_csv_delay?: number;
   /** Peer Connection Host:Port */
   partner_socket?: string;
-}>;
+};
+
+export type OpenChannelArgs = AuthenticatedLightningArgs<ChannelOpenOptions>;
 
 export type OpenChannelResult = {
   /** Funding Transaction Id */
@@ -43,6 +49,9 @@ export type OpenChannelResult = {
  * Requires `offchain:write`, `onchain:write`, `peers:write` permissions
  *
  * External funding requires LND compiled with `walletrpc` build tag
+ *
+ * `base_fee_mtokens` is not supported on LND 0.15.2 and below
+ * `fee_rate` is not supported on LND 0.15.2 and below
  */
 export const openChannel: AuthenticatedLightningMethod<
   OpenChannelArgs,

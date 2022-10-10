@@ -1,7 +1,6 @@
-import {
+import type {
   AuthenticatedLightningArgs,
   AuthenticatedLightningSubscription,
-  EmptyObject,
   LightningError,
 } from '../../typescript';
 
