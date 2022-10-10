@@ -1,5 +1,9 @@
 # Versions
 
+## 6.2.2
+
+- `getWalletInfo`: Add support for LND 0.15.2
+
 ## 6.2.1
 
 - `openChannel`, `openChannels`: Add `base_fee_mtokens`, `fee_rate` to set

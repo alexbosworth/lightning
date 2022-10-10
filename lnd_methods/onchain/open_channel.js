@@ -20,8 +20,8 @@ const type = 'default';
 
   External funding requires LND compiled with `walletrpc` build tag
 
-  `base_fee_mtokens` is not supported on LND 0.15.2 and below
-  `fee_rate` is not supported on LND 0.15.2 and below
+  `base_fee_mtokens` is not supported on LND 0.15.3 and below
+  `fee_rate` is not supported on LND 0.15.3 and below
 
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
