@@ -3,7 +3,7 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type OpenChannelArgs = AuthenticatedLightningArgs<{
+export type ChannelOpenOptions = {
   /** Routing Base Fee Millitokens Charged String */
   base_fee_mtokens?: string;
   /** Chain Fee Tokens Per VByte */
@@ -28,7 +28,9 @@ export type OpenChannelArgs = AuthenticatedLightningArgs<{
   partner_csv_delay?: number;
   /** Peer Connection Host:Port */
   partner_socket?: string;
-}>;
+};
+
+export type OpenChannelArgs = AuthenticatedLightningArgs<ChannelOpenOptions>;
 
 export type OpenChannelResult = {
   /** Funding Transaction Id */

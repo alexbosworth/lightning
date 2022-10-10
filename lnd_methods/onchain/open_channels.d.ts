@@ -1,27 +1,28 @@
-import {
+import type {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
+import type {ChannelOpenOptions} from './open_channel';
+
+export type MultipleChannelOpenOptions = Pick<
+  ChannelOpenOptions,
+  | 'base_fee_mtokens'
+  | 'cooperative_close_address'
+  | 'fee_rate'
+  | 'give_tokens'
+  | 'is_private'
+  | 'min_htlc_mtokens'
+  | 'partner_public_key'
+  | 'partner_csv_delay'
+> & {
+  /** Channel Capacity Tokens */
+  capacity: number;
+  /** Peer Should Avoid Waiting For Confirmation */
+  is_trusted_funding?: boolean;
+};
 
 export type OpenChannelsArgs = AuthenticatedLightningArgs<{
-  channels: {
-    /** Channel Capacity Tokens */
-    capacity: number;
-    /** Restrict Coop Close To Address */
-    cooperative_close_address?: string;
-    /** Tokens to Gift To Partner */
-    give_tokens?: number;
-    /** Channel is Private */
-    is_private?: boolean;
-    /** Peer Should Avoid Waiting For Confirmation */
-    is_trusted_funding?: boolean;
-    /** Minimum HTLC Millitokens */
-    min_htlc_mtokens?: string;
-    /** Public Key Hex */
-    partner_public_key: string;
-    /** Peer Output CSV Delay */
-    partner_csv_delay?: number;
-  }[];
+  channels: MultipleChannelOpenOptions[];
   /** Do not broadcast any channel funding transactions */
   is_avoiding_broadcast?: boolean;
 }>;
@@ -54,6 +55,9 @@ channel that was not funded.
   `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
   `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
   as well as a channel open request listener to accept the trusted funding.
+
+ * `base_fee_mtokens` is not supported on LND 0.15.2 and below
+ * `fee_rate` is not supported on LND 0.15.2 and below
  */
 export const openChannels: AuthenticatedLightningMethod<
   OpenChannelsArgs,
