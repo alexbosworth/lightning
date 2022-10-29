@@ -81,6 +81,15 @@ module.exports = ({lnd}) => {
   const emitErr = emitSubscriptionError({emitter, subscription: sub});
 
   sub.on('data', data => {
+    // Exit early on subscribed events
+    if (!!data && !!data.subscribed_event) {
+      return;
+    }
+
+    if (!!data && !!data.final_htlc_event) {
+      return;
+    }
+
     try {
       const htlc = forwardFromHtlcEvent(data);
 

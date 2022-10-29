@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const errorMessageNotFound = 'tower not found';
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const method = 'removeTower';
 const type = 'tower_client';
@@ -45,6 +46,11 @@ module.exports = (args, cbk) => {
         err => {
           if (!!err && err.message === unimplementedError) {
             return cbk([501, 'ExpectedLndWithWtclientrpcTagToDisconnect']);
+          }
+
+          // Exit early when the tower is already not present
+          if (!!err && err.details === errorMessageNotFound) {
+            return cbk();
           }
 
           if (!!err) {

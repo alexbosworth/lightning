@@ -1,5 +1,9 @@
 # Versions
 
+## 6.2.5
+
+- Fix errors with LND API changes to HTLC events
+
 ## 6.2.4
 
 - `getWalletInfo`: Add support for LND 0.15.3
