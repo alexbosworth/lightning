@@ -50,8 +50,8 @@ export type OpenChannelResult = {
  *
  * External funding requires LND compiled with `walletrpc` build tag
  *
- * `base_fee_mtokens` is not supported on LND 0.15.3 and below
- * `fee_rate` is not supported on LND 0.15.3 and below
+ * `base_fee_mtokens` is not supported on LND 0.15.4 and below
+ * `fee_rate` is not supported on LND 0.15.4 and below
  */
 export const openChannel: AuthenticatedLightningMethod<
   OpenChannelArgs,

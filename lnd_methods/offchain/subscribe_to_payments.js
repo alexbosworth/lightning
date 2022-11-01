@@ -13,7 +13,7 @@ const type = 'router';
 
   Requires `offchain:read` permission
 
-  Note: Method not supported on LND 0.15.3 and below
+  Note: Method not supported on LND 0.15.4 and below
 
   {
     lnd: <Authenticated LND API Object>
