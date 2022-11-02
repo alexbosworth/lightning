@@ -21,7 +21,7 @@ const xOnlyPublicKey = hexKey => hexKey.slice(2);
 
   Requires `address:read`, `signer:generate` permissions
 
-  This method is not supported in LND 0.14.3 and below
+  This method is not supported in LND 0.14.5 and below
 
   {
     lnd: <Authenticated LND API Object>

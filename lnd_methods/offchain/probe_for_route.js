@@ -17,7 +17,7 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
   Requires `offchain:write` permission
 
-  Preferred `confidence` is not supported on LND 0.14.3 and below
+  Preferred `confidence` is not supported on LND 0.14.5 and below
 
   {
     [cltv_delta]: <Final CLTV Delta Number>

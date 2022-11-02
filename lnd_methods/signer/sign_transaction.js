@@ -21,8 +21,8 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
 
   Requires `signer:generate` permission
 
-  `root_hash` is not supported in LND 0.14.3 and below
-  `spending` is not supported in LND 0.14.3 and below
+  `root_hash` is not supported in LND 0.14.5 and below
+  `spending` is not supported in LND 0.14.5 and below
 
   {
     inputs: [{

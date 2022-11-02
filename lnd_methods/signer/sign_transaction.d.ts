@@ -44,7 +44,7 @@ export type SignTransactionResult = {
  *
  * Requires `signer:generate` permission
  *
- * `spending` is not supported in LND 0.14.3 and below
+ * `spending` is not supported in LND 0.14.5 and below
  */
 export const signTransaction: AuthenticatedLightningMethod<
   SignTransactionArgs,

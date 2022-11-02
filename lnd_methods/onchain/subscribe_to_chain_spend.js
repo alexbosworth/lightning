@@ -24,7 +24,7 @@ const type = 'chain';
 
   Requires `onchain:read` permission
 
-  Subscribing to P2TR outputs is not supported in LND 0.14.3 and below
+  Subscribing to P2TR outputs is not supported in LND 0.14.5 and below
 
   {
     [bech32_address]: <Bech32 P2WPKH or P2WSH Address String>

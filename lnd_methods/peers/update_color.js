@@ -9,7 +9,7 @@ const type = 'peers';
 
 /** Update the node color as advertised in the graph
 
-  Note: this method is not supported in LND versions 0.14.3 and below
+  Note: this method is not supported in LND versions 0.14.5 and below
 
   Requires LND built with `peersrpc` build tag
 

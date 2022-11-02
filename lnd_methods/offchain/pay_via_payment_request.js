@@ -14,7 +14,7 @@ const type = 'router';
 
   `max_path_mtokens` is not supported in LND 0.12.0 or below
 
-  Preferred `confidence` is not supported on LND 0.14.3 and below
+  Preferred `confidence` is not supported on LND 0.14.5 and below
 
   {
     [confidence]: <Preferred Route Confidence Number Out of One Million Number>

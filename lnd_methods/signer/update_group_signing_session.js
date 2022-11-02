@@ -19,7 +19,7 @@ const type = 'signer';
 
   Requires `signer:generate` permission
 
-  This method is not supported in LND 0.14.3 and below
+  This method is not supported in LND 0.14.5 and below
 
   {
     hash: <Hash to Sign Hex String>
