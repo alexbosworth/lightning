@@ -18,6 +18,11 @@ const makeArgs = overrides => {
 
 const tests = [
   {
+    args: makeArgs({expires_at: '1970'}),
+    description: 'Cannot give a past expiry',
+    error: [400, 'ExpectedLaterDateToSetLockExpirationDateTo'],
+  },
+  {
     args: makeArgs({lnd: undefined}),
     description: 'LND is required to lock a utxo',
     error: [400, 'ExpectedLndToLockUtxo'],

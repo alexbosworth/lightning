@@ -87,6 +87,18 @@ const tests = [
     description: 'Active wallet state emitted',
   },
   {
+    args: {lnd: makeLnd({state: 'SERVER_ACTIVE'})},
+    description: 'Active server state emitted',
+  },
+  {
+    args: {lnd: makeLnd({state: 'WAITING_TO_START'})},
+    description: 'Server waiting to start',
+  },
+  {
+    args: {lnd: makeLnd({state: 'undefined_state'})},
+    description: 'Server emitted an unknown event',
+  },
+  {
     args: {lnd: makeLnd({state: 'UNLOCKED'})},
     description: 'Starting state emitted',
   },

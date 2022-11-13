@@ -54,9 +54,51 @@ const tests = [
     args: {
       family: 1,
       index: 1,
+      lnd: {wallet: {deriveKey: ({}, cbk) => cbk(null, {
+        raw_key_bytes: Buffer.alloc(1),
+      })}},
+    },
+    description: 'Expects result key loc',
+    error: [503, 'ExpectedKeyLocatorInPublicKeyResponse'],
+  },
+  {
+    args: {
+      family: 1,
+      index: 1,
+      lnd: {wallet: {deriveKey: ({}, cbk) => cbk(null, {
+        key_loc: {},
+        raw_key_bytes: Buffer.alloc(1),
+      })}},
+    },
+    description: 'Expects result key loc index',
+    error: [503, 'ExpectedKeyIndexInPublicKeyResponse'],
+  },
+  {
+    args: {
+      family: 1,
+      index: 1,
       lnd: {
         wallet: {
           deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+        },
+      },
+    },
+    description: 'Got public key result',
+    expected: {public_key: '00'},
+  },
+  {
+    args: {
+      family: 1,
+      lnd: {
+        wallet: {
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+          deriveNextKey: ({}, cbk) => cbk(null, {
             key_loc: {key_index: 0},
             raw_key_bytes: Buffer.alloc(1),
           }),

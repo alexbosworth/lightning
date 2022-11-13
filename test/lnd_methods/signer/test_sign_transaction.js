@@ -84,6 +84,17 @@ const tests = [
     description: 'Buffers in raw sigs array are expected',
     expected: {signature: '00'},
   },
+  {
+    args: makeArgs({
+      override: {
+        inputs: [{
+          output_script: '51200000000000000000000000000000000000000000000000000000000000000000',
+        }],
+      },
+    }),
+    description: 'A taproot tx is signed',
+    expected: {signature: '00'},
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

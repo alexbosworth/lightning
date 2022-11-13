@@ -43,6 +43,10 @@ const tests = [
     error: [503, 'UnexpectedErrDisconnectingWatchtower', {err: 'err'}],
   },
   {
+    args: makeArgs({lnd: makeLnd({details: 'tower not found'})}),
+    description: 'Ignore removed already errors',
+  },
+  {
     args: makeArgs({}),
     description: 'A tower is added',
   },

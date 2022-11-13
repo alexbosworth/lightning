@@ -37,6 +37,11 @@ const tests = [
     error: [503, 'FailedToConnectToDaemon'],
   },
   {
+    args: {lnd: makeLnd({err: {details: 'No connection established'}})},
+    description: 'Connect fails returns error',
+    error: [503, 'FailedToConnectToDaemon'],
+  },
+  {
     args: {lnd: makeLnd({err: 'err'})},
     description: 'Generic failure returns back the error',
     error: [503, 'GetWalletInfoErr', {err: 'err'}],

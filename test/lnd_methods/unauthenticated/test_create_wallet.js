@@ -20,6 +20,26 @@ const tests = [
   },
   {
     args: {
+      lnd: {unlocker: {initWallet: ({}, cbk) => cbk()}},
+      passphrase: 'passphrase',
+      password: 'pass',
+      seed: 'seed',
+    },
+    description: 'A wallet creation is expected',
+    error: [503, 'ExpectedResponseForInitWallet'],
+  },
+  {
+    args: {
+      lnd: {unlocker: {initWallet: ({}, cbk) => cbk(null, {})}},
+      passphrase: 'passphrase',
+      password: 'pass',
+      seed: 'seed',
+    },
+    description: 'An admin macaroon is expected',
+    error: [503, 'ExpectedAdminMacaroonToCrateWallet'],
+  },
+  {
+    args: {
       lnd: {unlocker: {initWallet: ({}, cbk) => cbk('err')}},
       passphrase: 'passphrase',
       password: 'pass',
