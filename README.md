@@ -212,6 +212,8 @@ variables set:
     Calculate a route through specified nodes.
 - [getRouteToDestination](https://github.com/alexbosworth/ln-service#getroutetodestination):
     Calculate a route through the graph to a destination.
+- [getSettlementStatus](https://github.com/alexbosworth/ln-service#getsettlementstatus):
+    Lookup the status of a received payment output
 - [getSweepTransactions](https://github.com/alexbosworth/ln-service#getsweeptransactions): List
     transactions that are sweeping funds on-chain.
 - [getTowerServerInfo](https://github.com/alexbosworth/ln-service#gettowerserverinfo): General

@@ -67,6 +67,7 @@ const {getPublicKey} = require('./address');
 const {getRouteConfidence} = require('./generic');
 const {getRouteThroughHops} = require('./offchain');
 const {getRouteToDestination} = require('./info');
+const {getSettlementStatus} = require('./offchain');
 const {getSweepTransactions} = require('./onchain');
 const {getTowerServerInfo} = require('./info');
 const {getUtxos} = require('./onchain');
@@ -212,6 +213,7 @@ module.exports = {
   getRouteConfidence,
   getRouteThroughHops,
   getRouteToDestination,
+  getSettlementStatus,
   getSweepTransactions,
   getTowerServerInfo,
   getUtxos,

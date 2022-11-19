@@ -276,6 +276,10 @@
     "method": "QueryRoutes",
     "type": "default"
   },
+  "getSettlementStatus": {
+    "method": "LookupHtlc",
+    "type": "default"
+  },
   "getSweepTransactions": {
     "method": "ListSweeps",
     "type": "default"

@@ -1,5 +1,9 @@
 # Versions
 
+## 6.3.0
+
+- `getSettlementStatus`: Add method to lookup received htlc settlement status
+
 ## 6.2.7
 
 - `getWalletInfo`: Add support for LND 0.14.5
