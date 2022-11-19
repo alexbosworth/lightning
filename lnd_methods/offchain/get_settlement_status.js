@@ -18,6 +18,7 @@ const type = 'default';
 
   {
     channel: <Standard Format Channel Id String>
+    lnd: <Authenticated LND API Object>
     payment: <Payment Id Number>
   }
 
