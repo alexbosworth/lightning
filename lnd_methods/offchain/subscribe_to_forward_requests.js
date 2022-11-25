@@ -83,7 +83,7 @@ module.exports = ({lnd}) => {
       const request = rpcForwardAsForwardRequest(data);
 
       return emitter.emit(event, {
-        accept: () => sub.write({
+        accept: async () => await sub.write({
           action: forwardPaymentActions.accept,
           incoming_circuit_key: data.incoming_circuit_key,
         }),
@@ -97,11 +97,11 @@ module.exports = ({lnd}) => {
         mtokens: request.mtokens,
         onion: request.onion,
         out_channel: request.out_channel,
-        reject: () => sub.write({
+        reject: async () => await sub.write({
           action: forwardPaymentActions.reject,
           incoming_circuit_key: data.incoming_circuit_key,
         }),
-        settle: ({secret}) => sub.write({
+        settle: async ({secret}) => await sub.write({
           action: forwardPaymentActions.settle,
           incoming_circuit_key: data.incoming_circuit_key,
           preimage: bufferFromHex(secret),

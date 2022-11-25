@@ -1,6 +1,6 @@
 # Versions
 
-## 6.3.0
+## 6.3.1
 
 - `getSettlementStatus`: Add method to lookup received htlc settlement status
 
