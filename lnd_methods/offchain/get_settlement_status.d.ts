@@ -20,7 +20,7 @@ export type GetSettlementStatusResult = {
 /**
  * Get the settlement status of a received HTLC
  *
- * Note: this method is not supported in LND versions 0.15.4 and below
+ * Note: this method is not supported in LND versions 0.15.5 and below
  *
  * Requires `offchain:read` permissions
  */

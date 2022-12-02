@@ -37,8 +37,8 @@ const type = 'default';
   `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
   as well as a channel open request listener to accept the trusted funding.
 
-  `base_fee_mtokens` is not supported on LND 0.15.4 and below
-  `fee_rate` is not supported on LND 0.15.4 and below
+  `base_fee_mtokens` is not supported on LND 0.15.5 and below
+  `fee_rate` is not supported on LND 0.15.5 and below
 
   {
     channels: [{
