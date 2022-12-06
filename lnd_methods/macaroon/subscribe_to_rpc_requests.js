@@ -63,8 +63,10 @@ const type = 'default';
     macaroon: <Base64 Encoded Macaroon String>
     reject: ({message: <Rejection String>}, [cbk]) => {}
     request: {
+      [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
       [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
       [cooperative_close_address]: <Prefer Cooperative Close To Address String>
+      [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
       [give_tokens]: <Tokens to Gift To Partner Number>
       [is_private]: <Channel is Private Bool>
       local_tokens: <Local Tokens Number>

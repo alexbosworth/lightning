@@ -4,7 +4,9 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
 /** Derive open channel details from an open channel request gRPC message
 
   {
+    base_fee: <Set Channel Base Fee Millitokens String>
     close_address: <Cooperative Close Address String>
+    fee_rate: <Set Channel Routing Fee Rate Millitoken Per Millitokens String>
     local_funding_amount: <Channel Capacity Tokens String>
     min_htlc_msat: <Minimum HTLC Millitokens String>
     node_pubkey: <Node Public Key Buffer Object>
@@ -16,12 +18,16 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
     sat_per_vbyte: <Tokens Per Virtual Byte String>
     spend_unconfirmed: <Spend Unconfirmed UTXOs Bool>
     target_conf: <Funding Transaction Confirmation Target Number>
+    use_base_fee: <Set Base Fee Bool>
+    use_fee_rate: <Set Fee Rate Bool>
   }
 
   @returns
   {
+    [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
+    [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number>
     [is_private]: <Channel is Private Bool>
     local_tokens: <Local Tokens Number>
@@ -32,14 +38,16 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
   }
 */
 module.exports = args => {
-  const feeRate = Number(args.sat_per_vbyte) || Number(args.sat_per_byte);
+  const chainFeeRate = Number(args.sat_per_vbyte) || Number(args.sat_per_byte);
   const hasMinHtlc = args.min_htlc_msat !== Number().toString();
   const publicKey = bufferAsHex(args.node_pubkey) || args.node_pubkey_string;
   const utxoConfs = minConfs(args.spend_unconfirmed, args.min_confirmations);
 
   return {
-    chain_fee_tokens_per_vbyte: feeRate || undefined,
+    base_fee_mtokens: !!args.use_fee_rate ? args.base_fee : undefined,
+    chain_fee_tokens_per_vbyte: chainFeeRate || undefined,
     cooperative_close_address: args.close_address || undefined,
+    fee_rate: !!args.use_fee_rate ? Number(args.fee_rate) : undefined,
     give_tokens: Number(args.push_sat) || undefined,
     is_private: args.private || undefined,
     local_tokens: Number(args.local_funding_amount),

@@ -191,8 +191,10 @@ const tests = [
         macaroon: undefined,
         reject: true,
         request: {
+          base_fee_mtokens: undefined,
           chain_fee_tokens_per_vbyte: 1,
           cooperative_close_address: 'close_address',
+          fee_rate: undefined,
           give_tokens: 1,
           is_private: undefined,
           local_tokens: 1,
