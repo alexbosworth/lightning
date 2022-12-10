@@ -1,5 +1,11 @@
 # Versions
 
+## 6.5.0
+
+- `getFailedPayments`, `getInvoices`, `getPayments`, `getPendingPayments`: add
+    support for date based filtering with `created_after` and `created_before`
+    arguments
+
 ## 6.4.1
 
 - `subscribeToRpcRequests`: `open_channel_request` add support for

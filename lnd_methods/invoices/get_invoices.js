@@ -1,5 +1,3 @@
-const {createHash} = require('crypto');
-
 const asyncAuto = require('async/auto');
 const asyncRetry = require('async/retry');
 const {returnResult} = require('asyncjs-util');
@@ -9,6 +7,8 @@ const {isLnd} = require('./../../lnd_requests');
 const {rpcInvoiceAsInvoice} = require('./../../lnd_responses');
 const {sortBy} = require('./../../arrays');
 
+const asStart = n => !!n ? Math.floor(new Date(n).getTime() / 1e3) : undefined;
+const asEnd = n => !!n ? Math.ceil(new Date(n).getTime() / 1e3) : undefined;
 const createdAtSort = array => sortBy({array, attribute: 'created_at'});
 const defaultLimit = 100;
 const {isArray} = Array;
@@ -27,7 +27,12 @@ const type = 'default';
 
   Invoice `payment` is not supported on LND 0.11.1 and below
 
+  `created_after` is not supported on LND 0.15.5 and below
+  `created_before` is not supported on LND 0.15.5 and below
+
   {
+    [created_after]: <Creation Date After or Equal to ISO 8601 Date String>
+    [created_before]: <Creation Date Before or Equal to ISO 8601 Date String>
     [is_unconfirmed]: <Omit Canceled and Settled Invoices Bool>
     [limit]: <Page Result Limit Number>
     lnd: <Authenticated LND API Object>
@@ -106,16 +111,20 @@ module.exports = (args, cbk) => {
 
       // Get the list of invoices
       listInvoices: ['validate', ({}, cbk) => {
+        let after = asStart(args.created_after);
+        let before = asEnd(args.created_before);
+        let limit = args.limit || defaultLimit;
         let offset;
-        let resultsLimit = args.limit || defaultLimit;
 
         // When there is a token, parse it out into an offset and a limit
         if (!!args.token) {
           try {
             const pagingToken = parse(args.token);
 
+            after = pagingToken.after;
+            before = pagingToken.before;
             offset = pagingToken.offset;
-            resultsLimit = pagingToken.limit;
+            limit = pagingToken.limit;
           } catch (err) {
             return cbk([400, 'ExpectedValidPagingTokenForInvoicesReq', {err}]);
           }
@@ -123,8 +132,10 @@ module.exports = (args, cbk) => {
 
         return asyncRetry({}, cbk => {
           return args.lnd[type][method]({
+            creation_date_start: after,
+            creation_date_end: before,
             index_offset: offset || Number(),
-            num_max_invoices: resultsLimit,
+            num_max_invoices: limit,
             pending_only: args.is_unconfirmed === true || undefined,
             reversed: true,
           },
@@ -151,7 +162,7 @@ module.exports = (args, cbk) => {
 
             const offset = Number(res.first_index_offset);
 
-            const token = stringify({offset, limit: resultsLimit});
+            const token = stringify({after, before, limit, offset});
 
             return cbk(null, {
               invoices: res.invoices,

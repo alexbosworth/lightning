@@ -2,23 +2,21 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
-const {rpcPaymentAsPayment} = require('./../../lnd_responses');
-const {sortBy} = require('./../../arrays');
+const listPayments = require('./list_payments');
 
-const defaultLimit = 250;
-const {isArray} = Array;
-const isFailed = payment => !!payment && payment.status === 'FAILED';
-const lastPageFirstIndexOffset = 1;
 const method = 'listPayments';
-const {parse} = JSON;
-const {stringify} = JSON;
 const type = 'default';
 
 /** Get failed payments made through channels.
 
   Requires `offchain:read` permission
 
+  `created_after` is not supported on LND 0.15.5 and below
+  `created_before` is not supported on LND 0.15.5 and below
+
   {
+    [created_after]: <Creation Date After or Equal to ISO 8601 Date String>
+    [created_before]: <Creation Date Before or Equal to ISO 8601 Date String>
     [limit]: <Page Result Limit Number>
     lnd: <Authenticated LND API Object>
     [token]: <Opaque Paging Token String>
@@ -96,16 +94,16 @@ const type = 'default';
     [next]: <Next Opaque Paging Token String>
   }
 */
-module.exports = ({limit, lnd, token}, cbk) => {
+module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!!limit && !!token) {
+        if (!!args.limit && !!args.token) {
           return cbk([400, 'ExpectedNoLimitWhenPagingPayFailuresWithToken']);
         }
 
-        if (!isLnd({lnd, method, type})) {
+        if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedLndForGetFailedPaymentsRequest']);
         }
 
@@ -114,79 +112,17 @@ module.exports = ({limit, lnd, token}, cbk) => {
 
       // Get all payments
       listPayments: ['validate', ({}, cbk) => {
-        let offset;
-        let resultsLimit = limit || defaultLimit;
-
-        if (!!token) {
-          try {
-            const pagingToken = parse(token);
-
-            offset = pagingToken.offset;
-            resultsLimit = pagingToken.limit;
-          } catch (err) {
-            return cbk([400, 'ExpectedValidPagingTokenForGetFailed', {err}]);
-          }
-        }
-
-        return lnd[type][method]({
-          include_incomplete: true,
-          index_offset: offset || Number(),
-          max_payments: resultsLimit,
-          reversed: true,
+        return listPayments({
+          created_after: args.created_after,
+          created_before: args.created_before,
+          is_failed: true,
+          limit: args.limit,
+          lnd: args.lnd,
+          token: args.token,
         },
-        (err, res) => {
-          if (!!err) {
-            return cbk([503, 'UnexpectedGetFailedPaymentsError', {err}]);
-          }
-
-          if (!res || !isArray(res.payments)) {
-            return cbk([503, 'ExpectedFailedPaymentsInListPaymentsResponse']);
-          }
-
-          if (typeof res.last_index_offset !== 'string') {
-            return cbk([503, 'ExpectedLastIndexOffsetWhenRequestingFailed']);
-          }
-
-          const lastOffset = Number(res.last_index_offset);
-          const offset = Number(res.first_index_offset);
-
-          const token = stringify({offset, limit: resultsLimit});
-
-          return cbk(null, {
-            payments: res.payments.filter(isFailed),
-            token: offset <= lastPageFirstIndexOffset ? undefined : token,
-          });
-        });
-      }],
-
-      // Check and map payments
-      foundPayments: ['listPayments', ({listPayments}, cbk) => {
-        try {
-          const payments = listPayments.payments.map(rpcPaymentAsPayment);
-
-          return cbk(null, payments);
-        } catch (err) {
-          return cbk([503, err.message]);
-        }
-      }],
-
-      // Final found failed payments
-      payments: [
-        'foundPayments',
-        'listPayments',
-        ({foundPayments, listPayments}, cbk) =>
-      {
-        const payments = sortBy({
-          array: foundPayments,
-          attribute: 'created_at',
-        });
-
-        return cbk(null, {
-          next: listPayments.token || undefined,
-          payments: payments.sorted.reverse(),
-        });
+        cbk);
       }],
     },
-    returnResult({reject, resolve, of: 'payments'}, cbk));
+    returnResult({reject, resolve, of: 'listPayments'}, cbk));
   });
 };

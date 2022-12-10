@@ -2,21 +2,28 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
-const listPayments = require('./list_payments');
+const {rpcPaymentAsPayment} = require('./../../lnd_responses');
+const {sortBy} = require('./../../arrays');
 
+const asStart = n => !!n ? Math.floor(new Date(n).getTime() / 1e3) : undefined;
+const asEnd = n => !!n ? Math.ceil(new Date(n).getTime() / 1e3) : undefined;
+const defaultLimit = 250;
+const {isArray} = Array;
+const isFailed = payment => !!payment && payment.status === 'FAILED';
+const isPending = payment => !!payment && payment.status === 'IN_FLIGHT';
+const lastPageFirstIndexOffset = 1;
 const method = 'listPayments';
+const {parse} = JSON;
+const {stringify} = JSON;
 const type = 'default';
 
-/** Get payments made through channels.
-
-  Requires `offchain:read` permission
-
-  `created_after` is not supported on LND 0.15.5 and below
-  `created_before` is not supported on LND 0.15.5 and below
+/** Fetch payments
 
   {
     [created_after]: <Creation Date After or Equal to ISO 8601 Date String>
     [created_before]: <Creation Date Before or Equal to ISO 8601 Date String>
+    [is_failed]: <Fetch Failed Payments Bool>
+    [is_pending]: <Fetch Pending Payments Bool>
     [limit]: <Page Result Limit Number>
     lnd: <Authenticated LND API Object>
     [token]: <Opaque Paging Token String>
@@ -105,12 +112,8 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!!args.limit && !!args.token) {
-          return cbk([400, 'UnexpectedLimitWhenPagingPaymentsWithToken']);
-        }
-
-        if (!isLnd({method, type, lnd: args.lnd})) {
-          return cbk([400, 'ExpectedLndForGetPaymentsRequest']);
+        if (!!args.is_failed && !!args.is_pending) {
+          return cbk([400, 'EitherFailedOrPendingPaymentsIsSupportedNotBoth']);
         }
 
         return cbk();
@@ -118,16 +121,98 @@ module.exports = (args, cbk) => {
 
       // Get all payments
       listPayments: ['validate', ({}, cbk) => {
-        return listPayments({
-          created_after: args.created_after,
-          created_before: args.created_before,
-          limit: args.limit,
-          lnd: args.lnd,
-          token: args.token,
+        let after = asStart(args.created_after);
+        let before = asEnd(args.created_before);
+        let limit = args.limit || defaultLimit;
+        let offset;
+
+        if (!!args.token) {
+          try {
+            const pagingToken = parse(args.token);
+
+            after = pagingToken.after;
+            before = pagingToken.before;
+            limit = pagingToken.limit;
+            offset = pagingToken.offset;
+          } catch (err) {
+            return cbk([400, 'ExpectedValidPagingTokenForPaymentReq', {err}]);
+          }
+        }
+
+        return args.lnd[type][method]({
+          creation_date_start: after,
+          creation_date_end: before,
+          include_incomplete: !!args.is_failed || !!args.is_pending,
+          index_offset: offset || Number(),
+          max_payments: limit,
+          reversed: true,
         },
-        cbk);
+        (err, res) => {
+          if (!!err) {
+            return cbk([503, 'UnexpectedGetPaymentsError', {err}]);
+          }
+
+          if (!res || !isArray(res.payments)) {
+            return cbk([503, 'ExpectedPaymentsInListPaymentsResponse']);
+          }
+
+          if (typeof res.last_index_offset !== 'string') {
+            return cbk([503, 'ExpectedLastIndexOffsetWhenRequestingPayments']);
+          }
+
+          const offset = Number(res.first_index_offset);
+
+          const token = stringify({before, after, limit, offset});
+
+          return cbk(null, {
+            payments: res.payments,
+            token: offset <= lastPageFirstIndexOffset ? undefined : token,
+          });
+        });
+      }],
+
+      // Check and map payments
+      foundPayments: ['listPayments', ({listPayments}, cbk) => {
+        try {
+          const payments = listPayments.payments
+            .filter(payment => {
+              // Exit early when looking for failed payments only
+              if (!!args.is_failed) {
+                return isFailed(payment);
+              }
+
+              // Exit early when looking for pending payments only
+              if (!!args.is_pending) {
+                return isPending(payment);
+              }
+
+              return true;
+            })
+            .map(rpcPaymentAsPayment);
+
+          return cbk(null, payments);
+        } catch (err) {
+          return cbk([503, err.message]);
+        }
+      }],
+
+      // Final found payments
+      payments: [
+        'foundPayments',
+        'listPayments',
+        ({foundPayments, listPayments}, cbk) =>
+      {
+        const payments = sortBy({
+          array: foundPayments,
+          attribute: 'created_at',
+        });
+
+        return cbk(null, {
+          next: listPayments.token || undefined,
+          payments: payments.sorted.reverse(),
+        });
       }],
     },
-    returnResult({reject, resolve, of: 'listPayments'}, cbk));
+    returnResult({reject, resolve, of: 'payments'}, cbk));
   });
 };

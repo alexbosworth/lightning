@@ -189,6 +189,15 @@ const tests = [
     description: 'A payment is returned when a token is specified',
     expected: {payment: makeExpectedPayment({})},
   },
+  {
+    args: makeArgs({
+      created_after: new Date().toISOString(),
+      created_before: new Date().toISOString(),
+      lnd: makeLnd({first_index_offset: '2'}),
+    }),
+    description: 'Date range can be passed',
+    expected: {payment: makeExpectedPayment({})},
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

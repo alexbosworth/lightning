@@ -74,31 +74,31 @@ const tests = [
   {
     args: makeArgs({token: 'token'}),
     description: 'A valid token is required',
-    error: [400, 'ExpectedValidPagingTokenForGetPending'],
+    error: [400, 'ExpectedValidPagingTokenForPaymentReq'],
   },
   {
     args: makeArgs({lnd: {default: {listPayments: ({}, cbk) => cbk('err')}}}),
     description: 'Errors from LND are passed back',
-    error: [503, 'UnexpectedGetPendingPaymentsError', {err: 'err'}],
+    error: [503, 'UnexpectedGetPaymentsError', {err: 'err'}],
   },
   {
     args: makeArgs({lnd: {default: {listPayments: ({}, cbk) => cbk()}}}),
     description: 'A response is expected from LND',
-    error: [503, 'ExpectedPendingPaymentsInListPaymentsResponse'],
+    error: [503, 'ExpectedPaymentsInListPaymentsResponse'],
   },
   {
     args: makeArgs({
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {})}},
     }),
     description: 'A response with payments is expected from LND',
-    error: [503, 'ExpectedPendingPaymentsInListPaymentsResponse'],
+    error: [503, 'ExpectedPaymentsInListPaymentsResponse'],
   },
   {
     args: makeArgs({
       lnd: {default: {listPayments: ({}, cbk) => cbk(null, {payments: []})}},
     }),
     description: 'A response with payments and last index is expected',
-    error: [503, 'ExpectedLastIndexOffsetWhenRequestingPending'],
+    error: [503, 'ExpectedLastIndexOffsetWhenRequestingPayments'],
   },
   {
     args: makeArgs({

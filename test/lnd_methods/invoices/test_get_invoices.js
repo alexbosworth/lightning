@@ -114,7 +114,7 @@ const tests = [
         secret: '0000000000000000000000000000000000000000000000000000000000000000',
         tokens: 1,
       }],
-      next: '{"offset":2,"limit":100}',
+      next: '{"limit":100,"offset":2}',
     },
   },
   {
@@ -130,6 +130,23 @@ const tests = [
       },
     },
     description: 'Empty invoices are returned',
+    expected: {invoices: [], next: undefined},
+  },
+  {
+    args: {
+      created_after: new Date().toISOString(),
+      created_before: new Date().toISOString(),
+      lnd: {
+        default: {
+          listInvoices: ({}, cbk) => cbk(null, {
+            first_index_offset: '2',
+            invoices: [],
+            last_index_offset: '2',
+          }),
+        },
+      },
+    },
+    description: 'A date range is supported',
     expected: {invoices: [], next: undefined},
   },
 ];
