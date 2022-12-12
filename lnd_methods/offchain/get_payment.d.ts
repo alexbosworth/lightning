@@ -1,12 +1,15 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  DateRangeFilterArgs,
 } from '../../typescript';
 
-export type GetPaymentArgs = AuthenticatedLightningArgs<{
-  /** Payment Preimage Hash Hex */
-  id: string;
-}>;
+export type GetPaymentArgs = AuthenticatedLightningArgs<
+  {
+    /** Payment Preimage Hash Hex */
+    id: string;
+  } & DateRangeFilterArgs
+>;
 
 export type GetPaymentResult = {
   failed?: {
@@ -91,7 +94,7 @@ export type GetPaymentResult = {
       tokens: number;
       /** Total Millitokens Paid On All Paths */
       total_mtokens: string;
-    }[]
+    }[];
     /** BOLT 11 Payment Request */
     request?: string;
     /** Payment Forwarding Fee Rounded Up Tokens */
@@ -147,7 +150,7 @@ export type GetPaymentResult = {
       tokens: number;
       /** Total Millitokens Pending */
       total_mtokens: string;
-    }[]
+    }[];
     /** BOLT 11 Payment Request */
     request?: string;
     /** Payment Tokens Rounded Up */

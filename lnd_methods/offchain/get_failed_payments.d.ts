@@ -1,10 +1,13 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  DateRangeFilterArgs,
   PaginationArgs,
 } from '../../typescript';
 
-export type GetFailedPaymentsArgs = AuthenticatedLightningArgs<PaginationArgs>;
+export type GetFailedPaymentsArgs = AuthenticatedLightningArgs<
+  PaginationArgs & DateRangeFilterArgs
+>;
 
 export type GetFailedPaymentsResult = {
   payments: {
