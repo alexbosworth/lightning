@@ -77,6 +77,10 @@ export type SubscribeToRpcRequestsOpenChannelRequestEvent =
     partner_public_key: string;
     /** Peer Output CSV Delay Number */
     partner_csv_delay?: number;
+    /** Routing Base Fee Millitokens Charged String */
+    base_fee_mtokens?: string;
+    /** Routing Fee Rate In Millitokens Per Million Number */
+    fee_rate?: number;
   }>;
 
 /** A pay to route request was intercepted: by default it will be rejected */
