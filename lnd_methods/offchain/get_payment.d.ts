@@ -1,15 +1,12 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
-  DateRangeFilterArgs,
 } from '../../typescript';
 
-export type GetPaymentArgs = AuthenticatedLightningArgs<
-  {
-    /** Payment Preimage Hash Hex */
-    id: string;
-  } & DateRangeFilterArgs
->;
+export type GetPaymentArgs = AuthenticatedLightningArgs<{
+  /** Payment Preimage Hash Hex */
+  id: string;
+}>;
 
 export type GetPaymentResult = {
   failed?: {
