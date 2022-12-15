@@ -94,3 +94,10 @@ export type PaginationArgs = MergeExclusive<
     token?: string;
   }
 >;
+
+export type DateRangeFilterArgs = {
+  /** Creation Date After or Equal to ISO 8601 Date String */
+  created_after?: string;
+  /** Creation Date Before or Equal to ISO 8601 Date String */
+  created_before?: string;
+};

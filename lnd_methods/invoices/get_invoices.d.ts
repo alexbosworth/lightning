@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  DateRangeFilterArgs,
   PaginationArgs,
 } from '../../typescript';
 
@@ -8,7 +9,7 @@ export type GetInvoicesArgs = AuthenticatedLightningArgs<
   PaginationArgs & {
     /** Omit Canceled and Settled Invoices Bool */
     is_unconfirmed?: boolean;
-  }
+  } & DateRangeFilterArgs
 >;
 
 export type GetInvoicesResult = {

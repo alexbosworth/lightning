@@ -91,7 +91,7 @@ export type GetPaymentResult = {
       tokens: number;
       /** Total Millitokens Paid On All Paths */
       total_mtokens: string;
-    }[]
+    }[];
     /** BOLT 11 Payment Request */
     request?: string;
     /** Payment Forwarding Fee Rounded Up Tokens */
@@ -147,7 +147,7 @@ export type GetPaymentResult = {
       tokens: number;
       /** Total Millitokens Pending */
       total_mtokens: string;
-    }[]
+    }[];
     /** BOLT 11 Payment Request */
     request?: string;
     /** Payment Tokens Rounded Up */
