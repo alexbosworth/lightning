@@ -4,6 +4,7 @@
   "maxReceiveMessageLength": 924288000,
   "packageTypes": {
     "Autopilot": "autopilotrpc",
+    "ChainKit": "chainrpc",
     "ChainNotifier": "chainrpc",
     "Invoices": "invoicesrpc",
     "Lightning": "lnrpc",
@@ -19,6 +20,7 @@
   },
   "protoFiles": {
     "Autopilot": "autopilot.proto",
+    "ChainKit": "chainkit.proto",
     "ChainNotifier": "chainnotifier.proto",
     "Invoices": "invoices.proto",
     "Lightning": "lightning.proto",
@@ -35,6 +37,7 @@
   "protosDir": "../grpc/protos",
   "serviceTypes": {
     "autopilot": "Autopilot",
+    "blocks": "ChainKit",
     "chain": "ChainNotifier",
     "default": "Lightning",
     "invoices": "Invoices",

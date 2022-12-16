@@ -32,6 +32,7 @@ const {getAccessIds} = require('./lnd_methods');
 const {getAutopilot} = require('./lnd_methods');
 const {getBackup} = require('./lnd_methods');
 const {getBackups} = require('./lnd_methods');
+const {getBlock} = require('./lnd_methods');
 const {getChainBalance} = require('./lnd_methods');
 const {getChainFeeEstimate} = require('./lnd_methods');
 const {getChainFeeRate} = require('./lnd_methods');
@@ -182,6 +183,7 @@ module.exports = {
   getAutopilot,
   getBackup,
   getBackups,
+  getBlock,
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,

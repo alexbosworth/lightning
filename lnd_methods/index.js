@@ -30,6 +30,7 @@ const {getAccessIds} = require('./macaroon');
 const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
 const {getBackups} = require('./offchain');
+const {getBlock} = require('./onchain');
 const {getChainBalance} = require('./onchain');
 const {getChainFeeEstimate} = require('./onchain');
 const {getChainFeeRate} = require('./onchain');
@@ -176,6 +177,7 @@ module.exports = {
   getAutopilot,
   getBackup,
   getBackups,
+  getBlock,
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,

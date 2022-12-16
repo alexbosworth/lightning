@@ -121,6 +121,10 @@
     "method": "ExportAllChannelBackups",
     "type": "default"
   },
+  "getBlock": {
+    "method": "GetBlock",
+    "type": "blocks"
+  },
   "getChainBalance": {
     "method": "WalletBalance",
     "type": "default"

@@ -4,6 +4,7 @@ const {authenticatedLndGrpc} = require('./../../');
 
 const expectedServices = [
   'autopilot',
+  'blocks',
   'chain',
   'default',
   'invoices',

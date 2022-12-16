@@ -1,5 +1,9 @@
 # Versions
 
+## 6.6.0
+
+- `getBlock`: Add method to get a raw block from the chain
+
 ## 6.5.0
 
 - `getFailedPayments`, `getInvoices`, `getPayments`, `getPendingPayments`: add
