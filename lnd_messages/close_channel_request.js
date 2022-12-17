@@ -9,6 +9,7 @@ const hashAsTxId = hash => hash.slice().reverse().toString('hex');
     }
     delivery_address: <Request Cooperative Close Address String>
     force: <Force Close Channel Bool>
+    max_fee_per_vbyte: <Max Fee Tokens Per VByte String>
     sat_per_byte: <Chain Fee Tokens Per Virtual Byte String>
     target_conf: <Target Confirm Within N Blocks Number>
   }
@@ -17,6 +18,7 @@ const hashAsTxId = hash => hash.slice().reverse().toString('hex');
   {
     [address]: <Request Sending Local Channel Funds To Address String>
     [is_force_close]: <Is Force Close Bool>
+    [max_tokens_per_vbyte]: <Max Tokens Per VByte Number>
     [target_confirmations]: <Confirmation Target Number>
     [tokens_per_vbyte]: <Tokens Per Virtual Byte Number>
     transaction_id: <Transaction Id Hex String>
@@ -27,6 +29,7 @@ module.exports = args => {
   return {
     address: args.delivery_address || undefined,
     is_force_close: args.force || undefined,
+    max_tokens_per_vbyte: Number(args.max_fee_per_vbyte) || undefined,
     target_confirmations: args.target_conf || undefined,
     tokens_per_vbyte: Number(args.sat_per_byte) || undefined,
     transaction_id: hashAsTxId(args.channel_point.funding_txid_bytes),

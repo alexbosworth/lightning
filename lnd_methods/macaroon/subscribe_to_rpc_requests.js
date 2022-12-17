@@ -47,6 +47,7 @@ const type = 'default';
     request: {
       [address]: <Request Sending Local Channel Funds To Address String>
       [is_force_close]: <Is Force Close Bool>
+      [max_tokens_per_vbyte]: <Max Tokens Per VByte Number>
       [target_confirmations]: <Confirmation Target Number>
       [tokens_per_vbyte]: <Tokens Per Virtual Byte Number>
       transaction_id: <Transaction Id Hex String>

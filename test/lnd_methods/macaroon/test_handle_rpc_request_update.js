@@ -45,6 +45,7 @@ const tests = [
         request: {
           address: 'delivery_address',
           is_force_close: true,
+          max_tokens_per_vbyte: undefined,
           target_confirmations: 1,
           tokens_per_vbyte: 1,
           transaction_id: '030201',
