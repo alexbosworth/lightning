@@ -122,7 +122,7 @@
     "type": "default"
   },
   "getBlock": {
-    "method": "GetBlock",
+    "methods": ["GetBestBlock", "GetBlock", "GetBlockHash"],
     "type": "blocks"
   },
   "getChainBalance": {

@@ -1,6 +1,6 @@
 # Versions
 
-## 6.7.0
+## 6.7.1
 
 - `getBlock`: add `height` to allow fetching a raw block at a specified height
 
