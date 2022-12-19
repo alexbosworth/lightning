@@ -106,7 +106,6 @@ variables set:
 - [createWallet](https://github.com/alexbosworth/ln-service#createwallet): Make a new wallet.
 - [decodePaymentRequest](https://github.com/alexbosworth/ln-service#decodepaymentrequest):
     Get parsed details for a payment request.
-- [createWallet](https://github.com/alexbosworth/ln-service#createwallet): Make a new wallet.
 - [deleteFailedPayAttempts](https://github.com/alexbosworth/ln-service#deletefailedpayattempts)
     Remove failed payment paths from database.
 - [deleteFailedPayments](https://github.com/alexbosworth/ln-service#deletefailedpayments)
