@@ -1,70 +1,78 @@
+import {MergeExclusive} from 'type-fest';
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type ProbeForRouteArgs = AuthenticatedLightningArgs<{
-  /** Final CLTV Delta Number */
-  cltv_delta?: number;
-  /** Destination Public Key Hex String */
-  destination: string;
-  features?: {
-    /** Feature Bit Number */
-    bit: number;
-  }[];
-  ignore?: {
-    /** Channel Id String */
-    channel?: string;
-    /** Public Key Hex String */
-    from_public_key: string;
-    /** To Public Key Hex String */
-    to_public_key?: string;
-  }[];
-  /** Incoming Peer Public Key Hex String */
-  incoming_peer?: string;
-  /** Adjust Probe For Past Routing Failures Bool */
-  is_ignoring_past_failures?: boolean;
-  /** Maximum Fee Tokens Number */
-  max_fee?: number;
-  /** Maximum Fee Millitokens to Pay String */
-  max_fee_mtokens?: string;
-  /** Maximum Height of Payment Timeout Number */
-  max_timeout_height?: number;
-  messages?: {
-    /** Message To Final Destination Type Number String */
-    type: string;
-    /** Message To Final Destination Raw Value Hex Encoded String */
-    value: string;
-  }[];
-  /** Millitokens to Pay String */
-  mtokens?: string;
-  /** Outgoing Channel Id String */
-  outgoing_channel?: string;
-  /** Time to Spend On A Path Milliseconds Number */
-  path_timeout_ms?: number;
-  /** Payment Identifier Hex String */
-  payment?: string;
-  /** Probe Timeout Milliseconds Number */
-  probe_timeout_ms?: number;
-  routes?: {
-    /** Base Routing Fee In Millitokens Number */
-    base_fee_mtokens?: number;
-    /** Channel Capacity Tokens Number */
-    channel_capacity?: number;
-    /** Standard Format Channel Id String */
-    channel?: string;
-    /** CLTV Blocks Delta Number */
+export type ProbeForRouteArgs = AuthenticatedLightningArgs<
+  {
+    /** Final CLTV Delta Number */
     cltv_delta?: number;
-    /** Fee Rate In Millitokens Per Million Number */
-    fee_rate?: number;
-    /** Forward Edge Public Key Hex String */
-    public_key: string;
-  }[][];
-  /** Tokens Number */
-  tokens: number;
-  /** Total Millitokens Across Paths String */
-  total_mtokens?: string;
-}>;
+    /** Destination Public Key Hex String */
+    destination: string;
+    features?: {
+      /** Feature Bit Number */
+      bit: number;
+    }[];
+    ignore?: {
+      /** Channel Id String */
+      channel?: string;
+      /** Public Key Hex String */
+      from_public_key: string;
+      /** To Public Key Hex String */
+      to_public_key?: string;
+    }[];
+    /** Incoming Peer Public Key Hex String */
+    incoming_peer?: string;
+    /** Adjust Probe For Past Routing Failures Bool */
+    is_ignoring_past_failures?: boolean;
+    /** Maximum Fee Tokens Number */
+    max_fee?: number;
+    /** Maximum Fee Millitokens to Pay String */
+    max_fee_mtokens?: string;
+    /** Maximum Height of Payment Timeout Number */
+    max_timeout_height?: number;
+    messages?: {
+      /** Message To Final Destination Type Number String */
+      type: string;
+      /** Message To Final Destination Raw Value Hex Encoded String */
+      value: string;
+    }[];
+    /** Outgoing Channel Id String */
+    outgoing_channel?: string;
+    /** Time to Spend On A Path Milliseconds Number */
+    path_timeout_ms?: number;
+    /** Payment Identifier Hex String */
+    payment?: string;
+    /** Probe Timeout Milliseconds Number */
+    probe_timeout_ms?: number;
+    routes?: {
+      /** Base Routing Fee In Millitokens Number */
+      base_fee_mtokens?: number;
+      /** Channel Capacity Tokens Number */
+      channel_capacity?: number;
+      /** Standard Format Channel Id String */
+      channel?: string;
+      /** CLTV Blocks Delta Number */
+      cltv_delta?: number;
+      /** Fee Rate In Millitokens Per Million Number */
+      fee_rate?: number;
+      /** Forward Edge Public Key Hex String */
+      public_key: string;
+    }[][];
+    /** Total Millitokens Across Paths String */
+    total_mtokens?: string;
+  } & MergeExclusive<
+    {
+      /** Millitokens to Pay String */
+      mtokens: string;
+    },
+    {
+      /** Tokens Number */
+      tokens: number;
+    }
+  >
+>;
 
 export type ProbeForRouteResult = {
   route?: {
