@@ -47,7 +47,7 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
     [payment]: <Payment Identifier Hex String>
     [probe_timeout_ms]: <Probe Timeout Milliseconds Number>
     [routes]: [[{
-      [base_fee_mtokens]: <Base Routing Fee In Millitokens Number>
+      [base_fee_mtokens]: <Base Routing Fee In Millitokens Number String>
       [channel_capacity]: <Channel Capacity Tokens Number>
       [channel]: <Standard Format Channel Id String>
       [cltv_delta]: <CLTV Blocks Delta Number>
