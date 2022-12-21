@@ -1,8 +1,16 @@
-import {MergeExclusive} from 'type-fest';
-import {
+import type {MergeExclusive} from 'type-fest';
+import type {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
+import type {DecodePaymentRouteEdge} from './decode_payment_request';
+
+export type ProbeForRouteRouteEdge = DecodePaymentRouteEdge & {
+  /** Channel Capacity Tokens Number */
+  channel_capacity?: number;
+};
+
+export type ProbeForRouteRoutes = ProbeForRouteRouteEdge[][];
 
 export type ProbeForRouteArgs = AuthenticatedLightningArgs<
   {
@@ -46,20 +54,7 @@ export type ProbeForRouteArgs = AuthenticatedLightningArgs<
     payment?: string;
     /** Probe Timeout Milliseconds Number */
     probe_timeout_ms?: number;
-    routes?: {
-      /** Base Routing Fee In Millitokens Number */
-      base_fee_mtokens?: number;
-      /** Channel Capacity Tokens Number */
-      channel_capacity?: number;
-      /** Standard Format Channel Id String */
-      channel?: string;
-      /** CLTV Blocks Delta Number */
-      cltv_delta?: number;
-      /** Fee Rate In Millitokens Per Million Number */
-      fee_rate?: number;
-      /** Forward Edge Public Key Hex String */
-      public_key: string;
-    }[][];
+    routes?: ProbeForRouteRoutes;
     /** Total Millitokens Across Paths String */
     total_mtokens?: string;
   } & MergeExclusive<
