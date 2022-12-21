@@ -46,6 +46,8 @@ export type SubscribeToRpcRequestsCloseChannelRequestEvent =
     address?: string;
     /** Is Force Close Bool */
     is_force_close?: boolean;
+    /** Max Tokens Per VByte Number */
+    max_tokens_per_vbyte?: number;
     /** Confirmation Target Number */
     target_confirmations?: number;
     /** Tokens Per Virtual Byte Number */

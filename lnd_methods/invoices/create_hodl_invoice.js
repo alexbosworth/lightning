@@ -50,7 +50,7 @@ const type = 'invoices';
     created_at: <ISO 8601 Date String>
     description: <Description String>
     id: <Payment Hash Hex String>
-    mtokens: <Millitokens Number>
+    mtokens: <Millitokens Number String>
     request: <BOLT 11 Encoded Payment Request String>
     [secret]: <Hex Encoded Payment Secret String>
     tokens: <Tokens Number>
