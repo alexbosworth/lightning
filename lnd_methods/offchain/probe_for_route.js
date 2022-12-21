@@ -6,7 +6,7 @@ const subscribeToProbeForRoute = require('./subscribe_to_probe_for_route');
 
 const defaultProbeTimeoutMs = 1000 * 60;
 const {isArray} = Array;
-const isHex = (n) => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
+const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
 /** Probe to find a successful route
 
@@ -90,81 +90,76 @@ const isHex = (n) => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 */
 module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
-    return asyncAuto(
-      {
-        // Check arguments
-        validate: (cbk) => {
-          if (!args.destination || !isHex(args.destination)) {
-            return cbk([400, 'ExpectedDestinationKeyHexStringForRouteProbe']);
-          }
+    return asyncAuto({
+      // Check arguments
+      validate: cbk => {
+        if (!args.destination || !isHex(args.destination)) {
+          return cbk([400, 'ExpectedDestinationKeyHexStringForRouteProbe']);
+        }
 
-          if (!!args.ignore && !isArray(args.ignore)) {
-            return cbk([400, 'ExpectedIgnoreAsArrayWhenProbingForRoute']);
-          }
+        if (!!args.ignore && !isArray(args.ignore)) {
+          return cbk([400, 'ExpectedIgnoreAsArrayWhenProbingForRoute'])
+        }
 
-          if (!args.lnd || !args.lnd.router) {
-            return cbk([400, 'ExpectedAuthenticatedLndToProbeForRoute']);
-          }
+        if (!args.lnd || !args.lnd.router) {
+          return cbk([400, 'ExpectedAuthenticatedLndToProbeForRoute']);
+        }
 
-          if (!args.mtokens && !args.tokens) {
-            return cbk([400, 'ExpectedTokensValueToProbeForRoute']);
-          }
+        if (!args.mtokens && !args.tokens) {
+          return cbk([400, 'ExpectedTokensValueToProbeForRoute']);
+        }
 
-          return cbk();
-        },
-
-        // Start probe and return a successful route if found
-        probe: [
-          'validate',
-          ({}, cbk) => {
-            const result = {};
-            let isFinished = false;
-            let timeout;
-
-            const sub = subscribeToProbeForRoute({
-              cltv_delta: args.cltv_delta,
-              confidence: args.confidence,
-              destination: args.destination,
-              features: args.features,
-              ignore: args.ignore,
-              incoming_peer: args.incoming_peer,
-              is_ignoring_past_failures: args.is_ignoring_past_failures,
-              lnd: args.lnd,
-              max_fee: args.max_fee,
-              max_fee_mtokens: args.max_fee_mtokens,
-              max_timeout_height: args.max_timeout_height,
-              messages: args.messages,
-              mtokens: args.mtokens,
-              outgoing_channel: args.outgoing_channel,
-              path_timeout_ms: args.path_timeout_ms,
-              payment: args.payment,
-              routes: args.routes,
-              tokens: args.tokens,
-              total_mtokens: args.total_mtokens,
-            });
-
-            const finished = (err, res) => {
-              sub.removeAllListeners();
-
-              clearTimeout(timeout);
-
-              return cbk(err, res);
-            };
-
-            timeout = setTimeout(
-              () => finished([503, 'ProbeForRouteTimedOut']),
-              args.probe_timeout_ms || defaultProbeTimeoutMs
-            );
-
-            sub.once('end', () => finished(null, {}));
-            sub.once('error', (err) => finished(err));
-            sub.once('probe_success', ({route}) => finished(null, {route}));
-
-            return;
-          },
-        ],
+        return cbk();
       },
-      returnResult({reject, resolve, of: 'probe'}, cbk)
-    );
+
+      // Start probe and return a successful route if found
+      probe: ['validate', ({}, cbk) => {
+        const result = {};
+        let isFinished = false;
+        let timeout;
+
+        const sub = subscribeToProbeForRoute({
+          cltv_delta: args.cltv_delta,
+          confidence: args.confidence,
+          destination: args.destination,
+          features: args.features,
+          ignore: args.ignore,
+          incoming_peer: args.incoming_peer,
+          is_ignoring_past_failures: args.is_ignoring_past_failures,
+          lnd: args.lnd,
+          max_fee: args.max_fee,
+          max_fee_mtokens: args.max_fee_mtokens,
+          max_timeout_height: args.max_timeout_height,
+          messages: args.messages,
+          mtokens: args.mtokens,
+          outgoing_channel: args.outgoing_channel,
+          path_timeout_ms: args.path_timeout_ms,
+          payment: args.payment,
+          routes: args.routes,
+          tokens: args.tokens,
+          total_mtokens: args.total_mtokens,
+        });
+
+        const finished = (err, res) => {
+          sub.removeAllListeners();
+
+          clearTimeout(timeout);
+
+          return cbk(err, res);
+        };
+
+        timeout = setTimeout(
+          () => finished([503, 'ProbeForRouteTimedOut']),
+          args.probe_timeout_ms || defaultProbeTimeoutMs
+        );
+
+        sub.once('end', () => finished(null, {}));
+        sub.once('error', err => finished(err));
+        sub.once('probe_success', ({route}) => finished(null, {route}));
+
+        return;
+      }],
+    },
+    returnResult({reject, resolve, of: 'probe'}, cbk));
   });
 };
