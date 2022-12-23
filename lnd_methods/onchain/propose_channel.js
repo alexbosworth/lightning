@@ -129,7 +129,6 @@ module.exports = (args, cbk) => {
             channelOpen.cancel();
 
             return cbk(null, {});
-            break;
 
           case 'confirmation':
             break;
