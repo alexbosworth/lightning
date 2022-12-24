@@ -7,6 +7,8 @@ export type GetFeeRatesResult = {
     base_fee: number;
     /** Base Flat Fee Millitokens */
     base_fee_mtokens: string;
+    /** Fee Rate in Millitokens Per Million Number */
+    fee_rate: number;
     /** Standard Format Channel Id */
     id: string;
     /** Channel Funding Transaction Id Hex */
