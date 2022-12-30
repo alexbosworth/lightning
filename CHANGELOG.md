@@ -1,6 +1,6 @@
 # Versions
 
-## 6.8.0
+## 6.8.1
 
 - `subscribeToRpcRequests`: add `max_tokens_per_vbyte` to RPC close requests
 
