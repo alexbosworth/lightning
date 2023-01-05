@@ -2,7 +2,7 @@
 
 ## 7.0.2
 
-- `getAddresses`: Add method to get the list of chain addresses
+- `getChainAddresses`: Add method to get the list of chain addresses
 
 ### Breaking Changes
 
