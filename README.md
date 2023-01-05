@@ -139,6 +139,8 @@ variables set:
 - [getBackups](https://github.com/alexbosworth/ln-service#getbackups): Get recovery details for
     all channels.
 - [getBlock](https://github.com/alexbosworth/ln-service#getblock): Get a block
+- [getChainAddresses](https://github.com/alexbosworth/ln-service#getchainaddresses):
+    Get a list of created chain addresses
 - [getChainBalance](https://github.com/alexbosworth/ln-service#getchainbalance): Get the amount
     of on-chain funds.
 - [getChainFeeEstimate](https://github.com/alexbosworth/ln-service#getchainfeeestimate):
