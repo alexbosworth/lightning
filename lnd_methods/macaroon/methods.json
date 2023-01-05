@@ -125,6 +125,10 @@
     "methods": ["GetBestBlock", "GetBlock", "GetBlockHash"],
     "type": "blocks"
   },
+  "getChainAddresses": {
+    "method": "ListAddresses",
+    "type": "wallet"
+  },
   "getChainBalance": {
     "method": "WalletBalance",
     "type": "default"
