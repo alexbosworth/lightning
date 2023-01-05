@@ -15,6 +15,7 @@ const pendingFromPayment = require('./pending_from_payment');
 const policyFromChannelUpdate = require('./policy_from_channel_update');
 const routesFromQueryRoutes = require('./routes_from_query_routes');
 const routingFailureFromHtlc = require('./routing_failure_from_htlc');
+const rpcAddressesAsAddresses = require('./rpc_addresses_as_addresses');
 const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
 const rpcChannelAsChannel = require('./rpc_channel_as_channel');
 const rpcChannelAsOldRpcChannel = require('./rpc_channel_as_old_rpc_channel');
@@ -60,6 +61,7 @@ module.exports = {
   policyFromChannelUpdate,
   routesFromQueryRoutes,
   routingFailureFromHtlc,
+  rpcAddressesAsAddresses,
   rpcAttemptHtlcAsAttempt,
   rpcChannelAsChannel,
   rpcChannelAsOldRpcChannel,

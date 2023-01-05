@@ -1,5 +1,13 @@
 # Versions
 
+## 7.0.0
+
+- `getAddresses`: Add method to get the list of chain addresses
+
+### Breaking Changes
+
+- Incorrect TypeScript settings for probe and fee rates was corrected
+
 ## 6.8.1
 
 - `subscribeToRpcRequests`: add `max_tokens_per_vbyte` to RPC close requests

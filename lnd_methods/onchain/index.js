@@ -4,6 +4,7 @@ const closeChannel = require('./close_channel');
 const fundPendingChannels = require('./fund_pending_channels');
 const fundPsbt = require('./fund_psbt');
 const getBlock = require('./get_block');
+const getChainAddresses = require('./get_chain_addresses');
 const getChainBalance = require('./get_chain_balance');
 const getChainFeeEstimate = require('./get_chain_fee_estimate');
 const getChainFeeRate = require('./get_chain_fee_rate');
@@ -39,6 +40,7 @@ module.exports = {
   fundPendingChannels,
   fundPsbt,
   getBlock,
+  getChainAddresses,
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,
