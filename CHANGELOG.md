@@ -1,6 +1,6 @@
 # Versions
 
-## 7.0.3
+## 7.0.4
 
 - `getChainAddresses`: Add method to get the list of chain addresses
 
