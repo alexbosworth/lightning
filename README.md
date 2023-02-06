@@ -8,6 +8,8 @@ Methods for working with the Lightning Network
 
 - [bitpay.com crypto-rpc](https://bitpay.com/) -
     https://github.com/bitpay/crypto-rpc
+- [channel.ninja](https://channel.ninja/) -
+    https://github.com/channelninja/channel.ninja
 - [coinos.io](https://coinos.io/) - https://github.com/coinos/coinos-server
 - [Galoy](https://galoy.io/) - https://github.com/GaloyMoney/galoy
 - [Lightning Poker](https://lightning-poker.com/) -
@@ -18,8 +20,8 @@ Methods for working with the Lightning Network
     https://github.com/ibz/lightning-shell
 - [LNMarkets](https://twitter.com/lnmarkets) -
     https://github.com/lnmarkets/umbrel
-- [LNPingBot](https://github.com/swissrouting/lnpingbot) - https://github.com/swissrouting/lnpingbot
-- [mempool.space](https://mempool.space/) - https://github.com/mempool/mempool
+- [LNPingBot](https://github.com/swissrouting/lnpingbot) -
+    https://github.com/swissrouting/lnpingbot
 - [p2plnbot](https://telegram.me/lnp2pbot) - https://github.com/grunch/p2plnbot
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
 - [stackernews](https://stacker.news/) -
