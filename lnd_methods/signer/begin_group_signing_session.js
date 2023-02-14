@@ -1,17 +1,21 @@
 const asyncAuto = require('async/auto');
+const asyncReflect = require('async/reflect');
 const {returnResult} = require('asyncjs-util');
 
 const getPublicKey = require('./../address/get_public_key');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcGroupSessionAsSession} = require('./../../lnd_responses');
 
+const defaultVersion = 'MUSIG2_VERSION_V100RC2';
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
+const messageErrorLegacyVersion = 'error parsing all signer public keys: error parsing signer public key 0 for v1.0.0rc2 (compressed format): malformed public key: invalid length: 32';
 const method = 'muSig2CreateSession';
 const type = 'signer';
 const uniq = arr => Array.from(new Set(arr));
 const unsupportedMessage = 'unknown method MuSig2CreateSession for service signrpc.Signer';
+const versionLegacy = 'MUSIG2_VERSION_V040';
 const xOnlyPublicKeyHexLength = 64;
 const xOnlyPublicKey = hexKey => hexKey.slice(2);
 
@@ -97,6 +101,41 @@ module.exports = (args, cbk) => {
         return cbk();
       }],
 
+      // Create the signing session
+      create: [
+        'getKey',
+        'taprootTweak',
+        asyncReflect(({getKey, taprootTweak}, cbk) =>
+      {
+        const keys = [getKey.public_key].concat(args.public_keys);
+
+        return args.lnd[type][method]({
+          all_signer_pubkeys: keys.map(hexAsBuffer),
+          key_loc: {key_family: args.key_family, key_index: args.key_index},
+          taproot_tweak: taprootTweak,
+          version: defaultVersion,
+        },
+        (err, res) => {
+          if (!!err && err.details === messageErrorLegacyVersion) {
+            return cbk(messageErrorLegacyVersion);
+          }
+
+          if (!!err && err.details === unsupportedMessage) {
+            return cbk([501, 'MuSig2BeginSigningSessionNotSupported']);
+          }
+
+          if (!!err) {
+            return cbk([503, 'UnexpectedErrorCreatingMuSig2Session', {err}]);
+          }
+
+          try {
+            return cbk(null, rpcGroupSessionAsSession(res));
+          } catch (err) {
+            return cbk([503, err.message]);
+          }
+        });
+      })],
+
       // Collect all public keys taking part in the signing session
       publicKeys: ['getKey', ({getKey}, cbk) => {
         // Trim public keys as necessary
@@ -111,16 +150,23 @@ module.exports = (args, cbk) => {
         return cbk(null, uniq(keys));
       }],
 
-      // Create the signing session
-      create: [
+      // Create the signing session with the legacy create if necessary
+      finalCreate: [
+        'create',
         'publicKeys',
         'taprootTweak',
-        ({publicKeys, taprootTweak}, cbk) =>
+        ({create, publicKeys, taprootTweak}, cbk) =>
       {
+        // Exit early when there is no need to use the legacy API
+        if (!create.error || create.error !== messageErrorLegacyVersion) {
+          return cbk(create.error, create.value);
+        }
+
         return args.lnd[type][method]({
           all_signer_pubkeys: publicKeys.map(hexAsBuffer),
           key_loc: {key_family: args.key_family, key_index: args.key_index},
           taproot_tweak: taprootTweak,
+          version: versionLegacy,
         },
         (err, res) => {
           if (!!err && err.details === unsupportedMessage) {
@@ -139,6 +185,6 @@ module.exports = (args, cbk) => {
         });
       }],
     },
-    returnResult({reject, resolve, of: 'create'}, cbk));
+    returnResult({reject, resolve, of: 'finalCreate'}, cbk));
   });
 };

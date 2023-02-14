@@ -7,6 +7,7 @@ const {Transaction} = require('bitcoinjs-lib');
 const {isLnd} = require('./../../lnd_requests');
 
 const asOutpoint = n => `${n.transaction_id}:${n.transaction_vout}`;
+const defaultChangeType = 'CHANGE_ADDRESS_TYPE_P2TR';
 const defaultConfirmationTarget = 6;
 const expirationAsDate = epoch => new Date(Number(epoch) * 1e3).toISOString();
 const {fromHex} = Transaction;
@@ -156,6 +157,7 @@ module.exports = (args, cbk) => {
       // Fund the PSBT
       fund: ['fee', 'funding', 'minConfs', ({fee, funding, minConfs}, cbk) => {
         return args.lnd[type][method]({
+          change_type: defaultChangeType,
           min_confs: minConfs !== undefined ? minConfs : undefined,
           psbt: !!args.psbt ? Buffer.from(args.psbt, 'hex') : undefined,
           raw: funding || undefined,
