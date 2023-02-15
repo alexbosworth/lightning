@@ -11,6 +11,7 @@ const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 const messageErrorLegacyVersion = 'error parsing all signer public keys: error parsing signer public key 0 for v1.0.0rc2 (compressed format): malformed public key: invalid length: 32';
+const messageErrorLegacyKeys = 'error parsing signer public key 0: bad pubkey byte string size (want 32, have 33)';
 const method = 'muSig2CreateSession';
 const type = 'signer';
 const uniq = arr => Array.from(new Set(arr));
@@ -116,6 +117,10 @@ module.exports = (args, cbk) => {
           version: defaultVersion,
         },
         (err, res) => {
+          if (!!err && err.details === messageErrorLegacyKeys) {
+            return cbk(messageErrorLegacyVersion);
+          }
+
           if (!!err && err.details === messageErrorLegacyVersion) {
             return cbk(messageErrorLegacyVersion);
           }
