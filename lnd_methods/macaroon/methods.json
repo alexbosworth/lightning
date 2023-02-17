@@ -413,6 +413,10 @@
     "method": "SignMessage",
     "type": "signer"
   },
+  "signChainAddressMessage": {
+    "method": "SignMessageWithAddr",
+    "type": "wallet"
+  },
   "signMessage": {
     "method": "SignMessage",
     "type": "default"
@@ -571,6 +575,10 @@
   "verifyBytesSignature": {
     "method": "VerifyMessage",
     "type": "signer"
+  },
+  "verifyChainAddressMessage": {
+    "method": "VerifyMessageWithAddr",
+    "type": "wallet"
   },
   "verifyMessage": {
     "method": "VerifyMessage",

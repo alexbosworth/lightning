@@ -103,6 +103,7 @@ const {sendToChainOutputScripts} = require('./onchain');
 const {setAutopilot} = require('./onchain');
 const {settleHodlInvoice} = require('./invoices');
 const {signBytes} = require('./signer');
+const {signChainAddressMessage} = require('./onchain');
 const {signMessage} = require('./message');
 const {signPsbt} = require('./onchain');
 const {signTransaction} = require('./signer');
@@ -143,6 +144,7 @@ const {verifyAccess} = require('./macaroon');
 const {verifyBackup} = require('./offchain');
 const {verifyBackups} = require('./offchain');
 const {verifyBytesSignature} = require('./signer');
+const {verifyChainAddressMessage} = require('./onchain');
 const {verifyMessage} = require('./message');
 
 module.exports = {
@@ -251,6 +253,7 @@ module.exports = {
   setAutopilot,
   settleHodlInvoice,
   signBytes,
+  signChainAddressMessage,
   signMessage,
   signPsbt,
   signTransaction,
@@ -291,5 +294,6 @@ module.exports = {
   verifyBackup,
   verifyBackups,
   verifyBytesSignature,
+  verifyChainAddressMessage,
   verifyMessage,
 };

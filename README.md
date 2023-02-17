@@ -281,6 +281,8 @@ variables set:
       off-chain funds when an invoice has held funds from an incoming payment.
 - [signBytes](https://github.com/alexbosworth/ln-service#signbytes): Use node keys to sign over an
     arbitrary set of bytes.
+- [signChainAddressMessage](https://github.com/alexbosworth/ln-service#signchainaddressmessage):
+    Sign a message using the public key behind a chain address with ECDSA
 - [signMessage](https://github.com/alexbosworth/ln-service#signmessage): Use the node identity
     key to generate a signed message that represents the public graph node identity.
 - [signPsbt](https://github.com/alexbosworth/ln-service#signpsbt): Sign inputs and finalize a
@@ -363,5 +365,7 @@ variables set:
     channel fund recovery backups are valid.
 - [verifyBytesSignature](https://github.com/alexbosworth/ln-service#verifybytessignature): Check
     that a signature over arbitrary bytes is valid.
+- [verifyChainAddressMessage](https://github.com/alexbosworth/ln-service#verifychainaddressmessage):
+    Verify that a chain address message has a valid ECDSA signature
 - [verifyMessage](https://github.com/alexbosworth/ln-service#verifymessage): Check that a
     message from a node in the graph has a valid signature.

@@ -25,6 +25,7 @@ const sendToChainAddress = require('./send_to_chain_address');
 const sendToChainAddresses = require('./send_to_chain_addresses');
 const sendToChainOutputScripts = require('./send_to_chain_output_scripts');
 const setAutopilot = require('./set_autopilot');
+const signChainAddressMessage = require('./sign_chain_address_message');
 const signPsbt = require('./sign_psbt');
 const subscribeToBlocks = require('./subscribe_to_blocks');
 const subscribeToChainAddress = require('./subscribe_to_chain_address');
@@ -32,6 +33,7 @@ const subscribeToChainSpend = require('./subscribe_to_chain_spend');
 const subscribeToTransactions = require('./subscribe_to_transactions');
 const unlockUtxo = require('./unlock_utxo');
 const updateChainTransaction = require('./update_chain_transaction');
+const verifyChainAddressMessage = require('./verify_chain_address_message');
 
 module.exports = {
   broadcastChainTransaction,
@@ -61,6 +63,7 @@ module.exports = {
   sendToChainAddresses,
   sendToChainOutputScripts,
   setAutopilot,
+  signChainAddressMessage,
   signPsbt,
   subscribeToBlocks,
   subscribeToChainAddress,
@@ -68,4 +71,5 @@ module.exports = {
   subscribeToTransactions,
   unlockUtxo,
   updateChainTransaction,
+  verifyChainAddressMessage,
 };

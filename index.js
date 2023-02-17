@@ -106,6 +106,7 @@ const {sendToChainOutputScripts} = require('./lnd_methods');
 const {setAutopilot} = require('./lnd_methods');
 const {settleHodlInvoice} = require('./lnd_methods');
 const {signBytes} = require('./lnd_methods');
+const {signChainAddressMessage} = require('./lnd_methods');
 const {signMessage} = require('./lnd_methods');
 const {signPsbt} = require('./lnd_methods');
 const {signTransaction} = require('./lnd_methods');
@@ -147,6 +148,7 @@ const {verifyAccess} = require('./lnd_methods');
 const {verifyBackup} = require('./lnd_methods');
 const {verifyBackups} = require('./lnd_methods');
 const {verifyBytesSignature} = require('./lnd_methods');
+const {verifyChainAddressMessage} = require('./lnd_methods');
 const {verifyMessage} = require('./lnd_methods');
 
 module.exports = {
@@ -258,6 +260,7 @@ module.exports = {
   setAutopilot,
   settleHodlInvoice,
   signBytes,
+  signChainAddressMessage,
   signMessage,
   signPsbt,
   signTransaction,
@@ -299,5 +302,6 @@ module.exports = {
   verifyBackup,
   verifyBackups,
   verifyBytesSignature,
+  verifyChainAddressMessage,
   verifyMessage,
 };
