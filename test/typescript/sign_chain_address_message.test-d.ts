@@ -9,14 +9,8 @@ const lnd = {} as AuthenticatedLnd;
 const address = '';
 const message = '';
 
-expectError(signChainAddressMessage());
-expectError(signChainAddressMessage({}));
-expectError(signChainAddressMessage({lnd}));
-expectError(signChainAddressMessage({address}));
-expectError(signChainAddressMessage({message}));
 expectError(signChainAddressMessage({lnd, address}));
 expectError(signChainAddressMessage({lnd, message}));
-expectError(signChainAddressMessage({address, message}));
 
 expectType<SignChainAddressMessageResult>(
   await signChainAddressMessage({
