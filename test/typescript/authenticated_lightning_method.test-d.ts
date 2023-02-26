@@ -1,4 +1,4 @@
-import {expectError} from 'tsd';
+import {expectError, expectType} from 'tsd';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   AuthenticatedLightningArgs,
@@ -15,4 +15,4 @@ const lnd = {} as AuthenticatedLnd;
 
 expectError(authenticatedLightningMethod());
 expectError(authenticatedLightningMethod({}));
-expectError(authenticatedLightningMethod({lnd}));
+expectType(authenticatedLightningMethod({lnd}));
