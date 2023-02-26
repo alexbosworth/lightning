@@ -1,6 +1,6 @@
 # Versions
 
-## 7.1.0
+## 7.1.1
 
 - `signChainAddressMessage`: Add method to sign a message given a chain address
 - `verifyChainAddressMessage`: Add method to verify a chain address message
