@@ -33,3 +33,4 @@ export * from './subscribe_to_chain_spend';
 export * from './subscribe_to_transactions';
 export * from './unlock_utxo';
 export * from './update_chain_transaction';
+export * from './verify_chain_address_message';
