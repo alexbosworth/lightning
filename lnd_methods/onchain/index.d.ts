@@ -24,6 +24,7 @@ export * from './request_chain_fee_increase';
 export * from './send_to_chain_address';
 export * from './send_to_chain_addresses';
 export * from './send_to_chain_output_scripts';
+export * from './sign_chain_address_message';
 export * from './set_autopilot';
 export * from './sign_psbt';
 export * from './subscribe_to_blocks';
