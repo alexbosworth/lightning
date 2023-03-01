@@ -285,7 +285,7 @@
     "type": "default"
   },
   "getSettlementStatus": {
-    "method": "LookupHtlc",
+    "method": "LookupHtlcResolution",
     "type": "default"
   },
   "getSweepTransactions": {

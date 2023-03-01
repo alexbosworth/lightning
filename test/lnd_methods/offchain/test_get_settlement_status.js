@@ -5,7 +5,7 @@ const {getSettlementStatus} = require('./../../../');
 const makeLnd = ({err, res}) => {
   const result = res === undefined ? {offchain: true, settled: true} : res;
 
-  return {default: {lookupHtlc: ({}, cbk) => cbk(err, result)}};
+  return {default: {lookupHtlcResolution: ({}, cbk) => cbk(err, result)}};
 };
 
 const makeArgs = overrides => {
@@ -38,9 +38,9 @@ const tests = [
     error: [404, 'PaymentNotFound'],
   },
   {
-    args: makeArgs({lnd: makeLnd({err: {details: 'unknown method LookupHtlc for service lnrpc.Lightning'}})}),
+    args: makeArgs({lnd: makeLnd({err: {details: 'unknown method LookupHtlcResolution for service lnrpc.Lightning'}})}),
     description: 'A method not supported error is returned',
-    error: [501, 'LookupHtlcMethodUnsupported'],
+    error: [501, 'LookupHtlcResolutionMethodUnsupported'],
   },
   {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),

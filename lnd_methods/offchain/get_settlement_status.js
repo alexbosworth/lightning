@@ -5,14 +5,16 @@ const {returnResult} = require('asyncjs-util');
 const {isLnd} = require('./../../lnd_requests');
 
 const errorNotFound = 'htlc unknown';
-const errorUnimplemented = 'unknown method LookupHtlc for service lnrpc.Lightning';
+const errorUnimplemented = 'unknown method LookupHtlcResolution for service lnrpc.Lightning';
 const isBoolean = n => n === false || n === true;
-const method = 'lookupHtlc';
+const method = 'lookupHtlcResolution';
 const type = 'default';
 
 /** Get the settlement status of a received HTLC
 
   Note: this method is not supported in LND versions 0.15.5 and below
+
+  Requires LND running with `--store-final-htlc-resolutions` flag
 
   Requires `offchain:read` permissions
 
@@ -60,7 +62,7 @@ module.exports = ({channel, lnd, payment}, cbk) => {
           }
 
           if (!!err && err.details === errorUnimplemented) {
-            return cbk([501, 'LookupHtlcMethodUnsupported']);
+            return cbk([501, 'LookupHtlcResolutionMethodUnsupported']);
           }
 
           if (!!err) {
