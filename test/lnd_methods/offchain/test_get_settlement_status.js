@@ -38,9 +38,26 @@ const tests = [
     error: [404, 'PaymentNotFound'],
   },
   {
-    args: makeArgs({lnd: makeLnd({err: {details: 'unknown method LookupHtlcResolution for service lnrpc.Lightning'}})}),
+    args: makeArgs({
+      lnd: makeLnd({
+        err: {
+          details: 'unknown method LookupHtlcResolution for service lnrpc.Lightning',
+        },
+      }),
+    }),
     description: 'A method not supported error is returned',
     error: [501, 'LookupHtlcResolutionMethodUnsupported'],
+  },
+  {
+    args: makeArgs({
+      lnd: makeLnd({
+        err: {
+          details: 'cannot lookup with flag --store-final-htlc-resolutions=false',
+        },
+      }),
+    }),
+    description: 'A method not supported error is returned',
+    error: [404, 'LookupHtlcResolutionMethodUninitiated'],
   },
   {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),

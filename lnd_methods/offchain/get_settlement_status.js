@@ -5,6 +5,7 @@ const {returnResult} = require('asyncjs-util');
 const {isLnd} = require('./../../lnd_requests');
 
 const errorNotFound = 'htlc unknown';
+const errorUninitiated = 'cannot lookup with flag --store-final-htlc-resolutions=false';
 const errorUnimplemented = 'unknown method LookupHtlcResolution for service lnrpc.Lightning';
 const isBoolean = n => n === false || n === true;
 const method = 'lookupHtlcResolution';
@@ -63,6 +64,10 @@ module.exports = ({channel, lnd, payment}, cbk) => {
 
           if (!!err && err.details === errorUnimplemented) {
             return cbk([501, 'LookupHtlcResolutionMethodUnsupported']);
+          }
+
+          if (!!err && err.details == errorUninitiated) {
+            return cbk([404, 'LookupHtlcResolutionMethodUninitiated']);
           }
 
           if (!!err) {
