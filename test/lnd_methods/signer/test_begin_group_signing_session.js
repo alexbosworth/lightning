@@ -5,7 +5,7 @@ const {beginGroupSigningSession} = require('./../../../');
 const makeLnd = (err, res) => {
   return {
     signer: {
-      muSig2CreateSession: ({}, cbk) => cbk(err, res)
+      muSig2CreateSession: ({}, cbk) => cbk(err, res),
     },
     wallet: {
       deriveKey: ({}, cbk) => cbk(null, {
@@ -83,6 +83,153 @@ const tests = [
     args: makeArgs({lnd: makeLnd(null, {})}),
     description: 'A valid response is expected',
     error: [503, 'ExpectedCombinedPublicKeyInMuSig2SessionResponse'],
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        signer: {
+          muSig2CreateSession: (args, cbk) => {
+            if (args.version === 'MUSIG2_VERSION_V100RC2') {
+              return cbk({
+                details: 'error parsing signer public key 0: bad pubkey byte string size (want 32, have 33)',
+              });
+            }
+
+            return cbk({
+              details: 'unknown method MuSig2CreateSession for service signrpc.Signer',
+            });
+          },
+        },
+        wallet: {
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+        },
+      },
+    }),
+    description: 'Just in case unsupported message is supported',
+    error: [501, 'MuSig2BeginSigningSessionNotSupported'],
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        signer: {
+          muSig2CreateSession: (args, cbk) => {
+            if (args.version === 'MUSIG2_VERSION_V100RC2') {
+              return cbk({
+                details: 'error parsing signer public key 0: bad pubkey byte string size (want 32, have 33)',
+              });
+            }
+
+            return cbk('err');
+          },
+        },
+        wallet: {
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+        },
+      },
+    }),
+    description: 'Errors are passed back',
+    error: [503, 'UnexpectedErrorCreatingMuSig2Session', {err: 'err'}],
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        signer: {
+          muSig2CreateSession: (args, cbk) => {
+            if (args.version === 'MUSIG2_VERSION_V100RC2') {
+              return cbk({
+                details: 'error parsing signer public key 0: bad pubkey byte string size (want 32, have 33)',
+              });
+            }
+
+            return cbk(null, {});
+          },
+        },
+        wallet: {
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+        },
+      },
+    }),
+    description: 'A valid response is expected',
+    error: [503, 'ExpectedCombinedPublicKeyInMuSig2SessionResponse'],
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        signer: {
+          muSig2CreateSession: (args, cbk) => {
+            if (args.version === 'MUSIG2_VERSION_V100RC2') {
+              return cbk({
+                details: 'error parsing signer public key 0: bad pubkey byte string size (want 32, have 33)',
+              });
+            }
+
+            return cbk(null, {
+              combined_key: Buffer.alloc(32, 1),
+              local_public_nonces: Buffer.alloc(66, 1),
+              session_id: Buffer.alloc(32, 1),
+              taproot_internal_key: Buffer.alloc(0),
+            });
+          },
+        },
+        wallet: {
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+        },
+      },
+    }),
+    description: 'Legacy signer is supported',
+    expected: {
+      external_key: '0101010101010101010101010101010101010101010101010101010101010101',
+      id: '0101010101010101010101010101010101010101010101010101010101010101',
+      internal_key: undefined,
+      nonce: '010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101',
+    },
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        signer: {
+          muSig2CreateSession: (args, cbk) => {
+            if (args.version === 'MUSIG2_VERSION_V100RC2') {
+              return cbk({
+                details: 'error parsing all signer public keys: error parsing signer public key 0 for v1.0.0rc2 (compressed format): malformed public key: invalid length: 32',
+              });
+            }
+
+            return cbk(null, {
+              combined_key: Buffer.alloc(32, 1),
+              local_public_nonces: Buffer.alloc(66, 1),
+              session_id: Buffer.alloc(32, 1),
+              taproot_internal_key: Buffer.alloc(0),
+            });
+          },
+        },
+        wallet: {
+          deriveKey: ({}, cbk) => cbk(null, {
+            key_loc: {key_index: 0},
+            raw_key_bytes: Buffer.alloc(1),
+          }),
+        },
+      },
+    }),
+    description: 'Legacy signer is supported when invalid keys specified',
+    expected: {
+      external_key: '0101010101010101010101010101010101010101010101010101010101010101',
+      id: '0101010101010101010101010101010101010101010101010101010101010101',
+      internal_key: undefined,
+      nonce: '010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101',
+    },
   },
   {
     args: makeArgs({}),
