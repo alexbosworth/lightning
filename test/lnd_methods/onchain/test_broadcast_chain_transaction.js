@@ -48,6 +48,27 @@ const tests = [
   },
   {
     args: {
+      lnd: {
+        wallet: {
+          publishTransaction: ({}, cbk) => cbk({
+            details: 'unmatched backend error: -26: mempool min fee not met, 123 < 1234',
+          }),
+        },
+      },
+      transaction: new Transaction().toHex(),
+    },
+    description: 'Minimum relay fee not met',
+    error: [
+      503,
+      'ChainBackendMinimumRelayFeeNotMet',
+      {
+        fee: 123,
+        minimum: 1234,
+      },
+    ],
+  },
+  {
+    args: {
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk(null, {})}},
       transaction: new Transaction().toHex(),
     },

@@ -7,6 +7,7 @@ const {isLnd} = require('./../../lnd_requests');
 const bufFromHex = hex => Buffer.from(hex, 'hex');
 const {fromHex} = Transaction;
 const method = 'publishTransaction';
+const minRelayFeeError = /^unmatched backend error: -26: mempool min fee not met, (\d*) < (\d*)$/;
 const type = 'wallet';
 
 /** Publish a raw blockchain transaction to Blockchain network peers
@@ -51,6 +52,19 @@ module.exports = ({description, lnd, transaction}, cbk) => {
           tx_hex: bufFromHex(transaction),
         },
         (err, res) => {
+          if (!!err && minRelayFeeError.test(err.details)) {
+            const [, got, expected] = err.details.match(minRelayFeeError);
+
+            return cbk([
+              503,
+              'ChainBackendMinimumRelayFeeNotMet',
+              {
+                fee: Number(got),
+                minimum: Number(expected),
+              }
+            ]);
+          }
+
           if (!!err) {
             return cbk([503, 'UnexpectedErrBroadcastingRawTx', {err}]);
           }
