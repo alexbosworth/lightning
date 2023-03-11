@@ -111,7 +111,7 @@ module.exports = (args, cbk) => {
         const keys = [getKey.public_key].concat(args.public_keys);
 
         return args.lnd[type][method]({
-          all_signer_pubkeys: keys.map(hexAsBuffer),
+          all_signer_pubkeys: uniq(keys).map(hexAsBuffer),
           key_loc: {key_family: args.key_family, key_index: args.key_index},
           taproot_tweak: taprootTweak,
           version: defaultVersion,
