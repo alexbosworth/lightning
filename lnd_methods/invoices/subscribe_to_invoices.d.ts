@@ -1,5 +1,14 @@
 import {AuthenticatedLightningSubscription} from '../../typescript';
 
+export type SubscribeToInvoicesArgs = AuthenticatedLightningArgs<{
+  /** Invoice Added After Index Number */
+  added_after?: number;
+  /** Invoice Confirmed After Index Number */
+  confirmed_after?: number;
+  /** Restart Subscription Delay Milliseconds Number */
+  restart_delay_ms?: number;
+}>;
+
 export type SubscribeToInvoicesInvoiceUpdatedEvent = {
   /** Fallback Chain Address */
   chain_address?: string;
@@ -7,6 +16,8 @@ export type SubscribeToInvoicesInvoiceUpdatedEvent = {
   cltv_delta: number;
   /** Confirmed At ISO 8601 Date */
   confirmed_at?: string;
+  /** Confirmed Index Number */
+  confirmed_index?: number;
   /** Created At ISO 8601 Date */
   created_at: string;
   /** Description */
@@ -27,12 +38,14 @@ export type SubscribeToInvoicesInvoiceUpdatedEvent = {
   }[];
   /** Invoice Payment Hash Hex String */
   id: string;
+  /** Invoice Index Number */
+  index: number;
   /** Invoice is Confirmed */
   is_confirmed: boolean;
-  /** Invoice is Outgoing */
-  is_outgoing: boolean;
   /** Invoice is Push Payment */
   is_push?: boolean;
+  /** Invoiced Millitokens String */
+  mtokens: string;
   /**
    * Payment Identifying Secret Hex String
    *
@@ -88,4 +101,4 @@ export type SubscribeToInvoicesInvoiceUpdatedEvent = {
  *
  * `payment` is not supported on LND 0.11.1 and below
  */
-export const subscribeToInvoices: AuthenticatedLightningSubscription;
+export const subscribeToInvoices: AuthenticatedLightningSubscription<SubscribeToInvoicesArgs>;
