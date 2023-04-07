@@ -1,4 +1,7 @@
-import {AuthenticatedLightningSubscription} from '../../typescript';
+import {
+  AuthenticatedLightningArgs,
+  AuthenticatedLightningSubscription,
+} from '../../typescript';
 
 export type SubscribeToInvoicesArgs = AuthenticatedLightningArgs<{
   /** Invoice Added After Index Number */
