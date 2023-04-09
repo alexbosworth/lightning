@@ -1,5 +1,9 @@
 # Versions
 
+## 7.1.9
+
+- `getPeers`: Correct feature bit returned as string and not number
+
 ## 7.1.8
 
 - `signChainAddressMessage`: Add method to sign a message given a chain address

@@ -116,7 +116,7 @@ module.exports = peer => {
     bytes_received: Number(peer.bytes_recv),
     bytes_sent: Number(peer.bytes_sent),
     features: keys(peer.features).map(bit => ({
-      bit,
+      bit: Number(bit),
       is_known: peer.features[bit].is_known,
       is_required: peer.features[bit].is_required,
       type: featureFlagDetails({bit}).type,

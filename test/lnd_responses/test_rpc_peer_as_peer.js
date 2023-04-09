@@ -34,7 +34,7 @@ const makeExpected = overrides => {
     bytes_received: 1,
     bytes_sent: 1,
     features: [{
-      bit: '1',
+      bit: 1,
       is_known: true,
       is_required: false,
       type: 'data_loss_protection',
