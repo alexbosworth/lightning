@@ -69,8 +69,9 @@ const type = 'default';
       [cooperative_close_address]: <Prefer Cooperative Close To Address String>
       [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
       [give_tokens]: <Tokens to Gift To Partner Number>
+      [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
       [is_private]: <Channel is Private Bool>
-      local_tokens: <Local Tokens Number>
+      [local_tokens]: <Local Tokens Number>
       [min_confirmations]: <Spend UTXOs With Minimum Confirmations Number>
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
       partner_public_key: <Public Key Hex String>

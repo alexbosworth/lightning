@@ -7,6 +7,7 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
     base_fee: <Set Channel Base Fee Millitokens String>
     close_address: <Cooperative Close Address String>
     fee_rate: <Set Channel Routing Fee Rate Millitoken Per Millitokens String>
+    fund_max: <Use Maximal Funding Bool>
     local_funding_amount: <Channel Capacity Tokens String>
     min_htlc_msat: <Minimum HTLC Millitokens String>
     node_pubkey: <Node Public Key Buffer Object>
@@ -29,8 +30,9 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
     [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number>
+    [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool>
-    local_tokens: <Local Tokens Number>
+    [local_tokens]: <Local Tokens Number>
     [min_confirmations]: <Spend UTXOs With Minimum Confirmations Number>
     [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
     partner_public_key: <Public Key Hex String>
@@ -40,6 +42,7 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
 module.exports = args => {
   const chainFeeRate = Number(args.sat_per_vbyte) || Number(args.sat_per_byte);
   const hasMinHtlc = args.min_htlc_msat !== Number().toString();
+  const normalFunded = !args.fund_max;
   const publicKey = bufferAsHex(args.node_pubkey) || args.node_pubkey_string;
   const utxoConfs = minConfs(args.spend_unconfirmed, args.min_confirmations);
 
@@ -49,8 +52,9 @@ module.exports = args => {
     cooperative_close_address: args.close_address || undefined,
     fee_rate: !!args.use_fee_rate ? Number(args.fee_rate) : undefined,
     give_tokens: Number(args.push_sat) || undefined,
+    is_max_funding: !!args.fund_max || undefined,
     is_private: args.private || undefined,
-    local_tokens: Number(args.local_funding_amount),
+    local_tokens: normalFunded ? Number(args.local_funding_amount) : undefined,
     min_confirmations: utxoConfs,
     min_htlc_mtokens: hasMinHtlc ? args.min_htlc_msat : undefined,
     partner_public_key: publicKey,

@@ -1,5 +1,16 @@
 # Versions
 
+## 8.0.0
+
+- `openChannel`: Add `is_max_funding` to fund a channel maximally
+- `subscribeToRpcRequests`: Add support for returning `is_max_funding` in
+    `open_channel_request`
+
+### Breaking Changes
+
+- `subscribeToRpcRequests`: `open_channel_request`: `local_tokens` is now an
+    optional value
+
 ## 7.1.9
 
 - `getPeers`: Correct feature bit returned as string and not number

@@ -23,15 +23,18 @@ const type = 'default';
   `base_fee_mtokens` is not supported on LND 0.15.5 and below
   `fee_rate` is not supported on LND 0.15.5 and below
 
+  `is_max_funding` is not supported on LND 0.16.0 and below
+
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
     [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
+    [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool> // Defaults to false
     lnd: <Authenticated LND API Object>
-    local_tokens: <Total Channel Capacity Tokens Number>
+    [local_tokens]: <Total Channel Capacity Tokens Number>
     [min_confirmations]: <Spend UTXOs With Minimum Confirmations Number>
     [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
     [partner_csv_delay]: <Peer Output CSV Delay Number>
@@ -54,11 +57,11 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedLndForChannelOpen']);
         }
 
-        if (!args.local_tokens) {
+        if (!args.local_tokens && !args.is_max_funding) {
           return cbk([400, 'ExpectedLocalTokensNumberToOpenChannelWith']);
         }
 
-        if (args.local_tokens < minChannelTokens) {
+        if (!args.is_max_funding && args.local_tokens < minChannelTokens) {
           return cbk([400, 'ExpectedLargerChannelSizeForChannelOpen']);
         }
 
@@ -99,6 +102,7 @@ module.exports = (args, cbk) => {
         const options = {
           base_fee: args.base_fee_mtokens || undefined,
           fee_rate: args.fee_rate,
+          fund_max: args.is_max_funding || undefined,
           local_funding_amount: args.local_tokens,
           min_confs: minConfs,
           min_htlc_msat: args.min_htlc_mtokens || defaultMinHtlcMtokens,

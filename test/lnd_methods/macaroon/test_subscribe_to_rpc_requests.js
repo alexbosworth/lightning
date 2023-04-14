@@ -196,6 +196,7 @@ const tests = [
           cooperative_close_address: 'close_address',
           fee_rate: undefined,
           give_tokens: 1,
+          is_max_funding: undefined,
           is_private: undefined,
           local_tokens: 1,
           min_confirmations: 0,
