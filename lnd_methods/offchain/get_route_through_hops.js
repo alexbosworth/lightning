@@ -4,7 +4,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {routesFromQueryRoutes} = require('../../lnd_responses');
 
-const defaultFinalCltvDelta = 40;
+const defaultFinalCltvDelta = 144;
 const defaultMtokens = '1000000';
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const {isArray} = Array;

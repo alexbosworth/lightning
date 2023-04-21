@@ -1,5 +1,11 @@
 # Versions
 
+## 9.0.0
+
+### Breaking Changes
+
+- node.js version 14 is no longer supported, 16 or higher is required
+
 ## 8.0.0
 
 - `openChannel`: Add `is_max_funding` to fund a channel maximally

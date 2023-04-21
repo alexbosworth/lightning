@@ -3,7 +3,7 @@ const {randomBytes} = require('crypto');
 const {isLnd} = require('./../../lnd_requests');
 const subscribeToPay = require('./subscribe_to_pay');
 
-const defaultCltvDelta = 40;
+const defaultCltvDelta = 144;
 const isPublicKey = n => !!n && /^[0-9A-F]{66}$/i.test(n);
 const method = 'sendPaymentV2';
 const randomId = () => randomBytes(32).toString('hex');

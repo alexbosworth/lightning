@@ -5,7 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 const {rpcFailedPolicyAsFail} = require('./../../lnd_responses');
 
 const defaultBaseFee = 1;
-const defaultCltvDelta = 40;
+const defaultCltvDelta = 144;
 const defaultRate = 1;
 const feeRatio = 1e6;
 const {floor} = Math;
