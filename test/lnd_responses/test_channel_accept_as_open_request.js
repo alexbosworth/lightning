@@ -7,6 +7,7 @@ const makeArgs = overrides => {
     chain_hash: Buffer.alloc(32),
     channel_flags: 34,
     channel_reserve: '1',
+    commitment_type: 'LEGACY',
     csv_delay: 1,
     dust_limit: '1',
     fee_per_kw: '1000',
@@ -43,6 +44,7 @@ const tests = [
       min_chain_output: 1,
       min_htlc_mtokens: '1000',
       partner_public_key: Buffer.alloc(33, 3).toString('hex'),
+      type: 'original',
     },
   },
   {

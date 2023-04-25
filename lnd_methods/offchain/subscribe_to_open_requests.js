@@ -60,6 +60,7 @@ const type = 'default';
     reject: <Reject Request Function> ({
       [reason]: <500 Character Limited Rejection Reason String>
     }) -> {}
+    [type]: <Channel Commitment Transaction Type String>
   }
 
   @event 'error'
@@ -132,6 +133,7 @@ module.exports = ({lnd}) => {
             pending_chan_id: id,
           });
         },
+        type: request.type,
       }));
     } catch (err) {
       return emitError([503, err.message]);

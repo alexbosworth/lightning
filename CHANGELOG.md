@@ -1,5 +1,10 @@
 # Versions
 
+## 9.1.0
+
+- `getWalletInfo`: Add support for LND 0.16.1
+- `subscribeToOpenRequests`: Add `type` for channel request commitment type
+
 ## 9.0.0
 
 ### Breaking Changes

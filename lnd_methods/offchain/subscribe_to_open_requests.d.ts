@@ -53,6 +53,8 @@ export type SubscribeToOpenRequestsChannelRequestEvent = {
     /** 500 Character Limited Rejection Reason */
     reason?: string;
   }) => void;
+  /** Channel Commitment Transaction Type */
+  type?: string;
 };
 
 /**

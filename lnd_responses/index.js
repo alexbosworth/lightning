@@ -18,7 +18,6 @@ const routingFailureFromHtlc = require('./routing_failure_from_htlc');
 const rpcAddressesAsAddresses = require('./rpc_addresses_as_addresses');
 const rpcAttemptHtlcAsAttempt = require('./rpc_attempt_htlc_as_attempt');
 const rpcChannelAsChannel = require('./rpc_channel_as_channel');
-const rpcChannelAsOldRpcChannel = require('./rpc_channel_as_old_rpc_channel');
 const rpcChannelClosedAsClosed = require('./rpc_channel_closed_as_closed');
 const rpcChannelUpdateAsUpdate = require('./rpc_channel_update_as_update');
 const rpcClosedChannelAsClosed = require('./rpc_closed_channel_as_closed');
@@ -64,7 +63,6 @@ module.exports = {
   rpcAddressesAsAddresses,
   rpcAttemptHtlcAsAttempt,
   rpcChannelAsChannel,
-  rpcChannelAsOldRpcChannel,
   rpcChannelClosedAsClosed,
   rpcChannelUpdateAsUpdate,
   rpcClosedChannelAsClosed,

@@ -14,6 +14,12 @@
     "failed": "FAILED",
     "pending": "IN_FLIGHT"
   },
+  "channelTypes": {
+    "ANCHORS": "anchor",
+    "LEGACY": "original",
+    "SCRIPT_ENFORCED_LEASE": "anchor_with_lease_constraint",
+    "STATIC_REMOTE_KEY": "original_with_static_to_remote"
+  },
   "commitmentTypes": {
     "anchor": "ANCHORS",
     "static_remote_key": "STATIC_REMOTE_KEY",

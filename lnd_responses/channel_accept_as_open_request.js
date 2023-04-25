@@ -1,3 +1,5 @@
+const {channelTypes} = require('./constants');
+
 const bufferAsHex = buffer => buffer.toString('hex');
 const compressedPublicKeyLength = 33;
 const hashAsId = hash => hash.reverse().toString('hex');
@@ -13,6 +15,7 @@ const weightPerVByte = 4;
     chain_hash: <Blockchain Genesis Block Hash Bytes Buffer Object>
     channel_flags: <Bit-field Channel Type Flags Number>
     channel_reserve: <Reserve Tokens Requirement String>
+    commitment_type: <Channel Commitment Transaction Type String>
     csv_delay: <Relative Time Lock Blocks Count Number>
     dust_limit: <Dust Limit Tokens of Peer's Commitment Transaction String>
     fee_per_kw: <Commitment Transaction Fee Rate String>
@@ -45,6 +48,7 @@ const weightPerVByte = 4;
     min_chain_output: <Minimum Chain Output Tokens Number>
     min_htlc_mtokens: <Minimum HTLC Millitokens String>
     partner_public_key: <Peer Public Key Hex String>
+    [type]: <Channel Commitment Transaction Type String>
   }
 */
 module.exports = data => {
@@ -62,6 +66,10 @@ module.exports = data => {
 
   if (!data.channel_reserve) {
     throw new Error('ExpectedChannelReserveForChannelRequest');
+  }
+
+  if (!data.commitment_type) {
+    throw new Error('ExpectedCommitmentTypeForChannelRequest');
   }
 
   if (data.csv_delay === undefined) {
@@ -125,5 +133,6 @@ module.exports = data => {
     min_chain_output: Number(data.dust_limit),
     min_htlc_mtokens: data.min_htlc,
     partner_public_key: bufferAsHex(data.node_pubkey),
+    type: channelTypes[data.commitment_type],
   };
 };
