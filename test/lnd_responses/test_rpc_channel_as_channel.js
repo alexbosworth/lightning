@@ -13,7 +13,7 @@ const makeArgs = overrides => {
     close_address: undefined,
     commit_fee: '1',
     commit_weight: '1',
-    commitment_type: 'LEGACY',
+    commitment_type: 'ANCHORS',
     csv_delay: 1,
     fee_per_kw: '1',
     initiator: false,
@@ -112,6 +112,7 @@ const makeExpected = overrides => {
     time_online: 1000,
     transaction_id: '00',
     transaction_vout: 1,
+    type: 'anchor',
     unsettled_balance: 1,
   };
 
@@ -155,6 +156,11 @@ const tests = [
     args: makeArgs({commit_weight: undefined}),
     description: 'Channel commit weight is expected',
     error: 'ExpectedCommitWeightInChannelMessage',
+  },
+  {
+    args: makeArgs({commitment_type: undefined}),
+    description: 'Channel commit type is expected',
+    error: 'ExpectedChannelCommitmentTypeInChannelMessage',
   },
   {
     args: makeArgs({fee_per_kw: undefined}),
@@ -242,7 +248,7 @@ const tests = [
     expected: makeExpected({id: '0x0x2', other_ids: ['0x0x3']}),
   },
   {
-    args: makeArgs({commitment_type: 'STATIC_REMOTE_KEY', initiator: true}),
+    args: makeArgs({commitment_type: 'ANCHORS', initiator: true}),
     description: 'Initiated RPC channel is mapped to channel',
     expected: makeExpected({
       is_partner_initiated: false,

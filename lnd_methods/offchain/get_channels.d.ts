@@ -114,6 +114,8 @@ export type GetChannelsResult = {
     transaction_id: string;
     /** Blockchain Transaction Vout */
     transaction_vout: number;
+    /** Channel Commitment Transaction Type */
+    type?: string;
     /** Unsettled Balance Tokens */
     unsettled_balance: number;
   }[];

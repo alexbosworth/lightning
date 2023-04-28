@@ -78,6 +78,7 @@ const type = 'default';
       [time_online]: <Monitoring Uptime Channel Up Milliseconds Number>
       transaction_id: <Blockchain Transaction Id String>
       transaction_vout: <Blockchain Transaction Vout Number>
+      [type]: <Channel Commitment Transaction Type String>
       unsettled_balance: <Unsettled Balance Tokens Number>
     }]
   }

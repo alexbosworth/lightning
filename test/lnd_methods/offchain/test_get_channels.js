@@ -53,6 +53,7 @@ const makeExpected = overrides => {
     time_online: 1000,
     transaction_id: '00',
     transaction_vout: 1,
+    type: 'anchor',
     unsettled_balance: 1,
   };
 
@@ -71,7 +72,7 @@ const makeLnd = overrides => {
     close_address: 'cooperative_close_address',
     commit_fee: '1',
     commit_weight: '1',
-    commitment_type: 'LEGACY',
+    commitment_type: 'ANCHORS',
     fee_per_kw: '1',
     initiator: true,
     lifetime: 1,
@@ -175,6 +176,11 @@ const tests = [
     error: [503, 'ExpectedCommitWeight'],
   },
   {
+    args: {lnd: makeLnd({commitment_type: undefined})},
+    description: 'Channel commit type is expected',
+    error: [503, 'ExpectedChannelCommitmentTypeInChannelMessage'],
+  },
+  {
     args: {lnd: makeLnd({fee_per_kw: undefined})},
     description: 'Channel fee per kw is expected',
     error: [503, 'ExpectedFeePerKw'],
@@ -242,7 +248,7 @@ const tests = [
   {
     args: {
       lnd: makeLnd({
-        commitment_type: 'STATIC_REMOTE_KEY',
+        commitment_type: 'ANCHORS',
         thaw_height: 1,
       }),
     },

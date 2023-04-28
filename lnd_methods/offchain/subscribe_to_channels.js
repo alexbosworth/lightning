@@ -109,6 +109,7 @@ const updateOpening = 'pending_open_channel';
     sent: <Sent Tokens Number>
     transaction_id: <Blockchain Transaction Id String>
     transaction_vout: <Blockchain Transaction Vout Number>
+    [type]: <Channel Commitment Transaction Type String>
     unsettled_balance: <Unsettled Balance Tokens Number>
   }
 

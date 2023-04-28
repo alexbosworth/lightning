@@ -1,6 +1,6 @@
 const {chanFormat} = require('bolt07');
 
-const {commitmentTypes} = require('./constants');
+const {channelTypes} = require('./constants');
 const parseThawHeight = require('./parse_thaw_height');
 const rpcHtlcAsPayment = require('./rpc_htlc_as_payment');
 
@@ -118,6 +118,7 @@ const outpointDelimiter = ':';
     time_online: <Monitoring Uptime Channel Up Milliseconds Number>
     transaction_id: <Blockchain Transaction Id String>
     transaction_vout: <Blockchain Transaction Vout Number>
+    [type]: <Channel Commitment Transaction Type String>
     unsettled_balance: <Unsettled Balance Tokens Number>
   }
 */
@@ -148,6 +149,10 @@ module.exports = args => {
 
   if (args.commit_weight === undefined) {
     throw new Error('ExpectedCommitWeightInChannelMessage');
+  }
+
+  if (!args.commitment_type) {
+    throw new Error('ExpectedChannelCommitmentTypeInChannelMessage');
   }
 
   if (args.fee_per_kw === undefined) {
@@ -210,7 +215,6 @@ module.exports = args => {
     throw new Error('ExpectedUnsettledBalanceInChannelMessage');
   }
 
-  const chanType = args.commitment_type;
   const commitWeight = Number(args.commit_weight);
   const {height} = parseThawHeight({id: args.chan_id, thaw: args.thaw_height});
   const own = args.local_constraints;
@@ -266,6 +270,7 @@ module.exports = args => {
     time_online: uptime,
     transaction_id: transactionId,
     transaction_vout: Number(vout),
+    type: channelTypes[args.commitment_type],
     unsettled_balance: Number(args.unsettled_balance),
   };
 };
