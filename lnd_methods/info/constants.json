@@ -45,7 +45,8 @@
     "df0b82f0165f19bde8832bacd1e35544b0a2990d": "0.14.0-beta",
     "eecbe99d68384c734b2c91fd0800484e69c5cab2": "0.14.4-beta",
     "fb765fdb1daf1c1db08ab9b6aa0c442af431bc82": "0.16.1-beta",
-    "fd1a95bf322cdd1c743a1554f8e470fbf9a5e564": "0.15.1-beta"
+    "fd1a95bf322cdd1c743a1554f8e470fbf9a5e564": "0.15.1-beta",
+    "fdbeb1e7023827f1cb499a81d474986aa569d945": "0.16.2-beta"
   },
   "weightedType": "weightedcomb",
   "wrongLnd": "12 UNIMPLEMENTED: unknown service autopilotrpc.Autopilot"

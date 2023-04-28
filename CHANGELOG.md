@@ -1,6 +1,6 @@
 # Versions
 
-## 9.2.0
+## 9.2.1
 
 - `getChannels`: Add support for `type` to show channel type
 - `subscribeToChannels`: Add support for `channel_opened` `type` to show type
