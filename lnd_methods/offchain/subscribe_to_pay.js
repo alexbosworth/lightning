@@ -125,6 +125,7 @@ const unknownServiceErr = 'unknown service verrpc.Versioner';
 
   @event 'failed'
   {
+    id: <Payment Hash Hex String>
     is_insufficient_balance: <Failed Due To Lack of Balance Bool>
     is_invalid_payment: <Failed Due to Invalid Payment Bool>
     is_pathfinding_timeout: <Failed Due to Pathfinding Timeout Bool>

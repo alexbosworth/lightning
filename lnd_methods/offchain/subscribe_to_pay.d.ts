@@ -138,6 +138,8 @@ export type SubscribeToPayConfirmedEvent = {
 };
 
 export type SubscribeToPayFailedEvent = {
+  /** Payment Hash Hex */
+  id: string;
   /** Failed Due To Lack of Balance Bool> */
   is_insufficient_balance: boolean;
   /** Failed Due to Invalid Payment Bool> */

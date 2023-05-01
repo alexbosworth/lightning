@@ -2,11 +2,11 @@ const {test} = require('@alexbosworth/tap');
 
 const {failureFromPayment} = require('./../../lnd_responses');
 
-const payment_hash = Buffer.alloc(32).toString('hex')
+const id = Buffer.alloc(32).toString('hex')
 
 const makeExpected = overrides => {
   const expected = {
-    id: payment_hash,
+    id,
     is_insufficient_balance: false,
     is_invalid_payment: false,
     is_pathfinding_timeout: false,
@@ -20,22 +20,34 @@ const makeExpected = overrides => {
 
 const tests = [
   {
-    args: {payment_hash, failure_reason: 'FAILURE_REASON_INSUFFICIENT_BALANCE'},
+    args: {
+      failure_reason: 'FAILURE_REASON_INSUFFICIENT_BALANCE',
+      payment_hash: id,
+    },
     description: 'Insufficient balance mapped',
     expected: makeExpected({is_insufficient_balance: true}),
   },
   {
-    args: {payment_hash, failure_reason: 'FAILURE_REASON_INCORRECT_PAYMENT_DETAILS'},
+    args: {
+      failure_reason: 'FAILURE_REASON_INCORRECT_PAYMENT_DETAILS',
+      payment_hash: id,
+    },
     description: 'Invalid payment is mapped',
     expected: makeExpected({is_invalid_payment: true}),
   },
   {
-    args: {payment_hash, failure_reason: 'FAILURE_REASON_NO_ROUTE'},
+    args: {
+      failure_reason: 'FAILURE_REASON_NO_ROUTE',
+      payment_hash: id,
+    },
     description: 'No route is mapped',
     expected: makeExpected({is_route_not_found: true}),
   },
   {
-    args: {payment_hash, failure_reason: 'FAILURE_REASON_TIMEOUT'},
+    args: {
+      failure_reason: 'FAILURE_REASON_TIMEOUT',
+      payment_hash: id,
+    },
     description: 'Timeout is mapped',
     expected: makeExpected({is_pathfinding_timeout: true}),
   },

@@ -5,9 +5,12 @@ const is256Hex = n => !!n && /^[0-9A-F]{64}$/i.test(n);
 /** Derive failure status from payment
 
   {
-    payment_hash: <Payment SHA256 Hash Hex String>
     failure_reason: <Payment Failure Reason String>
+    payment_hash: <Payment SHA256 Hash Hex String>
   }
+
+  @throws
+  <Error>
 
   @returns
   {

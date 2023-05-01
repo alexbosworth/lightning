@@ -56,6 +56,8 @@ export type SubscribeToPastPaymentConfirmedEvent = {
 };
 
 export type SubscribeToPastPaymentFailedEvent = {
+  /** Payment Hash Hex */
+  id: string;
   /** Failed Due To Lack of Balance */
   is_insufficient_balance: boolean;
   /** Failed Due to Payment Rejected At Destination */
