@@ -1,5 +1,11 @@
 # Versions
 
+## 9.3.0
+
+- `subscribeToPastPayment`, `subscribeToPayViaDetails`,
+    `subscribeToPayViaRequest`, `subscribeToPayments`: Add `id` for `failed`
+    payment hash
+
 ## 9.2.1
 
 - `getChannels`: Add support for `type` to show channel type
