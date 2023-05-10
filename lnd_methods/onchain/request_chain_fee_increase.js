@@ -6,6 +6,7 @@ const {isLnd} = require('./../../lnd_requests');
 const defaultConfirmations = 6;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 const isNumber = n => !isNaN(n);
+const messageExternalUtxo = 'the passed output does not belong to the wallet';
 const method = 'bumpFee';
 const type = 'wallet';
 
@@ -76,6 +77,10 @@ module.exports = (args, cbk) => {
           target_conf: feeRate.target_conf,
         },
         (err, res) => {
+          if (!!err && err.details === messageExternalUtxo) {
+            return cbk([404, 'SpecifiedOutpointNotFoundInWalletUtxos']);
+          }
+
           if (!!err) {
             return cbk([500, 'UnexpectedErrorRequestingChainFeeBump', {err}]);
           }

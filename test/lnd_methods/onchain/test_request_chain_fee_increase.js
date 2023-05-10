@@ -44,6 +44,19 @@ const tests = [
     error: [400, 'ExpectedTransactionOutputIndexToRequestFeeBump'],
   },
   {
+    args: makeArgs({
+      lnd: {
+        wallet: {
+          bumpFee: ({}, cbk) => cbk({
+            details: 'the passed output does not belong to the wallet',
+          }),
+        },
+      },
+    }),
+    description: 'Unknown UTXO error is passed back',
+    error: [404, 'SpecifiedOutpointNotFoundInWalletUtxos'],
+  },
+  {
     args: makeArgs({lnd: {wallet: {bumpFee: ({}, cbk) => cbk('err')}}}),
     description: 'Errors are passed back',
     error: [500, 'UnexpectedErrorRequestingChainFeeBump', {err: 'err'}],
