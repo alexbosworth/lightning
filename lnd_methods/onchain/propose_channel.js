@@ -19,6 +19,8 @@ const type = 'default';
 
   Requires LND compiled with `walletrpc` build tag
 
+  `description` is not supported on LND 0.16.3 and below
+
   {
     capacity: <Channel Capacity Tokens Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
