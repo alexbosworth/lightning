@@ -68,6 +68,7 @@ const makeExpected = overrides => {
     commit_transaction_weight: 1,
     cooperative_close_address: undefined,
     cooperative_close_delay_height: undefined,
+    description: undefined,
     id: '0x0x1',
     is_active: true,
     is_closing: false,

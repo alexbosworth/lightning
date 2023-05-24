@@ -67,6 +67,7 @@ const type = 'default';
       [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
       [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
       [cooperative_close_address]: <Prefer Cooperative Close To Address String>
+      [description]: <Immutable Channel Description String>
       [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
       [give_tokens]: <Tokens to Gift To Partner Number>
       [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>

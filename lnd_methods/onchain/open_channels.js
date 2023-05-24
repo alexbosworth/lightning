@@ -45,6 +45,7 @@ const type = 'default';
       [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
       capacity: <Channel Capacity Tokens Number>
       [cooperative_close_address]: <Restrict Coop Close To Address String>
+      [description]: <Immutable Channel Description String>
       [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
       [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
       [is_private]: <Channel is Private Bool> // Defaults to false
@@ -99,6 +100,7 @@ module.exports = (args, cbk) => {
         return cbk(null, args.channels.map(channel => ({
           base_fee_mtokens: channel.base_fee_mtokens,
           capacity: channel.capacity,
+          description: channel.description,
           fee_rate: channel.fee_rate,
           id: makeId(),
           cooperative_close_address: channel.cooperative_close_address,
@@ -131,6 +133,7 @@ module.exports = (args, cbk) => {
               },
             },
             local_funding_amount: channel.capacity,
+            memo: channel.description || undefined,
             min_htlc_msat: channel.min_htlc_mtokens || defaultMinHtlcMtokens,
             node_pubkey: bufferFromHex(channel.partner_public_key),
             private: !!channel.is_private,

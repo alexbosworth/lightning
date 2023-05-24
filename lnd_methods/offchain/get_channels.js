@@ -17,6 +17,8 @@ const type = 'default';
 
   `is_trusted_funding` is not supported on LND 0.15.0 and below
 
+  `description` is not supported on LND 0.16.3 and below
+
   {
     [is_active]: <Limit Results To Only Active Channels Bool> // false
     [is_offline]: <Limit Results To Only Offline Channels Bool> // false
@@ -34,6 +36,7 @@ const type = 'default';
       commit_transaction_weight: <Commit Transaction Weight Number>
       [cooperative_close_address]: <Coop Close Restricted to Address String>
       [cooperative_close_delay_height]: <Deny Coop Close Until Height Number>
+      [description]: <Channel Description String>
       id: <Standard Format Channel Id String>
       is_active: <Channel Active Bool>
       is_closing: <Channel Is Closing Bool>

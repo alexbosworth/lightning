@@ -28,6 +28,7 @@ const makeExpected = overrides => {
     base_fee_mtokens: undefined,
     chain_fee_tokens_per_vbyte: 1,
     cooperative_close_address: 'close_address',
+    description: undefined,
     fee_rate: undefined,
     give_tokens: 1,
     is_max_funding: undefined,

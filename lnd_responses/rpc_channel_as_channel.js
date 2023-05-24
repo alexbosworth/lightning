@@ -35,6 +35,7 @@ const outpointDelimiter = ':';
       min_htlc_msat: <Minimum Millitokens HTLC String>
     }
     num_updates: <Updated Channel Count String>
+    memo: <Channel Description String>
     pending_htlcs: [{
       amount: <HTLC Tokens Amount String>
       expiration_height: <CLTV Timeout Block Height Number>
@@ -74,6 +75,7 @@ const outpointDelimiter = ':';
     commit_transaction_weight: <Commit Transaction Weight Number>
     [cooperative_close_address]: <Coop Close Restricted to Address String>
     [cooperative_close_delay_height]: <Prevent Coop Close Until Height Number>
+    [description]: <Channel Description String>
     id: <Standard Format Channel Id String>
     is_active: <Channel Active Bool>
     is_closing: <Channel Is Closing Bool>
@@ -237,6 +239,7 @@ module.exports = args => {
     commit_transaction_weight: commitWeight,
     cooperative_close_address: args.close_address || undefined,
     cooperative_close_delay_height: height,
+    description: args.memo || undefined,
     id: chanFormat({number: channelId}).channel,
     is_active: args.active,
     is_closing: false,

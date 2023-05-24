@@ -10,6 +10,8 @@ export type ProposeChannelArgs = AuthenticatedLightningArgs<{
   cooperative_close_address?: string;
   /** Cooperative Close Relative Delay */
   cooperative_close_delay?: number;
+  /** Immutable Channel Description */
+  description?: string;
   /** Tokens to Gift To Partner */
   give_tokens?: number;
   /** Pending Channel Id Hex */

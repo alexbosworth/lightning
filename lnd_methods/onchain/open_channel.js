@@ -6,6 +6,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const defaultMinConfs = 1;
 const defaultMinHtlcMtokens = '1';
+const errMemoLength = /^provided memo \(.*\) is of length \d*, exceeds (\d*)$/;
 const minChannelTokens = 20000;
 const method = 'openChannel';
 const type = 'default';
@@ -23,12 +24,15 @@ const type = 'default';
   `base_fee_mtokens` is not supported on LND 0.15.5 and below
   `fee_rate` is not supported on LND 0.15.5 and below
 
-  `is_max_funding` is not supported on LND 0.16.0 and below
+  `is_max_funding` is not supported on LND 0.16.3 and below
+
+  `description` is not supported on LND 0.16.3 and below
 
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
+    [description]: <Immutable Channel Description String>
     [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
@@ -104,6 +108,7 @@ module.exports = (args, cbk) => {
           fee_rate: args.fee_rate,
           fund_max: args.is_max_funding || undefined,
           local_funding_amount: args.local_tokens,
+          memo: args.description || undefined,
           min_confs: minConfs,
           min_htlc_msat: args.min_htlc_mtokens || defaultMinHtlcMtokens,
           node_pubkey: Buffer.from(args.partner_public_key, 'hex'),
@@ -195,6 +200,14 @@ module.exports = (args, cbk) => {
 
           if (/^unknown.chain/i.test(n.details)) {
             return cbk([503, 'ChainUnsupported']);
+          }
+
+          if (errMemoLength.test(n.details)) {
+            const [, maxLength] = n.details.match(errMemoLength);
+
+            const max = Number(maxLength);
+
+            return cbk([400, 'MaxChannelDescriptionLengthExceeded', {max}]);
           }
 
           switch (n.details.toLowerCase()) {

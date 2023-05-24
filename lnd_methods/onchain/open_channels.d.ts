@@ -8,6 +8,7 @@ export type MultipleChannelOpenOptions = Pick<
   ChannelOpenOptions,
   | 'base_fee_mtokens'
   | 'cooperative_close_address'
+  | 'description'
   | 'fee_rate'
   | 'give_tokens'
   | 'is_private'

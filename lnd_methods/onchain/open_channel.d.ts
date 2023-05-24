@@ -10,6 +10,8 @@ export type ChannelOpenOptions = {
   chain_fee_tokens_per_vbyte?: number;
   /** Restrict Cooperative Close To Address */
   cooperative_close_address?: string;
+  /** Immutable Channel Description */
+  description?: string;
   /** Routing Fee Rate In Millitokens Per Million Number */
   fee_rate?: number;
   /** Tokens to Gift To Partner */

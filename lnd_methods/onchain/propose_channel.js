@@ -23,6 +23,7 @@ const type = 'default';
     capacity: <Channel Capacity Tokens Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
     [cooperative_close_delay]: <Cooperative Close Relative Delay Number>
+    [description]: <Immutable Channel Description String>
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
     id: <Pending Channel Id Hex String>
     [is_private]: <Channel is Private Bool> // Defaults to false
@@ -109,6 +110,7 @@ module.exports = (args, cbk) => {
             },
           },
           local_funding_amount: args.capacity.toString(),
+          memo: args.description || undefined,
           node_pubkey: hexAsBuffer(args.partner_public_key),
           private: !!args.is_private,
           push_sat: (args.give_tokens || Number()).toString(),

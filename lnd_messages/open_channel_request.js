@@ -9,6 +9,7 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
     fee_rate: <Set Channel Routing Fee Rate Millitoken Per Millitokens String>
     fund_max: <Use Maximal Funding Bool>
     local_funding_amount: <Channel Capacity Tokens String>
+    memo: <Channel Description String>
     min_htlc_msat: <Minimum HTLC Millitokens String>
     node_pubkey: <Node Public Key Buffer Object>
     node_pubkey_string: <Node Public Key Hex String>
@@ -28,6 +29,7 @@ const minConfs = (isZero, confs) => isZero ? Number() : (confs || undefined);
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
     [cooperative_close_address]: <Restrict Cooperative Close To Address String>
+    [description]: <Channel Description String>
     [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number>
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
@@ -50,6 +52,7 @@ module.exports = args => {
     base_fee_mtokens: !!args.use_fee_rate ? args.base_fee : undefined,
     chain_fee_tokens_per_vbyte: chainFeeRate || undefined,
     cooperative_close_address: args.close_address || undefined,
+    description: args.memo || undefined,
     fee_rate: !!args.use_fee_rate ? Number(args.fee_rate) : undefined,
     give_tokens: Number(args.push_sat) || undefined,
     is_max_funding: !!args.fund_max || undefined,
