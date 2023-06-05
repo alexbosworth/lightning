@@ -8,7 +8,6 @@ const defaultMessageType = 32768;
 const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const isPublicKey = n => !!n && /^[0-9A-F]{66}$/i.test(n);
 const method = 'sendCustomMessage';
-const notSupported = /unknown/;
 const type = 'default';
 
 /** Send a custom message to a connected peer
@@ -58,10 +57,6 @@ module.exports = (args, cbk) => {
           type: args.type || defaultMessageType,
         },
         err => {
-          if (!!err && notSupported.test(err.details)) {
-            return cbk([501, 'SendMessageToPeerMethodNotSupported']);
-          }
-
           if (!!err) {
             return cbk([503, 'UnexpectedErrorSendingMessageToPeer', {err}]);
           }

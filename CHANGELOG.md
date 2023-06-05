@@ -1,6 +1,6 @@
 # Versions
 
-## 9.4.0
+## 9.4.1
 
 - `getChannels`: Add `description` to show the channel description
 - `openChannel`, `openChannels`, `proposeChannel`: Add `description` to set

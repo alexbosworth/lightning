@@ -36,11 +36,6 @@ const tests = [
     error: [400, 'ExpectedPeerPublicKeyToSendMessageTo'],
   },
   {
-    args: makeArgs({lnd: makeLnd({err: {details: 'unknown service'}})}),
-    description: 'Unimplemented error is returned',
-    error: [501, 'SendMessageToPeerMethodNotSupported'],
-  },
-  {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),
     description: 'Server error is returned',
     error: [503, 'UnexpectedErrorSendingMessageToPeer', {err: 'err'}],
