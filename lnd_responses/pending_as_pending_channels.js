@@ -263,6 +263,7 @@ module.exports = args => {
     }
 
     sum[pending.channel.channel_point] = {
+      close_transaction_id: pending.closing_txid,
       pending_balance: Number(pending.limbo_balance),
     };
 
@@ -282,7 +283,7 @@ module.exports = args => {
     const [txId, vout] = channel.channel_point.split(outpointSeparator);
     const wait = waitClosing[channel.channel_point] || {};
 
-    const endTx = forced.close_transaction_id;
+    const endTx = forced.close_transaction_id || wait.close_transaction_id;
     const pendingTokens = wait.pending_balance || forced.pending_balance;
 
     return {
