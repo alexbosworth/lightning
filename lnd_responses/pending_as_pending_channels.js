@@ -1,4 +1,5 @@
-const anchorChannelType = 'ANCHORS';
+const {channelTypes} = require('./constants');
+
 const {isArray} = Array;
 const remoteInitiator = 'INITIATOR_REMOTE';
 const outpointSeparator = ':';
@@ -109,6 +110,7 @@ const outpointSeparator = ':';
       transaction_id: <Channel Funding Transaction Id String>
       transaction_vout: <Channel Funding Transaction Vout Number>
       [transaction_weight]: <Commit Transaction Weight Number>
+      [type]: <Channel Commitment Transaction Type String>
     }]
   }
 */
@@ -310,6 +312,7 @@ module.exports = args => {
       transaction_id: txId,
       transaction_vout: Number(vout),
       transaction_weight: !chanOpen ? null : chanOpen.transaction_weight,
+      type: channelTypes[channel.commitment_type],
     };
   });
 

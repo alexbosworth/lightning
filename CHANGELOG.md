@@ -1,5 +1,9 @@
 # Versions
 
+## 9.6.0
+
+- `getPendingChannels`: Add `type` to return pending channel type
+
 ## 9.5.1
 
 - `getPendingChannels`: Fix returning closing transaction id for waiting close

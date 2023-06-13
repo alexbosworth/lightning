@@ -128,6 +128,7 @@ const makeExpectedPending = overrides => {
     transaction_id: Buffer.alloc(32).toString('hex'),
     transaction_vout: 1,
     transaction_weight: 1,
+    type: 'original_with_static_to_remote',
   };
 
   Object.keys(overrides || {}).forEach(key => res[key] = overrides[key]);

@@ -53,6 +53,7 @@ const type = 'default';
       transaction_id: <Channel Funding Transaction Id String>
       transaction_vout: <Channel Funding Transaction Vout Number>
       [transaction_weight]: <Commit Transaction Weight Number>
+      [type]: <Channel Commitment Transaction Type String>
     }]
   }
 */

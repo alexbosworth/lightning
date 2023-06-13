@@ -59,6 +59,8 @@ export type GetPendingChannelsResult = {
     transaction_vout: number;
     /** Funding Transaction Weight */
     transaction_weight?: number;
+    /** Channel Commitment Transaction Type */
+    type?: string;
   }[];
 };
 
