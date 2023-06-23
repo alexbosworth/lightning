@@ -17,7 +17,7 @@ const type = 'default';
 
   `is_trusted_funding` is not supported on LND 0.15.0 and below
 
-  `description` is not supported on LND 0.16.3 and below
+  `description` is not supported on LND 0.16.4 and below
 
   {
     [is_active]: <Limit Results To Only Active Channels Bool> // false

@@ -24,7 +24,7 @@ const type = 'default';
 
   This method is not supported in LND 0.13.4 and below
 
-  `description` is not supported on LND 0.16.3 and below
+  `description` is not supported on LND 0.16.4 and below
 
   {
     [id]: <RPC Middleware Interception Name String>

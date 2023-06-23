@@ -1,5 +1,10 @@
 # Versions
 
+## 9.7.0
+
+- `getPendingChannels`: Add `description` to return pending channel description
+- `getPendingChannels`: Add `is_private` to show pending channel announcement
+
 ## 9.6.0
 
 - `getPendingChannels`: Add `type` to return pending channel type

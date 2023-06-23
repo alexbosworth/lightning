@@ -17,6 +17,7 @@ const outpointSeparator = ':';
         initiator: <Channel Creator Status String>
         local_balance: <Local Balance Tokens String>
         local_chan_reserve_sat: <Local Side Channel Reserve Tokens String>
+        memo: <Channel Description String>
         remote_balance: <Remote Balance Tokens String>
         remote_chan_reserve_sat: <Remote Side Channel Reserve Tokens String>
         remote_node_pub: <Remote Node Public Key Hex String>
@@ -42,6 +43,7 @@ const outpointSeparator = ':';
         initiator: <Channel Creator Status String>
         local_balance: <Local Balance Tokens String>
         local_chan_reserve_sat: <Local Side Channel Reserve Tokens String>
+        memo: <Channel Description String>
         remote_balance: <Remote Balance Tokens String>
         remote_chan_reserve_sat: <Remote Side Channel Reserve Tokens String>
         remote_node_pub: <Remote Node Public Key Hex String>
@@ -59,6 +61,7 @@ const outpointSeparator = ':';
         initiator: <Channel Creator Status String>
         local_balance: <Local Balance Tokens String>
         local_chan_reserve_sat: <Local Side Channel Reserve Tokens String>
+        memo: <Channel Description String>
         remote_balance: <Remote Balance Tokens String>
         remote_chan_reserve_sat: <Remote Side Channel Reserve Tokens String>
         remote_node_pub: <Remote Node Public Key Hex String>
@@ -83,6 +86,7 @@ const outpointSeparator = ':';
     pending_channels: [{
       capacity: <Channel Capacity Tokens Number>
       [close_transaction_id]: <Channel Closing Transaction Id String>
+      [description]: <Channel Description String>
       is_active: <Channel Is Active Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
@@ -291,10 +295,12 @@ module.exports = args => {
     return {
       capacity: Number(channel.capacity),
       close_transaction_id: endTx || undefined,
+      description: channel.memo || undefined,
       is_active: false,
       is_closing: !chanOpen,
       is_opening: !!chanOpen,
       is_partner_initiated: channel.initiator === remoteInitiator,
+      is_private: channel.private || undefined,
       is_timelocked: forced.timelock_blocks !== undefined,
       local_balance: Number(channel.local_balance),
       local_reserve: Number(channel.local_chan_reserve_sat),

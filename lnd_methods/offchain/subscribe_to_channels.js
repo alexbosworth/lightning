@@ -31,7 +31,7 @@ const updateOpening = 'pending_open_channel';
 
   `is_trusted_funding`, `other_ids` are not supported on LND 0.15.0 and below
 
-  `description` is not supported on LND 0.16.3 and below
+  `description` is not supported on LND 0.16.4 and below
 
   @throws
   <Error>

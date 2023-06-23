@@ -40,7 +40,7 @@ const type = 'default';
   `base_fee_mtokens` is not supported on LND 0.15.5 and below
   `fee_rate` is not supported on LND 0.15.5 and below
 
-  `description` is not supported on LND 0.16.3 and below
+  `description` is not supported on LND 0.16.4 and below
 
   {
     channels: [{

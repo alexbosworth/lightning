@@ -17,6 +17,10 @@ const type = 'default';
 
   Requires `offchain:read` permission
 
+  `is_private` is not supported in LND 0.14.5 or before
+
+  `description` is not supported in LND 0.16.4 or before
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -26,10 +30,12 @@ const type = 'default';
     pending_channels: [{
       capacity: <Channel Capacity Tokens Number>
       [close_transaction_id]: <Channel Closing Transaction Id String>
+      [description]: <Channel Description String>
       is_active: <Channel Is Active Bool>
       is_closing: <Channel Is Closing Bool>
       is_opening: <Channel Is Opening Bool>
       is_partner_initiated: <Channel Partner Initiated Channel Bool>
+      [is_private]: <Channel Is Private Bool>
       is_timelocked: <Channel Local Funds Constrained by Timelock Script Bool>
       local_balance: <Channel Local Tokens Balance Number>
       local_reserve: <Channel Local Reserved Tokens Number>

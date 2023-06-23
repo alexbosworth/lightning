@@ -7,6 +7,8 @@ export type GetPendingChannelsResult = {
     capacity: number;
     /** Channel Closing Transaction Id */
     close_transaction_id?: string;
+    /** Channel Description */
+    description?: string;
     /** Channel Is Active */
     is_active: boolean;
     /** Channel Is Closing */
@@ -15,6 +17,8 @@ export type GetPendingChannelsResult = {
     is_opening: boolean;
     /** Channel Partner Initiated Channel */
     is_partner_initiated?: boolean;
+    /** Channel Is Not Announced */
+    is_private?: boolean;
     /** Channel Local Funds Constrained by Timelock */
     is_timelocked: boolean;
     /** Channel Local Tokens Balance */

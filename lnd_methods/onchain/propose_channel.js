@@ -19,7 +19,7 @@ const type = 'default';
 
   Requires LND compiled with `walletrpc` build tag
 
-  `description` is not supported on LND 0.16.3 and below
+  `description` is not supported on LND 0.16.4 and below
 
   {
     capacity: <Channel Capacity Tokens Number>

@@ -101,10 +101,12 @@ const makeExpectedPending = overrides => {
   const res = {
     capacity: 1,
     close_transaction_id: Buffer.alloc(32).toString('hex'),
+    description: undefined,
     is_active: false,
     is_closing: true,
     is_opening: false,
     is_partner_initiated: true,
+    is_private: undefined,
     is_timelocked: true,
     local_balance: 1,
     local_reserve: 1,
