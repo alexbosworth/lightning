@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const subscribeToPayViaDetails = require('./subscribe_to_pay_via_details');
 
+const defaultMillitokens = '1000';
 const defaultTokens = 1;
 
 /** Determine if a payment destination is actually payable by probing it
@@ -56,7 +57,7 @@ module.exports = (args, cbk) => {
 
       // Attempt payment
       probe: ['validate', ({}, cbk) => {
-        const tokens = !args.mtokens ? null : args.tokens || defaultTokens;
+        const isDefaultTokens = !args.tokens && !args.mtokens;
 
         const sub = subscribeToPayViaDetails({
           cltv_delta: args.cltv_delta,
@@ -66,11 +67,11 @@ module.exports = (args, cbk) => {
           max_fee: args.max_fee,
           max_fee_mtokens: args.max_fee_mtokens,
           max_timeout_height: args.max_timeout_height,
-          mtokens: args.mtokens,
+          mtokens: isDefaultTokens ? defaultMillitokens : args.mtokens,
           outgoing_channel: args.outgoing_channel,
           pathfinding_timeout: args.pathfinding_timeout,
           routes: args.routes,
-          tokens: tokens || undefined,
+          tokens: isDefaultTokens ? defaultTokens : args.tokens,
         });
 
         const finished = (err, res) => {
