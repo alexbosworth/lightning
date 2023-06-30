@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const decodeSerialized = require('./../../lnd_grpc/decode_serialized');
 
@@ -29,7 +30,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, async ({end, equal}) => {
+  return test(description, (t, end) => {
     const {decoded} = expected;
     const res = decodeSerialized(args);
 

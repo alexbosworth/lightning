@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const test = require('node:test');
 
 const {handleRemoveListener} = require('./../../grpc');
 
@@ -26,7 +26,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, equal}) => {
+  return test(description, (t, end) => {
     handleRemoveListener(args);
 
     return end();

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {diffieHellmanComputeSecret} = require('./../../../');
 
@@ -83,15 +85,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(diffieHellmanComputeSecret(args), error, 'Got error');
     } else {
       const {secret} = await diffieHellmanComputeSecret(args);
 
-      equal(secret.toString('hex'), expected.secret, 'Got expected secret');
+      strictEqual(secret.toString('hex'), expected.secret, 'Got secret');
     }
 
-    return end();
+    return;
   });
 });

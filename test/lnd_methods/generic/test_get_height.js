@@ -1,6 +1,7 @@
+const {deepStrictEqual} = require('node:assert').strict;
 const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getHeight} = require('./../../../');
 const {getInfoResponse} = require('./../fixtures');
@@ -67,15 +68,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(getHeight(args), error, 'Got expected error');
     } else {
       const got = await getHeight(args);
 
-      strictSame(got, expected, 'Got expected result');
+      deepStrictEqual(got, expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

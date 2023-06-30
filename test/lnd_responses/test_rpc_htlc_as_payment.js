@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const rpcHtlcAsPayment = require('./../../lnd_responses/rpc_htlc_as_payment');
 
@@ -108,11 +110,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcHtlcAsPayment(args), new Error(error), 'Got err');
     } else {
-      strictSame(rpcHtlcAsPayment(args), expected, 'Mapped to payment');
+      deepStrictEqual(rpcHtlcAsPayment(args), expected, 'Mapped to payment');
     }
 
     return end();

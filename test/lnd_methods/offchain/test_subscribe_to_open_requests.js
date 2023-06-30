@@ -1,7 +1,8 @@
-const EventEmitter = require('events');
-const {promisify} = require('util');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const {promisify} = require('node:util');
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToOpenRequests} = require('./../../../');
 
@@ -101,7 +102,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, match, strictSame, throws}) => {
+  return test(description, async () => {
     if (!!error) {
       throws(() => subscribeToOpenRequests(args), new Error(error), 'Got err');
     } else {
@@ -135,9 +136,9 @@ tests.forEach(({args, description, error, expected}) => {
         }
       });
 
-      strictSame(events, expected.events);
+      deepStrictEqual(events, expected.events);
     }
 
-    return end();
+    return;
   });
 });

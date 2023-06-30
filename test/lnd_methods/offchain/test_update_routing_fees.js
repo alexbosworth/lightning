@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {updateRoutingFees} = require('./../../../');
 
@@ -165,13 +166,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(updateRoutingFees(args), error, 'Got expected error');
     } else {
       await updateRoutingFees(args);
     }
 
-    return end();
+    return;
   });
 });

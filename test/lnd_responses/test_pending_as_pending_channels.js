@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {pendingAsPendingChannels} = require('./../../lnd_responses');
 
@@ -437,11 +439,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => pendingAsPendingChannels(args), new Error(error), 'Errors');
     } else {
-      strictSame(pendingAsPendingChannels(args), expected, 'Pending mapped');
+      deepStrictEqual(pendingAsPendingChannels(args), expected, 'Pending map');
     }
 
     return end();

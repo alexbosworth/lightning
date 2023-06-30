@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const returnResponse = require('./../../lnd_gateway/return_response');
 
@@ -24,7 +25,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({equal, end}) => {
+  return test(description, (t, end) => {
     let code;
     let type;
 
@@ -43,6 +44,8 @@ tests.forEach(({args, description, expected}) => {
       type: n => type = n,
     };
 
-    return returnResponse({res}).responder(args.err, args.response);
+    returnResponse({res}).responder(args.err, args.response);
+
+    return;
   });
 });

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcPaymentAsPayment} = require('./../../lnd_responses');
 
@@ -336,11 +338,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcPaymentAsPayment(args), new Error(error), 'Got err');
     } else {
-      strictSame(rpcPaymentAsPayment(args), expected, 'Got expected result');
+      deepStrictEqual(rpcPaymentAsPayment(args), expected, 'Got result');
     }
 
     return end();

@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {createHodlInvoice} = require('./../../../');
 
@@ -115,29 +118,29 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => createHodlInvoice(args), error, 'Got error');
     } else {
       const got = await createHodlInvoice(args);
 
       if (!!expected.id) {
-        equal(got.id, expected.id, 'Got expected id');
+        strictEqual(got.id, expected.id, 'Got expected id');
       }
 
-      equal(got.id.length, 64, 'Got id');
+      strictEqual(got.id.length, 64, 'Got id');
 
       if (!!got.secret) {
-        equal(got.secret.length, 64, 'Got secret');
+        strictEqual(got.secret.length, 64, 'Got secret');
       }
 
       delete expected.id;
       delete got.id;
       delete got.secret;
 
-      strictSame(got, expected, 'Got expected result');
+      deepStrictEqual(got, expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

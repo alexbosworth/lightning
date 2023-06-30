@@ -1,7 +1,8 @@
 const EventEmitter = require('events');
 const {promisify} = require('util');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const nextTick = promisify(process.nextTick);
 const {subscribeToRpcRequests} = require('./../../../lnd_methods');
@@ -212,7 +213,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => subscribeToRpcRequests(args), error, 'Got err');
     } else {
@@ -237,13 +238,13 @@ tests.forEach(({args, description, error, expected}) => {
       await nextTick();
 
       if (!!expected.intercepts) {
-        strictSame(intercepts, expected.intercepts, 'Got expected intercepts');
+        deepStrictEqual(intercepts, expected.intercepts, 'Got intercepts');
       }
 
-      strictSame(events, expected.events, 'Got expected events');
-      strictSame(!!res.subscription, true, 'Got subscription');
+      deepStrictEqual(events, expected.events, 'Got expected events');
+      deepStrictEqual(!!res.subscription, true, 'Got subscription');
     }
 
-    return end();
+    return;
   });
 });

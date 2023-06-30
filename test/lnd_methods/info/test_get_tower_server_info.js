@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getTowerServerInfo} = require('./../../../lnd_methods');
 
@@ -87,13 +89,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getTowerServerInfo(args), error, 'Got expected err');
     } else {
-      strictSame(await getTowerServerInfo(args), expected, 'Got server info');
+      deepStrictEqual(await getTowerServerInfo(args), expected, 'Got info');
     }
 
-    return end();
+    return;
   });
 });

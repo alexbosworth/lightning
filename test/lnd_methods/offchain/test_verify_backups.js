@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {verifyBackups} = require('./../../../');
 
@@ -69,15 +71,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(verifyBackups(args), error, 'Got expected error');
     } else {
       const res = await verifyBackups(args);
 
-      strictSame(res, expected, 'Got expected result');
+      deepStrictEqual(res, expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

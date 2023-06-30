@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToPeerMessages} = require('./../../../lnd_methods');
 
@@ -92,11 +93,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     try {
       subscribeToPeerMessages({});
     } catch (err) {
-      strictSame(
+      deepStrictEqual(
         err,
         new Error('ExpectedLndToSubscribeToPeerMessages'), 'Needs lnd');
     }
@@ -105,7 +106,7 @@ tests.forEach(({args, description, error, expected}) => {
 
     if (!!error) {
       sub.once('error', err => {
-        strictSame(err, error, 'Got expected error');
+        deepStrictEqual(err, error, 'Got expected error');
 
         subscribeToPeerMessages(args);
 
@@ -121,7 +122,7 @@ tests.forEach(({args, description, error, expected}) => {
       }
 
       sub.once('message_received', message => {
-        strictSame(message, expected, 'Got message received');
+        deepStrictEqual(message, expected, 'Got message received');
 
         return end();
       });

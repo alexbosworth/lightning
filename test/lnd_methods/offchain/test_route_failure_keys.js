@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const method = require('./../../../lnd_methods/offchain/route_failure_keys');
 
@@ -45,10 +46,10 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, strictSame}) => {
+  return test(description, (t, end) => {
     const {keys} = method(args);
 
-    strictSame(keys, expected.keys, 'Got expected route failure keys');
+    deepStrictEqual(keys, expected.keys, 'Got expected route failure keys');
 
     return end();
   });

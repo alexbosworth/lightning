@@ -1,6 +1,8 @@
+const {deepStrictEqual} = require('node:assert').strict;
 const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {lookupInvoiceResponse} = require('./../fixtures');
 const {subscribeToInvoices} = require('./../../../');
@@ -86,7 +88,7 @@ const tests = [
 tests.forEach(({args, description, error, expected}) => {
   args.restart_delay_ms = 1;
 
-  return test(description, async ({end, equal, match, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => subscribeToInvoices(args), new Error(error), 'Got error');
     } else {
@@ -116,9 +118,9 @@ tests.forEach(({args, description, error, expected}) => {
       sub.removeAllListeners('error');
 
       emitter.emit('error', new Error('error'));
-      strictSame(gotErr, subscriptionError, 'Got expected error');
-      equal(gotErr2, null, 'Did not get second error');
-      equal(gotStatus, 'status', 'Got expected status');
+      deepStrictEqual(gotErr, subscriptionError, 'Got expected error');
+      strictEqual(gotErr2, null, 'Did not get second error');
+      strictEqual(gotStatus, 'status', 'Got expected status');
 
       sub.on('error', err => gotErr3 = err);
 
@@ -126,11 +128,11 @@ tests.forEach(({args, description, error, expected}) => {
 
       const invoiceError = 'ExpectedInvoiceCreationDateInResponse';
 
-      strictSame(gotErr3, [503, invoiceError], 'Got invoice update error');
+      deepStrictEqual(gotErr3, [503, invoiceError], 'Got invoice update err');
 
       emitter.emit('data', lookupInvoiceResponse({}));
 
-      strictSame(gotInvoice, expected.invoice, 'Got expected invoice');
+      deepStrictEqual(gotInvoice, expected.invoice, 'Got expected invoice');
 
       sub.removeAllListeners();
     }

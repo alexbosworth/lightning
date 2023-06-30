@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const handleErrors = require('./../../lnd_gateway/handle_errors');
 
@@ -22,7 +23,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({equal, end}) => {
+  return test(description, (t, end) => {
     const {middleware} = handleErrors({});
 
     const next = !!args.res && !!args.res.headersSent ? () => end() : null;

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {strictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getChainBalance} = require('./../../../lnd_methods');
 
@@ -37,15 +39,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
-      rejects(() => getChainBalance(args), error, 'Got expected error');
+      await rejects(() => getChainBalance(args), error, 'Got expected error');
     } else {
       const res = await getChainBalance(args);
 
-      equal(res.chain_balance, expected.chain_balance, 'Got chain balance');
+      strictEqual(res.chain_balance, expected.chain_balance, 'Got balance');
     }
 
-    return end();
+    return;
   });
 });

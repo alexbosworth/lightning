@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToPayments} = require('./../../../');
 
@@ -143,7 +144,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, strictSame, throws}) => {
+  return test(description, async () => {
     if (!!error) {
       throws(() => subscribeToPayments(args), new Error(error), 'Got err');
     } else {
@@ -158,10 +159,10 @@ tests.forEach(({args, description, error, expected}) => {
       await tick();
       await tick();
 
-      strictSame(confirmed, expected.confirmed, 'Got expected payments');
-      strictSame(errors, expected.errors, 'Got expected errors');
+      deepStrictEqual(confirmed, expected.confirmed, 'Got expected payments');
+      deepStrictEqual(errors, expected.errors, 'Got expected errors');
     }
 
-    return end();
+    return;
   });
 });

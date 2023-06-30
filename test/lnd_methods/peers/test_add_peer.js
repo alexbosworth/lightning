@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {addPeer} = require('./../../../');
 
@@ -131,13 +132,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(addPeer(args), error, 'Got expected error');
     } else {
       await addPeer(args);
     }
 
-    return end();
+    return;
   });
 });

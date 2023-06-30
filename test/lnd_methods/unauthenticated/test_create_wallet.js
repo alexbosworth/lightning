@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {createWallet} = require('./../../../lnd_methods');
 
@@ -65,13 +66,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(createWallet(args), error, 'Got expected error');
     } else {
       await createWallet(args);
     }
 
-    return end();
+    return;
   });
 });

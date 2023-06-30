@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
+
 const {Transaction} = require('bitcoinjs-lib');
 
 const {getSweepTransactions} = require('./../../../lnd_methods');
@@ -109,15 +112,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getSweepTransactions(args), error, 'Got error');
     } else {
       const res = await getSweepTransactions(args);
 
-      strictSame(res.transactions, expected.transactions, 'Got transactions');
+      deepStrictEqual(res.transactions, expected.transactions, 'Got txs');
     }
 
-    return end();
+    return;
   });
 });

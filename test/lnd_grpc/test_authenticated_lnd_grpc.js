@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const {authenticatedLndGrpc} = require('./../../');
 
@@ -31,11 +33,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, async ({end, equal, strictSame}) => {
+  return test(description, (t, end) => {
     const {lnd} = authenticatedLndGrpc(args);
 
     equal(!!lnd, true, 'Got LND object');
-    strictSame(Object.keys(lnd), expected.services, 'Got expected services');
+    deepStrictEqual(Object.keys(lnd), expected.services, 'Got services');
 
     return end();
   });

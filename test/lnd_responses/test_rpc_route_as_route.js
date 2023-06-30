@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcRouteAsRoute} = require('./../../lnd_responses');
 
@@ -80,20 +82,20 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({end, equal, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcRouteAsRoute(args), new Error(error), 'Got error');
     } else {
       const route = rpcRouteAsRoute(args);
 
-      equal(route.fee, expected.fee, 'Got expected fee');
-      equal(route.fee_mtokens, expected.fee_mtokens, 'Got expected fee mtok');
-      equal(route.mtokens, expected.mtokens, 'Got expected millitokens');
-      equal(route.payment, expected.payment, 'Got expected payment');
-      equal(route.timeout, expected.timeout, 'Got expected timeout');
-      equal(route.total_mtokens, expected.total_mtokens, 'Got expected total');
+      strictEqual(route.fee, expected.fee, 'Got expected fee');
+      strictEqual(route.fee_mtokens, expected.fee_mtokens, 'Got fee mtok');
+      strictEqual(route.mtokens, expected.mtokens, 'Got expected millitokens');
+      strictEqual(route.payment, expected.payment, 'Got expected payment');
+      strictEqual(route.timeout, expected.timeout, 'Got expected timeout');
+      strictEqual(route.total_mtokens, expected.total_mtokens, 'Got total');
     }
 
     return end();
-  })
+  });
 });

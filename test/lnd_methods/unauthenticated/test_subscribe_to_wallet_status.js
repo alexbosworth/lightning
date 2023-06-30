@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {subscribeToWalletStatus} = require('./../../../lnd_methods');
 
@@ -105,11 +106,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     try {
       subscribeToWalletStatus({});
     } catch (err) {
-      strictSame(
+      deepStrictEqual(
         err,
         new Error('ExpectedAuthenticatedLndToSubscribeToWalletStatus'), 'lnd');
     }
@@ -118,7 +119,7 @@ tests.forEach(({args, description, error, expected}) => {
 
     if (!!error) {
       sub.once('error', err => {
-        strictSame(err, error, 'Got expected error');
+        deepStrictEqual(err, error, 'Got expected error');
 
         subscribeToWalletStatus(args);
 

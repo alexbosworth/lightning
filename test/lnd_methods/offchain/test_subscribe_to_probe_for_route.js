@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {getInfoResponse} = require('./../fixtures');
 const {queryRoutesResponse} = require('./../fixtures');
@@ -266,7 +269,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => subscribeToProbeForRoute(args), new Error(error), 'Error');
 
@@ -288,10 +291,10 @@ tests.forEach(({args, description, error, expected}) => {
       }
 
       sub.on('end', () => {
-        strictSame(failures, expected.failures, 'Got expected failures');
-        strictSame(gotError, expected.error, 'Got expected error');
-        strictSame(gotSuccess, expected.success, 'Got expected success');
-        strictSame(routes, expected.routes, 'Got expected routes');
+        deepStrictEqual(failures, expected.failures, 'Got expected failures');
+        deepStrictEqual(gotError, expected.error, 'Got expected error');
+        deepStrictEqual(gotSuccess, expected.success, 'Got expected success');
+        deepStrictEqual(routes, expected.routes, 'Got expected routes');
 
         return end();
       });

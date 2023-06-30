@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {grantAccess} = require('./../../../');
 
@@ -114,15 +116,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => grantAccess(args), error, 'Got expected error');
     } else {
       const {macaroon} = await grantAccess(args);
 
-      equal(macaroon, expected.macaroon, 'Got expected macaroon');
+      strictEqual(macaroon, expected.macaroon, 'Got expected macaroon');
     }
 
-    return end();
+    return;
   });
 });

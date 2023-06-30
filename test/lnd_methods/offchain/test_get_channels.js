@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getChannels} = require('./../../../');
 
@@ -149,12 +151,12 @@ const tests = [
   {
     args: {lnd: makeLnd({active: undefined})},
     description: 'An active state is expected',
-    error: [503, 'ExpectedChannelActiveState'],
+    error: [503, 'ExpectedChannelActiveStateInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({capacity: undefined})},
     description: 'Channel capacity is expected',
-    error: [503, 'ExpectedChannelCapacity'],
+    error: [503, 'ExpectedChannelCapacityInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({chan_id: undefined})},
@@ -164,17 +166,17 @@ const tests = [
   {
     args: {lnd: makeLnd({channel_point: ''})},
     description: 'Channel funding outpoint is expected',
-    error: [503, 'ExpectedChannelPoint'],
+    error: [503, 'ExpectedChannelPointInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({commit_fee: undefined})},
     description: 'Channel commit fee is expected',
-    error: [503, 'ExpectedCommitFee'],
+    error: [503, 'ExpectedCommitFeeInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({commit_weight: undefined})},
     description: 'Channel commit weight is expected',
-    error: [503, 'ExpectedCommitWeight'],
+    error: [503, 'ExpectedCommitWeightInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({commitment_type: undefined})},
@@ -184,62 +186,62 @@ const tests = [
   {
     args: {lnd: makeLnd({fee_per_kw: undefined})},
     description: 'Channel fee per kw is expected',
-    error: [503, 'ExpectedFeePerKw'],
+    error: [503, 'ExpectedFeePerKwInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({local_balance: undefined})},
     description: 'Local balance is expected',
-    error: [503, 'ExpectedLocalBalance'],
+    error: [503, 'ExpectedLocalBalanceInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({local_chan_reserve_sat: undefined})},
     description: 'Local chan reserve is expected',
-    error: [503, 'ExpectedLocalChannelReserveAmountInChannel'],
+    error: [503, 'ExpectedLocalChannelReserveAmountInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({num_updates: undefined})},
     description: 'Number of updates is expected',
-    error: [503, 'ExpectedNumUpdates'],
+    error: [503, 'ExpectedNumUpdatesInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({pending_htlcs: undefined})},
     description: 'Pending HTLCs is expected',
-    error: [503, 'ExpectedChannelPendingHtlcs'],
+    error: [503, 'ExpectedChannelPendingHtlcsInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({private: undefined})},
     description: 'Private status is expected',
-    error: [503, 'ExpectedChannelPrivateStatus'],
+    error: [503, 'ExpectedChannelPrivateStatusInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({remote_balance: undefined})},
     description: 'Remote balance is expected',
-    error: [503, 'ExpectedRemoteBalance'],
+    error: [503, 'ExpectedRemoteBalanceInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({remote_chan_reserve_sat: undefined})},
     description: 'Remote channel reserve amount is expected',
-    error: [503, 'ExpectedRemoteChannelReserveAmount'],
+    error: [503, 'ExpectedRemoteChannelReserveAmountInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({remote_pubkey: undefined})},
     description: 'Remote public key is expected',
-    error: [503, 'ExpectedRemotePubkey'],
+    error: [503, 'ExpectedRemotePubkeyInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({total_satoshis_received: undefined})},
     description: 'Total satoshis received is expected',
-    error: [503, 'ExpectedTotalSatoshisReceived'],
+    error: [503, 'ExpectedTotalSatoshisReceivedInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({total_satoshis_sent: undefined})},
     description: 'Total satoshis sent is expected',
-    error: [503, 'ExpectedTotalSatoshisSent'],
+    error: [503, 'ExpectedTotalSatoshisSentInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({unsettled_balance: undefined})},
     description: 'Unsettled balance is expected',
-    error: [503, 'ExpectedUnsettledBalance'],
+    error: [503, 'ExpectedUnsettledBalanceInChannelMessage'],
   },
   {
     args: {lnd: makeLnd({})},
@@ -288,7 +290,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getChannels(args), error, 'Got expected error');
     } else {
@@ -296,9 +298,9 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [channel] = channels;
 
-      strictSame(channel, expected.channel, 'Got expected channel');
+      deepStrictEqual(channel, expected.channel, 'Got expected channel');
     }
 
-    return end();
+    return;
   });
 });

@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {unlockUtxo} = require('./../../../lnd_methods');
 
@@ -50,13 +51,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(unlockUtxo(args), error, 'Got expected error');
     } else {
       await unlockUtxo(args);
     }
 
-    return end();
+    return;
   });
 });

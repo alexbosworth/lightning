@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const encodeResponse = require('./../../lnd_gateway/encode_response');
 
@@ -21,7 +23,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(encodeResponse(args), error, 'Got expected error');
     } else {
@@ -30,6 +32,6 @@ tests.forEach(({args, description, error, expected}) => {
       equal(response.toString('hex'), expected.response, 'Encoded response');
     }
 
-    return end();
+    return;
   });
 });

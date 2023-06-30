@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const wsUrl = require('./../../lnd_gateway/ws_url');
 
@@ -21,7 +22,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({equal, end}) => {
+  return test(description, (t, end) => {
     const {url} = wsUrl(args);
 
     equal(url, expected.url, 'Got expected websocket url');

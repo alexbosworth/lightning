@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
 
@@ -151,11 +153,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => confirmedFromPaymentStatus(args), new Error(error), 'Err');
     } else {
-      strictSame(confirmedFromPaymentStatus(args), expected, 'Mapped');
+      deepStrictEqual(confirmedFromPaymentStatus(args), expected, 'Mapped');
     }
 
     return end();

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getMasterPublicKeys} = require('./../../../lnd_methods');
 
@@ -80,15 +82,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getMasterPublicKeys(args), error, 'Got error');
     } else {
       const {keys} = await getMasterPublicKeys(args);
 
-      strictSame(keys, expected.keys, 'Got keys');
+      deepStrictEqual(keys, expected.keys, 'Got keys');
     }
 
-    return end();
+    return;
   });
 });

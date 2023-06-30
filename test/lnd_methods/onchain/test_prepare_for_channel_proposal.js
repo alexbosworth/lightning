@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {prepareForChannelProposal} = require('./../../../lnd_methods');
 
@@ -81,15 +83,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => prepareForChannelProposal(args), error, 'Got err');
     } else {
       const res = await prepareForChannelProposal(args);
 
-      equal(res.id.length, 64, 'Got pending id');
+      deepStrictEqual(res.id.length, 64, 'Got pending id');
     }
 
-    return end();
+    return;
   });
 });

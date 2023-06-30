@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const method = require('./../../../lnd_methods/macaroon/handle_rpc_request_update');
 
@@ -218,7 +221,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, strictSame, throws}) => {
+  return test(description, async () => {
     if (!!error) {
       throws(() => method(args), new Error(error), 'Got expected error');
     } else {
@@ -234,13 +237,13 @@ tests.forEach(({args, description, error, expected}) => {
         try { await reject({}); } catch (err) {}
       }
 
-      strictSame(id, expected.data.id, 'Got expected id');
-      strictSame(res.event, expected.event, 'Got expected event');
-      strictSame(macaroon, expected.data.macaroon, 'Got expected macaroon');
-      strictSame(request, expected.data.request, 'Got expected request');
-      strictSame(uri, expected.data.uri, 'Got expected uri');
+      deepStrictEqual(id, expected.data.id, 'Got expected id');
+      deepStrictEqual(res.event, expected.event, 'Got expected event');
+      deepStrictEqual(macaroon, expected.data.macaroon, 'Got macaroon');
+      deepStrictEqual(request, expected.data.request, 'Got expected request');
+      deepStrictEqual(uri, expected.data.uri, 'Got expected uri');
     }
 
-    return end();
+    return;
   });
 });

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getPendingChannels} = require('./../../../');
 
@@ -41,15 +43,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getPendingChannels(args), error, 'Got expected err');
     } else {
       const pending = await getPendingChannels(args);
 
-      strictSame(pending, expected, 'Got expected pending channels');
+      deepStrictEqual(pending, expected, 'Got expected pending channels');
     }
 
-    return end();
+    return;
   });
 });

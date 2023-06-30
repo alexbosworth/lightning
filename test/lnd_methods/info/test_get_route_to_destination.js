@@ -1,7 +1,9 @@
+const {deepStrictEqual} = require('node:assert').strict;
 const EventEmitter = require('events');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const BN = require('bn.js');
-const {test} = require('@alexbosworth/tap');
 
 const {getInfoResponse} = require('./../fixtures');
 const {getRouteToDestination} = require('./../../../');
@@ -222,13 +224,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getRouteToDestination(args), error, 'Got error');
     } else {
-      strictSame(await getRouteToDestination(args), expected, 'Got route');
+      deepStrictEqual(await getRouteToDestination(args), expected, 'Got res');
     }
 
-    return end();
+    return;
   });
 });

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {createSeed} = require('./../../../lnd_methods');
 
@@ -68,15 +70,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(createSeed(args), error, 'Got expected error');
     } else {
       const {seed} = await createSeed(args);
 
-      equal(seed, expected.seed, 'Got expected seed');
+      deepStrictEqual(seed, expected.seed, 'Got expected seed');
     }
 
-    return end();
+    return;
   });
 });

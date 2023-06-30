@@ -1,7 +1,9 @@
 const EventEmitter = require('events');
+const {deepStrictEqual} = require('node:assert').strict;
 const {promisify} = require('util');
-
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToGraph} = require('./../../../');
 
@@ -516,7 +518,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, match, strictSame, throws}) => {
+  return test(description, async () => {
     if (!!error) {
       throws(() => subscribeToGraph(args), new Error(error), 'Got error');
     } else {
@@ -541,9 +543,9 @@ tests.forEach(({args, description, error, expected}) => {
         return got;
       });
 
-      strictSame(gotEvents, expected.events, 'Got expected graph events');
+      deepStrictEqual(gotEvents, expected.events, 'Got graph events');
     }
 
-    return end();
+    return;
   });
 });

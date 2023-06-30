@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {verifyBytesSignature} = require('./../../../');
 
@@ -74,15 +76,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(verifyBytesSignature(args), error, 'Got expected error');
     } else {
       const validity = await verifyBytesSignature(args);
 
-      equal(validity.is_valid, expected.is_valid, 'Got expected validity');
+      deepStrictEqual(validity.is_valid, expected.is_valid, 'Got validity');
     }
 
-    return end();
+    return;
   });
 });

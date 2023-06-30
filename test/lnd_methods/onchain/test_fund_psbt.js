@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {fundPsbt} = require('./../../../lnd_methods');
 
@@ -170,15 +172,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(fundPsbt(args), error, 'Got error');
     } else {
       const got = await fundPsbt(args);
 
-      strictSame(got, expected, 'Got expected result');
+      deepStrictEqual(got, expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

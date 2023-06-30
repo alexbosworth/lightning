@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getAutopilot} = require('./../../../');
 
@@ -230,7 +231,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, equal}) => {
+  return test(description, (t, end) => {
     getAutopilot(args, (err, res) => {
       const [errCode, errMessage] = err || [];
 

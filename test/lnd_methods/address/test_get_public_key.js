@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getPublicKey} = require('./../../../');
 
@@ -111,7 +113,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getPublicKey(args), error, 'Got expected error');
     } else {
@@ -120,6 +122,6 @@ tests.forEach(({args, description, error, expected}) => {
       equal(res.public_key, expected.public_key, 'Got expected public key');
     }
 
-    return end();
+    return;
   });
 });

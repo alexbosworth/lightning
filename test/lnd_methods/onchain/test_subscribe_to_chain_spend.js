@@ -1,6 +1,8 @@
-const EventEmitter = require('events');
+const EventEmitter = require('node:events');
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
-const {test} = require('@alexbosworth/tap');
 const {Transaction} = require('bitcoinjs-lib');
 
 const {subscribeToChainSpend} = require('./../../../lnd_methods');
@@ -38,7 +40,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => subscribeToChainSpend(args), new Error(error), 'Got error');
 
@@ -52,9 +54,9 @@ tests.forEach(({args, description, error, expected}) => {
     const sub = subscribeToChainSpend(args);
 
     sub.on('confirmation', ({height, transaction, vin}) => {
-      equal(height, expected.height, 'Got height');
-      equal(transaction, expected.transaction, 'Got transaction');
-      equal(vin, expected.vin, 'Got vin');
+      strictEqual(height, expected.height, 'Got height');
+      strictEqual(transaction, expected.transaction, 'Got transaction');
+      strictEqual(vin, expected.vin, 'Got vin');
 
       return end();
     });

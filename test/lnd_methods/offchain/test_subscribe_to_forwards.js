@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToForwards} = require('./../../../');
 
@@ -57,7 +58,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, match, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => subscribeToForwards(args), new Error(error), 'Got error');
     } else {
@@ -87,11 +88,11 @@ tests.forEach(({args, description, error, expected}) => {
 
       const forwardErr = 'ExpectedHtlcEventTypeToDeriveForwardFromHtlcEvent';
 
-      strictSame(gotErr3, [503, forwardErr], 'Got forward event error');
+      deepStrictEqual(gotErr3, [503, forwardErr], 'Got forward event error');
 
       emitter.emit('data', makeForwardResponse({}));
 
-      strictSame(gotForward, expected.forward, 'Got expected forward');
+      deepStrictEqual(gotForward, expected.forward, 'Got expected forward');
 
       [sub, sub2].forEach(n => n.removeAllListeners());
     }

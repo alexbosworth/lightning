@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getUtxos} = require('./../../../lnd_methods');
 
@@ -134,15 +136,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getUtxos(args), error, 'Got expected error');
     } else {
       const {utxos} = await getUtxos(args);
 
-      strictSame(utxos, expected.utxos, 'Got utxos');
+      deepStrictEqual(utxos, expected.utxos, 'Got utxos');
     }
 
-    return end();
+    return;
   });
 });

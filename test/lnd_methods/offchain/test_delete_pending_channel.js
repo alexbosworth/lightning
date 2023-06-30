@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
+
 const {Transaction} = require('bitcoinjs-lib');
 
 const {deletePendingChannel} = require('./../../../lnd_methods');
@@ -86,13 +88,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => deletePendingChannel(args), error, 'Got error');
     } else {
       await deletePendingChannel(args);
     }
 
-    return end();
+    return;
   });
 });

@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getInvoice} = require('./../../../');
 const {lookupInvoiceResponse} = require('./../fixtures');
@@ -46,13 +47,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error}) => {
-  return test(description, async ({deepEqual, end, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(getInvoice(args), error, 'Got expected err');
     } else {
       await getInvoice(args);
     }
 
-    return end();
+    return;
   });
 });

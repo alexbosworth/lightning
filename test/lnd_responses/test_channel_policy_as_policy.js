@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const chanPolicyAsPolicy = require('./../../lnd_responses/channel_policy_as_policy');
 
@@ -106,13 +108,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => chanPolicyAsPolicy(args), new Error(error), 'Got error');
     } else {
       const policy = chanPolicyAsPolicy(args);
 
-      strictSame(policy, expected, 'Raw policy cast as policy');
+      deepStrictEqual(policy, expected, 'Raw policy cast as policy');
     }
 
     return end();

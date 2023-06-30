@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {subscribeToPeers} = require('./../../../lnd_methods');
 
@@ -99,11 +100,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     try {
       subscribeToPeers({});
     } catch (err) {
-      strictSame(
+      deepStrictEqual(
         err,
         new Error('ExpectedAuthenticatedLndToSubscribeToPeers'), 'Needs lnd');
     }
@@ -112,7 +113,7 @@ tests.forEach(({args, description, error, expected}) => {
 
     if (!!error) {
       sub.once('error', err => {
-        strictSame(err, error, 'Got expected error');
+        deepStrictEqual(err, error, 'Got expected error');
 
         subscribeToPeers(args);
 
@@ -128,13 +129,13 @@ tests.forEach(({args, description, error, expected}) => {
       }
 
       sub.once('connected', peer => {
-        equal(peer.public_key, expected.public_key, 'Got connected peer');
+        strictEqual(peer.public_key, expected.public_key, 'Connected peer');
 
         return end();
       });
 
       sub.once('disconnected', peer => {
-        equal(peer.public_key, expected.public_key, 'Got disconnected peer');
+        strictEqual(peer.public_key, expected.public_key, 'Got disconnected');
 
         return end();
       });

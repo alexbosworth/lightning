@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToPastPayments} = require('./../../../lnd_methods');
 
@@ -256,7 +257,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, strictSame, throws}) => {
+  return test(description, async () => {
     if (!!error) {
       throws(() => subscribeToPastPayments(args), new Error(error), 'Got err');
     } else {
@@ -269,9 +270,9 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [payment] = payments;
 
-      strictSame(payment, expected, 'Got expected payment');
+      deepStrictEqual(payment, expected, 'Got expected payment');
     }
 
-    return end();
+    return;
   });
 });

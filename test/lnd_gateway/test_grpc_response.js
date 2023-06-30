@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const test = require('node:test');
 
 const grpcResponse = require('./../../lnd_gateway/grpc_response');
 
@@ -16,7 +16,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end}) => {
+  return test(description, (t, end) => {
     const locals = args.locals || {};
     const {middleware} = grpcResponse(args);
 

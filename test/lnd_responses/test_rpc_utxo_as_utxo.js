@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcUtxoAsUtxo} = require('./../../lnd_responses');
 
@@ -87,13 +89,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcUtxoAsUtxo(args), new Error(error), 'Got error');
     } else {
       const utxo = rpcUtxoAsUtxo(args);
 
-      strictSame(utxo, expected, 'Got expected UTXO details');
+      deepStrictEqual(utxo, expected, 'Got expected UTXO details');
     }
 
     return end();

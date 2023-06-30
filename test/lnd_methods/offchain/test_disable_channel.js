@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {disableChannel} = require('./../../../lnd_methods');
 
@@ -53,13 +54,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(disableChannel(args), error, 'Got expected error');
     } else {
       await disableChannel(args);
     }
 
-    return end();
+    return;
   });
 });

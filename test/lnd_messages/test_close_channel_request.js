@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {closeChannelRequest} = require('./../../lnd_messages');
 
@@ -59,13 +61,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => closeChannelRequest(args), new Error(error), 'Got error');
     } else {
       const res = closeChannelRequest(args);
 
-      strictSame(res, expected, 'Got expected result');
+      deepStrictEqual(res, expected, 'Got expected result');
     }
 
     return end();

@@ -1,8 +1,10 @@
 const EventEmitter = require('events');
+const {deepStrictEqual} = require('node:assert').strict;
 const {once} = require('events');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {encode} = require('cbor');
-const {test} = require('@alexbosworth/tap');
 
 const emitEvent = require('./../../lnd_gateway/emit_event');
 
@@ -22,7 +24,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     const emitter = new EventEmitter();
     const message = args.message;
 
@@ -41,9 +43,9 @@ tests.forEach(({args, description, error, expected}) => {
     } else {
       const [, [emitted]] = await all([emit, once(emitter, expected.event)]);
 
-      strictSame(emitted, expected.emitted, 'Got expected emitted data');
+      deepStrictEqual(emitted, expected.emitted, 'Got expected emitted data');
     }
 
-    return end();
+    return;
   });
 });

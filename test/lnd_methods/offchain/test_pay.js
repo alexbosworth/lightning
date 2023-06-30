@@ -1,5 +1,8 @@
-const EventEmitter = require('events');
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const {rejects} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getInfoResponse} = require('./../fixtures');
 const {pay} = require('./../../../');
@@ -160,13 +163,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       try {
         await pay(args);
       } catch (gotErr) {
         if (gotErr.length === 2) {
-          strictSame(gotErr, error, 'Got expected error')
+          deepStrictEqual(gotErr, error, 'Got expected error')
         } else {
           const [errCode, errMessage] = gotErr;
           const [expectedCode, expectedMessage, expectedDetails] = error;
@@ -174,26 +177,26 @@ tests.forEach(({args, description, error, expected}) => {
           equal(errCode, expectedCode, 'Error code received');
           equal(errMessage, expectedMessage, 'Error message received');
 
-          strictSame(failures, expectedDetails.failures, 'Full fails received');
+          deepStrictEqual(failures, expectedDetails.failures, 'Full fails');
         }
 
-        return end();
+        return;
       }
     }
 
     const paid = await pay(args);
 
-    strictSame(paid.failures, expected.failures, 'Failures are returned');
-    equal(paid.fee, expected.fee, 'Fee is returned');
-    equal(paid.fee_mtokens, expected.fee_mtokens, 'Fee mtokens are returned');
-    strictSame(paid.hops, expected.hops, 'Hops are returned');
-    equal(paid.id.length, preimage.toString('hex').length, 'Got payment hash');
-    equal(paid.is_confirmed, true, 'Payment is confirmed');
-    equal(paid.is_outgoing, true, 'Transaction is an outgoing one');
-    equal(paid.mtokens, expected.mtokens, 'Mtokens are returned');
-    equal(paid.secret, expected.secret, 'Payment results in secret delivery');
-    equal(paid.tokens, expected.tokens, 'Tokens are returned');
+    deepStrictEqual(paid.failures, expected.failures, 'Failures are returned');
+    strictEqual(paid.fee, expected.fee, 'Fee is returned');
+    strictEqual(paid.fee_mtokens, expected.fee_mtokens, 'Fee mtokens');
+    deepStrictEqual(paid.hops, expected.hops, 'Hops are returned');
+    strictEqual(paid.id.length, preimage.toString('hex').length, 'Got hash');
+    strictEqual(paid.is_confirmed, true, 'Payment is confirmed');
+    strictEqual(paid.is_outgoing, true, 'Transaction is an outgoing one');
+    strictEqual(paid.mtokens, expected.mtokens, 'Mtokens are returned');
+    strictEqual(paid.secret, expected.secret, 'Payment results in secret');
+    strictEqual(paid.tokens, expected.tokens, 'Tokens are returned');
 
-    return end();
+    return;
   });
 });

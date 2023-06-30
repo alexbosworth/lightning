@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getChannelBalance} = require('./../../../');
 
@@ -152,15 +154,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
-      rejects(() => getChannelBalance(args), error, 'Got expected error');
+      await rejects(() => getChannelBalance(args), error, 'Got error');
     } else {
       const balances = await getChannelBalance(args);
 
-      strictSame(balances, expected, 'Got channel balances');
+      deepStrictEqual(balances, expected, 'Got channel balances');
     }
 
-    return end();
+    return;
   });
 });

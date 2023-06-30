@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const method = require('./../../../lnd_methods/signer/input_signing_method');
 
@@ -43,10 +44,10 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, async ({end, strictSame}) => {
+  return test(description, (t, end) => {
     const res = method(args);
 
-    strictSame(res, expected, 'Got expected result');
+    deepStrictEqual(res, expected, 'Got expected result');
 
     return end();
   });

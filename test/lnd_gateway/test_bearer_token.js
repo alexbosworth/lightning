@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const bearerToken = require('./../../lnd_gateway/bearer_token');
 
@@ -16,12 +18,12 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, strictSame}) => {
+  return test(description, (t, end) => {
     const {middleware} = bearerToken({});
     const res = {locals: {}};
 
     return middleware({get: key => args.header}, res, () => {
-      strictSame(res.locals, expected.locals, 'Got expected locals');
+      deepStrictEqual(res.locals, expected.locals, 'Got expected locals');
 
       return end();
     });

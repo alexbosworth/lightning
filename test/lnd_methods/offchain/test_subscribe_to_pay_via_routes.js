@@ -1,4 +1,8 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const EventEmitter = require('node:events');
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToPayViaRoutes} = require('./../../../');
 
@@ -376,7 +380,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => subscribeToPayViaRoutes(args), new Error(error), 'Got err');
 
@@ -394,20 +398,18 @@ tests.forEach(({args, description, error, expected}) => {
       sub.on('success', success => gotSuccess = success);
 
       return sub.once('end', () => {
-        strictSame(attempts, expected.attempts, 'Got expected pay attempts');
-        strictSame(failures, expected.failures, 'Got expected pay failures');
-        strictSame(gotSuccess, expected.success, 'Got expected pay success');
+        deepStrictEqual(attempts, expected.attempts, 'Got pay attempts');
+        deepStrictEqual(failures, expected.failures, 'Got pay failures');
+        deepStrictEqual(gotSuccess, expected.success, 'Got pay success');
 
         const [errCode, errMessage] = gotError || [];
         const [expectedErrCode, expectedErrMessage] = expected.error || [];
 
-        equal(errCode, expectedErrCode, 'Got expected error code');
-        equal(errMessage, expectedErrMessage, 'Got expected error message');
+        strictEqual(errCode, expectedErrCode, 'Got error code');
+        strictEqual(errMessage, expectedErrMessage, 'Got error message');
 
         return end();
       });
     }
-
-    return end();
   });
 });

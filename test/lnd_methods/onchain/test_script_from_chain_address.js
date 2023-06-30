@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const scriptFromChainAddress = require('./../../../lnd_methods/onchain/script_from_chain_address');
 
@@ -63,10 +64,10 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, equal}) => {
+  return test(description, (t, end) => {
     const {script} = scriptFromChainAddress(args);
 
-    equal(script, expected.script, 'Script derived from address');
+    deepStrictEqual(script, expected.script, 'Script derived from address');
 
     return end();
   });

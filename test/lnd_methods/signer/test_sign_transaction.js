@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {signTransaction} = require('./../../../');
 
@@ -98,7 +100,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(signTransaction(args), error, 'Got expected error');
     } else {
@@ -106,9 +108,9 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [signature] = signatures;
 
-      equal(signature, expected.signature, 'Got expected signature');
+      deepStrictEqual(signature, expected.signature, 'Got expected signature');
     }
 
-    return end();
+    return;
   });
 });

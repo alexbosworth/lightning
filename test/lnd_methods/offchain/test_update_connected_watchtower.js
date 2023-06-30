@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {updateConnectedWatchtower} = require('./../../../lnd_methods');
 
@@ -77,13 +78,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(updateConnectedWatchtower(args), error, 'Got error');
     } else {
       await updateConnectedWatchtower(args);
     }
 
-    return end();
+    return;
   });
 });

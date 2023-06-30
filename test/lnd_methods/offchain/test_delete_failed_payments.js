@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {deleteFailedPayments} = require('./../../../lnd_methods');
 
@@ -20,13 +21,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(deleteFailedPayments(args), error, 'Got expected err');
     } else {
       await deleteFailedPayments(args);
     }
 
-    return end();
+    return;
   });
 });

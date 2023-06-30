@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {ignoreAsIgnoredNodes} = require('./../../lnd_requests');
 
@@ -36,7 +39,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => ignoreAsIgnoredNodes(args), new Error(error), 'Got error');
     } else if (!!expected.ignore) {
@@ -44,9 +47,9 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [ignore] = ignored;
 
-      strictSame(ignore.toString('hex'), expected.ignore, 'Ignore mapped');
+      deepStrictEqual(ignore.toString('hex'), expected.ignore, 'Ignore map');
     } else {
-      equal(ignoreAsIgnoredNodes(args).ignored, undefined, 'Nothing ignored');
+      strictEqual(ignoreAsIgnoredNodes(args).ignored, undefined, 'No ignored');
     }
 
     return end();

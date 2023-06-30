@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {signChainAddressMessage} = require('./../../../');
 
@@ -74,13 +76,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => signChainAddressMessage(args), error, 'Got error');
     } else {
-      strictSame(await signChainAddressMessage(args), expected, 'Got result');
+      deepStrictEqual(await signChainAddressMessage(args), expected, 'Result');
     }
 
-    return end();
+    return;
   });
 });

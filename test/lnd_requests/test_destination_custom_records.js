@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {destinationCustomRecords} = require('./../../lnd_requests');
 
@@ -16,10 +17,10 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, strictSame}) => {
+  return test(description, (t, end) => {
     const {tlv} = destinationCustomRecords(args);
 
-    strictSame(tlv, expected.tlv, 'Got expected output');
+    deepStrictEqual(tlv, expected.tlv, 'Got expected output');
 
     return end();
   });

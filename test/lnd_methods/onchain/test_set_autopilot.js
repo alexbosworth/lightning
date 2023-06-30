@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {setAutopilot} = require('./../../../lnd_methods');
 
@@ -175,16 +176,16 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, equal}) => {
+  return test(description, (t, end) => {
     setAutopilot(args, (err, res) => {
       const [errCode, errMessage] = err || [];
 
       if (!!expected.error_code || !!errCode) {
-        equal(errCode, expected.error_code, 'Got expected error code');
+        strictEqual(errCode, expected.error_code, 'Got expected error code');
       }
 
       if (!!expected.error_message || !!errMessage) {
-        equal(errMessage, expected.error_message, 'Got expected err message');
+        strictEqual(errMessage, expected.error_message, 'Got expected err');
       }
 
       if (!!err) {

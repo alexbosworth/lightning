@@ -1,5 +1,8 @@
+const {rejects} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+
 const {Transaction} = require('bitcoinjs-lib');
-const {test} = require('@alexbosworth/tap');
 
 const {broadcastChainTransaction} = require('./../../../lnd_methods');
 
@@ -80,15 +83,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
-      rejects(() => broadcastChainTransaction(args), error, 'Got expected error');
+      await rejects(() => broadcastChainTransaction(args), error, 'Got error');
     } else {
       const {id} = await broadcastChainTransaction(args);
 
-      equal(id, expected.id, 'Got fee rate');
+      strictEqual(id, expected.id, 'Got fee rate');
     }
 
-    return end();
+    return;
   });
 });

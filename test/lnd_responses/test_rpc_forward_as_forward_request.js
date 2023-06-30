@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcForwardAsForwardRequest} = require('./../../lnd_responses');
 
@@ -126,13 +128,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcForwardAsForwardRequest(args), new Error(error), 'Err');
     } else {
       const request = rpcForwardAsForwardRequest(args);
 
-      strictSame(request, expected, 'Got expected forward request');
+      deepStrictEqual(request, expected, 'Got expected forward request');
     }
 
     return end();

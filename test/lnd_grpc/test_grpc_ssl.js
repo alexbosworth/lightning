@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const grpcSsl = require('./../../lnd_grpc/grpc_ssl');
 
@@ -18,7 +19,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description}) => {
-  return test(description, async ({end, equal}) => {
+  return test(description, (t, end) => {
     const res = grpcSsl(args);
 
     equal(!!res.ssl, true, 'Has SSL object');

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcWalletStateAsState} = require('./../../lnd_responses');
 
@@ -58,13 +60,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcWalletStateAsState(args), new Error(error), 'Got error');
     } else {
-      strictSame(rpcWalletStateAsState(args), expected, 'Got expected');
+      deepStrictEqual(rpcWalletStateAsState(args), expected, 'Got expected');
     }
 
     return end();
-  })
+  });
 });

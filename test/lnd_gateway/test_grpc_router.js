@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const {grpcRouter} = require('./../../');
 
@@ -11,8 +12,8 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, type}) => {
-    type(grpcRouter({}), expected.type, 'Got expected result type');
+  return test(description, (t, end) => {
+    equal(typeof grpcRouter({}), expected.type, 'Got expected result type');
 
     return end();
   });

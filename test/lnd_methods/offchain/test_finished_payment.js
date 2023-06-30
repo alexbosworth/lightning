@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const method = require('./../../../lnd_methods/offchain/finished_payment');
 
@@ -129,13 +131,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(method(args), error, 'Got expected error');
     } else {
-      strictSame(await method(args), expected, 'Got expected result');
+      deepStrictEqual(await method(args), expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

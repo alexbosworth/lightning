@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getRouteThroughHops} = require('./../../../');
 
@@ -241,15 +243,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
-      rejects(getRouteThroughHops(args), error, 'Got expected error');
+      await rejects(getRouteThroughHops(args), error, 'Got expected error');
     } else {
       const {route} = await getRouteThroughHops(args);
 
-      strictSame(route, expected.route, 'Route');
+      deepStrictEqual(route, expected.route, 'Route');
     }
 
-    return end();
+    return;
   });
 });

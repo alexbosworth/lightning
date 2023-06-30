@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcResolutionAsResolution} = require('./../../lnd_responses');
 
@@ -114,11 +116,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcResolutionAsResolution(args), new Error(error), 'Err');
     } else {
-      strictSame(rpcResolutionAsResolution(args), expected, 'RPC res mapped');
+      deepStrictEqual(rpcResolutionAsResolution(args), expected, 'res mapped');
     }
 
     return end();

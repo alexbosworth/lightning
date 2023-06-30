@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcPeerAsPeer} = require('./../../lnd_responses');
 
@@ -141,11 +143,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcPeerAsPeer(args), new Error(error), 'Got expected err');
     } else {
-      strictSame(rpcPeerAsPeer(args), expected, 'RPC peer mapped to peer');
+      deepStrictEqual(rpcPeerAsPeer(args), expected, 'RPC peer mapped');
     }
 
     return end();

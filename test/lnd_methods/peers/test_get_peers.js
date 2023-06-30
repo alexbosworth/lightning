@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getPeers} = require('./../../../');
 
@@ -41,15 +43,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getPeers(args), error, 'Got expected error');
     } else {
       const {peers} = await getPeers(args);
 
-      strictSame(peers, expected.peers, 'Got expected peers');
+      deepStrictEqual(peers, expected.peers, 'Got expected peers');
     }
 
-    return end();
+    return;
   });
 });

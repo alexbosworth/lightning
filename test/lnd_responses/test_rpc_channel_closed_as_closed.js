@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcChannelClosedAsClosed} = require('./../../lnd_responses');
 
@@ -93,17 +95,17 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcChannelClosedAsClosed(args), new Error(error), 'Error');
     } else {
       const update = rpcChannelClosedAsClosed(args);
 
-      equal(!!update.updated_at, true, 'Has last updated date');
+      deepStrictEqual(!!update.updated_at, true, 'Has last updated date');
 
       delete update.updated_at;
 
-      strictSame(update, expected, 'Channel closed cast as close');
+      deepStrictEqual(update, expected, 'Channel closed cast as close');
     }
 
     return end();

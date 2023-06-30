@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {settleHodlInvoice} = require('./../../../');
 
@@ -51,13 +52,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => settleHodlInvoice(args), error, 'Got error');
     } else {
       await settleHodlInvoice(args);
     }
 
-    return end();
+    return;
   });
 });

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcChannelUpdateAsUpdate} = require('./../../lnd_responses');
 
@@ -171,17 +173,17 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcChannelUpdateAsUpdate(args), new Error(error), 'Error');
     } else {
       const update = rpcChannelUpdateAsUpdate(args);
 
-      equal(!!update.updated_at, true, 'Has last updated date');
+      deepStrictEqual(!!update.updated_at, true, 'Has last updated date');
 
       delete update.updated_at;
 
-      strictSame(update, expected, 'Channel update cast as update');
+      deepStrictEqual(update, expected, 'Channel update cast as update');
     }
 
     return end();

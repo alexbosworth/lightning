@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {mtokensAmount} = require('./../../bolt00');
 
@@ -41,13 +43,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({equal, end, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => mtokensAmount(args), new Error(error), 'Got expected err');
     } else {
       const {mtokens} = mtokensAmount(args);
 
-      equal(mtokens, expected.mtokens, 'Got expected output');
+      deepStrictEqual(mtokens, expected.mtokens, 'Got expected output');
     }
 
     return end();

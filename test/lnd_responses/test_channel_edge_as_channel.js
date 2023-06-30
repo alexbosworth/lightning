@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {channelEdgeAsChannel} = require('./../../lnd_responses');
 
@@ -135,13 +137,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => channelEdgeAsChannel(args), new Error(error), 'Got error');
     } else {
       const channel = channelEdgeAsChannel(args);
 
-      strictSame(channel, expected, 'Channel cast as channel');
+      deepStrictEqual(channel, expected, 'Channel cast as channel');
     }
 
     return end();

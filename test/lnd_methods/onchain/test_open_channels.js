@@ -1,6 +1,7 @@
-const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const EventEmitter = require('node:events');
+const {rejects} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
 
 const {openChannels} = require('./../../../lnd_methods');
 
@@ -184,7 +185,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects, match}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(openChannels(args), error, 'Got error');
     } else {
@@ -192,11 +193,11 @@ tests.forEach(({args, description, error, expected}) => {
 
       const [channel] = pending;
 
-      equal(channel.address, expected.pending.address, 'Got funding address');
-      equal(channel.id.length, 64, 'Got expected pending id');
-      equal(channel.tokens, expected.pending.tokens, 'Got funding tokens');
+      strictEqual(channel.address, expected.pending.address, 'Got fund addr');
+      strictEqual(channel.id.length, 64, 'Got expected pending id');
+      strictEqual(channel.tokens, expected.pending.tokens, 'Got tokens');
     }
 
-    return end();
+    return;
   });
 });

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getAccessIds} = require('./../../../');
 
@@ -59,15 +61,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getAccessIds(args), error, 'Got expected error');
     } else {
       const {ids} = await getAccessIds(args);
 
-      strictSame(ids, expected.ids, 'Got expected ids');
+      deepStrictEqual(ids, expected.ids, 'Got expected ids');
     }
 
-    return end();
+    return;
   });
 });

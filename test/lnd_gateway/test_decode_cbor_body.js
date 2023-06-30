@@ -1,5 +1,8 @@
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
+
 const {encode} = require('cbor');
-const {test} = require('@alexbosworth/tap');
 
 const decodeCborBody = require('./../../lnd_gateway/decode_cbor_body');
 
@@ -17,15 +20,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame}) => {
+  return test(description, (t, end) => {
     const {middleware} = decodeCborBody({});
     const req = {body: args.body};
 
     return middleware(req, null, err => {
       if (!!error) {
-        strictSame(err, error, 'Got expected error');
+        deepStrictEqual(err, error, 'Got expected error');
       } else {
-        strictSame(req.body, expected.body, 'Got expected body');
+        deepStrictEqual(req.body, expected.body, 'Got expected body');
       }
 
       return end();

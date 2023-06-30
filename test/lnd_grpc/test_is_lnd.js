@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {equal} = require('node:assert').strict;
+const test = require('node:test');
 
 const {isLnd} = require('./../../lnd_grpc');
 
@@ -31,7 +32,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, async ({end, equal}) => {
+  return test(description, (t, end) => {
     const res = isLnd(args);
 
     equal(res, expected, 'LND status is as expected');

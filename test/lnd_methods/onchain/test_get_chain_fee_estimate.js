@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {getChainFeeEstimate} = require('./../../../lnd_methods');
 
@@ -114,15 +116,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => getChainFeeEstimate(args), error, 'Got error');
     } else {
       const estimate = await getChainFeeEstimate(args);
 
-      strictSame(estimate, expected, 'Got chain fee estimate');
+      deepStrictEqual(estimate, expected, 'Got chain fee estimate');
     }
 
-    return end();
+    return;
   });
 });

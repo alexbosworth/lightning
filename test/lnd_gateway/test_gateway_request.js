@@ -1,5 +1,8 @@
+const {equal} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
+
 const {encode} = require('cbor');
-const {test} = require('@alexbosworth/tap');
 
 const gatewayRequest = require('./../../lnd_gateway/gateway_request');
 
@@ -122,7 +125,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(gatewayRequest(args), error, 'Got expected error');
     } else {
@@ -131,6 +134,6 @@ tests.forEach(({args, description, error, expected}) => {
       equal(res, expected.res, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

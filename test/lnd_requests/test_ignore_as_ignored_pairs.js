@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {strictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const requests = './../../lnd_requests';
 
@@ -33,7 +36,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => ignoreAsIgnoredPairs(args), new Error(error), 'Got error');
     } else if (!!expected.ignored) {
@@ -43,9 +46,9 @@ tests.forEach(({args, description, error, expected}) => {
         return {from: n.from.toString('hex'), to: n.to.toString('hex')};
       });
 
-      strictSame(got, expected.ignored, 'Got expected ignore pairs');
+      deepStrictEqual(got, expected.ignored, 'Got expected ignore pairs');
     } else {
-      equal(ignoreAsIgnoredPairs(args).ignored, undefined, 'Nothing ignored');
+      strictEqual(ignoreAsIgnoredPairs(args).ignored, undefined, 'No ignored');
     }
 
     return end();

@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {partiallySignPsbt} = require('./../../../lnd_methods');
 
@@ -50,7 +52,7 @@ const tests = [
       },
     }),
     description: 'Unsupported error is passed back',
-    error: [501, 'SignPsbtMethodNotSupported'],
+    error: [501, 'PartiallySignPsbtMethodNotSupported'],
   },
   {
     args: makeArgs({lnd: {wallet: {signPsbt: ({}, cbk) => cbk('err')}}}),
@@ -86,15 +88,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(partiallySignPsbt(args), error, 'Got error');
     } else {
       const got = await partiallySignPsbt(args);
 
-      strictSame(got, expected, 'Got expected result');
+      deepStrictEqual(got, expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

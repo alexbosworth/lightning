@@ -1,10 +1,11 @@
-const {stringify} = JSON;
-
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {routesFromQueryRoutes} = require('./../../lnd_responses');
 
 const recordType = '11903';
+const {stringify} = JSON;
 
 const tests = [
   {
@@ -133,7 +134,7 @@ const tests = [
 ];
 
 tests.forEach(({description, error, expected, response}) => {
-  return test(({end, equal, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => routesFromQueryRoutes({response}), new Error(error));
 
@@ -142,7 +143,7 @@ tests.forEach(({description, error, expected, response}) => {
 
     const {routes} = routesFromQueryRoutes({response});
 
-    equal(stringify(routes), stringify(expected.routes))
+    deepStrictEqual(stringify(routes), stringify(expected.routes));
 
     return end();
   })

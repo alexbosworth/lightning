@@ -1,4 +1,4 @@
-const {test} = require('@alexbosworth/tap');
+const test = require('node:test');
 
 const {emitSubscriptionError} = require('./../../grpc');
 
@@ -54,7 +54,6 @@ const tests = [
           }
 
           throw new Error('ExpectedNoErrorEmitted');
-            
         },
         listenerCount: () => Number(),
       },
@@ -68,7 +67,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({end, equal}) => {
+  return test(description, (t, end) => {
     const emitErr = emitSubscriptionError(args);
 
     emitErr('error');

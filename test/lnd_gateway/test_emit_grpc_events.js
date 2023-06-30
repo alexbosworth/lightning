@@ -1,13 +1,13 @@
+const {equal} = require('node:assert').strict;
 const EventEmitter = require('events');
-
-const {test} = require('@alexbosworth/tap');
+const test = require('node:test');
 
 const {emitGrpcEvents} = require('./../../');
 
 const tests = [
   {
     args: {message: Buffer.alloc(3)},
-    description: 'When ',
+    description: 'Event is emitted',
     expected: {
       message: 'a26464617461a16764657461696c73781a457870656374656456616c696443626f7257734d657373616765656576656e74656572726f72',
     },
@@ -15,7 +15,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, expected}) => {
-  return test(description, ({equal, end}) => {
+  return test(description, (t, end) => {
     const ws = new EventEmitter();
 
     ws.send = message => {

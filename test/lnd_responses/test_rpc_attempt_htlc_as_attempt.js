@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {rpcAttemptHtlcAsAttempt} = require('./../../lnd_responses');
 
@@ -113,13 +115,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(({end, equal, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => rpcAttemptHtlcAsAttempt(args), new Error(error), 'Got err');
     } else {
       const attempt = rpcAttemptHtlcAsAttempt(args);
 
-      strictSame(attempt, expected.attempt, 'Got attempt from rpc attempt');
+      deepStrictEqual(attempt, expected.attempt, 'Attempt from rpc attempt');
     }
 
     return end();

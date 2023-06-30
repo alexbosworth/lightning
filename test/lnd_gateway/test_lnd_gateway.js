@@ -1,4 +1,7 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
+
 const websocket = require('ws');
 
 const {lndGateway} = require('./../../');
@@ -44,7 +47,7 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => lndGateway(args), new Error(error), 'Got expected error');
 
@@ -55,7 +58,7 @@ tests.forEach(({args, description, error, expected}) => {
       lnd.unlocker.genSeed({}, (err, res) => {
         const [code, message, details] = err;
 
-        strictSame(err, expected.err, 'Got expected result');
+        deepStrictEqual(err, expected.err, 'Got expected result');
 
         return end();
       });

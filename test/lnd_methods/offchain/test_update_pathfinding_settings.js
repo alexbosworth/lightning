@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {updatePathfindingSettings} = require('./../../../lnd_methods');
 
@@ -119,15 +121,15 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({end, rejects, strictSame}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => updatePathfindingSettings(args), error, 'Got err');
     } else {
       const res = await updatePathfindingSettings(args);
 
-      strictSame(res, expected, 'Got expected result');
+      deepStrictEqual(res, expected, 'Got expected result');
     }
 
-    return end();
+    return;
   });
 });

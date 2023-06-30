@@ -1,4 +1,5 @@
-const {test} = require('@alexbosworth/tap');
+const {rejects} = require('node:assert').strict;
+const test = require('node:test');
 
 const {removeExternalSocket} = require('./../../../');
 
@@ -44,13 +45,13 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, async ({deepEqual, end, equal, rejects}) => {
+  return test(description, async () => {
     if (!!error) {
       await rejects(() => removeExternalSocket(args), error, 'Got error');
     } else {
       await removeExternalSocket(args);
     }
 
-    return end();
+    return;
   });
 });

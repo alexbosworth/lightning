@@ -1,4 +1,6 @@
-const {test} = require('@alexbosworth/tap');
+const {deepStrictEqual} = require('node:assert').strict;
+const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const routeFromHint = require('./../../lnd_responses/route_from_route_hint');
 
@@ -130,11 +132,11 @@ const tests = [
 ];
 
 tests.forEach(({args, description, error, expected}) => {
-  return test(description, ({end, strictSame, throws}) => {
+  return test(description, (t, end) => {
     if (!!error) {
       throws(() => routeFromHint(args), new Error(error), 'Got error');
     } else {
-      strictSame(routeFromHint(args), expected.route, 'Got expected route');
+      deepStrictEqual(routeFromHint(args), expected.route, 'Got route');
     }
 
     return end();
