@@ -48,10 +48,10 @@ const outpointSeparator = ':';
         remote_chan_reserve_sat: <Remote Side Channel Reserve Tokens String>
         remote_node_pub: <Remote Node Public Key Hex String>
       }
-      confirmation_height: <Future Confirmation Height Number>
       commit_fee: <Commitment Transaction Fee Tokens String>
       commit_weight: <Commitment Transaction Weight Units String>
       fee_per_kw: <Fee Tokens Per Thousand Weight Units String>
+      funding_expiry_blocks: <Blocks Until Open Expired Number>
     }]
     waiting_close_channels: [{
       channel: {
@@ -84,6 +84,7 @@ const outpointSeparator = ':';
   @returns
   {
     pending_channels: [{
+      [blocks_until_expiry]: <Blocks Until Open Channel Expires Number>
       capacity: <Channel Capacity Tokens Number>
       [close_transaction_id]: <Channel Closing Transaction Id String>
       [description]: <Channel Description String>
@@ -243,6 +244,7 @@ module.exports = args => {
     }
 
     sum[pending.channel.channel_point] = {
+      funding_expiry: Number(pending.funding_expiry_blocks) || undefined,
       transaction_fee: Number(pending.commit_fee),
       transaction_weight: Number(pending.commit_weight),
     };
@@ -293,6 +295,7 @@ module.exports = args => {
     const pendingTokens = wait.pending_balance || forced.pending_balance;
 
     return {
+      blocks_until_expiry: !!chanOpen ? chanOpen.funding_expiry : undefined,
       capacity: Number(channel.capacity),
       close_transaction_id: endTx || undefined,
       description: channel.memo || undefined,

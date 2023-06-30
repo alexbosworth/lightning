@@ -58,5 +58,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "9.7.1"
+  "version": "9.8.0"
 }

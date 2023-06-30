@@ -21,6 +21,8 @@ const type = 'default';
 
   `description` is not supported in LND 0.16.4 or before
 
+  `blocks_until_expiry` is not supported in LND 0.16.4 or before
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -28,6 +30,7 @@ const type = 'default';
   @returns via cbk or Promise
   {
     pending_channels: [{
+      [blocks_until_expiry]: <Blocks Until Open Channel Expires Number>
       capacity: <Channel Capacity Tokens Number>
       [close_transaction_id]: <Channel Closing Transaction Id String>
       [description]: <Channel Description String>

@@ -1,5 +1,9 @@
 # Versions
 
+## 9.8.0
+
+- `getPendingChannels`: Add `blocks_until_expiry` for opening funding expiry
+
 ## 9.7.1
 
 - `isDestinationPayable`: Correct behavior for passing variations of amounts
