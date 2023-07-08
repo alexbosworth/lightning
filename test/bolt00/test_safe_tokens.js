@@ -1,4 +1,4 @@
-const {deepStrictEqual} = require('node:assert').strict;
+const {deepEqual} = require('node:assert').strict;
 const test = require('node:test');
 
 const {safeTokens} = require('./../../bolt00');
@@ -30,8 +30,8 @@ tests.forEach(({args, description, expected}) => {
   return test(description, (t, end) => {
     const {safe, tokens} = safeTokens(args);
 
-    deepStrictEqual(safe, expected.safe, 'Got expected safe tokens');
-    deepStrictEqual(tokens, expected.tokens, 'Got expected tokens');
+    deepEqual(safe, expected.safe, 'Got expected safe tokens');
+    deepEqual(tokens, expected.tokens, 'Got expected tokens');
 
     return end();
   });

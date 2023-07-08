@@ -1,4 +1,4 @@
-const {deepStrictEqual} = require('node:assert').strict;
+const {deepEqual} = require('node:assert').strict;
 const test = require('node:test');
 const {throws} = require('node:assert').strict;
 
@@ -49,7 +49,7 @@ tests.forEach(({args, description, error, expected}) => {
     } else {
       const {mtokens} = mtokensAmount(args);
 
-      deepStrictEqual(mtokens, expected.mtokens, 'Got expected output');
+      deepEqual(mtokens, expected.mtokens, 'Got expected output');
     }
 
     return end();
