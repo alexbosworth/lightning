@@ -29,6 +29,10 @@ const type = 'default';
 
   `description` is not supported on LND 0.16.4 and below
 
+  `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
+  `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
+  as well as a channel open request listener to accept the trusted funding.
+
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
