@@ -45,6 +45,7 @@ const type = 'default';
     [partner_csv_delay]: <Peer Output CSV Delay Number>
     partner_public_key: <Public Key Hex String>
     [partner_socket]: <Peer Connection Host:Port String>
+    [is_trusted_funding]: <Accept Funding as Trusted Bool>
   }
 
   @returns via cbk or Promise

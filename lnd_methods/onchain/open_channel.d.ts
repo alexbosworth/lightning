@@ -2,7 +2,6 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-import { CommitmentType } from '../../typescript';
 
 export type ChannelOpenOptions = {
   /** Routing Base Fee Millitokens Charged String */
