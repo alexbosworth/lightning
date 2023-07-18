@@ -2,8 +2,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
 } from '../../typescript';
-
-export type CommitmentType = 'UNKNOWN_COMMITMENT_TYPE' | 'LEGACY' | 'STATIC_REMOTE_KEY' | 'ANCHORS' | 'SCRIPT_ENFORCED_LEASE'
+import { CommitmentType } from '../../typescript';
 
 export type ChannelOpenOptions = {
   /** Routing Base Fee Millitokens Charged String */
