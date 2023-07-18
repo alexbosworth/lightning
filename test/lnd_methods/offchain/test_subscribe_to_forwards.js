@@ -7,6 +7,8 @@ const {subscribeToForwards} = require('./../../../');
 
 const emitter = new EventEmitter();
 
+emitter.cancel = () => {};
+
 const makeForwardResponse = () => {
   return {
     event_type: 'UNKNOWN',

@@ -4,9 +4,11 @@ const asyncDoUntil = require('async/doUntil');
 const {chanFormat} = require('bolt07');
 
 const {forwardFromHtlcEvent} = require('./../../lnd_responses');
+const {handleRemoveListener} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 
 const event = 'forward';
+const events = ['error', 'forward'];
 const method = 'subscribeHtlcEvents';
 const restartForwardListenerDelayMs = 1e3;
 const type = 'router';
@@ -69,6 +71,9 @@ module.exports = ({lnd}) => {
   };
 
   const sub = lnd[type][method]({});
+
+  // Terminate subscription when all listeners are removed
+  handleRemoveListener({events, emitter, subscription: sub});
 
   sub.on('data', data => {
     // Exit early on subscribed events
