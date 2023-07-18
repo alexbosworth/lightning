@@ -37,6 +37,7 @@ const type = 'default';
     [secret]: <Payment Preimage Hex String>
     [mtokens]: <Millitokens String>
     [tokens]: <Tokens Number>
+    [route_hints]: <Route Hints RouteHint>
   }
 
   @returns via cbk or Promise
@@ -138,6 +139,7 @@ module.exports = (args, cbk) => {
           private: !!args.is_including_private_channels,
           r_preimage: preimage || undefined,
           value_msat: mtokens,
+          route_hints: args.route_hints || undefined
         },
         (err, response) => {
           if (!!err && err.details === invoiceExistsError) {
