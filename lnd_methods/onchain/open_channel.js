@@ -11,25 +11,6 @@ const minChannelTokens = 20000;
 const method = 'openChannel';
 const type = 'default';
 
-function commitmentTypeToNumber(type) {
-  if (!type) {
-    return undefined
-  }
-  const upperCaseType = type.toUpperCase()
-  if (upperCaseType === 'UNKNOWN_COMMITMENT_TYPE') {
-    return 0
-  } else if (upperCaseType === 'LEGACY') {
-    return 1
-  } else if (upperCaseType === 'STATIC_REMOTE_KEY') {
-    return 2
-  } else if (upperCaseType === 'ANCHORS') {
-    return 3
-  } else if (upperCaseType === 'SCRIPT_ENFORCED_LEASE') {
-    return 4
-  } else {
-    throw new Error(`Unknown commitment type ${type} not recognized.`)
-  }
-}
 
 /** Open a new channel.
 
@@ -138,7 +119,7 @@ module.exports = (args, cbk) => {
           use_base_fee: args.base_fee_mtokens !== undefined,
           use_fee_rate: args.fee_rate !== undefined,
           zero_conf: !!args.is_trusted_funding,
-          commitment_type: commitmentTypeToNumber(args.commitment_type),
+          commitment_type: !!args.is_trusted_funding? 3 :undefined, // Anchors
         };
 
         if (!!args.chain_fee_tokens_per_vbyte) {

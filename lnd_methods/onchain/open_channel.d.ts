@@ -33,8 +33,6 @@ export type ChannelOpenOptions = {
   partner_socket?: string;
   /** Peer Should Avoid Waiting For Confirmation */
   is_trusted_funding?: boolean;
-  /** Channel Commitment Transaction Type */
-  commitment_type?: CommitmentType;
 };
 
 export type OpenChannelArgs = AuthenticatedLightningArgs<ChannelOpenOptions>;
