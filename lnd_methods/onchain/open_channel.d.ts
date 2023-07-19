@@ -18,6 +18,8 @@ export type ChannelOpenOptions = {
   give_tokens?: number;
   /** Channel is Private */
   is_private?: boolean;
+  /** Peer Should Avoid Waiting For Confirmation */
+  is_trusted_funding?: boolean;
   /** Local Tokens */
   local_tokens: number;
   /** Spend UTXOs With Minimum Confirmations */
@@ -30,8 +32,6 @@ export type ChannelOpenOptions = {
   partner_csv_delay?: number;
   /** Peer Connection Host:Port */
   partner_socket?: string;
-  /** Peer Should Avoid Waiting For Confirmation */
-  is_trusted_funding?: boolean;
 };
 
 export type OpenChannelArgs = AuthenticatedLightningArgs<ChannelOpenOptions>;

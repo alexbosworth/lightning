@@ -4,6 +4,7 @@ const {returnResult} = require('asyncjs-util');
 const {addPeer} = require('./../peers');
 const {isLnd} = require('./../../lnd_requests');
 
+const anchors = 'ANCHORS';
 const defaultMinConfs = 1;
 const defaultMinHtlcMtokens = '1';
 const errMemoLength = /^provided memo \(.*\) is of length \d*, exceeds (\d*)$/;
@@ -42,6 +43,7 @@ const type = 'default';
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool> // Defaults to false
+    [is_trusted_funding]: <Accept Funding as Trusted Bool>
     lnd: <Authenticated LND API Object>
     [local_tokens]: <Total Channel Capacity Tokens Number>
     [min_confirmations]: <Spend UTXOs With Minimum Confirmations Number>
@@ -49,7 +51,6 @@ const type = 'default';
     [partner_csv_delay]: <Peer Output CSV Delay Number>
     partner_public_key: <Public Key Hex String>
     [partner_socket]: <Peer Connection Host:Port String>
-    [is_trusted_funding]: <Accept Funding as Trusted Bool>
   }
 
   @returns via cbk or Promise
@@ -111,6 +112,7 @@ module.exports = (args, cbk) => {
 
         const options = {
           base_fee: args.base_fee_mtokens || undefined,
+          commitment_type: args.is_trusted_funding ? anchors : undefined,
           fee_rate: args.fee_rate,
           fund_max: args.is_max_funding || undefined,
           local_funding_amount: args.local_tokens,
@@ -123,8 +125,7 @@ module.exports = (args, cbk) => {
           spend_unconfirmed: !minConfs,
           use_base_fee: args.base_fee_mtokens !== undefined,
           use_fee_rate: args.fee_rate !== undefined,
-          zero_conf: !!args.is_trusted_funding,
-          commitment_type: !!args.is_trusted_funding? 'ANCHORS' : undefined, // Anchors
+          zero_conf: !!args.is_trusted_funding || undefined,
         };
 
         if (!!args.chain_fee_tokens_per_vbyte) {
