@@ -1,5 +1,9 @@
 # Versions
 
+## 9.9.0
+
+- `openChannel`: Add `is_trusted_funding` to support skipping confirmation wait
+
 ## 9.8.2
 
 - `subscribeToForwards`: Cancel subscription when there are no event listeners
