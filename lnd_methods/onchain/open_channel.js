@@ -124,7 +124,7 @@ module.exports = (args, cbk) => {
           use_base_fee: args.base_fee_mtokens !== undefined,
           use_fee_rate: args.fee_rate !== undefined,
           zero_conf: !!args.is_trusted_funding,
-          commitment_type: !!args.is_trusted_funding? 3 :undefined, // Anchors
+          commitment_type: !!args.is_trusted_funding? 'ANCHORS' : undefined, // Anchors
         };
 
         if (!!args.chain_fee_tokens_per_vbyte) {
