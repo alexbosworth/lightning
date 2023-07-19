@@ -42,6 +42,7 @@ const type = 'invoices';
     lnd: <Authenticated LND API Object>
     [mtokens]: <Millitokens String>
     [tokens]: <Tokens Number>
+    [route_hints]: <Route Hints RouteHint>
   }
 
   @returns via cbk or Promise
@@ -119,6 +120,7 @@ module.exports = (args, cbk) => {
           private: !!args.is_including_private_channels,
           value: args.tokens || undefined,
           value_msat: args.mtokens || undefined,
+          route_hints: args.route_hints || undefined
         },
         (err, response) => {
           if (!!err) {
