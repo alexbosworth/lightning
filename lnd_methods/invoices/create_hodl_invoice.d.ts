@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  RouteHint
 } from '../../typescript';
 
 export type CreateHodlInvoiceArgs = AuthenticatedLightningArgs<{
@@ -24,6 +25,8 @@ export type CreateHodlInvoiceArgs = AuthenticatedLightningArgs<{
   mtokens?: string;
   /** Tokens */
   tokens?: number;
+  /** Route hints */
+  route_hints?: RouteHint[]
 }>;
 
 export type CreateHodlInvoiceResult = {
