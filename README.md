@@ -22,6 +22,8 @@ Methods for working with the Lightning Network
     https://github.com/lnmarkets/umbrel
 - [LNPingBot](https://github.com/swissrouting/lnpingbot) -
     https://github.com/swissrouting/lnpingbot
+- [MutinyWallet faucet](https://github.com/MutinyWallet/mutinynet-faucet) -
+    https://www.mutinywallet.com/
 - [p2plnbot](https://telegram.me/lnp2pbot) - https://github.com/grunch/p2plnbot
 - [rekr](https://rekr.app/) - https://github.com/ryan-lingle/rekr
 - [stackernews](https://stacker.news/) -
