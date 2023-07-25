@@ -1,6 +1,6 @@
 # Versions
 
-## 9.9.0
+## 9.9.1
 
 - `openChannel`: Add `is_trusted_funding` to support skipping confirmation wait
 
