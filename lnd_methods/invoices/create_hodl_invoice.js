@@ -7,6 +7,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {createChainAddress} = require('./../address');
 const {isLnd} = require('./../../lnd_requests');
+const {routeHintFromRoute} = require('./../../lnd_requests');
 
 const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
 const {isArray} = Array;
@@ -41,8 +42,14 @@ const type = 'invoices';
     [is_including_private_channels]: <Invoice Includes Private Channels Bool>
     lnd: <Authenticated LND API Object>
     [mtokens]: <Millitokens String>
+    [routes]: [[{
+      [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
+      [channel]: <Standard Format Channel Id String>
+      [cltv_delta]: <CLTV Blocks Delta Number>
+      [fee_rate]: <Fee Rate In Millitokens Per Million Number>
+      public_key: <Forward Edge Public Key Hex String>
+    }]]
     [tokens]: <Tokens Number>
-    [route_hints]: <Route Hints RouteHint>
   }
 
   @returns via cbk or Promise
@@ -66,6 +73,10 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedInvoicesLndToCreateHodlInvoice']);
         }
 
+        if (!!args.routes && !isArray(args.routes)) {
+          return cbk([400, 'ExpectedArrayOfHopHintPathsForRoutes']);
+        }
+
         return cbk();
       },
 
@@ -79,6 +90,20 @@ module.exports = (args, cbk) => {
         const format = !!args.is_fallback_nested ? 'np2wpkh' : 'p2wpkh';
 
         return createChainAddress({format, lnd: args.lnd}, cbk);
+      }],
+
+      // Determine the route hints
+      hints: ['validate', ({}, cbk) => {
+        // Exit early when there are no route hints for the invoice
+        if (!args.routes) {
+          return cbk();
+        }
+
+        const hints = args.routes.map(route => {
+          return {hop_hints: routeHintFromRoute({route}).hops};
+        });
+
+        return cbk(null, hints);
       }],
 
       // Generate id if needed
@@ -98,8 +123,9 @@ module.exports = (args, cbk) => {
       // Add invoice
       addInvoice: [
         'addAddress',
+        'hints',
         'invoiceId',
-        ({addAddress, invoiceId}, cbk) =>
+        ({addAddress, hints, invoiceId}, cbk) =>
       {
         const fallbackAddress = !addAddress ? undefined : addAddress.address;
         const createdAt = new Date();
@@ -118,9 +144,9 @@ module.exports = (args, cbk) => {
           hash: Buffer.from(invoiceId.id, 'hex'),
           memo: args.description,
           private: !!args.is_including_private_channels,
+          route_hints: hints || undefined,
           value: args.tokens || undefined,
           value_msat: args.mtokens || undefined,
-          route_hints: args.route_hints || undefined
         },
         (err, response) => {
           if (!!err) {

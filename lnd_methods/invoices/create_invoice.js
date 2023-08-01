@@ -6,6 +6,7 @@ const {createChainAddress} = require('./../address');
 const getInvoice = require('./get_invoice');
 const {isLnd} = require('./../../lnd_requests');
 const {mtokensAmount} = require('./../../bolt00');
+const {routeHintFromRoute} = require('./../../lnd_requests');
 
 const defaultExpirySec = 60 * 60 * 3;
 const hexAsBuffer = hex => !!hex ? Buffer.from(hex, 'hex') : undefined;
@@ -36,8 +37,14 @@ const type = 'default';
     lnd: <Authenticated LND API Object>
     [secret]: <Payment Preimage Hex String>
     [mtokens]: <Millitokens String>
+    [routes]: [[{
+      [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
+      [channel]: <Standard Format Channel Id String>
+      [cltv_delta]: <CLTV Blocks Delta Number>
+      [fee_rate]: <Fee Rate In Millitokens Per Million Number>
+      public_key: <Forward Edge Public Key Hex String>
+    }]]
     [tokens]: <Tokens Number>
-    [route_hints]: <Route Hints RouteHint>
   }
 
   @returns via cbk or Promise
@@ -87,6 +94,10 @@ module.exports = (args, cbk) => {
           }
         }
 
+        if (!!args.routes && !isArray(args.routes)) {
+          return cbk([400, 'ExpectedArrayOfHopHintPathsForRoutes']);
+        }
+
         return cbk();
       },
 
@@ -100,6 +111,20 @@ module.exports = (args, cbk) => {
         const format = !!args.is_fallback_nested ? 'np2wpkh' : 'p2wpkh';
 
         return createChainAddress({format, lnd: args.lnd}, cbk);
+      }],
+
+      // Determine the route hints
+      hints: ['validate', ({}, cbk) => {
+        // Exit early when there are no route hints for the invoice
+        if (!args.routes) {
+          return cbk();
+        }
+
+        const hints = args.routes.map(route => {
+          return {hop_hints: routeHintFromRoute({route}).hops};
+        });
+
+        return cbk(null, hints);
       }],
 
       // Determine the value of the invoice
@@ -120,9 +145,10 @@ module.exports = (args, cbk) => {
       // Add invoice
       addInvoice: [
         'addAddress',
+        'hints',
         'mtokens',
         'preimage',
-        ({addAddress, mtokens, preimage}, cbk) =>
+        ({addAddress, hints, mtokens, preimage}, cbk) =>
       {
         const fallbackAddress = !addAddress ? String() : addAddress.address;
         const createdAt = new Date();
@@ -138,8 +164,8 @@ module.exports = (args, cbk) => {
           memo: args.description,
           private: !!args.is_including_private_channels,
           r_preimage: preimage || undefined,
+          route_hints: hints || undefined,
           value_msat: mtokens,
-          route_hints: args.route_hints || undefined
         },
         (err, response) => {
           if (!!err && err.details === invoiceExistsError) {

@@ -101,15 +101,3 @@ export type DateRangeFilterArgs = {
   /** Creation Date Before or Equal to ISO 8601 Date String */
   created_before?: string;
 };
-
-export type RouteHint = {
-  hop_hints: HopHint[]
-}
-
-export type HopHint = {
-  node_id: string,
-  chan_id: string,
-  fee_base_msat: number,
-  fee_proportional_millionths: number,
-  cltv_expiry_delta: number,
-}

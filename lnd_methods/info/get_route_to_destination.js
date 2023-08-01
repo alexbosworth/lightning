@@ -221,7 +221,7 @@ module.exports = (args, cbk) => {
         }
 
         const hints = args.routes.map(route => {
-          return {hop_hints: routeHintFromRoute({route}).hops}
+          return {hop_hints: routeHintFromRoute({route}).hops};
         });
 
         return cbk(null, hints);
