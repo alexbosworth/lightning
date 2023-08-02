@@ -1,7 +1,7 @@
-import { expectError, expectType } from 'tsd';
-import { AuthenticatedLnd } from '../../lnd_grpc';
-import { createInvoice, CreateInvoiceResult } from '../../lnd_methods';
-import { Routes } from '../../typescript';
+import {expectError, expectType} from 'tsd';
+import {AuthenticatedLnd} from '../../lnd_grpc';
+import {createInvoice, CreateInvoiceResult} from '../../lnd_methods';
+import {Routes} from '../../typescript';
 
 const lnd = {} as AuthenticatedLnd;
 const cltv_delta = 1;
@@ -24,7 +24,7 @@ const routes: Routes = [[{
 expectError(createInvoice());
 expectError(createInvoice({}));
 
-expectType<CreateInvoiceResult>(await createInvoice({ lnd }));
+expectType<CreateInvoiceResult>(await createInvoice({lnd}));
 expectType<CreateInvoiceResult>(
   await createInvoice({
     lnd,
@@ -37,13 +37,13 @@ expectType<CreateInvoiceResult>(
     secret,
     mtokens,
     tokens,
-  })
+ })
 );
 
 expectType<void>(
-  createInvoice({ lnd }, (error, result) => {
+  createInvoice({lnd}, (error, result) => {
     expectType<CreateInvoiceResult>(result);
-  })
+ })
 );
 expectType<void>(
   createInvoice(
@@ -59,9 +59,9 @@ expectType<void>(
       mtokens,
       routes,
       tokens,
-    },
+   },
     (error, result) => {
       expectType<CreateInvoiceResult>(result);
-    }
+   }
   )
 );

@@ -1,7 +1,7 @@
-import { expectError, expectType } from 'tsd';
-import { AuthenticatedLnd } from '../../lnd_grpc';
-import { createHodlInvoice, CreateHodlInvoiceResult } from '../../lnd_methods';
-import { Routes } from '../../typescript';
+import {expectError, expectType} from 'tsd';
+import {AuthenticatedLnd} from '../../lnd_grpc';
+import {createHodlInvoice, CreateHodlInvoiceResult} from '../../lnd_methods';
+import {Routes} from '../../typescript';
 
 const lnd = {} as AuthenticatedLnd;
 const cltv_delta = 1;
@@ -24,7 +24,7 @@ const routes: Routes = [[{
 expectError(createHodlInvoice());
 expectError(createHodlInvoice({}));
 
-expectType<CreateHodlInvoiceResult>(await createHodlInvoice({ lnd }));
+expectType<CreateHodlInvoiceResult>(await createHodlInvoice({lnd}));
 expectType<CreateHodlInvoiceResult>(
   await createHodlInvoice({
     lnd,
@@ -37,13 +37,13 @@ expectType<CreateHodlInvoiceResult>(
     is_including_private_channels,
     mtokens,
     tokens,
-  })
+ })
 );
 
 expectType<void>(
-  createHodlInvoice({ lnd }, (error, result) => {
+  createHodlInvoice({lnd}, (error, result) => {
     expectType<CreateHodlInvoiceResult>(result);
-  })
+ })
 );
 expectType<void>(
   createHodlInvoice(
@@ -59,9 +59,9 @@ expectType<void>(
       mtokens,
       routes,
       tokens,
-    },
+   },
     (error, result) => {
       expectType<CreateHodlInvoiceResult>(result);
-    }
+   }
   )
 );
