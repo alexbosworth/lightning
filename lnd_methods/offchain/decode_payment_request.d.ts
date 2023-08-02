@@ -1,27 +1,13 @@
 import type {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  Routes,
 } from '../../typescript';
 
 export type DecodePaymentRequestArgs = AuthenticatedLightningArgs<{
   /** BOLT 11 Payment Request */
   request: string;
 }>;
-
-export type DecodePaymentRouteEdge = {
-  /** Base Routing Fee In Millitokens */
-  base_fee_mtokens?: string;
-  /** Standard Format Channel Id */
-  channel?: string;
-  /** CLTV Blocks Delta */
-  cltv_delta?: number;
-  /** Fees Charged in Millitokens Per Million */
-  fee_rate?: number;
-  /** Forward Edge Public Key Hex */
-  public_key: string;
-};
-
-export type DecodePaymentRoutes = DecodePaymentRouteEdge[][];
 
 export type DecodePaymentRequestResult = {
   /** Fallback Chain Address */
@@ -52,7 +38,7 @@ export type DecodePaymentRequestResult = {
   mtokens: string;
   /** Payment Identifier Hex Encoded */
   payment?: string;
-  routes: DecodePaymentRoutes;
+  routes: Routes;
   /** Requested Tokens Rounded Up */
   safe_tokens: number;
   /** Requested Tokens Rounded Down */

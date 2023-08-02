@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  Routes,
 } from '../../typescript';
 
 export type CreateHodlInvoiceArgs = AuthenticatedLightningArgs<{
@@ -22,6 +23,7 @@ export type CreateHodlInvoiceArgs = AuthenticatedLightningArgs<{
   is_including_private_channels?: boolean;
   /** Millitokens */
   mtokens?: string;
+  routes?: Routes;
   /** Tokens */
   tokens?: number;
 }>;

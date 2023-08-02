@@ -1,19 +1,19 @@
 import * as events from 'events';
-import {MergeExclusive} from 'type-fest';
-import {AuthenticatedLnd, UnauthenticatedLnd} from '../lnd_grpc';
+import { MergeExclusive } from 'type-fest';
+import { AuthenticatedLnd, UnauthenticatedLnd } from '../lnd_grpc';
 
-export type EmptyObject = {[key: string]: never};
+export type EmptyObject = { [key: string]: never };
 
 export type AuthenticatedLightningArgs<TArgs = undefined> =
   TArgs extends undefined
-    ? {lnd: AuthenticatedLnd}
-    : TArgs & {lnd: AuthenticatedLnd};
+  ? { lnd: AuthenticatedLnd }
+  : TArgs & { lnd: AuthenticatedLnd };
 export type UnauthenticatedLightningArgs<TArgs = undefined> =
   TArgs extends undefined
-    ? {lnd: UnauthenticatedLnd}
-    : TArgs & {lnd: UnauthenticatedLnd};
+  ? { lnd: UnauthenticatedLnd }
+  : TArgs & { lnd: UnauthenticatedLnd };
 
-export type LightningError<TError = {err: Error}> = TError extends undefined
+export type LightningError<TError = { err: Error }> = TError extends undefined
   ? [number, string]
   : [number, string, TError];
 
@@ -32,23 +32,23 @@ export type LightningMethod<
 };
 
 export type AuthenticatedLightningMethod<
-  TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd},
+  TArgs extends { lnd: AuthenticatedLnd } = { lnd: AuthenticatedLnd },
   TResult = void,
   TErrorDetails = any
 > = LightningMethod<TArgs, TResult, TErrorDetails>;
 
 export type UnauthenticatedLightningMethod<
-  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd},
+  TArgs extends { lnd: UnauthenticatedLnd } = { lnd: UnauthenticatedLnd },
   TResult = void,
   TErrorDetails = any
 > = LightningMethod<TArgs, TResult, TErrorDetails>;
 
 export type AuthenticatedLightningSubscription<
-  TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd}
+  TArgs extends { lnd: AuthenticatedLnd } = { lnd: AuthenticatedLnd }
 > = (args: TArgs) => events.EventEmitter;
 
 export type UnauthenticatedLightningSubscription<
-  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd}
+  TArgs extends { lnd: UnauthenticatedLnd } = { lnd: UnauthenticatedLnd }
 > = (args: TArgs) => events.EventEmitter;
 
 type CommonStatus = 'IN_FLIGHT' | 'SUCCEEDED' | 'FAILED';
@@ -101,3 +101,20 @@ export type DateRangeFilterArgs = {
   /** Creation Date Before or Equal to ISO 8601 Date String */
   created_before?: string;
 };
+
+export type RouteNode = {
+  /** Base Routing Fee In Millitokens */
+  base_fee_mtokens?: string;
+  /** Standard Format Channel Id */
+  channel?: string;
+  /** CLTV Blocks Delta */
+  cltv_delta?: number;
+  /** Fees Charged in Millitokens Per Million */
+  fee_rate?: number;
+  /** Forward Edge Public Key Hex */
+  public_key: string;
+}
+
+export type Route = RouteNode[]
+
+export type Routes = Route[]
