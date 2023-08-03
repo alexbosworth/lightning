@@ -8,10 +8,10 @@ const anchors = 'ANCHORS';
 const defaultMinConfs = 1;
 const defaultMinHtlcMtokens = '1';
 const errMemoLength = /^provided memo \(.*\) is of length \d*, exceeds (\d*)$/;
+const {isArray} = Array;
 const minChannelTokens = 20000;
 const method = 'openChannel';
 const type = 'default';
-
 
 /** Open a new channel.
 
@@ -23,6 +23,10 @@ const type = 'default';
 
   External funding requires LND compiled with `walletrpc` build tag
 
+  `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
+  `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
+  as well as a channel open request listener to accept the trusted funding.
+
   `base_fee_mtokens` is not supported on LND 0.15.5 and below
   `fee_rate` is not supported on LND 0.15.5 and below
 
@@ -30,9 +34,7 @@ const type = 'default';
 
   `description` is not supported on LND 0.16.4 and below
 
-  `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
-  `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
-  as well as a channel open request listener to accept the trusted funding.
+  `inputs` is not supported on LND 0.16.4 and below
 
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
@@ -41,6 +43,10 @@ const type = 'default';
     [description]: <Immutable Channel Description String>
     [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
     [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
+    [inputs]: [{
+      transaction_id: <Fund With Unspent Transaction Id Hex String>
+      transaction_vout: <Fund With Unspent Transaction Output Index Number>
+    }]
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool> // Defaults to false
     [is_trusted_funding]: <Accept Funding as Trusted Bool>
@@ -76,6 +82,10 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedLargerChannelSizeForChannelOpen']);
         }
 
+        if (!!args.inputs && !isArray(args.inputs)) {
+          return cbk([400, 'ExpectedArrayOfTransactionOutpointsAsInputs']);
+        }
+
         if (!args.partner_public_key) {
           return cbk([400, 'ExpectedPartnerPublicKeyForChannelOpen']);
         }
@@ -106,8 +116,28 @@ module.exports = (args, cbk) => {
         return cbk(null, args.min_confirmations);
       }],
 
+      // Determine which inputs should be used to fund the channel
+      outpoints: ['validate', ({}, cbk) => {
+        // Exit early when there are no specific UTXOs to spend
+        if (!args.inputs) {
+          return cbk();
+        }
+
+        const utxos = args.inputs.map(input => ({
+          output_index: input.transaction_vout,
+          txid_str: input.transaction_id,
+        }));
+
+        return cbk(null, utxos);
+      }],
+
       // Open the channel
-      openChannel: ['connect', 'minConfs', ({minConfs}, cbk) => {
+      openChannel: [
+        'connect',
+        'minConfs',
+        'outpoints',
+        ({minConfs, outpoints}, cbk) =>
+      {
         let isAnnounced = false;
 
         const options = {
@@ -120,6 +150,7 @@ module.exports = (args, cbk) => {
           min_confs: minConfs,
           min_htlc_msat: args.min_htlc_mtokens || defaultMinHtlcMtokens,
           node_pubkey: Buffer.from(args.partner_public_key, 'hex'),
+          outpoints: outpoints || undefined,
           private: !!args.is_private,
           remote_csv_delay: args.partner_csv_delay || undefined,
           spend_unconfirmed: !minConfs,

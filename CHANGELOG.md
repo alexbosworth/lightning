@@ -1,5 +1,9 @@
 # Versions
 
+## 9.11.0
+
+- `openChannel`: Add `inputs` to select inputs for channel open funding
+
 ## 9.10.0
 
 - `createInvoice`, `createHodlInvoice`: Add `routes` to customize the hop hints
