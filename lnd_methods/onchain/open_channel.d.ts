@@ -3,6 +3,13 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
+export type ChannelOpenOptionsInput = {
+  /** Fund With Unspent Transaction Id Hex String */
+  transaction_id: string
+  /** Fund With Unspent Transaction Output Index Number */
+  transaction_vout: number
+}
+
 export type ChannelOpenOptions = {
   /** Routing Base Fee Millitokens Charged String */
   base_fee_mtokens?: string;
@@ -16,6 +23,9 @@ export type ChannelOpenOptions = {
   fee_rate?: number;
   /** Tokens to Gift To Partner */
   give_tokens?: number;
+  inputs?: ChannelOpenOptionsInput[]
+  /** Use Maximal Chain Funds For Local Funding Bool */
+  is_max_funding?: boolean;
   /** Channel is Private */
   is_private?: boolean;
   /** Peer Should Avoid Waiting For Confirmation */
@@ -26,10 +36,10 @@ export type ChannelOpenOptions = {
   min_confirmations?: number;
   /** Minimum HTLC Millitokens */
   min_htlc_mtokens?: string;
-  /** Public Key Hex */
-  partner_public_key: string;
   /** Peer Output CSV Delay */
   partner_csv_delay?: number;
+  /** Public Key Hex */
+  partner_public_key: string;
   /** Peer Connection Host:Port */
   partner_socket?: string;
 };
@@ -54,8 +64,18 @@ export type OpenChannelResult = {
  *
  * External funding requires LND compiled with `walletrpc` build tag
  *
+ * `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
+ * `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
+ * as well as a channel open request listener to accept the trusted funding.
+ * 
  * `base_fee_mtokens` is not supported on LND 0.15.5 and below
  * `fee_rate` is not supported on LND 0.15.5 and below
+ * 
+ * `is_max_funding` is not supported on LND 0.16.4 and below
+ * 
+ * `description` is not supported on LND 0.16.4 and below
+ * 
+ * `inputs` is not supported on LND 0.16.4 and below
  */
 export const openChannel: AuthenticatedLightningMethod<
   OpenChannelArgs,
