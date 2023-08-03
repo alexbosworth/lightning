@@ -122,11 +122,26 @@ const tests = [
     error: [400, 'ExpectedPartnerPublicKeyForChannelOpen'],
   },
   {
+    args: makeArgs({inputs: 'inputs'}),
+    description: 'A channel is opened with a tx id set',
+    error: [400, 'ExpectedArrayOfTransactionOutpointsAsInputs'],
+  },
+  {
     args: makeArgs({
       public_key: Buffer.alloc(33).toString('hex'),
       socket: 'socket',
     }),
     description: 'A peer is connected before opening',
+    expected: {transaction_id: '04030201', transaction_vout: 0},
+  },
+  {
+    args: makeArgs({
+      inputs: [{
+        transaction_id: Buffer.alloc(32).toString('hex'),
+        transaction_vout: 0,
+      }],
+    }),
+    description: 'A channel is opened with a tx id set',
     expected: {transaction_id: '04030201', transaction_vout: 0},
   },
   {
