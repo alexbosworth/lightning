@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  Routes,
 } from '../../typescript';
 
 export type CreateInvoiceArgs = AuthenticatedLightningArgs<{
@@ -22,6 +23,7 @@ export type CreateInvoiceArgs = AuthenticatedLightningArgs<{
   secret?: string;
   /** Millitokens */
   mtokens?: string;
+  routes?: Routes;
   /** Tokens */
   tokens?: number;
 }>;

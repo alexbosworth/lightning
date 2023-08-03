@@ -101,3 +101,20 @@ export type DateRangeFilterArgs = {
   /** Creation Date Before or Equal to ISO 8601 Date String */
   created_before?: string;
 };
+
+export type RouteNode = {
+  /** Base Routing Fee In Millitokens */
+  base_fee_mtokens?: string;
+  /** Standard Format Channel Id */
+  channel?: string;
+  /** CLTV Blocks Delta */
+  cltv_delta?: number;
+  /** Fees Charged in Millitokens Per Million */
+  fee_rate?: number;
+  /** Forward Edge Public Key Hex */
+  public_key: string;
+}
+
+export type Route = RouteNode[]
+
+export type Routes = Route[]

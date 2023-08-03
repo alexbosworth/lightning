@@ -1,6 +1,7 @@
 import {expectError, expectType} from 'tsd';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {createInvoice, CreateInvoiceResult} from '../../lnd_methods';
+import {Routes} from '../../typescript';
 
 const lnd = {} as AuthenticatedLnd;
 const cltv_delta = 1;
@@ -12,6 +13,13 @@ const is_including_private_channels = true;
 const secret = Buffer.alloc(32).toString('hex');
 const mtokens = '1000';
 const tokens = 1;
+const routes: Routes = [[{
+  base_fee_mtokens: '1',
+  channel: '0',
+  cltv_delta: 1,
+  fee_rate: 1,
+  public_key: 'pubkey'
+}]];
 
 expectError(createInvoice());
 expectError(createInvoice({}));
@@ -29,13 +37,13 @@ expectType<CreateInvoiceResult>(
     secret,
     mtokens,
     tokens,
-  })
+ })
 );
 
 expectType<void>(
   createInvoice({lnd}, (error, result) => {
     expectType<CreateInvoiceResult>(result);
-  })
+ })
 );
 expectType<void>(
   createInvoice(
@@ -49,10 +57,11 @@ expectType<void>(
       is_including_private_channels,
       secret,
       mtokens,
+      routes,
       tokens,
-    },
+   },
     (error, result) => {
       expectType<CreateInvoiceResult>(result);
-    }
+   }
   )
 );

@@ -2,15 +2,15 @@ import type {MergeExclusive} from 'type-fest';
 import type {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  RouteNode,
 } from '../../typescript';
-import type {DecodePaymentRouteEdge} from './decode_payment_request';
 
-export type ProbeForRouteRouteEdge = DecodePaymentRouteEdge & {
+export type ProbeForRouteNode = RouteNode & {
   /** Channel Capacity Tokens Number */
   channel_capacity?: number;
 };
 
-export type ProbeForRouteRoutes = ProbeForRouteRouteEdge[][];
+export type ProbeForRouteRoutes = ProbeForRouteNode[][];
 
 export type ProbeForRouteArgs = AuthenticatedLightningArgs<
   {

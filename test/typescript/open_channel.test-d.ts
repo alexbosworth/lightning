@@ -10,6 +10,9 @@ const chain_fee_tokens_per_vbyte = 1;
 const cooperative_close_address = 'close_address';
 const give_tokens = 1;
 
+const is_max_funding = true;
+const inputs = [{transaction_id: 'id', transaction_vout: 0}];
+
 expectError(openChannel());
 expectError(openChannel({}));
 expectError(openChannel({local_tokens}));
@@ -29,6 +32,8 @@ expectType<OpenChannelResult>(
     chain_fee_tokens_per_vbyte,
     cooperative_close_address,
     give_tokens,
+    is_max_funding,
+    inputs,
   })
 );
 
@@ -46,6 +51,8 @@ expectType<void>(
       chain_fee_tokens_per_vbyte,
       cooperative_close_address,
       give_tokens,
+      is_max_funding,
+      inputs,
     },
     (error, result) => {
       expectType<OpenChannelResult>(result);
