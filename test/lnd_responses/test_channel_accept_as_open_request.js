@@ -69,6 +69,11 @@ const tests = [
     error: 'ExpectedChannelReserveForChannelRequest',
   },
   {
+    args: makeArgs({commitment_type: undefined}),
+    description: 'Open request missing commitment type',
+    error: 'ExpectedCommitmentTypeForChannelRequest',
+  },
+  {
     args: makeArgs({csv_delay: undefined}),
     description: 'Open request missing csv delay',
     error: 'ExpectedCsvDelayInChannelOpenRequest',

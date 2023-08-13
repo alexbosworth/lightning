@@ -201,6 +201,7 @@ module.exports = args => {
 
   const emitter = new EventEmitter();
   const ignore = [];
+  let isErrored = false;
   let isFinal = false;
   let isTimedOut = false;
   const temporaryChannelFailures = [];
@@ -213,9 +214,12 @@ module.exports = args => {
   }
 
   const emitError = err => {
-    if (!emitter.listenerCount('error')) {
+    if (isErrored || !emitter.listenerCount('error')) {
       return;
     }
+
+    // Safeguard against returning multiple errors
+    isErrored = true;
 
     return emitter.emit('error', err);
   };
