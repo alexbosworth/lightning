@@ -1,6 +1,6 @@
 # Versions
 
-## 9.11.2
+## 9.11.3
 
 - `openChannel`: Add `inputs` to select inputs for channel open funding
 
