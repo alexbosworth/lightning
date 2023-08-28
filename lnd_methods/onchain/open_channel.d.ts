@@ -28,6 +28,8 @@ export type ChannelOpenOptions = {
   is_max_funding?: boolean;
   /** Channel is Private */
   is_private?: boolean;
+  /** Create Simplified Taproot Type Channel */
+  is_simplified_taproot?: boolean;
   /** Peer Should Avoid Waiting For Confirmation */
   is_trusted_funding?: boolean;
   /** Local Tokens */

@@ -1,5 +1,9 @@
 # Versions
 
+## 9.12.0
+
+- `openChannel`: Add `is_simplified_taproot` to make a simplified taproot chan
+
 ## 9.11.3
 
 - `openChannel`: Add `inputs` to select inputs for channel open funding

@@ -18,10 +18,12 @@
     "ANCHORS": "anchor",
     "LEGACY": "original",
     "SCRIPT_ENFORCED_LEASE": "anchor_with_lease_constraint",
+    "SIMPLE_TAPROOT": "simplified_taproot",
     "STATIC_REMOTE_KEY": "original_with_static_to_remote"
   },
   "commitmentTypes": {
     "anchor": "ANCHORS",
+    "simplified_taproot": "SIMPLE_TAPROOT",
     "static_remote_key": "STATIC_REMOTE_KEY",
     "variable_remote_key": "LEGACY"
   },

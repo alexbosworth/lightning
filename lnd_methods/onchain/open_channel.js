@@ -11,6 +11,7 @@ const errMemoLength = /^provided memo \(.*\) is of length \d*, exceeds (\d*)$/;
 const {isArray} = Array;
 const minChannelTokens = 20000;
 const method = 'openChannel';
+const simplifiedTaprootChannelType = 'SIMPLE_TAPROOT';
 const type = 'default';
 
 /** Open a new channel.
@@ -36,6 +37,9 @@ const type = 'default';
 
   `inputs` is not supported on LND 0.16.4 and below
 
+  `is_simplified_taproot` is not supported on LND 0.16.4 and below and requires
+  `--protocol.simple-taproot-chans` set on both sides.
+
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
@@ -49,6 +53,7 @@ const type = 'default';
     }]
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool> // Defaults to false
+    [is_simplified_taproot]: <Channel is Simplified Taproot Type Bool>
     [is_trusted_funding]: <Accept Funding as Trusted Bool>
     lnd: <Authenticated LND API Object>
     [local_tokens]: <Total Channel Capacity Tokens Number>
@@ -169,6 +174,10 @@ module.exports = (args, cbk) => {
 
         if (!!args.give_tokens) {
           options.push_sat = args.give_tokens;
+        }
+
+        if (!!args.is_simplified_taproot) {
+          options.commitment_type = simplifiedTaprootChannelType;
         }
 
         const channelOpen = args.lnd.default.openChannel(options);

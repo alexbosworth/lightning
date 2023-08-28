@@ -120,13 +120,14 @@ module.exports = (args, cbk) => {
         const [lastChannel] = toOpen.map(n => n.id).reverse();
 
         return asyncMap(toOpen, (channel, cbk) => {
+          const baseType = !!channel.is_trusted_funding ? anchors : undefined;
           let isDone = false;
           const isSelfPublish = !!args.is_avoiding_broadcast;
 
           const channelOpen = args.lnd[type][method]({
             base_fee: channel.base_fee_mtokens || undefined,
             close_address: channel.cooperative_close_address || undefined,
-            commitment_type: channel.is_trusted_funding ? anchors : undefined,
+            commitment_type: baseType,
             fee_rate: channel.fee_rate,
             funding_shim: {
               psbt_shim: {
