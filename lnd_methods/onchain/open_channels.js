@@ -18,6 +18,7 @@ const isPublicKey = n => /^[0-9A-F]{66}$/i.test(n);
 const makeId = () => randomBytes(32);
 const method = 'openChannel';
 const notEnoughOutputs = 'not enough witness outputs to create funding';
+const taproot = 'SIMPLE_TAPROOT';
 const type = 'default';
 
 /** Open one or more channels
@@ -42,6 +43,9 @@ const type = 'default';
 
   `description` is not supported on LND 0.16.4 and below
 
+  `is_simplified_taproot` is not supported on LND 0.16.4 and below and requires
+  `--protocol.simple-taproot-chans` set on both sides.
+
   {
     channels: [{
       [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
@@ -51,6 +55,7 @@ const type = 'default';
       [fee_rate]: <Routing Fee Rate In Millitokens Per Million Number>
       [give_tokens]: <Tokens to Gift To Partner Number> // Defaults to zero
       [is_private]: <Channel is Private Bool> // Defaults to false
+      [is_simplified_taproot]: <Channel is Simplified Taproot Type Bool>
       [is_trusted_funding]: <Peer Should Avoid Waiting For Confirmation Bool>
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
       [partner_csv_delay]: <Peer Output CSV Delay Number>
@@ -108,6 +113,7 @@ module.exports = (args, cbk) => {
           cooperative_close_address: channel.cooperative_close_address,
           give_tokens: channel.give_tokens,
           is_private: channel.is_private,
+          is_simplified_taproot: channel.is_simplified_taproot,
           is_trusted_funding: channel.is_trusted_funding,
           min_htlc_mtokens: channel.min_htlc_mtokens,
           partner_public_key: channel.partner_public_key,
@@ -124,10 +130,12 @@ module.exports = (args, cbk) => {
           let isDone = false;
           const isSelfPublish = !!args.is_avoiding_broadcast;
 
+          const commit = !!channel.is_simplified_taproot ? taproot : baseType;
+
           const channelOpen = args.lnd[type][method]({
             base_fee: channel.base_fee_mtokens || undefined,
             close_address: channel.cooperative_close_address || undefined,
-            commitment_type: baseType,
+            commitment_type: commit,
             fee_rate: channel.fee_rate,
             funding_shim: {
               psbt_shim: {
