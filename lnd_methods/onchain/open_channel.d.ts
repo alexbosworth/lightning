@@ -44,6 +44,8 @@ export type ChannelOpenOptions = {
   partner_public_key: string;
   /** Peer Connection Host:Port */
   partner_socket?: string;
+  /** Allow peer to have a minimal channel reserve (dust limit) */
+  is_allowing_minimal_reserve?: boolean;
 };
 
 export type OpenChannelArgs = AuthenticatedLightningArgs<ChannelOpenOptions>;

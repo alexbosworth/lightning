@@ -13,6 +13,7 @@ const minChannelTokens = 20000;
 const method = 'openChannel';
 const simplifiedTaprootChannelType = 'SIMPLE_TAPROOT';
 const type = 'default';
+const static_dust_limit = 354;
 
 /** Open a new channel.
 
@@ -62,6 +63,7 @@ const type = 'default';
     [partner_csv_delay]: <Peer Output CSV Delay Number>
     partner_public_key: <Public Key Hex String>
     [partner_socket]: <Peer Connection Host:Port String>
+    [is_allowing_minimal_reserve]: <Allow peer to have a minimal channel reserve (dust limit) Bool>
   }
 
   @returns via cbk or Promise
@@ -162,6 +164,7 @@ module.exports = (args, cbk) => {
           use_base_fee: args.base_fee_mtokens !== undefined,
           use_fee_rate: args.fee_rate !== undefined,
           zero_conf: !!args.is_trusted_funding || undefined,
+          remote_chan_reserve_sat: args.is_allowing_minimal_reserve? static_dust_limit: undefined
         };
 
         if (!!args.chain_fee_tokens_per_vbyte) {
