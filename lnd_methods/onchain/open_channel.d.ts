@@ -24,6 +24,8 @@ export type ChannelOpenOptions = {
   /** Tokens to Gift To Partner */
   give_tokens?: number;
   inputs?: ChannelOpenOptionsInput[]
+  /** Allow Peer to Have Minimal Reserve Bool */
+  is_allowing_minimal_reserve?: boolean;
   /** Use Maximal Chain Funds For Local Funding Bool */
   is_max_funding?: boolean;
   /** Channel is Private */
@@ -44,8 +46,6 @@ export type ChannelOpenOptions = {
   partner_public_key: string;
   /** Peer Connection Host:Port */
   partner_socket?: string;
-  /** Allow peer to have a minimal channel reserve (dust limit) */
-  is_allowing_minimal_reserve?: boolean;
 };
 
 export type OpenChannelArgs = AuthenticatedLightningArgs<ChannelOpenOptions>;

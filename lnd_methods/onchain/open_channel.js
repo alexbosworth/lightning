@@ -11,9 +11,9 @@ const errMemoLength = /^provided memo \(.*\) is of length \d*, exceeds (\d*)$/;
 const {isArray} = Array;
 const minChannelTokens = 20000;
 const method = 'openChannel';
+const reserve = isDust => isDust ? 354 : undefined;
 const simplifiedTaprootChannelType = 'SIMPLE_TAPROOT';
 const type = 'default';
-const static_dust_limit = 354;
 
 /** Open a new channel.
 
@@ -28,6 +28,8 @@ const static_dust_limit = 354;
   `is_trusted_funding` is not supported on LND 0.15.0 and below and requires
   `--protocol.option-scid-alias` and `--protocol.zero-conf` set on both sides
   as well as a channel open request listener to accept the trusted funding.
+
+  `is_allowing_minimal_reserve` is not supported on LND 0.15.0 and below
 
   `base_fee_mtokens` is not supported on LND 0.15.5 and below
   `fee_rate` is not supported on LND 0.15.5 and below
@@ -52,6 +54,7 @@ const static_dust_limit = 354;
       transaction_id: <Fund With Unspent Transaction Id Hex String>
       transaction_vout: <Fund With Unspent Transaction Output Index Number>
     }]
+    [is_allowing_minimal_reserve]: <Allow Peer to Have Minimal Reserve Bool>
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool> // Defaults to false
     [is_simplified_taproot]: <Channel is Simplified Taproot Type Bool>
@@ -63,7 +66,6 @@ const static_dust_limit = 354;
     [partner_csv_delay]: <Peer Output CSV Delay Number>
     partner_public_key: <Public Key Hex String>
     [partner_socket]: <Peer Connection Host:Port String>
-    [is_allowing_minimal_reserve]: <Allow peer to have a minimal channel reserve (dust limit) Bool>
   }
 
   @returns via cbk or Promise
@@ -159,12 +161,12 @@ module.exports = (args, cbk) => {
           node_pubkey: Buffer.from(args.partner_public_key, 'hex'),
           outpoints: outpoints || undefined,
           private: !!args.is_private,
+          remote_chan_reserve_sat: reserve(!!args.is_allowing_minimal_reserve),
           remote_csv_delay: args.partner_csv_delay || undefined,
           spend_unconfirmed: !minConfs,
           use_base_fee: args.base_fee_mtokens !== undefined,
           use_fee_rate: args.fee_rate !== undefined,
           zero_conf: !!args.is_trusted_funding || undefined,
-          remote_chan_reserve_sat: args.is_allowing_minimal_reserve? static_dust_limit: undefined
         };
 
         if (!!args.chain_fee_tokens_per_vbyte) {

@@ -76,6 +76,7 @@ const makeArgs = overrides => {
     lnd: makeLnd({}),
     give_tokens: 1,
     local_tokens: 1e6,
+    is_allowing_minimal_reserve: true,
     partner_public_key: Buffer.alloc(33).toString('hex'),
   };
 
