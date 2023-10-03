@@ -1,5 +1,14 @@
 # Versions
 
+## 10.0.0
+
+- Add support for LND 0.17.0-beta
+
+### Breaking Changes
+
+- End support for node.js 16, require 18 or higher
+- `emitGrpcEvents`, `grpcRouter`, `lndGateway`: Remove gRPC gateway methods
+
 ## 9.14.0
 
 - `openChannel`: Add `is_allowing_minimal_reserve` to allow no reserve on peer

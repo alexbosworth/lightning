@@ -23,7 +23,6 @@ const {deletePendingChannel} = require('./lnd_methods');
 const {diffieHellmanComputeSecret} = require('./lnd_methods');
 const {disableChannel} = require('./lnd_methods');
 const {disconnectWatchtower} = require('./lnd_methods');
-const {emitGrpcEvents} = require('./lnd_gateway');
 const {enableChannel} = require('./lnd_methods');
 const {endGroupSigningSession} = require('./lnd_methods');
 const {fundPendingChannels} = require('./lnd_methods');
@@ -79,9 +78,7 @@ const {getWalletInfo} = require('./lnd_methods');
 const {getWalletStatus} = require('./lnd_methods');
 const {getWalletVersion} = require('./lnd_methods');
 const {grantAccess} = require('./lnd_methods');
-const {grpcRouter} = require('./lnd_gateway');
 const {isDestinationPayable} = require('./lnd_methods');
-const {lndGateway} = require('./lnd_gateway');
 const {lockUtxo} = require('./lnd_methods');
 const {openChannel} = require('./lnd_methods');
 const {openChannels} = require('./lnd_methods');
@@ -179,7 +176,6 @@ module.exports = {
   enableChannel,
   endGroupSigningSession,
   diffieHellmanComputeSecret,
-  emitGrpcEvents,
   fundPendingChannels,
   fundPsbt,
   getAccessIds,
@@ -233,9 +229,7 @@ module.exports = {
   getWalletStatus,
   getWalletVersion,
   grantAccess,
-  grpcRouter,
   isDestinationPayable,
-  lndGateway,
   lockUtxo,
   openChannel,
   openChannels,
