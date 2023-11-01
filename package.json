@@ -7,11 +7,11 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.9.5",
+    "@grpc/grpc-js": "1.9.9",
     "@grpc/proto-loader": "0.7.10",
-    "@types/node": "20.8.4",
-    "@types/request": "2.48.10",
-    "@types/ws": "8.5.7",
+    "@types/node": "20.8.10",
+    "@types/request": "2.48.11",
+    "@types/ws": "8.5.8",
     "async": "3.2.4",
     "asyncjs-util": "1.2.12",
     "bitcoinjs-lib": "6.1.5",
@@ -22,7 +22,7 @@
     "invoices": "3.0.0",
     "psbt": "3.0.0",
     "tiny-secp256k1": "2.2.3",
-    "type-fest": "4.4.0"
+    "type-fest": "4.6.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {

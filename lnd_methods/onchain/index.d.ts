@@ -4,6 +4,7 @@ export * from './close_channel';
 export * from './fund_pending_channels';
 export * from './fund_psbt';
 export * from './get_block';
+export * from './get_block_header';
 export * from './get_chain_addresses';
 export * from './get_chain_balance';
 export * from './get_chain_fee_estimate';

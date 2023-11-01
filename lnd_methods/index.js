@@ -31,6 +31,7 @@ const {getAutopilot} = require('./info');
 const {getBackup} = require('./offchain');
 const {getBackups} = require('./offchain');
 const {getBlock} = require('./onchain');
+const {getBlockHeader} = require('./onchain');
 const {getChainAddresses} = require('./onchain');
 const {getChainBalance} = require('./onchain');
 const {getChainFeeEstimate} = require('./onchain');
@@ -181,6 +182,7 @@ module.exports = {
   getBackup,
   getBackups,
   getBlock,
+  getBlockHeader,
   getChainAddresses,
   getChainBalance,
   getChainFeeEstimate,

@@ -32,6 +32,7 @@ const {getAutopilot} = require('./lnd_methods');
 const {getBackup} = require('./lnd_methods');
 const {getBackups} = require('./lnd_methods');
 const {getBlock} = require('./lnd_methods');
+const {getBlockHeader} = require('./lnd_methods');
 const {getChainAddresses} = require('./lnd_methods');
 const {getChainBalance} = require('./lnd_methods');
 const {getChainFeeEstimate} = require('./lnd_methods');
@@ -183,6 +184,7 @@ module.exports = {
   getBackup,
   getBackups,
   getBlock,
+  getBlockHeader,
   getChainAddresses,
   getChainBalance,
   getChainFeeEstimate,

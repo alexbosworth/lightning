@@ -5,21 +5,21 @@ const {isLnd} = require('./../../lnd_requests');
 
 const bufferAsHex = buffer => buffer.toString('hex');
 const errorNotFound = '-5: Block not found';
-const errorUnknownMethod = 'unknown service chainrpc.ChainKit';
+const errorUnknownMethod = 'unknown method GetBlockHeader for service chainrpc.ChainKit';
 const hexAsReversedBuffer = hex => Buffer.from(hex, 'hex').reverse();
 const {isBuffer} = Buffer;
 const isNumber = n => !isNaN(n);
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
-const method = 'getBlock';
+const method = 'getBlockHeader';
 const type = 'blocks';
 
-/** Get a block in the chain
+/** Get a block header in the best chain
 
   This method requires LND built with `chainrpc` build tag
 
   Requires `onchain:read` permission
 
-  This method is not supported on LND 0.15.5 and below
+  This method is not supported on LND 0.17.0 and below
 
   {
     [height]: <Block Height Number>
@@ -29,7 +29,7 @@ const type = 'blocks';
 
   @returns via cbk or Promise
   {
-    block: <Raw Block Bytes Hex String>
+    header: <Raw Block Header Bytes Hex String>
   }
 */
 module.exports = ({height, id, lnd}, cbk) => {
@@ -38,19 +38,19 @@ module.exports = ({height, id, lnd}, cbk) => {
       // Check arguments
       validate: cbk => {
         if (height !== undefined && !isNumber(height)) {
-          return cbk([400, 'ExpectedNumericBlockHeightOfBlockToRetrieve']);
+          return cbk([400, 'ExpectedNumericBlockHeightOfHeaderToRetrieve']);
         }
 
         if (!!id && !isHash(id)) {
-          return cbk([400, 'ExpectedIdentifyingBlockHashOfBlockToRetrieve']);
+          return cbk([400, 'ExpectedIdentifyingBlockHashOfHeaderToRetrieve']);
         }
 
         if (height !== undefined && !!id) {
-          return cbk([400, 'ExpectedEitherHeightOrIdNotBoth']);
+          return cbk([400, 'ExpectedEitherHeightOrIdNotBothForHeaderFetch']);
         }
 
         if (!isLnd({lnd, method, type})) {
-          return cbk([400, 'ExpectedAuthenticatedLndToRetrieveBlock']);
+          return cbk([400, 'ExpectedAuthenticatedLndToRetrieveBlockHeader']);
         }
 
         return cbk();
@@ -117,33 +117,33 @@ module.exports = ({height, id, lnd}, cbk) => {
         });
       }],
 
-      // Get the block
-      getBlock: ['getHash', ({getHash}, cbk) => {
+      // Get the block header
+      getBlockHeader: ['getHash', ({getHash}, cbk) => {
         return lnd[type][method]({block_hash: getHash}, (err, res) => {
           if (!!err && err.details === errorNotFound) {
-            return cbk([404, 'BlockNotFound']);
+            return cbk([404, 'BlockForHeaderNotFound']);
           }
 
           if (!!err && err.details === errorUnknownMethod) {
-            return cbk([501, 'GetBlockMethodNotSupported']);
+            return cbk([501, 'GetBlockHeaderMethodNotSupported']);
           }
 
           if (!!err) {
-            return cbk([503, 'UnexpectedErrorWhenGettingChainBlock', {err}]);
+            return cbk([503, 'UnexpectedErrorWhenGettingBlockHeader', {err}]);
           }
 
           if (!res) {
-            return cbk([503, 'ExpectedResponseForChainBlockRequest']);
+            return cbk([503, 'ExpectedResponseForChainBlockHeaderRequest']);
           }
 
-          if (!isBuffer(res.raw_block)) {
-            return cbk([503, 'ExpectedRawBlockInChainBlockResponse']);
+          if (!isBuffer(res.raw_block_header)) {
+            return cbk([503, 'ExpectedRawHeaderInChainBlockHeaderResponse']);
           }
 
-          return cbk(null, {block: bufferAsHex(res.raw_block)});
+          return cbk(null, {header: bufferAsHex(res.raw_block_header)});
         });
       }],
     },
-    returnResult({reject, resolve, of: 'getBlock'}, cbk));
+    returnResult({reject, resolve, of: 'getBlockHeader'}, cbk));
   });
 };

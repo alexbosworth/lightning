@@ -17,21 +17,21 @@ export type GetBlockArgs = AuthenticatedLightningArgs<
   >
 >;
 
-export type GetBlockResult = {
-  /** Raw Block Bytes Hex String */
-  block: string;
+export type GetBlockHeaderResult = {
+  /** Raw Block Header Bytes Hex String */
+  header: string;
 };
 
 /**
- * Get a block in the chain
+ * Get a block header in the chain
  *
  * This method requires LND built with `chainrpc` build tag
  *
  * Requires `onchain:read` permission
  *
- * This method is not supported on LND 0.15.5 and below
+ * This method is not supported on LND 0.17.0 and below
  */
-export const getBlock: AuthenticatedLightningMethod<
+export const getBlockHeader: AuthenticatedLightningMethod<
   GetBlockArgs,
-  GetBlockResult
+  GetBlockHeaderResult
 >;
