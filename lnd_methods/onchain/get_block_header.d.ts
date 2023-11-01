@@ -4,7 +4,7 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type GetBlockArgs = AuthenticatedLightningArgs<
+export type GetBlockHeaderArgs = AuthenticatedLightningArgs<
   MergeExclusive<
     {
       /** Block Height Number */
@@ -32,6 +32,6 @@ export type GetBlockHeaderResult = {
  * This method is not supported on LND 0.17.0 and below
  */
 export const getBlockHeader: AuthenticatedLightningMethod<
-  GetBlockArgs,
+  GetBlockHeaderArgs,
   GetBlockHeaderResult
 >;
