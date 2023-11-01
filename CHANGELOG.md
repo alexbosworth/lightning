@@ -1,5 +1,9 @@
 # Versions
 
+## 10.1.0
+
+- `getBlockHeader`: Add method to get the header portion of a block
+
 ## 10.0.1
 
 - Add support for LND 0.17.0-beta
