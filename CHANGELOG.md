@@ -1,6 +1,6 @@
 # Versions
 
-## 10.1.2
+## 10.1.3
 
 - `getBlockHeader`: Add method to get the header portion of a block
 
