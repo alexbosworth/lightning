@@ -11,6 +11,7 @@ const decBase = 10;
 const defaultOdds = 950000;
 const fullConfidence = 1e6;
 const {isArray} = Array;
+const notFoundIndex = -1;
 const oddsDenominator = BigInt(1e6);
 const unimplemented = 'QueryProbabilityNotImplemented';
 
@@ -43,7 +44,7 @@ module.exports = ({from, hops, lnd}, cbk) => {
           return cbk([400, 'ExpectedArrayOfHopsToCalculateRoutingOdds']);
         }
 
-        if (!!hops.find(n => !n.channel || !n.public_key)) {
+        if (hops.findIndex(n => !n.public_key) !== notFoundIndex) {
           return cbk([400, 'ExpectedHopsWithEdges']);
         }
 
