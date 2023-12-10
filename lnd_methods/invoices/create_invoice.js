@@ -31,6 +31,7 @@ const type = 'default';
     [description]: <Invoice Description String>
     [description_hash]: <Hashed Description of Payment Hex String>
     [expires_at]: <Expires At ISO 8601 Date String>
+    [is_amp]: <Is Payment AMP Invoice Bool>
     [is_fallback_included]: <Is Fallback Address Included Bool>
     [is_fallback_nested]: <Is Fallback Address Nested Bool>
     [is_including_private_channels]: <Invoice Includes Private Channels Bool>
@@ -161,6 +162,7 @@ module.exports = (args, cbk) => {
           description_hash: hexAsBuffer(args.description_hash),
           expiry: !expiryMs ? defaultExpirySec : round(expiryMs / msPerSec),
           fallback_addr: fallbackAddress,
+          is_amp: args.is_amp || undefined,
           memo: args.description,
           private: !!args.is_including_private_channels,
           r_preimage: preimage || undefined,
