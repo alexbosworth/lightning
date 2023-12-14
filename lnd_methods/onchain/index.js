@@ -1,6 +1,7 @@
 const broadcastChainTransaction = require('./broadcast_chain_transaction');
 const cancelPendingChannel = require('./cancel_pending_channel');
 const closeChannel = require('./close_channel');
+const deleteChainTransaction = require('./delete_chain_transaction');
 const fundPendingChannels = require('./fund_pending_channels');
 const fundPsbt = require('./fund_psbt');
 const getBlock = require('./get_block');
@@ -9,6 +10,7 @@ const getChainAddresses = require('./get_chain_addresses');
 const getChainBalance = require('./get_chain_balance');
 const getChainFeeEstimate = require('./get_chain_fee_estimate');
 const getChainFeeRate = require('./get_chain_fee_rate');
+const getChainTransaction = require('./get_chain_transaction');
 const getChainTransactions = require('./get_chain_transactions');
 const getLockedUtxos = require('./get_locked_utxos');
 const getMasterPublicKeys = require('./get_master_public_keys');
@@ -40,6 +42,7 @@ module.exports = {
   broadcastChainTransaction,
   cancelPendingChannel,
   closeChannel,
+  deleteChainTransaction,
   fundPendingChannels,
   fundPsbt,
   getBlock,
@@ -48,6 +51,7 @@ module.exports = {
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,
+  getChainTransaction,
   getChainTransactions,
   getLockedUtxos,
   getMasterPublicKeys,

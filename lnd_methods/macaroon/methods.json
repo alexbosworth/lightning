@@ -52,6 +52,10 @@
     "method": "DecodePayReq",
     "type": "default"
   },
+  "deleteChainTransaction": {
+    "method": "RemoveTransaction",
+    "type": "wallet"
+  },
   "deleteFailedPayAttempts": {
     "depends_on": ["deletePayment"],
     "method": "DeleteAllPayments",
@@ -143,6 +147,10 @@
   },
   "getChainFeeRate": {
     "method": "EstimateFee",
+    "type": "wallet"
+  },
+  "getChainTransaction": {
+    "method": "GetTransaction",
     "type": "wallet"
   },
   "getChainTransactions": {

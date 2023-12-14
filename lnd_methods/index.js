@@ -13,6 +13,7 @@ const {createInvoice} = require('./invoices');
 const {createSeed} = require('./unauthenticated');
 const {createWallet} = require('./unauthenticated');
 const {decodePaymentRequest} = require('./offchain');
+const {deleteChainTransaction} = require('./onchain');
 const {deleteFailedPayAttempts} = require('./offchain');
 const {deleteFailedPayments} = require('./offchain');
 const {deleteForwardingReputations} = require('./offchain');
@@ -36,6 +37,7 @@ const {getChainAddresses} = require('./onchain');
 const {getChainBalance} = require('./onchain');
 const {getChainFeeEstimate} = require('./onchain');
 const {getChainFeeRate} = require('./onchain');
+const {getChainTransaction} = require('./onchain');
 const {getChainTransactions} = require('./onchain');
 const {getChannel} = require('./info');
 const {getChannelBalance} = require('./offchain');
@@ -164,6 +166,7 @@ module.exports = {
   createSeed,
   createWallet,
   decodePaymentRequest,
+  deleteChainTransaction,
   deleteFailedPayAttempts,
   deleteFailedPayments,
   deleteForwardingReputations,
@@ -187,6 +190,7 @@ module.exports = {
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,
+  getChainTransaction,
   getChainTransactions,
   getChannel,
   getChannelBalance,

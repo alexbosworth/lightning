@@ -110,6 +110,8 @@ variables set:
 - [createWallet](https://github.com/alexbosworth/ln-service#createwallet): Make a new wallet.
 - [decodePaymentRequest](https://github.com/alexbosworth/ln-service#decodepaymentrequest):
     Get parsed details for a payment request.
+- [deleteChainTransaction](https://github.com/alexbosworth/ln-service#deletechaintransaction)
+    Delete a broadcast chain transaction
 - [deleteFailedPayAttempts](https://github.com/alexbosworth/ln-service#deletefailedpayattempts)
     Remove failed payment paths from database.
 - [deleteFailedPayments](https://github.com/alexbosworth/ln-service#deletefailedpayments)
@@ -153,6 +155,8 @@ variables set:
     Estimate a chain fee to send funds to an address.
 - [getChainFeeRate](https://github.com/alexbosworth/ln-service#getchainfeerate): Get an estimate
     for an on-chain fee rate.
+- [getChainTransaction](https://github.com/alexbosworth/ln-service#getchaintransaction):
+    Get a wallet on-chain transaction.
 - [getChainTransactions](https://github.com/alexbosworth/ln-service#getchaintransactions): List
     past on-chain transactions.
 - [getChannel](https://github.com/alexbosworth/ln-service#getchannel): Lookup network graph

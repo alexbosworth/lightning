@@ -14,6 +14,7 @@ const {createInvoice} = require('./lnd_methods');
 const {createSeed} = require('./lnd_methods');
 const {createWallet} = require('./lnd_methods');
 const {decodePaymentRequest} = require('./lnd_methods');
+const {deleteChainTransaction} = require('./lnd_methods');
 const {deleteFailedPayAttempts} = require('./lnd_methods');
 const {deleteFailedPayments} = require('./lnd_methods');
 const {deleteForwardingReputations} = require('./lnd_methods');
@@ -37,6 +38,7 @@ const {getChainAddresses} = require('./lnd_methods');
 const {getChainBalance} = require('./lnd_methods');
 const {getChainFeeEstimate} = require('./lnd_methods');
 const {getChainFeeRate} = require('./lnd_methods');
+const {getChainTransaction} = require('./lnd_methods');
 const {getChainTransactions} = require('./lnd_methods');
 const {getChannel} = require('./lnd_methods');
 const {getChannelBalance} = require('./lnd_methods');
@@ -166,6 +168,7 @@ module.exports = {
   createSeed,
   createWallet,
   decodePaymentRequest,
+  deleteChainTransaction,
   deleteFailedPayAttempts,
   deleteFailedPayments,
   deleteForwardingReputations,
@@ -189,6 +192,7 @@ module.exports = {
   getChainBalance,
   getChainFeeEstimate,
   getChainFeeRate,
+  getChainTransaction,
   getChainTransactions,
   getChannel,
   getChannelBalance,

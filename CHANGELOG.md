@@ -1,5 +1,10 @@
 # Versions
 
+## 10.2.0
+
+- `deleteChainTransaction`: Add method to delete a chain transaction
+- `getChainTransaction`: Add method to get a chain transaction
+
 ## 10.1.4
 
 - `getBlockHeader`: Add method to get the header portion of a block
