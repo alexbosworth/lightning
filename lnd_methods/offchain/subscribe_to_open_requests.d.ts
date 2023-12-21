@@ -17,7 +17,7 @@ export type SubscribeToOpenRequestsChannelRequestEvent = {
     remote_max_htlcs?: number;
     /** Maximum HTLCs Value Millitokens */
     remote_max_pending_mtokens?: string;
-    /** Minimium HTLC Value Millitokens */
+    /** Minimum HTLC Value Millitokens */
     remote_min_htlc_mtokens?: string;
   }) => void;
   /** Capacity Tokens */

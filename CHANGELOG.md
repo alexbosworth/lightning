@@ -467,7 +467,7 @@
 
 ## 4.2.1
 
-- `getChannelBalance`: Corrrect typescript type for `unsettled_balance_mtokens`
+- `getChannelBalance`: Correct typescript type for `unsettled_balance_mtokens`
 - `subscribeToProbeForRoute`: Correct typescript type for `base_fee_mtokens`
 
 ## 4.2.0

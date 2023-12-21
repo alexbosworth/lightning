@@ -41,7 +41,7 @@ const type = 'default';
       [remote_reserve]: <Minimum Tokens Peer Must Keep On Their Side Number>
       [remote_max_htlcs]: <Maximum Slots For Attaching HTLCs Number>
       [remote_max_pending_mtokens]: <Maximum HTLCs Value Millitokens String>
-      [remote_min_htlc_mtokens]: <Minimium HTLC Value Millitokens String>
+      [remote_min_htlc_mtokens]: <Minimum HTLC Value Millitokens String>
     }) -> {}
     capacity: <Capacity Tokens Number>
     chain: <Chain Id Hex String>
