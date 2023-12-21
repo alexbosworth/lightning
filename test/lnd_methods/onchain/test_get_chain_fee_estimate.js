@@ -38,7 +38,7 @@ const tests = [
       lnd: {default: {estimateFee: ({}, cbk) => cbk('err')}},
       send_to: [{address: 'address', tokens: 1}],
     },
-    description: 'An error is pased back from fee estimate',
+    description: 'An error is passed back from fee estimate',
     error: [503, 'UnexpectedErrEstimatingFeeForChainSend', {err: 'err'}],
   },
   {
