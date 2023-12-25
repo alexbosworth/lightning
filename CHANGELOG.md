@@ -1,5 +1,9 @@
 # Versions
 
+## 10.2.1
+
+- `deleteChainTransaction`, `getChainTransaction`: Add types
+
 ## 10.2.0
 
 - `deleteChainTransaction`: Add method to delete a chain transaction
