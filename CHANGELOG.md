@@ -1,5 +1,9 @@
 # Versions
 
+## 10.3.0
+
+- `getConfiguration`: Add method to get the configuration file options
+
 ## 10.2.1
 
 - `deleteChainTransaction`, `getChainTransaction`: Add types

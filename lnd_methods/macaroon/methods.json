@@ -173,6 +173,10 @@
     "method": "ClosedChannels",
     "type": "default"
   },
+  "getConfiguration": {
+    "method": "GetDebugInfo",
+    "type": "default"
+  },
   "getConnectedWatchtowers": {
     "methods": ["ListTowers", "Policy", "Stats"],
     "type": "tower_client"

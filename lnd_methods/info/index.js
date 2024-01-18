@@ -1,5 +1,6 @@
 const getAutopilot = require('./get_autopilot');
 const getChannel = require('./get_channel');
+const getConfiguration = require('./get_configuration');
 const getIdentity = require('./get_identity');
 const getMethods = require('./get_methods');
 const getNetworkCentrality = require('./get_network_centrality');
@@ -16,6 +17,7 @@ const subscribeToGraph = require('./subscribe_to_graph');
 module.exports = {
   getAutopilot,
   getChannel,
+  getConfiguration,
   getIdentity,
   getMethods,
   getNetworkCentrality,

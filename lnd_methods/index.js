@@ -43,6 +43,7 @@ const {getChannel} = require('./info');
 const {getChannelBalance} = require('./offchain');
 const {getChannels} = require('./offchain');
 const {getClosedChannels} = require('./offchain');
+const {getConfiguration} = require('./info');
 const {getConnectedWatchtowers} = require('./offchain');
 const {getEphemeralChannelIds} = require('./offchain');
 const {getFailedPayments} = require('./offchain');
@@ -196,6 +197,7 @@ module.exports = {
   getChannelBalance,
   getChannels,
   getClosedChannels,
+  getConfiguration,
   getConnectedWatchtowers,
   getEphemeralChannelIds,
   getFailedPayments,

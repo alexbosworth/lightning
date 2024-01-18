@@ -167,6 +167,8 @@ variables set:
     the node.
 - [getClosedChannels](https://github.com/alexbosworth/ln-service#getclosedchannels): List closed
     channels on the node.
+- [getConfiguration](https://github.com/alexbosworth/ln-service#getconfiguration):
+    Get the configuration file settings for the node and the log.
 - [getConnectedWatchtowers](https://github.com/alexbosworth/ln-service#getconnectedwatchtowers):
     List watchtowers that were added
 - [getEphemeralChannelIds](https://github.com/alexbosworth/ln-service#getephemeralchannelids):
