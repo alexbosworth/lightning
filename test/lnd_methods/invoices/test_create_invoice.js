@@ -41,6 +41,7 @@ const makeArgs = override => {
     description: 'description',
     description_hash: Buffer.alloc(32).toString('hex'),
     expires_at: new Date(Date.now() + 1e8).toISOString(),
+    is_amp: false,
     is_fallback_included: true,
     is_fallback_nested: true,
     is_including_private_channels: true,
@@ -111,6 +112,23 @@ const tests = [
   {
     args: makeArgs({}),
     description: 'An invoice is created',
+    expected: {
+      request,
+      chain_address: 'address',
+      created_at: '1970-01-01T00:00:01.000Z',
+      description: 'description',
+      id: '0001020304050607080900010203040506070809000102030405060708090102',
+      mtokens: '0',
+      payment: undefined,
+      secret: Buffer.alloc(32).toString('hex'),
+      tokens: 0,
+    },
+  },
+  {
+    args: makeArgs({
+      is_amp: true,
+    }),
+    description: 'An AMP invoice is created',
     expected: {
       request,
       chain_address: 'address',
