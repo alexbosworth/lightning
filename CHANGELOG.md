@@ -1,6 +1,6 @@
 # Versions
 
-## 10.3.0
+## 10.3.1
 
 - `getConfiguration`: Add method to get the configuration file options
 
