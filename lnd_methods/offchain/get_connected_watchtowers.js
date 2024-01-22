@@ -18,8 +18,11 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service wtclientrpc.Watcht
 
   `is_anchor` flag is not supported on LND 0.11.1 and below
 
+  `is_taproot` flag is not supported on LND 0.17.3 and below
+
   {
     [is_anchor]: <Get Anchor Type Tower Info Bool>
+    [is_taproot]: <Get Taproot Type Tower Info Bool>
     lnd: <Authenticated LND API Object>
   }
 
@@ -56,39 +59,6 @@ module.exports = (args, cbk) => {
 
         return cbk();
       },
-
-      // Get policy
-      getPolicy: ['validate', ({}, cbk) => {
-        return args.lnd[type].policy({
-          policy_type: !!args.is_anchor ? 'ANCHOR' : 'LEGACY',
-        },
-        (err, res) => {
-          if (!!err && err.message === unimplementedError) {
-            return cbk([503, 'ExpectedWatchtowerClientLndToGetPolicy']);
-          }
-
-          if (!!err) {
-            return cbk([503, 'UnexpectedErrorGettingWatchtowerPolicy', {err}]);
-          }
-
-          if (!res) {
-            return cbk([503, 'ExpectedResultForWatchtowerPolicy']);
-          }
-
-          if (res.max_updates === undefined) {
-            return cbk([503, 'ExpectedMaxUpdateCountInWatchtowerPolicyInfo']);
-          }
-
-          if (res.sweep_sat_per_byte === undefined) {
-            return cbk([503, 'ExpectedSweepSatsPerByteInWatchtowerPolicy']);
-          }
-
-          return cbk(null, {
-            max_session_update_count: res.max_updates,
-            sweep_tokens_per_vbyte: res.sweep_sat_per_byte,
-          });
-        });
-      }],
 
       // Get stats
       getStats: ['validate', ({}, cbk) => {
@@ -178,6 +148,49 @@ module.exports = (args, cbk) => {
           }));
 
           return cbk(null, {towers});
+        });
+      }],
+
+      // Determine the policy type
+      policyType: ['validate', ({}, cbk) => {
+        if (!!args.is_anchor) {
+          return cbk(null, 'ANCHOR');
+        }
+
+        if (!!args.is_taproot) {
+          return cbk(null, 'TAPROOT');
+        }
+
+        return cbk(null, 'LEGACY');
+      }],
+
+      // Get policy
+      getPolicy: ['policyType', ({policyType}, cbk) => {
+        return args.lnd[type].policy({policy_type: policyType}, (err, res) => {
+          if (!!err && err.message === unimplementedError) {
+            return cbk([503, 'ExpectedWatchtowerClientLndToGetPolicy']);
+          }
+
+          if (!!err) {
+            return cbk([503, 'UnexpectedErrorGettingWatchtowerPolicy', {err}]);
+          }
+
+          if (!res) {
+            return cbk([503, 'ExpectedResultForWatchtowerPolicy']);
+          }
+
+          if (res.max_updates === undefined) {
+            return cbk([503, 'ExpectedMaxUpdateCountInWatchtowerPolicyInfo']);
+          }
+
+          if (res.sweep_sat_per_byte === undefined) {
+            return cbk([503, 'ExpectedSweepSatsPerByteInWatchtowerPolicy']);
+          }
+
+          return cbk(null, {
+            max_session_update_count: res.max_updates,
+            sweep_tokens_per_vbyte: res.sweep_sat_per_byte,
+          });
         });
       }],
 

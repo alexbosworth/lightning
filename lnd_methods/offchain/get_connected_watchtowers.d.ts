@@ -6,6 +6,8 @@ import {
 export type GetConnectedWatchTowersArgs = AuthenticatedLightningArgs<{
   /** Get Anchor Type Tower Info Bool */
   is_anchor?: boolean;
+  /** Get Taproot Type Tower Info Bool */
+  is_taproot?: boolean;
 }>;
 
 export type GetConnectedWatchTowersResult = {
@@ -53,6 +55,8 @@ export type GetConnectedWatchTowersResult = {
  * Requires `offchain:read` permission
  *
  * `is_anchor` flag is not supported on LND 0.11.1 and below
+ *
+ * `is_taproot` flag is not supported on LND 0.17.3 and below
  */
 export const getConnectedWatchtowers: AuthenticatedLightningMethod<
   GetConnectedWatchTowersArgs,

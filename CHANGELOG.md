@@ -1,5 +1,9 @@
 # Versions
 
+## 10.4.0
+
+- `getConnectedWatchtowers`: Add `is_taproot` to get P2TR channels
+
 ## 10.3.1
 
 - `getConfiguration`: Add method to get the configuration file options

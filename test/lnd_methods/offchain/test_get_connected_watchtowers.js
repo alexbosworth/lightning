@@ -198,7 +198,7 @@ const tests = [
     error: [503, 'ExpectedResultForWatchtowerListing'],
   },
   {
-    args: {lnd: makeLnd({towersRes: {}})},
+    args: {is_taproot: true, lnd: makeLnd({towersRes: {}})},
     description: 'Towers array is expected',
     error: [503, 'ExpectedArrayOfTowersForWatchtowerListing'],
   },
