@@ -13,7 +13,7 @@ const type = 'wallet';
 
   Requires `onchain:write` permission
 
-  This method is not supported on LND 0.17.3 and below
+  This method is not supported on LND 0.17.4 and below
 
   {
     id: <Transaction Id Hex String>

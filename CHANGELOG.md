@@ -1,5 +1,9 @@
 # Versions
 
+## 10.5.0
+
+- `getSweepTransactions`: Add `after` to scope sweep result set
+
 ## 10.4.0
 
 - `getConnectedWatchtowers`: Add `is_taproot` to get P2TR channels

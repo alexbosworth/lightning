@@ -56,7 +56,7 @@ export type GetConnectedWatchTowersResult = {
  *
  * `is_anchor` flag is not supported on LND 0.11.1 and below
  *
- * `is_taproot` flag is not supported on LND 0.17.3 and below
+ * `is_taproot` flag is not supported on LND 0.17.4 and below
  */
 export const getConnectedWatchtowers: AuthenticatedLightningMethod<
   GetConnectedWatchTowersArgs,

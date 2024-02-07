@@ -17,7 +17,10 @@ const type = 'wallet';
 
   Requires LND built with `walletrpc` build tag
 
+  `after` is not supported in LND 0.17.3 or below
+
   {
+    [after]: <Confirmed After Block Height Number>
     lnd: <Authenticated LND API Object>
   }
 
@@ -43,7 +46,7 @@ const type = 'wallet';
     }]
   }
 */
-module.exports = ({lnd}, cbk) => {
+module.exports = ({after, lnd}, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Check arguments
@@ -57,7 +60,7 @@ module.exports = ({lnd}, cbk) => {
 
       // Get sweep transaction ids
       getSweeps: ['validate', ({}, cbk) => {
-        return lnd[type][method]({}, (err, res) => {
+        return lnd[type][method]({start_height: after}, (err, res) => {
           if (!!err && err.details === notSupportedError) {
             return cbk([501, 'BackingLndDoesNotSupportListingSweeps']);
           }

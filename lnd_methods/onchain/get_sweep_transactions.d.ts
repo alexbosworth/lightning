@@ -3,7 +3,10 @@ import {
   AuthenticatedLightningMethod,
 } from '../../typescript';
 
-export type GetSweepTransactionArgs = AuthenticatedLightningArgs;
+export type GetSweepTransactionArgs = AuthenticatedLightningArgs<{
+  /** Confirmed After Block Height */
+  after?: number;
+}>;
 
 export type GetSweepTransactionsResult = {
   transactions: {
@@ -44,6 +47,10 @@ export type GetSweepTransactionsResult = {
  * Get self-transfer spend transactions related to channel closes
  *
  * Requires `onchain:read` permission
+ *
+ * Requires LND built with `walletrpc` build tag
+ *
+ * `after` is not supported in LND 0.17.3 or below
  */
 export const getSweepTransactions: AuthenticatedLightningMethod<
   GetSweepTransactionArgs,

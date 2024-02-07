@@ -22,7 +22,7 @@ export type GetConfigurationResult = {
  * Requires `info:read`, `offchain:read`, `onchain:read`, `peers:read`
   permissions
  *
- * This method is not supported on LND 0.17.3 and below
+ * This method is not supported on LND 0.17.4 and below
  */
 export const getConfiguration: AuthenticatedLightningMethod<
   GetConfigurationArgs,
