@@ -1,5 +1,9 @@
 # Versions
 
+## 10.5.1
+
+- Add support for LND 0.17.4
+
 ## 10.5.0
 
 - `getSweepTransactions`: Add `after` to scope sweep result set
