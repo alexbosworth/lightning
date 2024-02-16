@@ -1,3 +1,4 @@
+const {addAdvertisedFeature} = require('./peers');
 const {addExternalSocket} = require('./peers');
 const {addPeer} = require('./peers');
 const {beginGroupSigningSession} = require('./signer');
@@ -152,6 +153,7 @@ const {verifyChainAddressMessage} = require('./onchain');
 const {verifyMessage} = require('./message');
 
 module.exports = {
+  addAdvertisedFeature,
   addExternalSocket,
   addPeer,
   beginGroupSigningSession,

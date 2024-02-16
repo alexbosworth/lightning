@@ -1,5 +1,9 @@
 # Versions
 
+## 10.6.0
+
+- `addAdvertisedFeature`: Add method to advertise a feature bit support
+
 ## 10.5.1
 
 - Add support for LND 0.17.4

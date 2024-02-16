@@ -1,4 +1,8 @@
 {
+  "addAdvertisedFeature": {
+    "method": "updateNodeAnnouncement",
+    "type": "peers"
+  },
   "addExternalSocket": {
     "method": "updateNodeAnnouncement",
     "type": "peers"

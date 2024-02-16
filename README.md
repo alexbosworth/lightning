@@ -80,6 +80,8 @@ variables set:
 
 ## Methods
 
+- [addAdvertisedFeature](https://github.com/alexbosworth/ln-service#addadvertisedfeature):
+    Add a new supported feature to the graph node announcement
 - [addExternalSocket](https://github.com/alexbosworth/ln-service#addexternalsocket):
     Add a new LN p2p network socket to node advertisement
 - [addPeer](https://github.com/alexbosworth/ln-service#addpeer): Connect to a new peer

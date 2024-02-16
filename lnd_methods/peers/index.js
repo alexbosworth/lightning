@@ -1,3 +1,4 @@
+const addAdvertisedFeature = require('./add_advertised_feature');
 const addExternalSocket = require('./add_external_socket');
 const addPeer = require('./add_peer');
 const getPeers = require('./get_peers');
@@ -8,6 +9,7 @@ const updateAlias = require('./update_alias');
 const updateColor = require('./update_color');
 
 module.exports = {
+  addAdvertisedFeature,
   addExternalSocket,
   addPeer,
   getPeers,

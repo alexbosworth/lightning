@@ -1,3 +1,4 @@
+const {addAdvertisedFeature} = require('./lnd_methods');
 const {addExternalSocket} = require('./lnd_methods');
 const {addPeer} = require('./lnd_methods');
 const {authenticatedLndGrpc} = require('./lnd_grpc');
@@ -153,6 +154,7 @@ const {verifyChainAddressMessage} = require('./lnd_methods');
 const {verifyMessage} = require('./lnd_methods');
 
 module.exports = {
+  addAdvertisedFeature,
   addExternalSocket,
   addPeer,
   authenticatedLndGrpc,
