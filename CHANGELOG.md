@@ -1,5 +1,9 @@
 # Versions
 
+## 10.6.1
+
+- `addAdvertisedFeature`: Add typescript definitions
+
 ## 10.6.0
 
 - `addAdvertisedFeature`: Add method to advertise a feature bit support
