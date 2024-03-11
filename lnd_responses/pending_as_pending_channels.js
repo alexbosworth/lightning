@@ -22,6 +22,7 @@ const outpointSeparator = ':';
         remote_chan_reserve_sat: <Remote Side Channel Reserve Tokens String>
         remote_node_pub: <Remote Node Public Key Hex String>
       }
+      closing_tx_hex: <Closing Raw Transaction Hex String>
       closing_txid: <Closing Transaction Id Hex String>
       limbo_balance: <Tokens Waiting For Resolution String>
       maturity_height: <Timelock Height Number>
@@ -86,6 +87,7 @@ const outpointSeparator = ':';
     pending_channels: [{
       [blocks_until_expiry]: <Blocks Until Open Channel Expires Number>
       capacity: <Channel Capacity Tokens Number>
+      [close_transaction]: <Channel Closing Raw Transaction Hex String>
       [close_transaction_id]: <Channel Closing Transaction Id String>
       [description]: <Channel Description String>
       is_active: <Channel Is Active Bool>
@@ -271,6 +273,7 @@ module.exports = args => {
     }
 
     sum[pending.channel.channel_point] = {
+      close_transaction: pending.closing_tx_hex,
       close_transaction_id: pending.closing_txid,
       pending_balance: Number(pending.limbo_balance),
     };
@@ -297,6 +300,7 @@ module.exports = args => {
     return {
       blocks_until_expiry: !!chanOpen ? chanOpen.funding_expiry : undefined,
       capacity: Number(channel.capacity),
+      close_transaction: wait.close_transaction || undefined,
       close_transaction_id: endTx || undefined,
       description: channel.memo || undefined,
       is_active: false,

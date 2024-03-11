@@ -1,5 +1,9 @@
 # Versions
 
+## 10.7.0
+
+- `getPendingChannels`: Add support for `close_transaction` to return raw tx
+
 ## 10.6.1
 
 - `addAdvertisedFeature`: Add typescript definitions

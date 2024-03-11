@@ -7,6 +7,8 @@ export type GetPendingChannelsResult = {
     blocks_until_expiry?: number;
     /** Channel Capacity Tokens */
     capacity: number;
+    /** Channel Closing Transaction */
+    close_transaction?: string;
     /** Channel Closing Transaction Id */
     close_transaction_id?: string;
     /** Channel Description */

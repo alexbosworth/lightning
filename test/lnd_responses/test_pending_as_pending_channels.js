@@ -103,6 +103,7 @@ const makeExpectedPending = overrides => {
   const res = {
     blocks_until_expiry: undefined,
     capacity: 1,
+    close_transaction: undefined,
     close_transaction_id: Buffer.alloc(32).toString('hex'),
     description: undefined,
     is_active: false,
