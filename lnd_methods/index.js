@@ -97,6 +97,7 @@ const {probeForRoute} = require('./offchain');
 const {proposeChannel} = require('./onchain');
 const {recoverFundsFromChannel} = require('./offchain');
 const {recoverFundsFromChannels} = require('./offchain');
+const {removeAdvertisedFeature} = require('./peers');
 const {removeExternalSocket} = require('./peers');
 const {removePeer} = require('./peers');
 const {requestChainFeeIncrease} = require('./onchain');
@@ -252,6 +253,7 @@ module.exports = {
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
+  removeAdvertisedFeature,
   removeExternalSocket,
   removePeer,
   requestChainFeeIncrease,

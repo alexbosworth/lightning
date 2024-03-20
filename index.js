@@ -97,6 +97,7 @@ const {probeForRoute} = require('./lnd_methods');
 const {proposeChannel} = require('./lnd_methods');
 const {recoverFundsFromChannel} = require('./lnd_methods');
 const {recoverFundsFromChannels} = require('./lnd_methods');
+const {removeAdvertisedFeature} = require('./lnd_methods');
 const {removeExternalSocket} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
 const {requestChainFeeIncrease} = require('./lnd_methods');
@@ -253,6 +254,7 @@ module.exports = {
   proposeChannel,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
+  removeAdvertisedFeature,
   removeExternalSocket,
   removePeer,
   requestChainFeeIncrease,
