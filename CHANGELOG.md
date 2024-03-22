@@ -1,6 +1,6 @@
 # Versions
 
-## 10.8.0
+## 10.8.1
 
 - `removeAdvertisedFeature`: Add method to remove a feature bit support ad
 

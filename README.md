@@ -271,6 +271,8 @@ variables set:
     Attempt to recover channel funds from a specific channel backup.
 - [recoverFundsFromChannels](https://github.com/alexbosworth/ln-service#recoverfundsfromchannels):
     Attempt to recover funds from multiple channels using a multiple channel backup.
+- [removeAdvertisedFeature](https://github.com/alexbosworth/ln-service#removeadvertisedfeature):
+    Remove a supported feature from the graph node announcement
 - [removeExternalSocket](https://github.com/alexbosworth/ln-service#removeexternalsocket):
     Remove a LN p2p network socket from the node advertisement
 - [removePeer](https://github.com/alexbosworth/ln-service#removepeer): Disconnect from a

@@ -388,6 +388,10 @@
     "method": "restoreChannelBackups",
     "type": "default"
   },
+  "removeAdvertisedFeature": {
+    "method": "updateNodeAnnouncement",
+    "type": "peers"
+  },
   "removeExternalSocket": {
     "method": "updateNodeAnnouncement",
     "type": "peers"
