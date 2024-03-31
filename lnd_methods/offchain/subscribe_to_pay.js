@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 const asyncAuto = require('async/auto');
 const {chanFormat} = require('bolt07');
 const {chanNumber} = require('bolt07');
+const {parsePaymentRequest} = require('invoices');
 
 const {confirmedFromPayment} = require('./../../lnd_responses');
 const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
@@ -37,6 +38,7 @@ const {round} = Math;
 const sha256 = preimage => createHash('sha256').update(preimage).digest();
 const type = 'router';
 const unknownServiceErr = 'unknown service verrpc.Versioner';
+const unsupportedFeatures = [30, 31];
 
 /** Initiate and subscribe to the outcome of a payment
 
@@ -252,6 +254,14 @@ module.exports = args => {
     throw new Error('ExpectedTokenAmountToPayWhenPaymentRequestNotSpecified');
   }
 
+  if (!!args.request) {
+    try {
+      parsePaymentRequest({request: args.request});
+    } catch (err) {
+      throw new Error('ExpectedValidPaymentRequestToMakePayment');
+    }
+  }
+
   if (!!args.routes && !isArray(args.routes)) {
     throw new Error('UnexpectedFormatForRoutesWhenSubscribingToPayment');
   }
@@ -296,6 +306,23 @@ module.exports = args => {
   const finalCltv = !args.cltv_delta ? defaultCltvDelta : args.cltv_delta;
 
   asyncAuto({
+    // Determine what features would be used with the payment
+    featureBits: cbk => {
+      // Exit early when there are no features to look at
+      if (!args.features && !args.request) {
+        return cbk(null, []);
+      }
+
+      // Exit early when feature bits are specified directly
+      if (!!features) {
+        return cbk(null, features);
+      }
+
+      const request = parsePaymentRequest({request: args.request});
+
+      return cbk(null, request.features.map(n => n.bit));
+    },
+
     // Determine the block height to figure out the height delta
     getHeight: cbk => {
       // Exit early when there is no max timeout restriction
@@ -324,6 +351,17 @@ module.exports = args => {
         return chanNumber({channel}).number;
       }));
     },
+
+    // Validate the payment request features
+    checkFeatures: ['featureBits', ({featureBits}, cbk) => {
+      const bit = featureBits.find(n => unsupportedFeatures.includes(n));
+
+      if (!!bit) {
+        return cbk([501, 'UnsupportedPaymentFeatureInPayRequest', {bit}]);
+      }
+
+      return cbk();
+    }],
 
     // Determine the maximum CLTV delta
     maxCltvDelta: ['getHeight', ({getHeight}, cbk) => {
@@ -394,7 +432,7 @@ module.exports = args => {
     }],
 
     // Send payment
-    send: ['params', ({params}, cbk) => {
+    send: ['checkFeatures', 'params', ({params}, cbk) => {
       const sub = args.lnd.router.sendPaymentV2(params);
 
       sub.on('data', data => emitPayment({data, emitter}));
