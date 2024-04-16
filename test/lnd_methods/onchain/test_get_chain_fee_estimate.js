@@ -113,6 +113,24 @@ const tests = [
     description: 'Sat per vbyte result is supported',
     expected: {fee: 1, tokens_per_vbyte: 2},
   },
+  {
+    args: {
+      lnd: {
+        default: {
+          estimateFee: ({}, cbk) => cbk(null, {
+            fee_sat: '1',
+            feerate_sat_per_byte: '1',
+            sat_per_vbyte: '2',
+          }),
+        },
+      },
+      send_to: [{address: 'address', tokens: 1}],
+      utxo_confirmations: 0,
+      utxo_selection: 'largest',
+    },
+    description: 'Coin selection can be specified',
+    expected: {fee: 1, tokens_per_vbyte: 2},
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

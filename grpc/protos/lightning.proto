@@ -1091,6 +1091,18 @@ message LightningAddress {
     string host = 2;
 }
 
+enum CoinSelectionStrategy {
+    // Use the coin selection strategy defined in the global configuration
+    // (lnd.conf).
+    STRATEGY_USE_GLOBAL_CONFIG = 0;
+
+    // Select the largest available coins first during coin selection.
+    STRATEGY_LARGEST = 1;
+
+    // Randomly select the available coins during coin selection.
+    STRATEGY_RANDOM = 2;
+}
+
 message EstimateFeeRequest {
     // The map from addresses to amounts for the transaction.
     map<string, int64> AddrToAmount = 1;
@@ -1105,6 +1117,9 @@ message EstimateFeeRequest {
 
     // Whether unconfirmed outputs should be used as inputs for the transaction.
     bool spend_unconfirmed = 4;
+
+    // The strategy to use for selecting coins during fees estimation.
+    CoinSelectionStrategy coin_selection_strategy = 5;
 }
 
 message EstimateFeeResponse {
@@ -1145,6 +1160,9 @@ message SendManyRequest {
 
     // Whether unconfirmed outputs should be used as inputs for the transaction.
     bool spend_unconfirmed = 8;
+
+    // The strategy to use for selecting coins during sending many requests.
+    CoinSelectionStrategy coin_selection_strategy = 9;
 }
 message SendManyResponse {
     // The id of the transaction
@@ -1187,6 +1205,9 @@ message SendCoinsRequest {
 
     // Whether unconfirmed outputs should be used as inputs for the transaction.
     bool spend_unconfirmed = 9;
+
+    // The strategy to use for selecting coins.
+    CoinSelectionStrategy coin_selection_strategy = 10;
 }
 message SendCoinsResponse {
     // The transaction ID of the transaction
@@ -2115,6 +2136,9 @@ message BatchOpenChannelRequest {
 
     // An optional label for the batch transaction, limited to 500 characters.
     string label = 6;
+
+    // The strategy to use for selecting coins during batch opening channels.
+    CoinSelectionStrategy coin_selection_strategy = 7;
 }
 
 message BatchOpenChannel {
@@ -3330,6 +3354,9 @@ message RoutingPolicy {
 
     // Custom channel update tlv records.
     map<uint64, bytes> custom_records = 8;
+
+    int32 inbound_fee_base_msat = 9;
+    int32 inbound_fee_rate_milli_msat = 10;
 }
 
 /*
@@ -3545,8 +3572,11 @@ message BlindedPaymentPath {
     // The base fee for the blinded path provided, expressed in msat.
     uint64 base_fee_msat = 2;
 
-    // The proportional fee for the blinded path provided, expressed in msat.
-    uint64 proportional_fee_msat = 3;
+    /*
+    The proportional fee for the blinded path provided, expressed in parts
+    per million.
+    */
+    uint32 proportional_fee_rate = 3;
 
     /*
     The total CLTV delta for the blinded path provided, including the
@@ -4306,7 +4336,15 @@ message ChannelFeeReport {
     // The effective fee rate in milli-satoshis. Computed by dividing the
     // fee_per_mil value by 1 million.
     double fee_rate = 4;
+
+    // The base fee charged regardless of the number of milli-satoshis sent.
+    int32 inbound_base_fee_msat = 6;
+
+    // The amount charged per milli-satoshis transferred expressed in
+    // millionths of a satoshi.
+    int32 inbound_fee_per_mil = 7;
 }
+
 message FeeReportResponse {
     // An array of channel fee reports which describes the current fee schedule
     // for each channel.
@@ -4357,7 +4395,11 @@ message PolicyUpdateRequest {
 
     // If true, min_htlc_msat is applied.
     bool min_htlc_msat_specified = 8;
+
+    int32 inbound_base_fee_msat = 10;
+    int32 inbound_fee_rate_ppm = 11;
 }
+
 enum UpdateFailure {
     UPDATE_FAILURE_UNKNOWN = 0;
     UPDATE_FAILURE_PENDING = 1;

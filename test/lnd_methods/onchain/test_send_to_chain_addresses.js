@@ -130,6 +130,17 @@ const tests = [
       tokens: 1,
     },
   },
+  {
+    args: makeArgs({utxo_selection: 'random'}),
+    description: 'Send coins with coin selection',
+    expected: {
+      confirmation_count: 0,
+      id: Buffer.alloc(32).toString('hex'),
+      is_confirmed: false,
+      is_outgoing: true,
+      tokens: 1,
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

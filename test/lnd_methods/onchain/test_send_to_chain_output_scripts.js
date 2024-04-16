@@ -61,6 +61,18 @@ const tests = [
       transaction: '01000000000000000000',
     },
   },
+  {
+    args: makeArgs({utxo_selection: 'random'}),
+    description: 'Send coins with coin selection',
+    expected: {
+      confirmation_count: 0,
+      id: 'd21633ba23f70118185227be58a63527675641ad37967e2aa461559f577aec43',
+      is_confirmed: false,
+      is_outgoing: true,
+      tokens: 1,
+      transaction: '01000000000000000000',
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

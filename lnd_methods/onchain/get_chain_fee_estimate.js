@@ -7,14 +7,19 @@ const hasNumber = n => !!n && n !== '0';
 const {isArray} = Array;
 const method = 'estimateFee';
 const notFound = -1;
+const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const type = 'default';
 const unconfirmedConfCount = 0;
 
 /** Get a chain fee estimate for a prospective chain send
 
+  `utxo_selection` methods: 'largest', 'random'
+
   Requires `onchain:read` permission
 
   Specifying 0 for `utxo_confirmations` is not supported in LND 0.13.0 or below
+
+  `utxo_selection` is not supported in LND 0.17.4 and below
 
   {
     lnd: <Authenticated LND API Object>
@@ -24,6 +29,7 @@ const unconfirmedConfCount = 0;
     }]
     [target_confirmations]: <Target Confirmations Number>
     [utxo_confirmations]: <Minimum Confirmations for UTXO Selection Number>
+    [utxo_selection]: <Select UTXOs Using Method String>
   }
 
   @returns via cbk or Promise
@@ -68,6 +74,7 @@ module.exports = (args, cbk) => {
 
         return args.lnd[type][method]({
           AddrToAmount,
+          coin_selection_strategy: strategy(args.utxo_selection),
           target_conf: args.target_confirmations || undefined,
           min_confs: args.utxo_confirmations || undefined,
           spend_unconfirmed: args.utxo_confirmations === unconfirmedConfCount,

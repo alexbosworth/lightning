@@ -8,14 +8,19 @@ const {isArray} = Array;
 const method = 'sendMany';
 const OPEN = 1;
 const unconfirmedConfCount = 0;
+const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const {stringify} = JSON;
 const type = 'default';
 
 /** Send tokens to multiple destinations in a blockchain transaction.
 
+  `utxo_selection` methods: 'largest', 'random'
+
   Requires `onchain:write` permission
 
   `utxo_confirmations` is not supported on LND 0.11.1 or below
+
+  `utxo_selection` is not supported in LND 0.17.4 and below
 
   {
     [description]: <Transaction Label String>
@@ -28,6 +33,7 @@ const type = 'default';
     }]
     [target_confirmations]: <Confirmations To Wait Number>
     [utxo_confirmations]: <Minimum Confirmations for UTXO Selection Number>
+    [utxo_selection]: <Select UTXOs Using Method String>
     [wss]: [<Web Socket Server Object>]
   }
 
@@ -76,6 +82,7 @@ module.exports = (args, cbk) => {
 
         const send = {
           AddrToAmount,
+          coin_selection_strategy: strategy(args.utxo_selection),
           label: args.description || undefined,
           min_confs: args.utxo_confirmations || undefined,
           sat_per_byte: args.fee_tokens_per_vbyte || undefined,

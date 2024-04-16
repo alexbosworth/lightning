@@ -9,15 +9,20 @@ const {isInteger} = Number;
 const lowBalanceErr = 'insufficient funds available to construct transaction';
 const method = 'sendCoins';
 const OPEN = 1;
+const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const {stringify} = JSON;
 const type = 'default';
 const unconfirmedConfCount = 0;
 
 /** Send tokens in a blockchain transaction.
 
+  `utxo_selection` methods: 'largest', 'random'
+
   Requires `onchain:write` permission
 
   `utxo_confirmations` is not supported on LND 0.11.1 or below
+
+  `utxo_selection` is not supported in LND 0.17.4 and below
 
   {
     address: <Destination Chain Address String>
@@ -29,6 +34,7 @@ const unconfirmedConfCount = 0;
     [target_confirmations]: <Confirmations To Wait Number>
     [tokens]: <Tokens To Send Number>
     [utxo_confirmations]: <Minimum Confirmations for UTXO Selection Number>
+    [utxo_selection]: <Select UTXOs Using Method String>
     [wss]: [<Web Socket Server Object>]
   }
 
@@ -82,6 +88,7 @@ module.exports = (args, cbk) => {
         return args.lnd.default.sendCoins({
           addr: args.address,
           amount: args.tokens || undefined,
+          coin_selection_strategy: strategy(args.utxo_selection),
           min_confs: args.utxo_confirmations || undefined,
           label: args.description || undefined,
           sat_per_byte: args.fee_tokens_per_vbyte || undefined,

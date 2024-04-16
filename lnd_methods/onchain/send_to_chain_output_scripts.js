@@ -12,16 +12,21 @@ const {isArray} = Array;
 const {isBuffer} = Buffer;
 const method = 'sendOutputs';
 const minFeeRate = 1;
-const unconfirmedConfCount = 0;
+const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const type = 'wallet';
+const unconfirmedConfCount = 0;
 const weightPerKWeight = 1e3;
 const weightPerVByte = 4;
 
 /** Send on-chain funds to multiple output scripts
 
+  `utxo_selection` methods: 'largest', 'random'
+
   Requires `onchain:write` permission
 
   Requires LND compiled with `walletrpc` build tag
+
+  `utxo_selection` is not supported in LND 0.17.4 and below
 
   {
     [description]: <Transaction Label String>
@@ -32,6 +37,7 @@ const weightPerVByte = 4;
       tokens: <Tokens Number>
     }]
     [utxo_confirmations]: <Minimum Confirmations for UTXO Selection Number>
+    [utxo_selection]: <Select UTXOs Using Method String>
   }
 
   @returns via cbk or Promise
@@ -66,6 +72,7 @@ module.exports = (args, cbk) => {
         const feePerKw = feePerVByte * weightPerKWeight / weightPerVByte;
 
         return args.lnd[type][method]({
+          coin_selection_strategy: strategy(args.utxo_selection),
           label: args.description || undefined,
           min_confs: args.utxo_confirmations || undefined,
           outputs: args.send_to.map(output => ({

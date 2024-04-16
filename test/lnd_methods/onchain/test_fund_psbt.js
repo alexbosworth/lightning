@@ -169,6 +169,11 @@ const tests = [
     description: 'PSBT funding can specify conf target',
     expected: makeExpected({}),
   },
+  {
+    args: makeArgs({utxo_selection: 'largest'}),
+    description: 'PSBT funding can select largest coins',
+    expected: makeExpected({}),
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

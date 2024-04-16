@@ -1,5 +1,11 @@
 # Versions
 
+## 10.9.0
+
+- `fundPsbt`, `getChainFeeEstimate`, `sendToChainAddress`,
+    `sendToChainAddresses`, `sendToChainOutputScripts`: Add `utxo_selection` to
+    specify preferred coin selection behavior.
+
 ## 10.8.2
 
 - `pay` and payment via request methods: disallow features 30/31 from payments

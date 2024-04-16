@@ -16,6 +16,7 @@ const {isArray} = Array;
 const {isBuffer} = Buffer;
 const method = 'fundPsbt';
 const notSupported = /unknown.*walletrpc.WalletKit/;
+const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const type = 'wallet';
 const txIdFromBuffer = buffer => buffer.slice().reverse().toString('hex');
 const txIdFromHash = hash => hash.reverse().toString('hex');
@@ -26,6 +27,8 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
 
   If there are no inputs passed, internal UTXOs will be selected and locked
 
+  `utxo_selection` methods: 'largest', 'random'
+
   Requires `onchain:write` permission
 
   Requires LND built with `walletrpc` tag
@@ -33,6 +36,8 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
   This method is not supported in LND 0.11.1 and below
 
   Specifying 0 for `min_confirmations` is not supported in LND 0.13.0 and below
+
+  `utxo_selection` is not supported in LND 0.17.4 and below
 
   {
     [fee_tokens_per_vbyte]: <Chain Fee Tokens Per Virtual Byte Number>
@@ -48,6 +53,7 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
     }]
     [target_confirmations]: <Confirmations To Wait Number>
     [psbt]: <Existing PSBT Hex String>
+    [utxo_selection]: <Select UTXOs Using Method String>
   }
 
   @returns via cbk or Promise
@@ -158,6 +164,7 @@ module.exports = (args, cbk) => {
       fund: ['fee', 'funding', 'minConfs', ({fee, funding, minConfs}, cbk) => {
         return args.lnd[type][method]({
           change_type: defaultChangeType,
+          coin_selection_strategy: strategy(args.utxo_selection),
           min_confs: minConfs !== undefined ? minConfs : undefined,
           psbt: !!args.psbt ? Buffer.from(args.psbt, 'hex') : undefined,
           raw: funding || undefined,
