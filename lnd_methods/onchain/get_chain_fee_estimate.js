@@ -19,7 +19,7 @@ const unconfirmedConfCount = 0;
 
   Specifying 0 for `utxo_confirmations` is not supported in LND 0.13.0 or below
 
-  `utxo_selection` is not supported in LND 0.17.4 and below
+  `utxo_selection` is not supported in LND 0.17.5 and below
 
   {
     lnd: <Authenticated LND API Object>

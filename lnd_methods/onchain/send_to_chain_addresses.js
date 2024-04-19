@@ -20,7 +20,7 @@ const type = 'default';
 
   `utxo_confirmations` is not supported on LND 0.11.1 or below
 
-  `utxo_selection` is not supported in LND 0.17.4 and below
+  `utxo_selection` is not supported in LND 0.17.5 and below
 
   {
     [description]: <Transaction Label String>

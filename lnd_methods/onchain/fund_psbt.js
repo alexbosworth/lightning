@@ -37,7 +37,7 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
 
   Specifying 0 for `min_confirmations` is not supported in LND 0.13.0 and below
 
-  `utxo_selection` is not supported in LND 0.17.4 and below
+  `utxo_selection` is not supported in LND 0.17.5 and below
 
   {
     [fee_tokens_per_vbyte]: <Chain Fee Tokens Per Virtual Byte Number>

@@ -18,7 +18,7 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service wtclientrpc.Watcht
 
   `is_anchor` flag is not supported on LND 0.11.1 and below
 
-  `is_taproot` flag is not supported on LND 0.17.4 and below
+  `is_taproot` flag is not supported on LND 0.17.5 and below
 
   {
     [is_anchor]: <Get Anchor Type Tower Info Bool>

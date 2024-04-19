@@ -16,7 +16,7 @@ export type GetChainTransactionResult = ChainTransaction;
  *
  * Requires `onchain:read` permission
  *
- * This method is not supported on LND 0.17.4 and below
+ * This method is not supported on LND 0.17.5 and below
  */
 export const getChainTransaction: AuthenticatedLightningMethod<
   GetChainTransactionArgs,

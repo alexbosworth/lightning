@@ -23,7 +23,7 @@ const type = 'default';
 
   `blocks_until_expiry` is not supported in LND 0.16.4 or before
 
-  `close_transaction` is not supported in LND 0.17.4 or before
+  `close_transaction` is not supported in LND 0.17.5 or before
 
   {
     lnd: <Authenticated LND API Object>

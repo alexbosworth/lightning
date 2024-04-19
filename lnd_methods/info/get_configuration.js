@@ -17,7 +17,7 @@ const {values} = Object;
   Requires `info:read`, `offchain:read`, `onchain:read`, `peers:read`
   permissions
 
-  This method is not supported on LND 0.17.4 and below
+  This method is not supported on LND 0.17.5 and below
 
   {
     lnd: <Authenticated LND API Object>
