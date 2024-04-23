@@ -1,5 +1,9 @@
 # Versions
 
+## 10.9.1
+
+- Add support for LND v0.17.5-beta
+
 ## 10.9.0
 
 - `fundPsbt`, `getChainFeeEstimate`, `sendToChainAddress`,
