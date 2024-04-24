@@ -3,6 +3,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
   LightningError,
+  UtxoSelection,
 } from '../../typescript';
 import {MergeExclusive} from 'type-fest';
 

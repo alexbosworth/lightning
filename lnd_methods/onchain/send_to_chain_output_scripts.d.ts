@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  UtxoSelection,
 } from '../../typescript';
 import {MergeExclusive} from 'type-fest';
 
