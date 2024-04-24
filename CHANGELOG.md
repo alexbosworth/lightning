@@ -1,6 +1,6 @@
 # Versions
 
-## 10.9.1
+## 10.9.2
 
 - Add support for LND v0.17.5-beta
 
