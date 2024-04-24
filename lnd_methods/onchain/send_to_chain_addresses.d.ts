@@ -3,6 +3,7 @@ import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
   LightningError,
+  UtxoSelection,
 } from '../../typescript';
 import {MergeExclusive} from 'type-fest';
 
@@ -32,6 +33,8 @@ export type SendToChainAddressesArgs = AuthenticatedLightningArgs<
     target_confirmations?: number;
     /** Minimum Confirmations for UTXO Selection */
     utxo_confirmations?: number;
+    /** Select UTXOs Using Method String */
+    utxo_selection?: UtxoSelection;
   } & ExpectedLogForChainSendWebSocketAnnouncement
 >;
 
@@ -54,6 +57,8 @@ export type SendToChainAddressesResult = {
  * Requires `onchain:write` permission
  *
  * `utxo_confirmations` is not supported on LND 0.11.1 or below
+ *
+ * `utxo_selection` is not supported in LND 0.17.5 and below
  */
 export const sendToChainAddresses: AuthenticatedLightningMethod<
   SendToChainAddressesArgs,

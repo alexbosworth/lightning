@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  UtxoSelection,
 } from '../../typescript';
 import {MergeExclusive} from 'type-fest';
 
@@ -57,6 +58,8 @@ export type FundPsbtResult = {
   }[];
   /** Unsigned PSBT Hex */
   psbt: string;
+  /** Select UTXOs Using Method String */
+  utxo_selection?: UtxoSelection;
 };
 
 /**
@@ -73,6 +76,8 @@ export type FundPsbtResult = {
  * This method is not supported in LND 0.11.1 and below
  *
  * Specifying 0 for `min_confirmations` is not supported in LND 0.13.0 and below
+ *
+ * `utxo_selection` is not supported in LND 0.17.5 and below
  */
 export const fundPsbt: AuthenticatedLightningMethod<
   FundPsbtArgs,
