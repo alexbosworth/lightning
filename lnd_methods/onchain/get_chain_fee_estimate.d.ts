@@ -1,6 +1,7 @@
 import {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  UtxoSelection,
 } from '../../typescript';
 
 export type GetChainFeeEstimateArgs = AuthenticatedLightningArgs<{
@@ -14,6 +15,8 @@ export type GetChainFeeEstimateArgs = AuthenticatedLightningArgs<{
   target_confirmations?: number;
   /** Minimum Confirmations for UTXO Selection */
   utxo_confirmations?: number;
+  /** Select UTXOs Using Method String */
+  utxo_selection?: UtxoSelection;
 }>;
 
 export type GetChainFeeEstimateResult = {
@@ -27,6 +30,8 @@ export type GetChainFeeEstimateResult = {
  * Get a chain fee estimate for a prospective chain send
  *
  * Requires `onchain:read` permission
+ *
+ * `utxo_selection` is not supported in LND 0.17.5 and below
  */
 export const getChainFeeEstimate: AuthenticatedLightningMethod<
   GetChainFeeEstimateArgs,

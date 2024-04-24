@@ -17,6 +17,8 @@ export type SendToChainOutputScriptsArgs = AuthenticatedLightningArgs<{
   }[];
   /** Minimum Confirmations for UTXO Selection Number */
   utxo_confirmations?: number;
+  /** Select UTXOs Using Method String */
+  utxo_selection?: UtxoSelection;
 }>;
 
 export type SendToChainOutputScriptsResult = {
@@ -40,6 +42,8 @@ export type SendToChainOutputScriptsResult = {
  * Requires `onchain:write` permission
  *
  * Requires LND compiled with `walletrpc` build tag
+ *
+ * `utxo_selection` is not supported in LND 0.17.5 and below
  */
 export const sendToChainOutputScripts: AuthenticatedLightningMethod<
   SendToChainOutputScriptsArgs,

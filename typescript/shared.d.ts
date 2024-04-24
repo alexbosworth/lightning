@@ -118,3 +118,5 @@ export type RouteNode = {
 export type Route = RouteNode[]
 
 export type Routes = Route[]
+
+export type UtxoSelection = "largest" | "random";
