@@ -4231,6 +4231,10 @@ message DeleteAllPaymentsRequest {
     Only delete failed HTLCs from payments, not the payment itself.
     */
     bool failed_htlcs_only = 2;
+
+    // Delete all payments. NOTE: Using this option requires careful
+    // consideration as it is a destructive operation.
+    bool all_payments = 3;
 }
 
 message DeletePaymentResponse {
@@ -4307,6 +4311,8 @@ enum FeatureBit {
     ANCHORS_OPT = 21;
     ANCHORS_ZERO_FEE_HTLC_REQ = 22;
     ANCHORS_ZERO_FEE_HTLC_OPT = 23;
+    ROUTE_BLINDING_REQUIRED = 24;
+    ROUTE_BLINDING_OPTIONAL = 25;
     AMP_REQ = 30;
     AMP_OPT = 31;
 }

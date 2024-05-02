@@ -280,6 +280,10 @@
     "method": "ListPayments",
     "type": "default"
   },
+  "getPendingSweeps": {
+    "method": "PendingSweeps",
+    "type": "wallet"
+  },
   "getPublicKey": {
     "methods": ["DeriveKey", "DeriveNextKey"],
     "type": "wallet"
@@ -399,6 +403,11 @@
   "removePeer": {
     "method": "DisconnectPeer",
     "type": "default"
+  },
+  "requestBatchedFeeIncrease": {
+    "depends_on": ["getHeight"],
+    "method": "BumpFee",
+    "type": "wallet"
   },
   "requestChainFeeIncrease": {
     "method": "BumpFee",

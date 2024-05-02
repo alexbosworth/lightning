@@ -220,6 +220,8 @@ variables set:
     details of opening or closing channels.
 - [getPendingPayments](https://github.com/alexbosworth/ln-service#getpendingpayments): List out
     past pending payments.
+- [getPendingSweeps](https://github.com/alexbosworth/ln-service#getpendingsweeps):
+    List out queued outpoints that are being swept
 - [getPublicKey](https://github.com/alexbosworth/ln-service#getpublickey): Derive a public key at
     a given index.
 - [getRouteConfidence](https://github.com/alexbosworth/ln-service#getrouteconfidence): Check a
@@ -277,6 +279,8 @@ variables set:
     Remove a LN p2p network socket from the node advertisement
 - [removePeer](https://github.com/alexbosworth/ln-service#removepeer): Disconnect from a
     connected peer.
+- [requestBatchedFeeIncrease](https://github.com/alexbosworth/ln-service#requestbatchedfeeincrease):
+    Ask for a batched CPFP chain fee rate increase on a pending confirm UTXO
 - [requestChainFeeIncrease](https://github.com/alexbosworth/ln-service#requestchainfeeincrease):
     Ask for a CPFP chain fee rate increase on a pending confirm UTXO.
 - [revokeAccess](https://github.com/alexbosworth/ln-service#revokeaccess): Remove the access

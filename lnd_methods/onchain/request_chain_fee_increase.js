@@ -69,6 +69,7 @@ module.exports = (args, cbk) => {
       request: ['feeRate', ({feeRate}, cbk) => {
         return args.lnd[type][method]({
           force: true,
+          immediate: true,
           outpoint: {
             output_index: args.transaction_vout,
             txid_str: args.transaction_id,

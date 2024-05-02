@@ -1,5 +1,10 @@
 # Versions
 
+## 10.10.0
+
+- `getPendingSweeps`: Add method to get the list of pending outpoints to sweep
+- `requestBatchedFeeIncrease`: Add method to batch a CPFP sweep of an outpoint
+
 ## 10.9.2
 
 - Add support for LND v0.17.5-beta

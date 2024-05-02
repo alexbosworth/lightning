@@ -70,6 +70,7 @@ const {getPeers} = require('./peers');
 const {getPendingChainBalance} = require('./onchain');
 const {getPendingChannels} = require('./offchain');
 const {getPendingPayments} = require('./offchain');
+const {getPendingSweeps} = require('./onchain');
 const {getPublicKey} = require('./address');
 const {getRouteConfidence} = require('./generic');
 const {getRouteThroughHops} = require('./offchain');
@@ -100,6 +101,7 @@ const {recoverFundsFromChannels} = require('./offchain');
 const {removeAdvertisedFeature} = require('./peers');
 const {removeExternalSocket} = require('./peers');
 const {removePeer} = require('./peers');
+const {requestBatchedFeeIncrease} = require('./onchain');
 const {requestChainFeeIncrease} = require('./onchain');
 const {revokeAccess} = require('./macaroon');
 const {sendMessageToPeer} = require('./offchain');
@@ -226,6 +228,7 @@ module.exports = {
   getPendingChainBalance,
   getPendingChannels,
   getPendingPayments,
+  getPendingSweeps,
   getPublicKey,
   getRouteConfidence,
   getRouteThroughHops,
@@ -256,6 +259,7 @@ module.exports = {
   removeAdvertisedFeature,
   removeExternalSocket,
   removePeer,
+  requestBatchedFeeIncrease,
   requestChainFeeIncrease,
   revokeAccess,
   sendMessageToPeer,

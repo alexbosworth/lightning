@@ -30,7 +30,7 @@ module.exports = ({lnd}, cbk) => {
 
       // Delete all payments
       deletePayments: ['validate', ({}, cbk) => {
-        return lnd[type][method]({}, err => {
+        return lnd[type][method]({all_payments: true}, err => {
           if (!!err) {
             return cbk([503, 'UnexpectedErrorDeletingAllPayments', {err}]);
           }

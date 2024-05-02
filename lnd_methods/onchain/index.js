@@ -15,6 +15,7 @@ const getChainTransactions = require('./get_chain_transactions');
 const getLockedUtxos = require('./get_locked_utxos');
 const getMasterPublicKeys = require('./get_master_public_keys');
 const getPendingChainBalance = require('./get_pending_chain_balance');
+const getPendingSweeps = require('./get_pending_sweeps');
 const getSweepTransactions = require('./get_sweep_transactions');
 const getUtxos = require('./get_utxos');
 const lockUtxo = require('./lock_utxo');
@@ -23,6 +24,7 @@ const openChannels = require('./open_channels');
 const partiallySignPsbt = require('./partially_sign_psbt');
 const prepareForChannelProposal = require('./prepare_for_channel_proposal');
 const proposeChannel = require('./propose_channel');
+const requestBatchedFeeIncrease = require('./request_batched_fee_increase');
 const requestChainFeeIncrease = require('./request_chain_fee_increase');
 const sendToChainAddress = require('./send_to_chain_address');
 const sendToChainAddresses = require('./send_to_chain_addresses');
@@ -56,6 +58,7 @@ module.exports = {
   getLockedUtxos,
   getMasterPublicKeys,
   getPendingChainBalance,
+  getPendingSweeps,
   getSweepTransactions,
   getUtxos,
   lockUtxo,
@@ -64,6 +67,7 @@ module.exports = {
   partiallySignPsbt,
   prepareForChannelProposal,
   proposeChannel,
+  requestBatchedFeeIncrease,
   requestChainFeeIncrease,
   sendToChainAddress,
   sendToChainAddresses,

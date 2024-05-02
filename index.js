@@ -71,6 +71,7 @@ const {getPeers} = require('./lnd_methods');
 const {getPendingChainBalance} = require('./lnd_methods');
 const {getPendingChannels} = require('./lnd_methods');
 const {getPendingPayments} = require('./lnd_methods');
+const {getPendingSweeps} = require('./lnd_methods');
 const {getPublicKey} = require('./lnd_methods');
 const {getRouteConfidence} = require('./lnd_methods');
 const {getRouteThroughHops} = require('./lnd_methods');
@@ -100,6 +101,7 @@ const {recoverFundsFromChannels} = require('./lnd_methods');
 const {removeAdvertisedFeature} = require('./lnd_methods');
 const {removeExternalSocket} = require('./lnd_methods');
 const {removePeer} = require('./lnd_methods');
+const {requestBatchedFeeIncrease} = require('./lnd_methods');
 const {requestChainFeeIncrease} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
 const {sendMessageToPeer} = require('./lnd_methods');
@@ -228,6 +230,7 @@ module.exports = {
   getPendingChainBalance,
   getPendingChannels,
   getPendingPayments,
+  getPendingSweeps,
   getPublicKey,
   getRouteConfidence,
   getRouteThroughHops,
@@ -257,6 +260,7 @@ module.exports = {
   removeAdvertisedFeature,
   removeExternalSocket,
   removePeer,
+  requestBatchedFeeIncrease,
   requestChainFeeIncrease,
   revokeAccess,
   sendMessageToPeer,
