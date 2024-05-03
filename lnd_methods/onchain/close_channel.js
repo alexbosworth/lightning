@@ -6,6 +6,7 @@ const {addPeer} = require('./../peers');
 const {getChannel} = require('./../info');
 const {isLnd} = require('./../../lnd_requests');
 
+const defaultConfTarget = 6;
 const method = 'closeChannel';
 const type = 'default';
 
@@ -107,8 +108,28 @@ module.exports = (args, cbk) => {
         return getChannel({id: args.id, lnd: args.lnd}, cbk);
       }],
 
+      // Determine what the confirmations to confirm should be
+      targetConf: ['validate', ({}, cbk) => {
+        // Exit early when a chain fee cannot be specified
+        if (!!args.is_force_close) {
+          return cbk();
+        }
+
+        // Exit early when there is a chain fee rate specified
+        if (!!args.tokens_per_vbyte) {
+          return cbk();
+        }
+
+        return cbk(null, args.target_confirmations || defaultConfTarget);
+      }],
+
       // Close out the channel
-      closeChannel: ['addPeer', 'getChannel', ({getChannel}, cbk) => {
+      closeChannel: [
+        'addPeer',
+        'getChannel',
+        'targetConf',
+        ({getChannel, targetConf}, cbk) =>
+      {
         let isFinished = false;
         const tokensPerVByte = args.tokens_per_vbyte;
         const transactionId = Buffer.from(getChannel.transaction_id, 'hex');
@@ -122,8 +143,8 @@ module.exports = (args, cbk) => {
           delivery_address: args.address || undefined,
           force: !!args.is_force_close,
           max_fee_per_vbyte: args.max_tokens_per_vbyte || undefined,
-          sat_per_byte: !!tokensPerVByte ? tokensPerVByte : undefined,
-          target_conf: args.target_confirmations || undefined,
+          sat_per_vbyte: !!tokensPerVByte ? tokensPerVByte : undefined,
+          target_conf: targetConf,
         });
 
         const finished = (err, res) => {

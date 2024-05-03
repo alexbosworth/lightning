@@ -1,4 +1,4 @@
-const {deepStrictEqual} = require('node:assert').strict;
+const {deepEqual} = require('node:assert').strict;
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
@@ -14,6 +14,20 @@ const makeArgs = overrides => {
         }),
       },
     },
+    tokens: 1,
+  };
+
+  Object.keys(overrides).forEach(k => args[k] = overrides[k]);
+
+  return args;
+};
+
+const makeExpected = overrides => {
+  const args = {
+    confirmation_count: 0,
+    id: Buffer.alloc(32).toString('hex'),
+    is_confirmed: false,
+    is_outgoing: true,
     tokens: 1,
   };
 
@@ -89,35 +103,17 @@ const tests = [
   {
     args: makeArgs({log: console.log, wss: [{clients: [null]}]}),
     description: 'Send coins with null wss client',
-    expected: {
-      confirmation_count: 0,
-      id: Buffer.alloc(32).toString('hex'),
-      is_confirmed: false,
-      is_outgoing: true,
-      tokens: 1,
-    },
+    expected: makeExpected({}),
   },
   {
     args: makeArgs({log: console.log, wss: [{clients: [{}]}]}),
     description: 'Send coins with no ready state',
-    expected: {
-      confirmation_count: 0,
-      id: Buffer.alloc(32).toString('hex'),
-      is_confirmed: false,
-      is_outgoing: true,
-      tokens: 1,
-    },
+    expected: makeExpected({}),
   },
   {
     args: makeArgs({log: () => {}, wss: [{clients: [{readyState: 1}]}]}),
     description: 'Send coins with no send method',
-    expected: {
-      confirmation_count: 0,
-      id: Buffer.alloc(32).toString('hex'),
-      is_confirmed: false,
-      is_outgoing: true,
-      tokens: 1,
-    },
+    expected: makeExpected({}),
   },
   {
     args: makeArgs({
@@ -127,35 +123,22 @@ const tests = [
       tokens: undefined,
     }),
     description: 'Send coins with broadcast',
-    expected: {
-      confirmation_count: 0,
-      id: Buffer.alloc(32).toString('hex'),
-      is_confirmed: false,
-      is_outgoing: true,
-      tokens: undefined,
-    },
+    expected: makeExpected({tokens: undefined}),
   },
   {
     args: makeArgs({}),
     description: 'Send coins',
-    expected: {
-      confirmation_count: 0,
-      id: Buffer.alloc(32).toString('hex'),
-      is_confirmed: false,
-      is_outgoing: true,
-      tokens: 1,
-    },
+    expected: makeExpected({}),
+  },
+  {
+    args: makeArgs({fee_tokens_per_vbyte: 1}),
+    description: 'Send coins with a fee rate',
+    expected: makeExpected({}),
   },
   {
     args: makeArgs({utxo_selection: 'random'}),
     description: 'Send coins with coin selection',
-    expected: {
-      confirmation_count: 0,
-      id: Buffer.alloc(32).toString('hex'),
-      is_confirmed: false,
-      is_outgoing: true,
-      tokens: 1,
-    },
+    expected: makeExpected({}),
   },
 ];
 
@@ -166,7 +149,7 @@ tests.forEach(({args, description, error, expected}) => {
     } else {
       const res = await sendToChainAddress(args);
 
-      deepStrictEqual(res, expected, 'Got expected result');
+      deepEqual(res, expected, 'Got expected result');
     }
 
     return;

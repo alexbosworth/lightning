@@ -92,21 +92,10 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedChainFeeInResponseToChainFeeEstimate']);
           }
 
-          if (!res.feerate_sat_per_byte) {
-            return cbk([503, 'ExpectedFeeRateValueInChainFeeEstimateQuery']);
-          }
-
-          const fee = Number(res.fee_sat);
-
-          // Exit early in LND 0.12.1 and below that do not support sat/vbyte
-          if (!hasNumber(res.sat_per_vbyte)) {
-            return cbk(null, {
-              fee,
-              tokens_per_vbyte: Number(res.feerate_sat_per_byte),
-            });
-          }
-
-          return cbk(null, {fee, tokens_per_vbyte: Number(res.sat_per_vbyte)});
+          return cbk(null, {
+            fee: Number(res.fee_sat),
+            tokens_per_vbyte: Number(res.sat_per_vbyte),
+          });
         });
       }],
     },

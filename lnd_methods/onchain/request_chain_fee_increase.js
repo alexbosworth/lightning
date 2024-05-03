@@ -54,7 +54,7 @@ module.exports = (args, cbk) => {
       feeRate: ['validate', ({}, cbk) => {
         // Exit early when the fee rate is specified
         if (!!args.fee_tokens_per_vbyte) {
-          return cbk(null, {sat_per_byte: args.fee_tokens_per_vbyte});
+          return cbk(null, {sat_per_vbyte: args.fee_tokens_per_vbyte});
         }
 
         // Exit early when the confirmation target is specified
@@ -74,7 +74,7 @@ module.exports = (args, cbk) => {
             output_index: args.transaction_vout,
             txid_str: args.transaction_id,
           },
-          sat_per_byte: feeRate.sat_per_byte,
+          sat_per_vbyte: feeRate.sat_per_vbyte,
           target_conf: feeRate.target_conf,
         },
         (err, res) => {

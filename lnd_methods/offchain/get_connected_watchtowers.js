@@ -142,7 +142,7 @@ module.exports = (args, cbk) => {
               backups_count: session.num_backups,
               max_backups_count: session.max_backups,
               pending_backups_count: session.num_pending_backups,
-              sweep_tokens_per_vbyte: session.sweep_sat_per_byte,
+              sweep_tokens_per_vbyte: session.sweep_sat_per_vbyte,
             })),
             sockets: tower.addresses,
           }));
@@ -183,13 +183,13 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedMaxUpdateCountInWatchtowerPolicyInfo']);
           }
 
-          if (res.sweep_sat_per_byte === undefined) {
+          if (res.sweep_sat_per_vbyte === undefined) {
             return cbk([503, 'ExpectedSweepSatsPerByteInWatchtowerPolicy']);
           }
 
           return cbk(null, {
             max_session_update_count: res.max_updates,
-            sweep_tokens_per_vbyte: res.sweep_sat_per_byte,
+            sweep_tokens_per_vbyte: res.sweep_sat_per_vbyte,
           });
         });
       }],

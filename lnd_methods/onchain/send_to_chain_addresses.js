@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const defaultConfTarget = 6;
 const initialConfirmationCount = 0;
 const {isArray} = Array;
 const method = 'sendMany';
@@ -74,7 +75,17 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
-      send: ['validate', ({}, cbk) => {
+      // Determine what the confirmations to confirm should be
+      targetConf: ['validate', ({}, cbk) => {
+        // Exit early when there is a chain fee rate specified
+        if (!!args.fee_tokens_per_vbyte) {
+          return cbk();
+        }
+
+        return cbk(null, args.target_confirmations || defaultConfTarget);
+      }],
+
+      send: ['targetConf', ({targetConf}, cbk) => {
         const AddrToAmount = {};
 
         args.send_to
@@ -85,9 +96,9 @@ module.exports = (args, cbk) => {
           coin_selection_strategy: strategy(args.utxo_selection),
           label: args.description || undefined,
           min_confs: args.utxo_confirmations || undefined,
-          sat_per_byte: args.fee_tokens_per_vbyte || undefined,
+          sat_per_vbyte: args.fee_tokens_per_vbyte || undefined,
           spend_unconfirmed: args.utxo_confirmations === unconfirmedConfCount,
-          target_conf: args.target_confirmations || undefined,
+          target_conf: targetConf,
         };
 
         return args.lnd.default.sendMany(send, (err, res) => {

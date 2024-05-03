@@ -19,7 +19,7 @@ const tests = [
               },
               delivery_address: 'delivery_address',
               force: true,
-              sat_per_byte: '1',
+              sat_per_vbyte: '1',
               target_conf: 1,
             }),
           },

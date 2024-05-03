@@ -12,7 +12,7 @@ const makeArgs = overrides => {
     },
     delivery_address: 'delivery_address',
     force: true,
-    sat_per_byte: '1',
+    sat_per_vbyte: '1',
     target_conf: 1,
   };
 
@@ -47,7 +47,7 @@ const tests = [
     args: makeArgs({
       delivery_address: '',
       force: false,
-      sat_per_byte: '0',
+      sat_per_vbyte: '0',
       target_conf: 0,
     }),
     description: 'Defaults are selected',

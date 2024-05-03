@@ -5,6 +5,7 @@ const {addPeer} = require('./../peers');
 const {isLnd} = require('./../../lnd_requests');
 
 const anchors = 'ANCHORS';
+const defaultChainFeeConfTarget = 6;
 const defaultMinConfs = 1;
 const defaultMinHtlcMtokens = '1';
 const errMemoLength = /^provided memo \(.*\) is of length \d*, exceeds (\d*)$/;
@@ -170,7 +171,9 @@ module.exports = (args, cbk) => {
         };
 
         if (!!args.chain_fee_tokens_per_vbyte) {
-          options.sat_per_byte = args.chain_fee_tokens_per_vbyte;
+          options.sat_per_vbyte = args.chain_fee_tokens_per_vbyte;
+        } else {
+          options.target_conf = defaultChainFeeConfTarget;
         }
 
         if (!!args.cooperative_close_address) {

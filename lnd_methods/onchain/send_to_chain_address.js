@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const defaultConfTarget = 6;
 const initialConfirmationCount = 0;
 const {isArray} = Array;
 const {isInteger} = Number;
@@ -83,18 +84,28 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
+      // Determine what the confirmations to confirm should be
+      targetConf: ['validate', ({}, cbk) => {
+        // Exit early when there is a chain fee rate specified
+        if (!!args.fee_tokens_per_vbyte) {
+          return cbk();
+        }
+
+        return cbk(null, args.target_confirmations || defaultConfTarget);
+      }],
+
       // Send coins
-      send: ['validate', ({}, cbk) => {
+      send: ['targetConf', ({targetConf}, cbk) => {
         return args.lnd.default.sendCoins({
           addr: args.address,
           amount: args.tokens || undefined,
           coin_selection_strategy: strategy(args.utxo_selection),
           min_confs: args.utxo_confirmations || undefined,
           label: args.description || undefined,
-          sat_per_byte: args.fee_tokens_per_vbyte || undefined,
+          sat_per_vbyte: args.fee_tokens_per_vbyte || undefined,
           send_all: args.is_send_all || undefined,
           spend_unconfirmed: args.utxo_confirmations === unconfirmedConfCount,
-          target_conf: args.target_confirmations || undefined,
+          target_conf: targetConf,
         },
         (err, res) => {
           if (!!err && err.details === lowBalanceErr) {

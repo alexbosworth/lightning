@@ -59,50 +59,10 @@ const tests = [
   },
   {
     args: {
-      lnd: {default: {estimateFee: ({}, cbk) => cbk(null, {fee_sat: '1'})}},
-      send_to: [{address: 'address', tokens: 1}],
-    },
-    description: 'Fee rate is expected in estimate fee response',
-    error: [503, 'ExpectedFeeRateValueInChainFeeEstimateQuery'],
-  },
-  {
-    args: {
       lnd: {
         default: {
           estimateFee: ({}, cbk) => cbk(null, {
             fee_sat: '1',
-            feerate_sat_per_byte: '1',
-          }),
-        },
-      },
-      send_to: [{address: 'address', tokens: 1}],
-    },
-    description: 'Fee rate and fee are given in chain response',
-    expected: {fee: 1, tokens_per_vbyte: 1},
-  },
-  {
-    args: {
-      lnd: {
-        default: {
-          estimateFee: ({}, cbk) => cbk(null, {
-            fee_sat: '1',
-            feerate_sat_per_byte: '1',
-          }),
-        },
-      },
-      send_to: [{address: 'address', tokens: 1}],
-      utxo_confirmations: 0,
-    },
-    description: 'Passing 0 UTXO confirmations is supported',
-    expected: {fee: 1, tokens_per_vbyte: 1},
-  },
-  {
-    args: {
-      lnd: {
-        default: {
-          estimateFee: ({}, cbk) => cbk(null, {
-            fee_sat: '1',
-            feerate_sat_per_byte: '1',
             sat_per_vbyte: '2',
           }),
         },
@@ -119,7 +79,6 @@ const tests = [
         default: {
           estimateFee: ({}, cbk) => cbk(null, {
             fee_sat: '1',
-            feerate_sat_per_byte: '1',
             sat_per_vbyte: '2',
           }),
         },

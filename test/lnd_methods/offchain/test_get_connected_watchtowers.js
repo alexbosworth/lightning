@@ -28,7 +28,7 @@ const makeTower = overrides => {
       max_backups: 1,
       num_backups: 1,
       num_pending_backups: 1,
-      sweep_sat_per_byte: 1,
+      sweep_sat_per_vbyte: 1,
     }],
   };
 
@@ -60,7 +60,7 @@ const makeLnd = args => {
           return cbk(null, args.policyRes);
         }
 
-        return cbk(null, {max_updates: 1, sweep_sat_per_byte: 1});
+        return cbk(null, {max_updates: 1, sweep_sat_per_vbyte: 1});
       },
       stats: ({}, cbk) => {
         if (!!args.statsErr) {
