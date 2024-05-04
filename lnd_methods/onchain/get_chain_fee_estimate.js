@@ -3,6 +3,7 @@ const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 
+const defaultConfTarget = 6;
 const hasNumber = n => !!n && n !== '0';
 const {isArray} = Array;
 const method = 'estimateFee';
@@ -75,7 +76,7 @@ module.exports = (args, cbk) => {
         return args.lnd[type][method]({
           AddrToAmount,
           coin_selection_strategy: strategy(args.utxo_selection),
-          target_conf: args.target_confirmations || undefined,
+          target_conf: args.target_confirmations || defaultConfTarget,
           min_confs: args.utxo_confirmations || undefined,
           spend_unconfirmed: args.utxo_confirmations === unconfirmedConfCount,
         },
