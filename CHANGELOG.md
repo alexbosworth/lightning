@@ -1,5 +1,9 @@
 # Versions
 
+## 10.10.3
+
+- `getPeers`: Set minimum possible peer ping time to positive zero
+
 ## 10.10.2
 
 - `getChainFeeEstimate`: Add default chain fee conf target when none is passed

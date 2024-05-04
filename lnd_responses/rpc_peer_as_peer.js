@@ -11,6 +11,7 @@ const isString = n => typeof n === 'string';
 const isZero = n => n === '0';
 const {keys} = Object;
 const microPerMilli = 1e3;
+const minTime = n => n < 1 ? 0 : n;
 
 /** Translate an RPC peer into a peer
 
@@ -124,7 +125,7 @@ module.exports = peer => {
     is_inbound: peer.inbound,
     is_sync_peer: isKnownSyncType ? isActiveSync(peer.sync_type) : undefined,
     last_reconnection: !!lastReconnected ? date(lastReconnected) : undefined,
-    ping_time: ceil(Number(peer.ping_time) / microPerMilli),
+    ping_time: minTime(ceil(Number(peer.ping_time) / microPerMilli)),
     public_key: peer.pub_key,
     reconnection_rate: !!peer.flap_count ? peer.flap_count : undefined,
     socket: peer.address,

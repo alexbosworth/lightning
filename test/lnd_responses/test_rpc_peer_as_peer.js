@@ -123,6 +123,11 @@ const tests = [
     expected: makeExpected({}),
   },
   {
+    args: makePeer({ping_time: '-1'}),
+    description: 'Ping time is set to zero when negative',
+    expected: makeExpected({ping_time: 0}),
+  },
+  {
     args: makePeer({sync_type: 'PASSIVE_SYNC'}),
     description: 'RPC passive sync peer is mapped to peer details',
     expected: makeExpected({is_sync_peer: false}),
