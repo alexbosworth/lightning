@@ -1,6 +1,6 @@
 # Versions
 
-## 10.10.3
+## 10.10.4
 
 - `getPeers`: Set minimum possible peer ping time to positive zero
 
