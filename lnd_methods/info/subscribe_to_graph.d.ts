@@ -1,4 +1,4 @@
-import {AuthenticatedLightningSubscription} from '../../typescript';
+import { AuthenticatedLightningSubscription } from "../../typescript";
 
 export type SubscribeToGraphChannelUpdatedEvent = {
   /** Channel Base Fee Millitokens */
@@ -20,7 +20,7 @@ export type SubscribeToGraphChannelUpdatedEvent = {
   /** Announcing Public Key, Target Public Key */
   public_keys: [string, string];
   /** Channel Source Discount Base Fee Millitokens */
-  source_discount_base_mtokens: number;
+  source_discount_base_mtokens: string;
   /** Channel Source Discount Fee Rate In Millitokens Per Million */
   source_discount_fee_rate: number;
   /** Channel Transaction Id */
