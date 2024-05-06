@@ -11,6 +11,10 @@ export type SubscribeToGraphChannelUpdatedEvent = {
   fee_rate: number;
   /** Standard Format Channel Id */
   id: string;
+    /** Channel Base Inbound Fee Millitokens */
+  inbound_base_fee_mtokens: string;
+  /** Channel Inbound Fee Rate In Millitokens Per Million */
+  inbound_fee_rate: number;
   /** Channel Is Disabled */
   is_disabled: boolean;
   /** Channel Maximum HTLC Millitokens */
