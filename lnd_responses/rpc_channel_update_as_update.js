@@ -20,8 +20,8 @@ const now = () => new Date().toISOString();
       disabled: <Forwarding is Disabled Bool>
       fee_base_msat: <Forwarding Base Fee Millitokens String>
       fee_rate_milli_msat: <Forwarding Fee Rate Per Million String>
-      inbound_fee_base_msat: <Inbound Forwarding Base Fee Millitokens Number>
-      inbound_fee_rate_milli_msat: <Inbound Forwarding Fee Rate Per Million Number>
+      inbound_fee_base_msat: <Inbound Forwarding Base Fee Millitokens String>
+      inbound_fee_rate_milli_msat: <Inbound Forwarding Fee Rate Per Million String>
       max_htlc_msat: <Maximum HTLC Size Millitokens String>
       min_htlc: <Minimum HTLC Size Millitokens String>
       time_lock_delta: <Forwarding CLTV Delta Number>
@@ -125,12 +125,12 @@ module.exports = update => {
     cltv_delta: update.routing_policy.time_lock_delta,
     fee_rate: Number(update.routing_policy.fee_rate_milli_msat),
     id: chanFormat({number: update.chan_id}).channel,
-    inbound_base_fee_mtokens: update.inbound_fee_base_msat,
-    inbound_fee_rate: update.routing_policy.inbound_fee_rate_milli_msat,
     is_disabled: update.routing_policy.disabled,
     max_htlc_mtokens: maxHtlc !== Number().toString() ? maxHtlc : undefined,
     min_htlc_mtokens: update.routing_policy.min_htlc,
     public_keys: [update.advertising_node, update.connecting_node],
+    source_discount_base_mtokens: Number(update.inbound_fee_base_msat),
+    source_discount_fee_rate: Number(update.routing_policy.inbound_fee_rate_milli_msat),
     transaction_id: !!txId ? bufferAsHex(txId) : undefined,
     transaction_vout: !!txId ? update.chan_point.output_index : undefined,
     updated_at: now(),

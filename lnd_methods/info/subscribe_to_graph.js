@@ -49,6 +49,8 @@ const type = 'default';
     [max_htlc_mtokens]: <Channel Maximum HTLC Millitokens String>
     min_htlc_mtokens: <Channel Minimum HTLC Millitokens String>
     public_keys: [<Announcing Public Key>, <Target Public Key String>]
+    source_discount_base_mtokens: <Channel Base Fee Millitokens Number>
+    source_discount_fee_rate: <Channel Source Discount Fee Rate In PPM Number>
     [transaction_id]: <Channel Transaction Id String>
     [transaction_vout]: <Channel Transaction Output Index Number>
     updated_at: <Update Received At ISO 8601 Date String>
