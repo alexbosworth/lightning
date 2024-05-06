@@ -139,7 +139,7 @@ module.exports = update => {
     max_htlc_mtokens: maxHtlc !== Number().toString() ? maxHtlc : undefined,
     min_htlc_mtokens: min_htlc,
     public_keys: [update.advertising_node, update.connecting_node],
-    source_discount_base_mtokens: Number(update.inbound_fee_base_msat),
+    source_discount_base_mtokens: update.inbound_fee_base_msat,
     source_discount_fee_rate: Number(update.routing_policy.inbound_fee_rate_milli_msat),
     transaction_id: !!txId ? bufferAsHex(txId) : undefined,
     transaction_vout: !!txId ? update.chan_point.output_index : undefined,
