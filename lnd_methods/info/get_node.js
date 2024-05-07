@@ -22,6 +22,9 @@ const type = 'default';
 
   Requires `info:read` permission
 
+  `inbound_base_discount_mtokens` is not supported on LND 0.17.5 and below
+  `inbound_rate_discount` is not supported on LND 0.17.5 and below
+
   {
     [is_omitting_channels]: <Omit Channels from Node Bool>
     lnd: <Authenticated LND API Object>
@@ -40,6 +43,8 @@ const type = 'default';
         [base_fee_mtokens]: <Base Fee Millitokens String>
         [cltv_delta]: <Locktime Delta Number>
         [fee_rate]: <Fees Charged in Millitokens Per Million Number>
+        [inbound_base_discount_mtokens]: <Source Base Fee Reduction String>
+        [inbound_rate_discount]: <Source Per Million Rate Reduction Number>
         [is_disabled]: <Channel Is Disabled Bool>
         [max_htlc_mtokens]: <Maximum HTLC Millitokens Value String>
         [min_htlc_mtokens]: <Minimum HTLC Millitokens Value String>

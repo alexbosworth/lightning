@@ -4,6 +4,25 @@ const {throws} = require('node:assert').strict;
 
 const chanPolicyAsPolicy = require('./../../lnd_responses/channel_policy_as_policy');
 
+const makeExpected = overrides => {
+  const expected = {
+    base_fee_mtokens: '1',
+    cltv_delta: 1,
+    fee_rate: 1,
+    inbound_base_discount_mtokens: '0',
+    inbound_rate_discount: 0,
+    is_disabled: false,
+    max_htlc_mtokens: '1',
+    min_htlc_mtokens: '1',
+    public_key: '00',
+    updated_at: new Date(1000).toISOString(),
+  };
+
+  Object.keys(overrides || {}).forEach(key => expected[key] = overrides[key]);
+
+  return expected;
+};
+
 const tests = [
   {
     args: {},
@@ -94,16 +113,28 @@ const tests = [
       },
     },
     description: 'Policy mapped',
-    expected: {
-      base_fee_mtokens: '1',
-      cltv_delta: 1,
-      fee_rate: 1,
-      is_disabled: false,
-      max_htlc_mtokens: '1',
-      min_htlc_mtokens: '1',
+    expected: makeExpected({}),
+  },
+  {
+    args: {
       public_key: '00',
-      updated_at: new Date(1000).toISOString(),
+      policy: {
+        disabled: false,
+        fee_base_msat: '1',
+        fee_rate_milli_msat: '1',
+        inbound_fee_base_msat: -1,
+        inbound_fee_rate_milli_msat: -1,
+        last_update: 1,
+        max_htlc_msat: '1',
+        min_htlc: '1',
+        time_lock_delta: 1,
+      },
     },
+    description: 'Policy mapped',
+    expected: makeExpected({
+      inbound_base_discount_mtokens: '1',
+      inbound_rate_discount: 1,
+    }),
   },
 ];
 

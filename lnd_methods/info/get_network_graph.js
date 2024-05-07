@@ -16,6 +16,9 @@ const type = 'default';
 
   Requires `info:read` permission
 
+  `inbound_base_discount_mtokens` is not supported on LND 0.17.5 and below
+  `inbound_rate_discount` is not supported on LND 0.17.5 and below
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -29,6 +32,8 @@ const type = 'default';
         [base_fee_mtokens]: <Bae Fee Millitokens String>
         [cltv_delta]: <CLTV Height Delta Number>
         [fee_rate]: <Fee Rate In Millitokens Per Million Number>
+        [inbound_base_discount_mtokens]: <Source Base Fee Reduction String>
+        [inbound_rate_discount]: <Source Per Million Rate Reduction Number>
         [is_disabled]: <Edge is Disabled Bool>
         [max_htlc_mtokens]: <Maximum HTLC Millitokens String>
         [min_htlc_mtokens]: <Minimum HTLC Millitokens String>

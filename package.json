@@ -9,7 +9,7 @@
   "dependencies": {
     "@grpc/grpc-js": "1.10.7",
     "@grpc/proto-loader": "0.7.13",
-    "@types/node": "20.12.8",
+    "@types/node": "20.12.10",
     "@types/request": "2.48.12",
     "@types/ws": "8.5.10",
     "async": "3.2.5",
@@ -22,7 +22,7 @@
     "invoices": "3.0.0",
     "psbt": "3.0.0",
     "tiny-secp256k1": "2.2.3",
-    "type-fest": "4.18.1"
+    "type-fest": "4.18.2"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.10.4"
+  "version": "10.11.0"
 }

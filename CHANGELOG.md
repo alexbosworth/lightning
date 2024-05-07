@@ -1,5 +1,10 @@
 # Versions
 
+## 10.11.0
+
+- `getChannel`, `getNetworkGraph`, `getNode`: Add
+    `inbound_base_discount_mtokens` and `inbound_rate_discount`
+
 ## 10.10.4
 
 - `getPeers`: Set minimum possible peer ping time to positive zero

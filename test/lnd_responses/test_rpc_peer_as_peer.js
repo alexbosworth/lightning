@@ -30,7 +30,6 @@ const makePeer = overrides => {
   return response;
 };
 
-
 const makeExpected = overrides => {
   const expected = {
     bytes_received: 1,

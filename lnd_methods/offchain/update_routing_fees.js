@@ -11,6 +11,7 @@ const feeRatio = 1e6;
 const {floor} = Math;
 const {isArray} = Array;
 const method = 'updateChannelPolicy';
+const surcharge = discount => discount === undefined ? undefined : -discount;
 const tokensAsMtokens = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
 const type = 'default';
 
@@ -29,6 +30,8 @@ const type = 'default';
     [base_fee_tokens]: <Base Fee Tokens Charged Number>
     [cltv_delta]: <HTLC CLTV Delta Number>
     [fee_rate]: <Fee Rate In Millitokens Per Million Number>
+    [inbound_base_discount_mtokens]: <Inbound Fee Millitokens Reduction String>
+    [inbound_rate_discount]: <Source Millitokens Per Million Discount Number>
     lnd: <Authenticated LND API Object>
     [max_htlc_mtokens]: <Maximum HTLC Millitokens to Forward String>
     [min_htlc_mtokens]: <Minimum HTLC Millitokens to Forward String>
@@ -105,6 +108,8 @@ module.exports = (args, cbk) => {
           chan_point: !isGlobal ? chan : undefined,
           fee_rate: rate / feeRatio,
           global: isGlobal || undefined,
+          inbound_base_fee_msat: surcharge(args.inbound_base_discount_mtokens),
+          inbound_fee_rate_ppm: surcharge(args.inbound_rate_discount),
           max_htlc_msat: args.max_htlc_mtokens || undefined,
           min_htlc_msat: args.min_htlc_mtokens || undefined,
           min_htlc_msat_specified: !!args.min_htlc_mtokens,
