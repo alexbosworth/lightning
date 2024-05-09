@@ -1,6 +1,6 @@
 # Versions
 
-## 10.11.0
+## 10.11.1
 
 - `getChannel`, `getNetworkGraph`, `getNode`: Add
     `inbound_base_discount_mtokens` and `inbound_rate_discount`
