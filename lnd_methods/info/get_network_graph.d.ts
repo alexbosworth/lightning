@@ -1,43 +1,29 @@
-import {AuthenticatedLnd} from '../../lnd_grpc';
-import {AuthenticatedLightningMethod} from '../../typescript';
+import type {AuthenticatedLnd} from '../../lnd_grpc';
+import type {
+  AuthenticatedLightningMethod,
+  ChannelPolicy,
+} from '../../typescript';
 
 export type GetNetworkGraphResult = {
-  channels: {
+  channels: Array<{
     /** Channel Capacity Tokens */
     capacity: number;
     /** Standard Format Channel Id */
     id: string;
-    policies: {
-      /** Base Fee Millitokens */
-      base_fee_mtokens?: string;
-      /** CLTV Height Delta */
-      cltv_delta?: number;
-      /** Fee Rate In Millitokens Per Million */
-      fee_rate?: number;
-      /** Edge is Disabled */
-      is_disabled?: boolean;
-      /** Maximum HTLC Millitokens */
-      max_htlc_mtokens?: string;
-      /** Minimum HTLC Millitokens */
-      min_htlc_mtokens?: string;
-      /** Public Key */
-      public_key: string;
-      /** Last Update Epoch ISO 8601 Date */
-      updated_at?: string;
-    }[];
+    policies: ChannelPolicy[];
     /** Funding Transaction Id */
     transaction_id: string;
     /** Funding Transaction Output Index */
     transaction_vout: number;
     /** Last Update Epoch ISO 8601 Date */
     updated_at?: string;
-  }[];
-  nodes: {
+  }>;
+  nodes: Array<{
     /** Name */
     alias: string;
     /** Hex Encoded Color */
     color: string;
-    features: {
+    features: Array<{
       /** BOLT 09 Feature Bit */
       bit: number;
       /** Feature is Known */
@@ -46,14 +32,14 @@ export type GetNetworkGraphResult = {
       is_required: boolean;
       /** Feature Type */
       type: string;
-    }[];
+    }>;
     /** Node Public Key */
     public_key: string;
     /** Network Addresses and Ports */
     sockets: string[];
     /** Last Updated ISO 8601 Date */
     updated_at: string;
-  }[];
+  }>;
 };
 
 /**
