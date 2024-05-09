@@ -1,6 +1,7 @@
-import {
+import type {
   AuthenticatedLightningArgs,
   AuthenticatedLightningMethod,
+  ChannelPolicy,
 } from '../../typescript';
 
 export type GetNodeArgs = AuthenticatedLightningArgs<{
@@ -17,39 +18,22 @@ export type GetNodeResult = {
   capacity: number;
   /** Known Node Channels */
   channel_count: number;
-  channels?: {
+  channels?: Array<{
     /** Maximum Tokens */
     capacity: number;
     /** Standard Format Channel Id */
     id: string;
-    policies: {
-      /** Base Fee Millitokens */
-      base_fee_mtokens?: string;
-      /** Locktime Delta */
-      cltv_delta?: number;
-      /** Fees Charged Per Million Millitokens */
-      fee_rate?: number;
-      /** Channel Is Disabled */
-      is_disabled?: boolean;
-      /** Maximum HTLC Millitokens Value */
-      max_htlc_mtokens?: string;
-      /** Minimum HTLC Millitokens Value */
-      min_htlc_mtokens?: string;
-      /** Node Public Key */
-      public_key: string;
-      /** Policy Last Updated At ISO 8601 Date */
-      updated_at?: string;
-    }[];
+    policies: ChannelPolicy[];
     /** Transaction Id Hex */
     transaction_id: string;
     /** Transaction Output Index */
     transaction_vout: number;
     /** Channel Last Updated At ISO 8601 Date */
     updated_at?: string;
-  }[];
+  }>;
   /** RGB Hex Color */
   color: string;
-  features: {
+  features: Array<{
     /** BOLT 09 Feature Bit */
     bit: number;
     /** Feature is Known */
@@ -58,13 +42,13 @@ export type GetNodeResult = {
     is_required: boolean;
     /** Feature Type */
     type: string;
-  }[];
-  sockets: {
+  }>;
+  sockets: Array<{
     /** Host and Port */
     socket: string;
     /** Socket Type */
     type: string;
-  }[];
+  }>;
   /** Last Known Update ISO 8601 Date */
   updated_at?: string;
 };

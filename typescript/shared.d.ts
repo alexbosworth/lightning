@@ -19,13 +19,13 @@ export type LightningError<TError = {err: Error}> = TError extends undefined
 
 export type LightningCallback<TResult = void, TErrorDetails = any> = (
   error: LightningError<TErrorDetails> | undefined | null,
-  result: TResult extends void ? undefined : TResult
+  result: TResult extends void ? undefined : TResult,
 ) => void;
 
 export type LightningMethod<
   TArgs = EmptyObject,
   TResult = void,
-  TErrorDetails = any
+  TErrorDetails = any,
 > = {
   (args: TArgs): Promise<TResult>;
   (args: TArgs, callback: LightningCallback<TResult, TErrorDetails>): void;
@@ -34,21 +34,21 @@ export type LightningMethod<
 export type AuthenticatedLightningMethod<
   TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd},
   TResult = void,
-  TErrorDetails = any
+  TErrorDetails = any,
 > = LightningMethod<TArgs, TResult, TErrorDetails>;
 
 export type UnauthenticatedLightningMethod<
   TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd},
   TResult = void,
-  TErrorDetails = any
+  TErrorDetails = any,
 > = LightningMethod<TArgs, TResult, TErrorDetails>;
 
 export type AuthenticatedLightningSubscription<
-  TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd}
+  TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd},
 > = (args: TArgs) => events.EventEmitter;
 
 export type UnauthenticatedLightningSubscription<
-  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd}
+  TArgs extends {lnd: UnauthenticatedLnd} = {lnd: UnauthenticatedLnd},
 > = (args: TArgs) => events.EventEmitter;
 
 type CommonStatus = 'IN_FLIGHT' | 'SUCCEEDED' | 'FAILED';
@@ -113,10 +113,41 @@ export type RouteNode = {
   fee_rate?: number;
   /** Forward Edge Public Key Hex */
   public_key: string;
+};
+
+export type Route = RouteNode[];
+
+export type Routes = Route[];
+
+export type UtxoSelection = 'largest' | 'random';
+
+export interface ChannelPolicy {
+  /** Base Fee Millitokens */
+  base_fee_mtokens?: string;
+  /** Locktime Delta */
+  cltv_delta?: number;
+  /** Fees Charged Per Million Millitokens */
+  fee_rate?: number;
+  /**
+   * Source Based Base Fee Reduction String
+   *
+   * Not supported on LND 0.17.5 and below
+   */
+  inbound_base_discount_mtokens?: string;
+  /**
+   * Source Based Per Million Rate Reduction Number
+   *
+   * Not supported on LND 0.17.5 and below
+   */
+  inbound_rate_discount?: number;
+  /** Channel Is Disabled */
+  is_disabled?: boolean;
+  /** Maximum HTLC Millitokens Value */
+  max_htlc_mtokens?: string;
+  /** Minimum HTLC Millitokens Value */
+  min_htlc_mtokens?: string;
+  /** Node Public Key */
+  public_key: string;
+  /** Policy Last Updated At ISO 8601 Date */
+  updated_at?: string;
 }
-
-export type Route = RouteNode[]
-
-export type Routes = Route[]
-
-export type UtxoSelection = "largest" | "random";
