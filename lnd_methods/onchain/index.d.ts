@@ -24,6 +24,7 @@ export * from './open_channels';
 export * from './partially_sign_psbt';
 export * from './prepare_for_channel_proposal';
 export * from './propose_channel';
+export * from './request_batched_fee_increase';
 export * from './request_chain_fee_increase';
 export * from './send_to_chain_address';
 export * from './send_to_chain_addresses';
