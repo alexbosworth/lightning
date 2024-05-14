@@ -1,4 +1,4 @@
-import { AuthenticatedLightningSubscription } from "../../typescript";
+import {AuthenticatedLightningSubscription} from '../../typescript';
 
 export type SubscribeToGraphChannelUpdatedEvent = {
   /** Channel Base Fee Millitokens */
