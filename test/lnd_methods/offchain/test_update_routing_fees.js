@@ -163,6 +163,22 @@ const tests = [
     },
     description: 'A local channel policy is updated',
   },
+  {
+    args: {
+      inbound_base_discount_mtokens: '1',
+      lnd: makeLnd({
+        policy: {
+          base_fee_msat: '1000',
+          chan_point: undefined,
+          fee_rate: 0.000001,
+          global: true,
+          max_htlc_msat: undefined,
+          time_lock_delta: 144,
+        },
+      }),
+      description: 'Set a base discount',
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

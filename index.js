@@ -10,6 +10,7 @@ const {changePassword} = require('./lnd_methods');
 const {closeChannel} = require('./lnd_methods');
 const {connectWatchtower} = require('./lnd_methods');
 const {createChainAddress} = require('./lnd_methods');
+const {createFundedPsbt} = require('./lnd_methods');
 const {createHodlInvoice} = require('./lnd_methods');
 const {createInvoice} = require('./lnd_methods');
 const {createSeed} = require('./lnd_methods');
@@ -169,6 +170,7 @@ module.exports = {
   closeChannel,
   connectWatchtower,
   createChainAddress,
+  createFundedPsbt,
   createHodlInvoice,
   createInvoice,
   createSeed,

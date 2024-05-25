@@ -90,8 +90,29 @@ module.exports = (args, cbk) => {
         return cbk(null, tokensAsMtokens(args.base_fee_tokens));
       }],
 
+      // Determine the inbound fee discount policy
+      inboundFee: ['validate', ({}, cbk) => {
+        const inboundBase = args.inbound_base_discount_mtokens;
+        const inboundRate = args.inbound_rate_discount;
+
+        // Exit early when there is no inbound policy defined
+        if (inboundBase === undefined && inboundRate === undefined) {
+          return cbk();
+        }
+
+        // Convert discounts into the surcharges format
+        return cbk(null, {
+          base_fee_msat: surcharge(inboundBase),
+          fee_rate_ppm: surcharge(inboundRate)
+        });
+      }],
+
       // Set the routing fee policy
-      updateFees: ['baseFeeMillitokens', ({baseFeeMillitokens}, cbk) => {
+      updateFees: [
+        'baseFeeMillitokens',
+        'inboundFee',
+        ({baseFeeMillitokens, inboundFee}, cbk) =>
+      {
         const id = args.transaction_id || undefined;
         const rate = args.fee_rate === undefined ? defaultRate : args.fee_rate;
         const vout = args.transaction_vout;
@@ -108,8 +129,7 @@ module.exports = (args, cbk) => {
           chan_point: !isGlobal ? chan : undefined,
           fee_rate: rate / feeRatio,
           global: isGlobal || undefined,
-          inbound_base_fee_msat: surcharge(args.inbound_base_discount_mtokens),
-          inbound_fee_rate_ppm: surcharge(args.inbound_rate_discount),
+          inbound_fee: inboundFee,
           max_htlc_msat: args.max_htlc_mtokens || undefined,
           min_htlc_msat: args.min_htlc_mtokens || undefined,
           min_htlc_msat_specified: !!args.min_htlc_mtokens,

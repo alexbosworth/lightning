@@ -1,6 +1,7 @@
 const broadcastChainTransaction = require('./broadcast_chain_transaction');
 const cancelPendingChannel = require('./cancel_pending_channel');
 const closeChannel = require('./close_channel');
+const createFundedPsbt = require('./create_funded_psbt');
 const deleteChainTransaction = require('./delete_chain_transaction');
 const fundPendingChannels = require('./fund_pending_channels');
 const fundPsbt = require('./fund_psbt');
@@ -44,6 +45,7 @@ module.exports = {
   broadcastChainTransaction,
   cancelPendingChannel,
   closeChannel,
+  createFundedPsbt,
   deleteChainTransaction,
   fundPendingChannels,
   fundPsbt,

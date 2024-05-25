@@ -42,6 +42,10 @@
     "method": "NewAddress",
     "type": "default"
   },
+  "createFundedPsbt": {
+    "method": "FundPsbt",
+    "type": "wallet"
+  },
   "createHodlInvoice": {
     "depends_on": ["createChainAddress"],
     "method": "AddHoldInvoice",

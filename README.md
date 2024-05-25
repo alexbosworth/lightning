@@ -103,6 +103,8 @@ variables set:
     new watchtower.
 - [createChainAddress](https://github.com/alexbosworth/ln-service#createchainaddress): Generate
     a chain address to receive on-chain funds.
+- [createFundedPsbt](https://github.com/alexbosworth/ln-service#createfundedpsbt):
+    Create a funded PSBT given inputs and outputs
 - [createHodlInvoice](https://github.com/alexbosworth/ln-service#createhodlinvoice): Make a new
     off-chain invoice that will not automatically accept payment.
 - [createInvoice](https://github.com/alexbosworth/ln-service#createinvoice): Make a new off-chain

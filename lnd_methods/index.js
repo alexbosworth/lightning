@@ -9,6 +9,7 @@ const {changePassword} = require('./unauthenticated');
 const {closeChannel} = require('./onchain');
 const {connectWatchtower} = require('./offchain');
 const {createChainAddress} = require('./address');
+const {createFundedPsbt} = require('./onchain');
 const {createHodlInvoice} = require('./invoices');
 const {createInvoice} = require('./invoices');
 const {createSeed} = require('./unauthenticated');
@@ -167,6 +168,7 @@ module.exports = {
   closeChannel,
   connectWatchtower,
   createChainAddress,
+  createFundedPsbt,
   createHodlInvoice,
   createInvoice,
   createSeed,
