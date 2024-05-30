@@ -19,10 +19,10 @@ export type SubscribeToGraphChannelUpdatedEvent = {
   min_htlc_mtokens: string;
   /** Announcing Public Key, Target Public Key */
   public_keys: [string, string];
-  /** Channel Source Discount Base Fee Millitokens */
-  source_discount_base_mtokens: string;
-  /** Channel Source Discount Fee Rate In Millitokens Per Million */
-  source_discount_fee_rate: number;
+  /** Source Base Fee Reduction String */
+  inbound_base_discount_mtokens: string;
+  /** Source Per Million Rate Reduction Number */
+  inbound_rate_discount: number;
   /** Channel Transaction Id */
   transaction_id: string;
   /** Channel Transaction Output Index */

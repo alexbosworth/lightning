@@ -20,8 +20,8 @@ const now = () => new Date().toISOString();
       disabled: <Forwarding is Disabled Bool>
       fee_base_msat: <Forwarding Base Fee Millitokens String>
       fee_rate_milli_msat: <Forwarding Fee Rate Per Million String>
-      inbound_fee_base_msat: <Inbound Forwarding Base Fee Millitokens Number>
-      inbound_fee_rate_milli_msat: <Inbound Forwarding Fee Rate Per Million Number>
+      inbound_fee_base_msat: <Inbound Fee Base Number>
+      inbound_fee_rate_milli_msat: <Inbound Fee Base Number>
       max_htlc_msat: <Maximum HTLC Size Millitokens String>
       min_htlc: <Minimum HTLC Size Millitokens String>
       time_lock_delta: <Forwarding CLTV Delta Number>
@@ -119,28 +119,18 @@ module.exports = update => {
 
   const txId = !!transactionId.equals(emptyTxId) ? null : transactionId;
 
-  const {
-    disabled,
-    fee_base_msat,
-    fee_rate_milli_msat,
-    min_htlc,
-    inbound_fee_base_msat,
-    inbound_fee_rate_milli_msat,
-    time_lock_delta,
-  } = update.routing_policy;
-
   return {
-    base_fee_mtokens: fee_base_msat,
+    base_fee_mtokens: update.routing_policy.fee_base_msat,
     capacity: Number(update.capacity) || undefined,
-    cltv_delta: time_lock_delta,
-    fee_rate: Number(fee_rate_milli_msat),
-    id: chanFormat({ number: update.chan_id }).channel,
-    is_disabled: disabled,
+    cltv_delta: update.routing_policy.time_lock_delta,
+    fee_rate: Number(update.routing_policy.fee_rate_milli_msat),
+    id: chanFormat({number: update.chan_id}).channel,
+    is_disabled: update.routing_policy.disabled,
     max_htlc_mtokens: maxHtlc !== Number().toString() ? maxHtlc : undefined,
-    min_htlc_mtokens: min_htlc,
+    min_htlc_mtokens: update.routing_policy.min_htlc,
     public_keys: [update.advertising_node, update.connecting_node],
     inbound_base_discount_mtokens: inbound_fee_base_msat.toString(),
-    inbound_rate_discount: inbound_fee_rate_milli_msat.toString(),
+    inbound_rate_discount: inbound_fee_rate_milli_msat,
     transaction_id: !!txId ? bufferAsHex(txId) : undefined,
     transaction_vout: !!txId ? update.chan_point.output_index : undefined,
     updated_at: now(),
