@@ -18,6 +18,9 @@ const type = 'default';
 
   Requires `info:read` permission
 
+  `inbound_base_discount_mtokens` is not supported on LND 0.17.5 and below
+  `inbound_rate_discount` is not supported on LND 0.17.5 and below
+
   {
     lnd: <Authenticated LND API Object>
   }
@@ -45,12 +48,12 @@ const type = 'default';
     cltv_delta: <Channel CLTV Delta Number>
     fee_rate: <Channel Fee Rate In Millitokens Per Million Number>
     id: <Standard Format Channel Id String>
+    inbound_base_discount_mtokens: <Source Specific Base Fee Reduction String>
+    inbound_rate_discount: <Source Specific Per Million Rate Reduction Number>
     is_disabled: <Channel Is Disabled Bool>
     [max_htlc_mtokens]: <Channel Maximum HTLC Millitokens String>
     min_htlc_mtokens: <Channel Minimum HTLC Millitokens String>
     public_keys: [<Announcing Public Key>, <Target Public Key String>]
-    inbound_base_discount_mtokens: <Source Specific Base Fee Reduction String>
-    inbound_rate_discount: <Source Specific Per Million Rate Reduction Number>
     [transaction_id]: <Channel Transaction Id String>
     [transaction_vout]: <Channel Transaction Output Index Number>
     updated_at: <Update Received At ISO 8601 Date String>

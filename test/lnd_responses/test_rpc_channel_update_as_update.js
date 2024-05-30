@@ -9,6 +9,8 @@ const makeRoutingPolicy = overrides => {
     disabled: false,
     fee_base_msat: '1',
     fee_rate_milli_msat: '1',
+    inbound_fee_base_msat: 0,
+    inbound_fee_rate_milli_msat: 0,
     max_htlc_msat: '1',
     min_htlc: '1',
     time_lock_delta: 1,
@@ -44,6 +46,8 @@ const makeExpected = overrides => {
     cltv_delta: 1,
     fee_rate: 1,
     id: '0x0x1',
+    inbound_base_discount_mtokens: '0',
+    inbound_rate_discount: 0,
     is_disabled: false,
     max_htlc_mtokens: '1',
     min_htlc_mtokens: '1',
@@ -155,6 +159,19 @@ const tests = [
     args: makeArgs({}),
     description: 'RPC channel update is mapped to update',
     expected: makeExpected({}),
+  },
+  {
+    args: makeArgs({
+      routing_policy: makeRoutingPolicy({
+        inbound_fee_base_msat: -1,
+        inbound_fee_rate_milli_msat: -1,
+      }),
+    }),
+    description: 'RPC channel with inbound rates is mapped',
+    expected: makeExpected({
+      inbound_base_discount_mtokens: '1',
+      inbound_rate_discount: 1,
+    }),
   },
   {
     args: makeArgs({

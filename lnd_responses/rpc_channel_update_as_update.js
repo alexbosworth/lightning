@@ -1,5 +1,6 @@
 const {chanFormat} = require('bolt07');
 
+const asDiscount = fee => !fee ? 0 : -fee;
 const bufferAsHex = buffer => buffer.toString('hex');
 const emptyTxId = Buffer.alloc(32);
 const {isBuffer} = Buffer;
@@ -38,6 +39,8 @@ const now = () => new Date().toISOString();
     cltv_delta: <Channel CLTV Delta Number>
     fee_rate: <Channel Fee Rate In Millitokens Per Million Number>
     id: <Standard Format Channel Id String>
+    inbound_base_discount_mtokens: <Source Fee Discount Millitokens String>
+    inbound_rate_discount: <Source Based PPM Fee Discount Number>
     is_disabled: <Channel Is Disabled Bool>
     [max_htlc_mtokens]: <Channel Maximum HTLC Millitokens String>
     min_htlc_mtokens: <Channel Minimum HTLC Millitokens String>
@@ -114,6 +117,8 @@ module.exports = update => {
     throw new Error('ExpectedValidChannelId');
   }
 
+  const inBase = asDiscount(update.routing_policy.inbound_fee_base_msat);
+  const inRate = asDiscount(update.routing_policy.inbound_fee_rate_milli_msat);
   const maxHtlc = update.routing_policy.max_htlc_msat;
   const transactionId = update.chan_point.funding_txid_bytes.reverse();
 
@@ -125,12 +130,12 @@ module.exports = update => {
     cltv_delta: update.routing_policy.time_lock_delta,
     fee_rate: Number(update.routing_policy.fee_rate_milli_msat),
     id: chanFormat({number: update.chan_id}).channel,
+    inbound_base_discount_mtokens: inBase.toString(),
+    inbound_rate_discount: inRate,
     is_disabled: update.routing_policy.disabled,
     max_htlc_mtokens: maxHtlc !== Number().toString() ? maxHtlc : undefined,
     min_htlc_mtokens: update.routing_policy.min_htlc,
     public_keys: [update.advertising_node, update.connecting_node],
-    inbound_base_discount_mtokens: update.routing_policy.inbound_fee_base_msat.toString(),
-    inbound_rate_discount: update.routing_policy.inbound_fee_rate_milli_msat,
     transaction_id: !!txId ? bufferAsHex(txId) : undefined,
     transaction_vout: !!txId ? update.chan_point.output_index : undefined,
     updated_at: now(),

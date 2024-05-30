@@ -472,6 +472,8 @@ const tests = [
             cltv_delta: 1,
             fee_rate: 1,
             id: '0x0x1',
+            inbound_base_discount_mtokens: '0',
+            inbound_rate_discount: 0,
             is_disabled: false,
             max_htlc_mtokens: '1',
             min_htlc_mtokens: '1',
