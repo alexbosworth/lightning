@@ -1,5 +1,10 @@
 # Versions
 
+## 10.13.0
+
+- `subscribeToGraph`: Add support for `inbound_base_discount_mtokens` and
+    `inbound_rate_discount`
+
 ## 10.12.0
 
 - `createFundedPsbt`: Add method to create a funded PSBT given inputs/outputs
