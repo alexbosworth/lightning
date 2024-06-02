@@ -34,6 +34,11 @@ export type CreateFundedPsbtArgs = AuthenticatedLightningArgs<{
   version?: number;
 }>;
 
+export interface CreateFundedPsbtResult {
+  /** Unsigned PSBT Hex String */
+  psbt: string;
+}
+
 /**
  * Create an unsigned funded PSBT given inputs or outputs
  *
@@ -47,4 +52,7 @@ export type CreateFundedPsbtArgs = AuthenticatedLightningArgs<{
  *
  * This method is not supported on LND 0.17.5 or below
  */
-export const createFundedPsbt: AuthenticatedLightningMethod<CreateFundedPsbtArgs>;
+export const createFundedPsbt: AuthenticatedLightningMethod<
+  CreateFundedPsbtArgs,
+  CreateFundedPsbtResult
+>;
