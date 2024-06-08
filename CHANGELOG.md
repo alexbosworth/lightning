@@ -1,6 +1,6 @@
 # Versions
 
-## 10.13.1
+## 10.13.2
 
 - `getWalletInfo`: Add support for LND 0.18.0
 
