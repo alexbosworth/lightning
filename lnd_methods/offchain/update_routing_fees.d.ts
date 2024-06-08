@@ -38,6 +38,10 @@ export type UpdateRoutingFeesArgs = AuthenticatedLightningArgs<
       max_htlc_mtokens?: string;
       /** Minimum HTLC Millitokens to Forward */
       min_htlc_mtokens?: string;
+      /** Inbound Fee Millitokens Reduction String */
+      inbound_base_discount_mtokens: string;
+      /** Source Millitokens Per Million Discount Number */
+      inbound_rate_discount: number;
     }
 >;
 
