@@ -7,17 +7,28 @@ const {isLnd} = require('./../../lnd_requests');
 
 const edgeIsZombieErrorMessage = 'edge marked as zombie';
 const edgeNotFoundErrorMessage = 'edge not found';
+const method = 'getChanInfo';
+const type = 'default';
 
 /** Get graph information about a channel on the network
+
+  Either channel `id` or a `transaction_id` and `transaction_vout` is required
 
   Requires `info:read` permission
 
   `inbound_base_discount_mtokens` is not supported on LND 0.17.5 and below
+
   `inbound_rate_discount` is not supported on LND 0.17.5 and below
 
+  `transaction_id` is not supported on LND 0.18.0 and below
+
+  `transaction_vout` is not supported on LND 0.18.0 and below
+
   {
-    id: <Standard Format Channel Id String>
+    [id]: <Standard Format Channel Id String>
     lnd: <Authenticated LND API Object>
+    [transaction_id]: <Funding Outpoint Transaction Id Hex String>
+    [transaction_vout]: <Funding Outpoint Transaction Output Index Number>
   }
 
   @returns via cbk or Promise
@@ -41,30 +52,45 @@ const edgeNotFoundErrorMessage = 'edge not found';
     [updated_at]: <Channel Last Updated At ISO 8601 Date String>
   }
 */
-module.exports = ({id, lnd}, cbk) => {
+module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        try {
-          chanNumber({channel: id}).number
-        } catch (err) {
-          return cbk([400, 'ExpectedValidChannelIdToGetChannel', {err}]);
+        if (!!args.id && !!args.transaction_id) {
+          return cbk([400, 'ExpectedEitherChannelIdOrOutpointToGetChannel']);
         }
 
-        if (!isLnd({lnd, method: 'getChanInfo', type: 'default'})) {
+        if (!args.id && !args.transaction_id) {
+          return cbk([400, 'ExpectedChannelIdOrFundingOutpointToGetChannel']);
+        }
+
+        if (!isLnd({lnd: args.lnd, method: 'getChanInfo', type: 'default'})) {
           return cbk([400, 'ExpectedLndToGetChannelDetails']);
+        }
+
+        if (!!args.transaction_id && args.transaction_vout === undefined) {
+          return cbk([400, 'ExpectedChannelFundingOutputIndexToGetChannel']);
         }
 
         return cbk();
       },
 
+      // Channel arguments
+      request: ['validate', ({}, cbk) => {
+        // Exit early when a channel id is specified
+        if (!!args.id) {
+          return cbk(null, {chan_id: chanNumber({channel: args.id}).number});
+        }
+
+        return cbk(null, {
+          chan_point: `${args.transaction_id}:${args.transaction_vout}`,
+        });
+      }],
+
       // Get channel
-      getChannel: ['validate', ({}, cbk) => {
-        return lnd.default.getChanInfo({
-          chan_id: chanNumber({channel: id}).number,
-        },
-        (err, response) => {
+      getChannel: ['request', ({request}, cbk) => {
+        return args.lnd[type][method](request, (err, response) => {
           if (!!err && err.details === edgeIsZombieErrorMessage) {
             return cbk([404, 'FullChannelDetailsNotFound']);
           }
