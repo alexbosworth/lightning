@@ -1,6 +1,6 @@
 # Versions
 
-## 10.14.0
+## 10.14.1
 
 - `getChannel`: Add support for specifying `transaction_id` and
     `transaction_vout` instead of `id`
