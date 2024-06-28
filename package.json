@@ -7,9 +7,9 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.10.9",
+    "@grpc/grpc-js": "1.10.10",
     "@grpc/proto-loader": "0.7.13",
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.9",
     "@types/request": "2.48.12",
     "@types/ws": "8.5.10",
     "async": "3.2.5",
@@ -26,8 +26,8 @@
   },
   "description": "Lightning Network client library",
   "devDependencies": {
-    "tsd": "0.31.0",
-    "typescript": "5.4.5"
+    "tsd": "0.31.1",
+    "typescript": "5.5.2"
   },
   "engines": {
     "node": ">=18"
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.14.2"
+  "version": "10.14.3"
 }
