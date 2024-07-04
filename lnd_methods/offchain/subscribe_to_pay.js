@@ -409,6 +409,7 @@ module.exports = args => {
         allow_self_payment: true,
         amt: amounts.tokens,
         amt_msat: amounts.mtokens,
+        cancelable: true,
         cltv_limit: !!args.max_timeout_height ? maxCltvDelta : undefined,
         dest: !args.destination ? undefined : hexToBuf(args.destination),
         dest_custom_records: !messages.length ? undefined : destTlv,
