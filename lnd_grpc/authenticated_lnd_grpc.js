@@ -15,7 +15,7 @@ const {serviceTypes} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
 const {keys} = Object;
-const pathForProto = (path, proto) => !!path ? join(path, proto) : join(__dirname, protosDir, proto);
+const pathForProto = proto => join(__dirname, protosDir, proto);
 
 /** Initiate a gRPC API Methods Object for authenticated methods
 
@@ -24,7 +24,7 @@ const pathForProto = (path, proto) => !!path ? join(path, proto) : join(__dirnam
   {
     [cert]: <Base64 or Hex Serialized LND TLS Cert>
     [macaroon]: <Base64 or Hex Serialized Macaroon String>
-    [path]: <Path to Proto Files String>
+    [path]: <Path to Proto Files Directory String>
     [socket]: <Host:Port Network Address String>
   }
 
@@ -66,11 +66,13 @@ module.exports = ({cert, macaroon, path, socket}) => {
     lnd: keys(serviceTypes).reduce((services, type) => {
       const service = serviceTypes[type];
 
+      const file = protoFiles[service];
+
       services[type] = apiForProto({
         credentials,
         params,
         service,
-        path: pathForProto(path, protoFiles[service]),
+        path: !!path ? join(path, file) : pathForProto(file),
         socket: lndSocket,
         type: packageTypes[service],
       });

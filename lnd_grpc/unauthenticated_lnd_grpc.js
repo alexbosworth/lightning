@@ -14,6 +14,7 @@ const {unauthenticatedServiceTypes} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
 const {keys} = Object;
+const pathToProto = file => join(__dirname, protosDir, file);
 
 /** Unauthenticated gRPC interface to the Lightning Network Daemon (lnd).
 
@@ -21,7 +22,7 @@ const {keys} = Object;
 
   {
     [cert]: <Base64 or Hex Serialized LND TLS Cert String>
-    [path]: <Path to Proto Files String>
+    [path]: <Path to Proto Files Directory String>
     [socket]: <Host:Port String>
   }
 
@@ -49,7 +50,9 @@ module.exports = ({cert, path, socket}) => {
     lnd: keys(unauthenticatedServiceTypes).reduce((services, type) => {
       const service = unauthenticatedServiceTypes[type];
 
-      const protoPath = !!path ? join(path, protoFiles[service]) : join(__dirname, protosDir, protoFiles[service]);
+      const file = protoFiles[service];
+
+      const protoPath = !!path ? join(path, file) : pathToProto(file);
 
       const rpc = grpc.loadPackageDefinition(loadSync(protoPath, grpcOptions));
 

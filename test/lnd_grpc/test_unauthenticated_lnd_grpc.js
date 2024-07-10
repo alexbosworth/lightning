@@ -1,5 +1,6 @@
 const {deepStrictEqual} = require('node:assert').strict;
 const {equal} = require('node:assert').strict;
+const {join} = require('path');
 const test = require('node:test');
 
 const {unauthenticatedLndGrpc} = require('./../../');
@@ -15,6 +16,11 @@ const tests = [
   {
     args: {cert: '00'},
     description: 'Passing a cert for the authenticated LND grpc is supported',
+    expected: {services: expectedServices},
+  },
+  {
+    args: {path: join(__dirname, '../../grpc/protos')},
+    description: 'The path can be specified',
     expected: {services: expectedServices},
   },
 ];
