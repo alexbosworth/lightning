@@ -1,5 +1,10 @@
 # Versions
 
+## 10.15.0
+
+- `authenticatedLndGrpc`, `unauthenticatedLndGrpc`: Add `path` to specify the
+    protos directory
+
 ## 10.14.4
 
 - `getChannel`: Add support for specifying `transaction_id` and

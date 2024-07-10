@@ -7,9 +7,9 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.10.10",
+    "@grpc/grpc-js": "1.10.11",
     "@grpc/proto-loader": "0.7.13",
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.10",
     "@types/request": "2.48.12",
     "@types/ws": "8.5.10",
     "async": "3.2.5",
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.14.4"
+  "version": "10.15.0"
 }
