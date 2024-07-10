@@ -1,5 +1,9 @@
 # Versions
 
+## 10.15.1
+
+- Add support for LND 0.18.2
+
 ## 10.15.0
 
 - `authenticatedLndGrpc`, `unauthenticatedLndGrpc`: Add `path` to specify the
