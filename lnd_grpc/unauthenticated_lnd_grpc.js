@@ -48,7 +48,7 @@ module.exports = ({cert, socket}) => {
     lnd: keys(unauthenticatedServiceTypes).reduce((services, type) => {
       const service = unauthenticatedServiceTypes[type];
 
-      const protoPath = join(__dirname, protosDir, protoFiles[service]);
+      const protoPath = join(__dirname, process.env.PROTOS_DIR || protosDir, protoFiles[service]);
 
       const rpc = grpc.loadPackageDefinition(loadSync(protoPath, grpcOptions));
 

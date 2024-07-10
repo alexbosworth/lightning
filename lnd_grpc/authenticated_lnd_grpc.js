@@ -15,7 +15,7 @@ const {serviceTypes} = require('./../grpc');
 
 const {GRPC_SSL_CIPHER_SUITES} = process.env;
 const {keys} = Object;
-const pathForProto = proto => join(__dirname, protosDir, proto);
+const pathForProto = proto => join(__dirname, process.env.PROTOS_DIR || protosDir, proto);
 
 /** Initiate a gRPC API Methods Object for authenticated methods
 
