@@ -1,6 +1,8 @@
 export type LndAuthentication = {
   /** Base64 or Hex Serialized LND TLS Cert String */
   cert?: string;
+  /** Path to proto files */
+  path?: string;
   /** Host:Port String */
   socket?: string;
 };
