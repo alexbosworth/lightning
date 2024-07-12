@@ -63,6 +63,10 @@ const makeExpectedChannel = ({override}) => {
     partner_public_key: 'b',
     transaction_id: '00',
     transaction_vout: 1,
+    anchor_spent_by: undefined,
+    anchor_vout: undefined,
+    anchor_is_confirmed: false,
+    anchor_is_pending: false,
   };
 
   Object.keys(override || {}).forEach(key => expected[key] = override[key]);
