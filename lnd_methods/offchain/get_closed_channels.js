@@ -192,6 +192,7 @@ module.exports = (args, cbk) => {
           const resolutions = chanResolutions.map(rpcResolutionAsResolution);
 
           const {balance} = resolutions.find(n => n.balance) || {balance: {}};
+          const {anchor} = resolutions.find(n => n.anchor) || {anchor: {}};
           const payments = resolutions.map(n => n.payment).filter(n => !!n);
 
           return cbk(null, {
@@ -201,6 +202,10 @@ module.exports = (args, cbk) => {
             close_confirm_height: height,
             close_payments: payments,
             close_transaction_id: closeTxId,
+            anchor_spent_by: anchor?.spent_by,
+            anchor_vout: anchor?.anchor_vout,
+            anchor_is_confirmed: anchor? anchor.is_confirmed: false,
+            anchor_is_pending: anchor? anchor.is_pending: false,
             final_local_balance: Number(chan.settled_balance),
             final_time_locked_balance: finalTimeLock,
             id: !chanId ? undefined : chanId.channel,

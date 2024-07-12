@@ -100,6 +100,16 @@ module.exports = args => {
       },
     };
 
+  case resolutionTypes.anchor:
+    return {
+      anchor: {
+        is_confirmed: args.outcome === resolutionOutcomes.confirmed,
+        is_pending: args.outcome === resolutionOutcomes.pending,
+        spent_by: args.sweep_txid || undefined,
+        vout: args.outpoint.output_index,
+      }
+    }
+
   default:
     return {};
   }

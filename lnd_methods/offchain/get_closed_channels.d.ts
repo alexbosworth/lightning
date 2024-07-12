@@ -74,6 +74,14 @@ export type GetClosedChannelsResult = {
     transaction_id: string;
     /** Channel Funding Output Index */
     transaction_vout: number;
+    /** Anchor CPFP Transaction Id Hex */
+    anchor_spent_by?: string,
+    /** Our Close Transaction Anchor Output Index */
+    anchor_vout?: number,
+    /** Is Anchor CPFP Transaction Confirmed */
+    anchor_is_confirmed: boolean,
+    /** Is Anchor CPFP Transaction Pending */
+    anchor_is_pending: boolean,
   }[];
 };
 

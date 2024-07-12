@@ -78,7 +78,8 @@
   "resolutionTypes": {
     "balance": "COMMIT",
     "incoming_payment": "INCOMING_HTLC",
-    "outgoing_payment": "OUTGOING_HTLC"
+    "outgoing_payment": "OUTGOING_HTLC",
+    "anchor": "ANCHOR"
   },
   "syncTypes": {
     "active": "ACTIVE_SYNC",
