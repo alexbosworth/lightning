@@ -79,9 +79,9 @@ export type GetClosedChannelsResult = {
     /** Our Close Transaction Anchor Output Index */
     anchor_vout?: number,
     /** Is Anchor CPFP Transaction Confirmed */
-    anchor_is_confirmed: boolean,
+    anchor_is_confirmed?: boolean,
     /** Is Anchor CPFP Transaction Pending */
-    anchor_is_pending: boolean,
+    anchor_is_pending?: boolean,
   }[];
 };
 

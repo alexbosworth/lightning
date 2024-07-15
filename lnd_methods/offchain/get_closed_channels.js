@@ -31,6 +31,10 @@ const outpointSeparator = ':';
   @returns via cbk or Promise
   {
     channels: [{
+      [anchor_is_confirmed]: <Anchor Sweep Confirmed Bool>
+      [anchor_is_pending]: <Anchor Sweep Pending Confirmation Bool>
+      [anchor_spent_by]: <Anchor Sweep Transaction Id Hex String>
+      [anchor_vout]: <Anchor Output Index Number>
       capacity: <Closed Channel Capacity Tokens Number>
       [close_balance_spent_by]: <Channel Balance Output Spent By Tx Id String>
       [close_balance_vout]: <Channel Balance Close Tx Output Index Number>
@@ -191,21 +195,21 @@ module.exports = (args, cbk) => {
 
           const resolutions = chanResolutions.map(rpcResolutionAsResolution);
 
-          const {balance} = resolutions.find(n => n.balance) || {balance: {}};
           const {anchor} = resolutions.find(n => n.anchor) || {anchor: {}};
+          const {balance} = resolutions.find(n => n.balance) || {balance: {}};
           const payments = resolutions.map(n => n.payment).filter(n => !!n);
 
           return cbk(null, {
+            anchor_is_confirmed: anchor.is_confirmed,
+            anchor_is_pending: anchor.is_pending,
+            anchor_spent_by: anchor.spent_by,
+            anchor_vout: anchor.transaction_vout,
             capacity: Number(chan.capacity),
             close_balance_spent_by: balance.spent_by,
             close_balance_vout: balance.transaction_vout,
             close_confirm_height: height,
             close_payments: payments,
             close_transaction_id: closeTxId,
-            anchor_spent_by: anchor?.spent_by,
-            anchor_vout: anchor?.anchor_vout,
-            anchor_is_confirmed: anchor.is_confirmed !== undefined? anchor.is_confirmed: false,
-            anchor_is_pending: anchor.is_pending !== undefined? anchor.is_pending: false,
             final_local_balance: Number(chan.settled_balance),
             final_time_locked_balance: finalTimeLock,
             id: !chanId ? undefined : chanId.channel,

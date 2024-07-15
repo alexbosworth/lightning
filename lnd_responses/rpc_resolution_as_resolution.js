@@ -22,6 +22,12 @@ const outpointSeparator = ':';
 
   @returns
   {
+    [anchor]: {
+      is_confirmed: <Anchor Output Spend Is Confirmed Bool>
+      is_pending: <Anchor Output Spend Is Pending Confirmation Bool>
+      [spent_by]: <Sweep Transaction Id Hex String>
+      transaction_vout: <Anchor Output Index Number>
+    }
     [balance]: {
       spent_by: <Close Transaction Spent By Transaction Id Hex String>
       transaction_vout: <Balance Spent By Transaction Output Index Number>
@@ -72,6 +78,16 @@ module.exports = args => {
   }
 
   switch (args.resolution_type) {
+  case resolutionTypes.anchor:
+    return {
+      anchor: {
+        is_confirmed: args.outcome === resolutionOutcomes.confirmed,
+        is_pending: args.outcome === resolutionOutcomes.pending,
+        spent_by: args.sweep_txid || undefined,
+        transaction_vout: args.outpoint.output_index,
+      },
+    };
+
   case resolutionTypes.balance:
     // Exit early when the outcome is indeterminate
     if (!args.sweep_txid || args.outcome !== resolutionOutcomes.confirmed) {
@@ -99,16 +115,6 @@ module.exports = args => {
         transaction_vout: args.outpoint.output_index,
       },
     };
-
-  case resolutionTypes.anchor:
-    return {
-      anchor: {
-        is_confirmed: args.outcome === resolutionOutcomes.confirmed,
-        is_pending: args.outcome === resolutionOutcomes.pending,
-        spent_by: args.sweep_txid || undefined,
-        vout: args.outpoint.output_index,
-      }
-    }
 
   default:
     return {};

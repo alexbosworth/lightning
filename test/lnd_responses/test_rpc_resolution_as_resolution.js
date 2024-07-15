@@ -113,6 +113,30 @@ const tests = [
       },
     },
   },
+  {
+    args: makeArgs({resolution_type: 'ANCHOR'}),
+    description: 'RPC anchor resolution is mapped to anchor',
+    expected: {
+      anchor: {
+        is_confirmed: true,
+        is_pending: false,
+        spent_by: Buffer.alloc(32, 1).toString('hex'),
+        transaction_vout: 0,
+      },
+    },
+  },
+  {
+    args: makeArgs({resolution_type: 'ANCHOR', sweep_txid: ''}),
+    description: 'RPC pending anchor resolution is mapped to anchor',
+    expected: {
+      anchor: {
+        is_confirmed: true,
+        is_pending: false,
+        spent_by: undefined,
+        transaction_vout: 0,
+      },
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

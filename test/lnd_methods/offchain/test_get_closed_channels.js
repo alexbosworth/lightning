@@ -43,6 +43,10 @@ const makeArgs = ({override}) => {
 
 const makeExpectedChannel = ({override}) => {
   const expected = {
+    anchor_is_confirmed: undefined,
+    anchor_is_pending: undefined,
+    anchor_spent_by: undefined,
+    anchor_vout: undefined,
     capacity: 1,
     close_balance_vout: undefined,
     close_balance_spent_by: undefined,
@@ -63,10 +67,6 @@ const makeExpectedChannel = ({override}) => {
     partner_public_key: 'b',
     transaction_id: '00',
     transaction_vout: 1,
-    anchor_spent_by: undefined,
-    anchor_vout: undefined,
-    anchor_is_confirmed: false,
-    anchor_is_pending: false,
   };
 
   Object.keys(override || {}).forEach(key => expected[key] = override[key]);
@@ -273,6 +273,35 @@ const tests = [
     args: makeArgs({override: {lnd: makeLnd(null, {chan_id: '0'})}}),
     description: 'Empty chan id is returned as undefined',
     expected: {channels: [makeExpectedChannel({override: {id: undefined}})]},
+  },
+  {
+    args: makeArgs({
+      override: {
+        lnd: makeLnd(null, {
+          resolutions: [{
+            amount_sat: '1',
+            outcome: 'CLAIMED',
+            outpoint: {
+              output_index: 0,
+              txid_str: Buffer.alloc(32).toString('hex'),
+            },
+            resolution_type: 'ANCHOR',
+            sweep_txid: Buffer.alloc(32, 1).toString('hex'),
+          }],
+        }),
+      },
+    }),
+    description: 'Anchor resolution maps to anchor status',
+    expected: {
+      channels: [
+        makeExpectedChannel({override: {
+          anchor_is_confirmed: true,
+          anchor_is_pending: false,
+          anchor_spent_by: Buffer.alloc(32, 1).toString('hex'),
+          anchor_vout: 0,
+        }}),
+      ],
+    },
   },
   {
     args: makeArgs({override: {lnd: makeLnd(null, {resolutions: [null]})}}),
