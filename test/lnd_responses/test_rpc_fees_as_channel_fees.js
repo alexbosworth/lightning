@@ -66,6 +66,8 @@ const tests = [
       base_fee_mtokens: '1',
       fee_rate: 0,
       id: '0x0x1',
+      inbound_base_discount_mtokens: '0',
+      inbound_rate_discount: 0,
       transaction_id: Buffer.alloc(32).toString('hex'),
       transaction_vout: 0,
     },

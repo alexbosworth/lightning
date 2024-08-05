@@ -2,6 +2,8 @@ const {chanFormat} = require('bolt07');
 
 const {safeTokens} = require('./../bolt00');
 
+const discount = fee => (!fee ? 0 : -fee).toString();
+const inverse = rate => !rate ? 0 : -rate;
 const isHash = n => /^[0-9A-F]{64}$/i.test(n);
 const notFound = -1;
 const outpointDivider = ':';
@@ -61,6 +63,8 @@ module.exports = channel => {
     base_fee_mtokens: channel.base_fee_msat,
     fee_rate: Number(channel.fee_per_mil),
     id: chanFormat({number: channel.chan_id}).channel,
+    inbound_base_discount_mtokens: discount(channel.inbound_base_fee_msat),
+    inbound_rate_discount: inverse(channel.inbound_fee_per_mil),
     transaction_id: txId,
     transaction_vout: Number(index),
   };
