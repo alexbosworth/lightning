@@ -43,8 +43,8 @@ const separatorChar = ':';
       [base_fee_mtokens]: <Base Fee Millitokens String>
       [cltv_delta]: <Locktime Delta Number>
       [fee_rate]: <Fees Charged in Millitokens Per Million Number>
-      inbound_base_discount_mtokens: <Source Specific Base Fee Reduction String>
-      inbound_rate_discount: <Source Specific Per Million Rate Reduction Number>
+      [inbound_base_discount_mtokens]: <Source Based Base Fee Reduction String>
+      [inbound_rate_discount]: <Source Based Per Million Rate Reduction Number>
       [is_disabled]: <Channel Is Disabled Bool>
       [max_htlc_mtokens]: <Maximum HTLC Millitokens Value String>
       [min_htlc_mtokens]: <Minimum HTLC Millitokens Value String>
