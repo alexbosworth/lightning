@@ -1,6 +1,6 @@
 # Versions
 
-## 10.16.0
+## 10.16.1
 
 - `getFeeRates`: Add support for `inbound_base_discount_mtokens`,
     'inbound_rate_discount` for inbound fee policy discounts
