@@ -15,6 +15,8 @@ const outpointDivider = ':';
     chan_id: <Numeric Format Channel Id String>
     channel_point: <Channel Funding Outpoint String>
     fee_per_mil: <Millitokens Per Million Fee Rate String>
+    inbound_base_fee_msat: <Inbound Base Fee Millitokens Number>
+    inbound_fee_per_mil: <Inbound Fee Rate PPM Number>
   }
 
   @returns

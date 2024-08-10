@@ -61,6 +61,7 @@ const {getInvoices} = require('./lnd_methods');
 const {getLockedUtxos} = require('./lnd_methods');
 const {getMasterPublicKeys} = require('./lnd_methods');
 const {getMethods} = require('./lnd_methods');
+const {getMinimumRelayFee} = require('./lnd_methods');
 const {getNetworkCentrality} = require('./lnd_methods');
 const {getNetworkGraph} = require('./lnd_methods');
 const {getNetworkInfo} = require('./lnd_methods');
@@ -221,6 +222,7 @@ module.exports = {
   getLockedUtxos,
   getMasterPublicKeys,
   getMethods,
+  getMinimumRelayFee,
   getNetworkCentrality,
   getNetworkGraph,
   getNetworkInfo,

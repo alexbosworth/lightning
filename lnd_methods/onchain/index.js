@@ -15,6 +15,7 @@ const getChainTransaction = require('./get_chain_transaction');
 const getChainTransactions = require('./get_chain_transactions');
 const getLockedUtxos = require('./get_locked_utxos');
 const getMasterPublicKeys = require('./get_master_public_keys');
+const getMinimumRelayFee = require('./get_minimum_relay_fee');
 const getPendingChainBalance = require('./get_pending_chain_balance');
 const getPendingSweeps = require('./get_pending_sweeps');
 const getSweepTransactions = require('./get_sweep_transactions');
@@ -59,6 +60,7 @@ module.exports = {
   getChainTransactions,
   getLockedUtxos,
   getMasterPublicKeys,
+  getMinimumRelayFee,
   getPendingChainBalance,
   getPendingSweeps,
   getSweepTransactions,

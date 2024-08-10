@@ -72,6 +72,23 @@ const tests = [
       transaction_vout: 0,
     },
   },
+  {
+    args: makeArgs({
+      inbound_base_fee_msat: -1,
+      inbound_fee_per_mil: -1,
+    }),
+    description: 'RPC channel fees are mapped to inverse channel fees',
+    expected: {
+      base_fee: 0,
+      base_fee_mtokens: '1',
+      fee_rate: 0,
+      id: '0x0x1',
+      inbound_base_discount_mtokens: '1',
+      inbound_rate_discount: 1,
+      transaction_id: Buffer.alloc(32).toString('hex'),
+      transaction_vout: 0,
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

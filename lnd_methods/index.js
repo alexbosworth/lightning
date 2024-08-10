@@ -60,6 +60,7 @@ const {getInvoices} = require('./invoices');
 const {getLockedUtxos} = require('./onchain');
 const {getMasterPublicKeys} = require('./onchain');
 const {getMethods} = require('./info');
+const {getMinimumRelayFee} = require('./onchain');
 const {getNetworkCentrality} = require('./info');
 const {getNetworkGraph} = require('./info');
 const {getNetworkInfo} = require('./info');
@@ -219,6 +220,7 @@ module.exports = {
   getLockedUtxos,
   getMasterPublicKeys,
   getMethods,
+  getMinimumRelayFee,
   getNetworkCentrality,
   getNetworkGraph,
   getNetworkInfo,

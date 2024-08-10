@@ -201,6 +201,8 @@ variables set:
     List out master seed derived extended public keys and derivation paths.
 - [getMethods](https://github.com/alexbosworth/ln-service#getmethods): List RPC methods and
     permissions required to use them.
+- [getMinimumRelayFee](https://github.com/alexbosworth/ln-service#getminimumrelayfee):
+    Get the minimum relayable fee for publishing a chain transaction
 - [getNetworkCentrality](https://github.com/alexbosworth/ln-service#getnetworkcentrality):
     Calculate the graph centrality score of a node.
 - [getNetworkGraph](https://github.com/alexbosworth/ln-service#getnetworkgraph): List all graph
