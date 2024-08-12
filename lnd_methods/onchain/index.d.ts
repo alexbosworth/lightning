@@ -15,6 +15,7 @@ export * from './get_chain_transaction';
 export * from './get_chain_transactions';
 export * from './get_locked_utxos';
 export * from './get_master_public_keys';
+export * from './get_minimum_relay_fee';
 export * from './get_pending_chain_balance';
 export * from './get_pending_sweeps';
 export * from './get_sweep_transactions';
