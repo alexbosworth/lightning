@@ -26,6 +26,8 @@ export type GetWalletInfoResult = {
   }[];
   /** Is Synced To Chain */
   is_synced_to_chain: boolean;
+  /** Is Synced To Network Graph */
+  is_synced_to_graph?: boolean;
   /** Latest Known Block At Date */
   latest_block_at: string;
   /** Peer Count */
@@ -34,6 +36,8 @@ export type GetWalletInfoResult = {
   pending_channels_count: number;
   /** Public Key */
   public_key: string;
+  /** The URIs of the Node */
+  uris?: string[];
   /** Version String */
   version: string;
 };
