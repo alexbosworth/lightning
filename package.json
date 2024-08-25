@@ -9,10 +9,10 @@
   "dependencies": {
     "@grpc/grpc-js": "1.11.1",
     "@grpc/proto-loader": "0.7.13",
-    "@types/node": "22.2.0",
+    "@types/node": "22.5.0",
     "@types/request": "2.48.12",
     "@types/ws": "8.5.12",
-    "async": "3.2.5",
+    "async": "3.2.6",
     "asyncjs-util": "1.2.12",
     "bitcoinjs-lib": "6.1.6",
     "bn.js": "5.2.1",
@@ -22,7 +22,7 @@
     "invoices": "3.0.0",
     "psbt": "3.0.0",
     "tiny-secp256k1": "2.2.3",
-    "type-fest": "4.24.0"
+    "type-fest": "4.25.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -45,7 +45,7 @@
     "url": "https://github.com/alexbosworth/lightning.git"
   },
   "scripts": {
-    "test": "npx nyc@15.1.0 node --experimental-test-coverage --test && npm run test:types",
+    "test": "npx nyc@17.0.0 node --experimental-test-coverage --test && npm run test:types",
     "test:types": "tsd",
     "unit-tests": "node --test && npm run test:types"
   },
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.18.0"
+  "version": "10.19.0"
 }

@@ -39,6 +39,7 @@ const {returnResult} = require('asyncjs-util');
       tokens: <Total Tokens Paid Rounded Down Number>
     }
     [failed]: {
+      is_canceled: <Payment Canceled Bool>
       is_insufficient_balance: <Failed Due To Lack of Balance Bool>
       is_invalid_payment: <Failed Due to Invalid Payment Bool>
       is_pathfinding_timeout: <Failed Due to Pathfinding Timeout Bool>
@@ -112,6 +113,10 @@ module.exports = ({confirmed, failed}, cbk) => {
         // Exit early when the payment didn't fail
         if (!failed) {
           return cbk();
+        }
+
+        if (!!failed.is_canceled) {
+          return cbk([503, 'PaymentExecutionCanceled']);
         }
 
         if (!!failed.is_insufficient_balance) {

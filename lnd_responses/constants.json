@@ -29,6 +29,7 @@
   },
   "defaultChannelType": "UNKNOWN_COMMITMENT_TYPE",
   "failureReason": {
+    "canceled": "FAILURE_REASON_CANCELED",
     "invalid_payment": "FAILURE_REASON_INCORRECT_PAYMENT_DETAILS",
     "insufficient_balance": "FAILURE_REASON_INSUFFICIENT_BALANCE",
     "pathfinding_timeout_failed": "FAILURE_REASON_TIMEOUT",

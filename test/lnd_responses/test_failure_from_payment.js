@@ -9,6 +9,7 @@ const id = Buffer.alloc(32).toString('hex')
 const makeExpected = overrides => {
   const expected = {
     id,
+    is_canceled: false,
     is_insufficient_balance: false,
     is_invalid_payment: false,
     is_pathfinding_timeout: false,
@@ -52,6 +53,14 @@ const tests = [
     },
     description: 'Timeout is mapped',
     expected: makeExpected({is_pathfinding_timeout: true}),
+  },
+  {
+    args: {
+      failure_reason: 'FAILURE_REASON_CANCELED',
+      payment_hash: id,
+    },
+    description: 'Cancel is mapped',
+    expected: makeExpected({is_canceled: true}),
   },
   {
     args: {payment_hash: undefined},

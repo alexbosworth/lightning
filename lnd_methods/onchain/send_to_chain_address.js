@@ -29,6 +29,10 @@ const unconfirmedConfCount = 0;
     address: <Destination Chain Address String>
     [description]: <Transaction Label String>
     [fee_tokens_per_vbyte]: <Chain Fee Tokens Per Virtual Byte Number>
+    [inputs]: [{
+      transaction_id: <Unspent Transaction Id Hex String>
+      transaction_vout: <Unspent Transaction Output Index Number>
+    }]
     [is_send_all]: <Send All Funds Bool>
     lnd: <Authenticated LND API Object>
     [log]: <Log Function>

@@ -1,5 +1,13 @@
 # Versions
 
+## 10.19.0
+
+- `createInvoice`: add `is_encrypting_routes` to enable blinded paths feature
+
+- `pay`, `subscribeToPastPayment`, `subscribeToPayViaDetails`,
+    `subscribeToPayViaRequest`, `subscribeToPayments`: Add `is_canceled` for
+    when the payment loop was explicitly canceled.
+
 ## 10.18.0
 
 - `getMinimumRelayFee`: Add method to get the chain backend minimum relay fee
