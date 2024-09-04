@@ -20,6 +20,7 @@ const makeArgs = overrides => {
         timeout: 1,
       }],
       id: Buffer.alloc(32).toString('hex'),
+      index: '1',
       mtokens: '1000',
       paths: [{
         fee_mtokens: '1000',
@@ -107,6 +108,7 @@ const tests = [
         timeout: 1,
       }],
       id: '0000000000000000000000000000000000000000000000000000000000000000',
+      index: '1',
       mtokens: '1000',
       paths: [{
         fee_mtokens: '1000',

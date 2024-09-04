@@ -58,6 +58,7 @@ const makeExpected = overrides => {
     created_at: '1970-01-01T00:00:00.000Z',
     destination: Buffer.alloc(33).toString('hex'),
     id: Buffer.alloc(32).toString('hex'),
+    index: '1',
     mtokens: '2000',
     paths: [{
       fee: 1,

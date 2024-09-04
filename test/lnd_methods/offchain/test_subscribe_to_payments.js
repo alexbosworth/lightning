@@ -111,6 +111,7 @@ const tests = [
           timeout: 1,
         }],
         id: Buffer.alloc(32).toString('hex'),
+        index: '1',
         mtokens: '2000',
         paths: [{
           fee: 1,
