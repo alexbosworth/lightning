@@ -67,6 +67,7 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
     created_at: <Payment Created At ISO 8601 Date String>
     destination: <Payment Destination Public Key Hex String>
     id: <Payment Hash Hex String>
+    index: <Payment Index String>
     mtokens: <Total Millitokens Pending String>
     paths: [{
       fee: <Total Fee Tokens Pending Number>
@@ -134,6 +135,7 @@ module.exports = payment => {
     destination,
     created_at: nsAsDate(payment.creation_time_ns).toISOString(),
     id: payment.payment_hash,
+    index: payment.payment_index,
     mtokens: mtokens.toString(),
     paths: pending.map(n => n.route),
     request: payment.payment_request || undefined,
