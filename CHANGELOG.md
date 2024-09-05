@@ -1,5 +1,10 @@
 # Versions
 
+## 10.20.0
+
+- `payViaPaymentRequest`, `subscribeToPayViaRequest`: Add `index` to response
+    for payment offset number in payments set
+
 ## 10.19.0
 
 - `createInvoice`: add `is_encrypting_routes` to enable blinded paths feature

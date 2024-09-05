@@ -54,6 +54,7 @@ const type = 'router';
       timeout: <First Route Timeout Block Height Number>
     }]
     id: <Payment Hash Hex String>
+    index: <Payment Index Offset Number String>
     mtokens: <Total Millitokens Paid String>
     paths: [{
       fee_mtokens: <Total Fee Millitokens Paid String>
@@ -109,6 +110,7 @@ const type = 'router';
     created_at: <Payment Created At ISO 8601 Date String>
     destination: <Payment Destination Hex String>
     id: <Payment Hash Hex String>
+    index: <Payment Index Offset Number String>
     mtokens: <Total Millitokens Pending String>
     paths: [{
       fee: <Total Fee Tokens Pending Number>
