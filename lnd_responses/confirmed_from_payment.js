@@ -81,7 +81,7 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
       timeout: <First Path Timeout Block Height Number>
     }]
     id: <Payment Hash Hex String>
-    index: <Payment Index String>
+    index: <Payment Index Offset Number String>
     mtokens: <Total Millitokens Paid String>
     paths: [{
       fee: <Total Fee Tokens Paid Number>
