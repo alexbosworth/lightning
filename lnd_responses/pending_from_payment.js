@@ -67,7 +67,7 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
     created_at: <Payment Created At ISO 8601 Date String>
     destination: <Payment Destination Public Key Hex String>
     id: <Payment Hash Hex String>
-    index: <Payment Index String>
+    index: <Payment Index Offset Number String>
     mtokens: <Total Millitokens Pending String>
     paths: [{
       fee: <Total Fee Tokens Pending Number>
