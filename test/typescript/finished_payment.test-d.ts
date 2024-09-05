@@ -22,6 +22,7 @@ const args = {
       },
     ],
     id: Buffer.alloc(32).toString('hex'),
+    index: '1',
     mtokens: '1000',
     paths: [
       {

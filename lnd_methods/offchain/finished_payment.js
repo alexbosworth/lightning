@@ -80,6 +80,7 @@ const {returnResult} = require('asyncjs-util');
       timeout: <Timeout Block Height Number>
     }]
     [id]: <Payment Hash Hex String>
+    index: <Payment Index Offset Number String>
     mtokens: <Total Millitokens Paid String>
     paths: [{
       fee_mtokens: <Total Fee Millitokens Paid String>
@@ -146,6 +147,7 @@ module.exports = ({confirmed, failed}, cbk) => {
           fee_mtokens: confirmed.fee_mtokens,
           hops: confirmed.hops,
           id: confirmed.id,
+          index: confirmed.index,
           mtokens: confirmed.mtokens,
           paths: confirmed.paths,
           secret: confirmed.secret,

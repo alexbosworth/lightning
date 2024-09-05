@@ -27,6 +27,8 @@ export type FinishedPaymentArgs = AuthenticatedLightningArgs<{
     }[];
     /** Payment Hash Hex String */
     id: string;
+    /** Payment Index String */
+    index: string;
     /** Total Millitokens Paid String */
     mtokens: string;
     paths: {
@@ -129,6 +131,8 @@ export type FinishedPaymentResult = {
   }[];
   /** Payment Hash Hex String */
   id?: string;
+  /** Payment Index String */
+  index: string;
   /** Total Millitokens Paid String */
   mtokens: string;
   paths: {

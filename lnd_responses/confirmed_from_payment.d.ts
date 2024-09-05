@@ -105,6 +105,8 @@ export type ConfirmedFromPaymentResult = {
   }[];
   /** Payment Hash Hex String */
   id: string;
+  /** Payment Index String */
+  index: string;
   /** Total Millitokens Paid String */
   mtokens: string;
   paths: {
