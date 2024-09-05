@@ -13,6 +13,8 @@ export type CreateInvoiceArgs = AuthenticatedLightningArgs<{
   description_hash?: string;
   /** Expires At ISO 8601 Date */
   expires_at?: string;
+  /** Use Blinded Paths For Inbound Routes */
+  is_encrypting_routes?: boolean;
   /** Is Fallback Address Included */
   is_fallback_included?: boolean;
   /** Is Fallback Address Nested */
