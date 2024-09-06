@@ -101,7 +101,7 @@ export type SubscribeToPayConfirmedEvent = {
   }[];
   /** Payment Hash Hex String> */
   id: string;
- /** Payment Index String */
+  /** Payment Index String */
   index: string;
   /** Total Millitokens Paid String> */
   mtokens: string;
