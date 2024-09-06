@@ -101,6 +101,8 @@ export type SubscribeToPayConfirmedEvent = {
   }[];
   /** Payment Hash Hex String> */
   id: string;
+  /** Payment Index String */
+  index: string;
   /** Total Millitokens Paid String> */
   mtokens: string;
   paths: {
@@ -193,6 +195,8 @@ export type SubscribeToPayPayingEvent = {
   destination: string;
   /** Payment Hash Hex String> */
   id: string;
+  /** Payment Index String */
+  index: string;
   /** Total Millitokens Pending String> */
   mtokens: string;
   paths: {

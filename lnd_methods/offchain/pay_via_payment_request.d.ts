@@ -61,6 +61,8 @@ export type PayViaPaymentRequestResult = {
   }[];
   /** Payment Hash Hex */
   id: string;
+  /** Payment Index String */
+  index: string;
   /** Total Millitokens Paid */
   mtokens: string;
   paths: {
