@@ -1,6 +1,6 @@
 # Versions
 
-## 10.20.1
+## 10.20.2
 
 - `payViaPaymentRequest`, `subscribeToPayViaRequest`: Add `index` to response
     for payment offset number in payments set
