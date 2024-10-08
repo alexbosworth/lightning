@@ -1,5 +1,9 @@
 # Versions
 
+## 10.21.0
+
+- `fundPsbt`: Add support for `change_format` to specify change address type
+
 ## 10.20.2
 
 - `payViaPaymentRequest`, `subscribeToPayViaRequest`: Add `index` to response

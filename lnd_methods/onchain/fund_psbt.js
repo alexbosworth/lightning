@@ -7,13 +7,14 @@ const {Transaction} = require('bitcoinjs-lib');
 const {isLnd} = require('./../../lnd_requests');
 
 const asOutpoint = n => `${n.transaction_id}:${n.transaction_vout}`;
-const defaultChangeType = 'CHANGE_ADDRESS_TYPE_P2TR';
+const defaultChangeType = () => 'CHANGE_ADDRESS_TYPE_P2TR';
 const defaultConfirmationTarget = 6;
 const expirationAsDate = epoch => new Date(Number(epoch) * 1e3).toISOString();
 const {fromHex} = Transaction;
 const hexFromBuffer = buffer => buffer.toString('hex');
 const {isArray} = Array;
 const {isBuffer} = Buffer;
+const isKnownChangeFormat = format => !format || format === 'p2tr';
 const method = 'fundPsbt';
 const notSupported = /unknown.*walletrpc.WalletKit/;
 const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
@@ -29,6 +30,8 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
 
   `utxo_selection` methods: 'largest', 'random'
 
+  `change_format` options: `p2tr` (only one change type is supported)
+
   Requires `onchain:write` permission
 
   Requires LND built with `walletrpc` tag
@@ -40,6 +43,7 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
   `utxo_selection` is not supported in LND 0.17.5 and below
 
   {
+    [change_format]: <Change Address Address Format String>
     [fee_tokens_per_vbyte]: <Chain Fee Tokens Per Virtual Byte Number>
     [inputs]: [{
       transaction_id: <Unspent Transaction Id Hex String>
@@ -80,6 +84,10 @@ module.exports = (args, cbk) => {
 
       // Check arguments
       validate: cbk => {
+        if (!isKnownChangeFormat(args.change_format)) {
+          return cbk([400, 'ExpectedKnownChangeFormatToFundPsbt']);
+        }
+
         if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedAuthenticatedLndToFundPsbt']);
         }
@@ -163,7 +171,7 @@ module.exports = (args, cbk) => {
       // Fund the PSBT
       fund: ['fee', 'funding', 'minConfs', ({fee, funding, minConfs}, cbk) => {
         return args.lnd[type][method]({
-          change_type: defaultChangeType,
+          change_type: defaultChangeType(args.change_type),
           coin_selection_strategy: strategy(args.utxo_selection),
           min_confs: minConfs !== undefined ? minConfs : undefined,
           psbt: !!args.psbt ? Buffer.from(args.psbt, 'hex') : undefined,
