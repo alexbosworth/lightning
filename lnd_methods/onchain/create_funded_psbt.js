@@ -5,12 +5,13 @@ const {returnResult} = require('asyncjs-util');
 const {isLnd} = require('./../../lnd_requests');
 
 const bufferAsHex = buffer => buffer.toString('hex');
-const defaultChangeType = 'CHANGE_ADDRESS_TYPE_P2TR';
+const defaultChangeType = () => 'CHANGE_ADDRESS_TYPE_P2TR';
 const defaultConfirmationTarget = 6;
 const errorUnsupported = 'transaction template missing, need to specify either PSBT or raw TX template';
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const indexNotFound = -1;
 const {isBuffer} = Buffer;
+const isKnownChangeFormat = format => !format || format === 'p2tr';
 const method = 'fundPsbt';
 const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const type = 'wallet';
@@ -22,6 +23,8 @@ const unconfirmedConfirmationsCount = 0;
 
   `utxo_selection` methods: 'largest', 'random'
 
+  `change_format` options: `p2tr` (only one change type is supported)
+
   Requires `onchain:write` permission
 
   Requires LND built with `walletrpc` tag
@@ -29,6 +32,7 @@ const unconfirmedConfirmationsCount = 0;
   This method is not supported on LND 0.17.5 or below
 
   {
+    [change_format]: <Change Address Address Format String>
     [fee_tokens_per_vbyte]: <Chain Fee Tokens Per Virtual Byte Number>
     [inputs]: [{
       [sequence]: <Sequence Number>
@@ -58,6 +62,10 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
+        if (!isKnownChangeFormat(args.change_format)) {
+          return cbk([400, 'ExpectedKnownChangeFormatToFundPsbt']);
+        }
+
         if (!isLnd({method, type, lnd: args.lnd})) {
           return cbk([400, 'ExpectedAuthenticatedLndToCreateFundedPsbt']);
         }
@@ -97,6 +105,7 @@ module.exports = (args, cbk) => {
       // Construct the PSBT that is needed for coin select type funding
       funding: ['validate', ({}, cbk) => {
         const {psbt} = createPsbt({
+          change_type: defaultChangeType(args.change_type),
           outputs: args.outputs || [],
           timelock: args.timelock,
           utxos: (args.inputs || []).map(input => ({

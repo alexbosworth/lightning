@@ -49,6 +49,11 @@ const makeExpected = overrides => {
 
 const tests = [
   {
+    args: makeArgs({change_format: 'change_format'}),
+    description: 'A valid change format is required',
+    error: [400, 'ExpectedKnownChangeFormatToFundPsbt'],
+  },
+  {
     args: makeArgs({lnd: undefined}),
     description: 'An LND object is required',
     error: [400, 'ExpectedAuthenticatedLndToCreateFundedPsbt'],
