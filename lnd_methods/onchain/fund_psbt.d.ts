@@ -7,6 +7,8 @@ import {MergeExclusive} from 'type-fest';
 
 export type FundPsbtArgs = AuthenticatedLightningArgs<
   {
+    /** Change Address Address Format String */
+    change_format?: 'p2tr';
     /** Chain Fee Tokens Per Virtual Byte */
     fee_tokens_per_vbyte?: number;
     inputs?: {
@@ -15,12 +17,12 @@ export type FundPsbtArgs = AuthenticatedLightningArgs<
       /** Unspent Transaction Output Index */
       transaction_vout: number;
     }[];
-
     /** Spend UTXOs With Minimum Confirmations */
     min_confirmations?: number;
-
     /** Confirmations To Wait */
     target_confirmations?: number;
+    /** Select UTXOs Using Method String */
+    utxo_selection?: 'largest' | 'random';
   } & MergeExclusive<
     {
       /** Existing PSBT Hex */
@@ -58,8 +60,6 @@ export type FundPsbtResult = {
   }[];
   /** Unsigned PSBT Hex */
   psbt: string;
-  /** Select UTXOs Using Method String */
-  utxo_selection?: UtxoSelection;
 };
 
 /**
@@ -68,6 +68,10 @@ export type FundPsbtResult = {
  * Specify outputs or PSBT with the outputs encoded
  *
  * If there are no inputs passed, internal UTXOs will be selected and locked
+ *
+ * `utxo_selection` methods: 'largest', 'random'
+ *
+ * `change_format` options: `p2tr` (only one change type is supported)
  *
  * Requires `onchain:write` permission
  *
