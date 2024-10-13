@@ -4,6 +4,8 @@ import type {
 } from '../../typescript';
 
 export type CreateFundedPsbtArgs = AuthenticatedLightningArgs<{
+  /** Change Address Address Format String */
+  change_format?: 'p2tr';
   /** Chain Fee Tokens Per Virtual Byte Number */
   fee_tokens_per_vbyte?: number;
   inputs?: Array<{
@@ -29,7 +31,7 @@ export type CreateFundedPsbtArgs = AuthenticatedLightningArgs<{
   /** Spendable Lock Time on Transaction Number */
   timelock?: number;
   /** Select Inputs Using Selection Methodology Type String */
-  utxo_selection?: string;
+  utxo_selection?: 'largest' | 'random';
   /** Transaction Version Number */
   version?: number;
 }>;
@@ -45,6 +47,8 @@ export interface CreateFundedPsbtResult {
  * When specifying local inputs, they must be locked before using
  *
  * `utxo_selection` methods: 'largest', 'random'
+ *
+ * `change_format` options: `p2tr` (only one change type is supported)
  *
  * Requires `onchain:write` permission
  *
