@@ -21,9 +21,9 @@ const unconfirmedConfirmationsCount = 0;
 
   When specifying local inputs, they must be locked before using
 
-  `utxo_selection` methods: 'largest', 'random'
-
   `change_format` options: `p2tr` (only one change type is supported)
+
+  `utxo_selection` methods: 'largest', 'random'
 
   Requires `onchain:write` permission
 
