@@ -204,10 +204,10 @@ message LookupInvoiceMsg {
 
 // CircuitKey is a unique identifier for an HTLC.
 message CircuitKey {
-    /// The id of the channel that the is part of this circuit.
+    // The id of the channel that the is part of this circuit.
     uint64 chan_id = 1;
 
-    /// The index of the incoming htlc in the incoming channel.
+    // The index of the incoming htlc in the incoming channel.
     uint64 htlc_id = 2;
 }
 
@@ -240,6 +240,12 @@ message HtlcModifyResponse {
     // The modified amount in milli-satoshi that the exit HTLC is paying. This
     // value can be different from the actual on-chain HTLC amount, in case the
     // HTLC carries other valuable items, as can be the case with custom channel
-    // types. In order to not modify this value, the client should set it zero.
-    uint64 amt_paid = 2;
+    // types.
+    optional uint64 amt_paid = 2;
+
+    // This flag indicates whether the HTLCs associated with the invoices should
+    // be cancelled. The interceptor client may set this field if some
+    // unexpected behavior is encountered. Setting this will ignore the amt_paid
+    // field.
+    bool cancel_set = 3;
 }
