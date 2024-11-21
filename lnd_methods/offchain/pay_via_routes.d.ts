@@ -46,10 +46,14 @@ export type PayViaRoutesArgs = AuthenticatedLightningArgs<{
     }[];
     /** Total Millitokens To Pay */
     mtokens: string;
+    /** Payment Identifier Hex */
+    payment?: string;
     /** Expiration Block Height */
     timeout: number;
     /** Total Tokens To Pay */
     tokens: number;
+    /** Total Millitokens */
+    total_mtokens?: string;
   }[];
 }>;
 
