@@ -9,9 +9,9 @@
   "dependencies": {
     "@grpc/grpc-js": "1.12.2",
     "@grpc/proto-loader": "0.7.13",
-    "@types/node": "22.7.5",
+    "@types/node": "22.9.1",
     "@types/request": "2.48.12",
-    "@types/ws": "8.5.12",
+    "@types/ws": "8.5.13",
     "async": "3.2.6",
     "asyncjs-util": "1.2.12",
     "bitcoinjs-lib": "6.1.6",
@@ -22,7 +22,7 @@
     "invoices": "3.0.0",
     "psbt": "3.0.0",
     "tiny-secp256k1": "2.2.3",
-    "type-fest": "4.26.1"
+    "type-fest": "4.27.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.22.1"
+  "version": "10.22.2"
 }
