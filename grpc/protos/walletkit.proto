@@ -414,6 +414,8 @@ message ReleaseOutputRequest {
 }
 
 message ReleaseOutputResponse {
+    // The status of the release operation.
+    string status = 1;
 }
 
 message KeyReq {
@@ -699,6 +701,8 @@ message ImportPublicKeyRequest {
     AddressType address_type = 2;
 }
 message ImportPublicKeyResponse {
+    // The status of the import operation.
+    string status = 1;
 }
 
 message ImportTapscriptRequest {
@@ -1318,6 +1322,8 @@ message LabelTransactionRequest {
 }
 
 message LabelTransactionResponse {
+    // The status of the label operation.
+    string status = 1;
 }
 
 // The possible change address types for default accounts and single imported
@@ -1388,6 +1394,12 @@ message FundPsbtRequest {
         input with.
         */
         uint64 sat_per_vbyte = 4;
+
+        /*
+        The fee rate, expressed in sat/kWU, that should be used to spend the
+        input with.
+        */
+        uint64 sat_per_kw = 11;
     }
 
     /*
@@ -1411,6 +1423,9 @@ message FundPsbtRequest {
 
     // The strategy to use for selecting coins during funding the PSBT.
     lnrpc.CoinSelectionStrategy coin_selection_strategy = 10;
+
+    // The max fee to total output amount ratio that this psbt should adhere to.
+    double max_fee_ratio = 12;
 }
 message FundPsbtResponse {
     /*

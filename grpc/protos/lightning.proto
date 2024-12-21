@@ -643,6 +643,8 @@ message SendCustomMessageRequest {
 }
 
 message SendCustomMessageResponse {
+    // The status of the send operation.
+    string status = 1;
 }
 
 message Utxo {
@@ -755,11 +757,35 @@ message GetTransactionsRequest {
 
     // An optional filter to only include transactions relevant to an account.
     string account = 3;
+
+    /*
+    The index of a transaction that will be used in a query to determine which
+    transaction should be returned in the response.
+    */
+    uint32 index_offset = 4;
+
+    /*
+    The maximal number of transactions returned in the response to this query.
+    This value should be set to 0 to return all transactions.
+    */
+    uint32 max_transactions = 5;
 }
 
 message TransactionDetails {
     // The list of transactions relevant to the wallet.
     repeated Transaction transactions = 1;
+
+    /*
+    The index of the last item in the set of returned transactions. This can be
+    used to seek further, pagination style.
+    */
+    uint64 last_index = 2;
+
+    /*
+    The index of the last item in the set of returned transactions. This can be
+    used to seek backwards, pagination style.
+    */
+    uint64 first_index = 3;
 }
 
 message FeeLimit {
@@ -1317,6 +1343,8 @@ message ConnectPeerRequest {
     uint64 timeout = 3;
 }
 message ConnectPeerResponse {
+    // The status of the connect operation.
+    string status = 1;
 }
 
 message DisconnectPeerRequest {
@@ -1324,6 +1352,8 @@ message DisconnectPeerRequest {
     string pub_key = 1;
 }
 message DisconnectPeerResponse {
+    // The status of the disconnect operation.
+    string status = 1;
 }
 
 message HTLC {
@@ -3542,6 +3572,8 @@ message NetworkInfo {
 message StopRequest {
 }
 message StopResponse {
+    // The status of the stop operation.
+    string status = 1;
 }
 
 message GraphTopologySubscription {
@@ -4366,9 +4398,13 @@ message DeleteAllPaymentsRequest {
 }
 
 message DeletePaymentResponse {
+    // The status of the delete operation.
+    string status = 1;
 }
 
 message DeleteAllPaymentsResponse {
+    // The status of the delete operation.
+    string status = 1;
 }
 
 message AbandonChannelRequest {
@@ -4385,6 +4421,8 @@ message AbandonChannelRequest {
 }
 
 message AbandonChannelResponse {
+    // The status of the abandon operation.
+    string status = 1;
 }
 
 message DebugLevelRequest {
@@ -4544,6 +4582,15 @@ message PolicyUpdateRequest {
     // Optional inbound fee. If unset, the previously set value will be
     // retained [EXPERIMENTAL].
     InboundFee inbound_fee = 10;
+
+    // Under unknown circumstances a channel can exist with a missing edge in
+    // the graph database. This can cause an 'edge not found' error when calling
+    // `getchaninfo` and/or cause the default channel policy to be used during
+    // forwards. Setting this flag will recreate the edge if not found, allowing
+    // updating this channel policy and fixing the missing edge problem for this
+    // channel permanently. For fields not set in this command, the default
+    // policy will be created.
+    bool create_missing_edge = 11;
 }
 
 enum UpdateFailure {
@@ -4724,12 +4771,15 @@ message RestoreChanBackupRequest {
     }
 }
 message RestoreBackupResponse {
+    // The number of channels successfully restored.
+    uint32 num_restored = 1;
 }
 
 message ChannelBackupSubscription {
 }
 
 message VerifyChanBackupResponse {
+    repeated string chan_points = 1;
 }
 
 message MacaroonPermission {
