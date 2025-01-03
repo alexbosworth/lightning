@@ -78,6 +78,7 @@ const {getPublicKey} = require('./lnd_methods');
 const {getRouteConfidence} = require('./lnd_methods');
 const {getRouteThroughHops} = require('./lnd_methods');
 const {getRouteToDestination} = require('./lnd_methods');
+const {getRoutingFeeEstimate} = require('./lnd_methods');
 const {getSettlementStatus} = require('./lnd_methods');
 const {getSweepTransactions} = require('./lnd_methods');
 const {getTowerServerInfo} = require('./lnd_methods');
@@ -239,6 +240,7 @@ module.exports = {
   getRouteConfidence,
   getRouteThroughHops,
   getRouteToDestination,
+  getRoutingFeeEstimate,
   getSettlementStatus,
   getSweepTransactions,
   getTowerServerInfo,

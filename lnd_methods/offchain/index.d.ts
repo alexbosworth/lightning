@@ -27,6 +27,7 @@ export * from './get_payments';
 export * from './get_pending_channels';
 export * from './get_pending_payments';
 export * from './get_route_through_hops';
+export * from './get_routing_fee_estimate';
 export * from './get_settlement_status';
 export * from './is_destination_payable';
 export * from './pay_via_payment_details';

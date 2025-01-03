@@ -27,6 +27,7 @@ const getPayments = require('./get_payments');
 const getPendingChannels = require('./get_pending_channels');
 const getPendingPayments = require('./get_pending_payments');
 const getRouteThroughHops = require('./get_route_through_hops');
+const getRoutingFeeEstimate = require('./get_routing_fee_estimate');
 const getSettlementStatus = require('./get_settlement_status');
 const isDestinationPayable = require('./is_destination_payable');
 const pay = require('./pay');
@@ -86,6 +87,7 @@ module.exports = {
   getPendingChannels,
   getPendingPayments,
   getRouteThroughHops,
+  getRoutingFeeEstimate,
   getSettlementStatus,
   isDestinationPayable,
   pay,
