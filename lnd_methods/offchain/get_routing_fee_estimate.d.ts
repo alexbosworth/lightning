@@ -9,14 +9,14 @@ export type GetRoutingFeeEstimateRequest = AuthenticatedLightningArgs<{
     /** BOLT 11 Encoded Payment Request */
     request: string;
     /** Optional Timeout in Milliseconds */
-    timeout: number;
+    timeout?: number;
 }>;
 
 export type GetRoutingFeeEstimateResponse = {
-    /** Sats (Routing Fee Sats) */
-    fee: number;
+    /** (Minimum Routing Fee Millitokens) */
+    fee_mtokens: string;
     /** Timeout (Time Lock Delay) */
-    timeout: string;
+    timeout: number;
 };
 
 /**

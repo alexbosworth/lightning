@@ -312,6 +312,10 @@
     "method": "QueryRoutes",
     "type": "default"
   },
+  "getRoutingFeeEstimate": {
+    "method": "EstimateRouteFee",
+    "type": "router"
+  },
   "getSettlementStatus": {
     "method": "LookupHtlcResolution",
     "type": "default"
