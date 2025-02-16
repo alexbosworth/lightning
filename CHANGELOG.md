@@ -1,6 +1,6 @@
 # Versions
 
-## 10.23.0
+## 10.23.1
 
 - `getRoutingFeeEstimate`: Add method to estimate an offchain payment fee
 
