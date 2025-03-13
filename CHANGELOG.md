@@ -1,5 +1,9 @@
 # Versions
 
+## 10.24.0
+
+- `closeChannel`: Add `is_graceful_close` to wait for pending resolutions
+
 ## 10.23.1
 
 - `getRoutingFeeEstimate`: Add method to estimate an offchain payment fee

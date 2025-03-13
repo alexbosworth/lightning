@@ -7,27 +7,27 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.12.6",
+    "@grpc/grpc-js": "1.13.0",
     "@grpc/proto-loader": "0.7.13",
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.10",
     "@types/request": "2.48.12",
-    "@types/ws": "8.5.14",
+    "@types/ws": "8.18.0",
     "async": "3.2.6",
     "asyncjs-util": "1.2.12",
     "bitcoinjs-lib": "6.1.7",
     "bn.js": "5.2.1",
     "bolt07": "1.9.4",
     "bolt09": "2.1.0",
-    "ecpair": "2.1.0",
+    "ecpair": "3.0.0",
     "invoices": "3.0.0",
     "psbt": "3.0.0",
     "tiny-secp256k1": "2.2.3",
-    "type-fest": "4.34.1"
+    "type-fest": "4.37.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
     "tsd": "0.31.2",
-    "typescript": "5.7.3"
+    "typescript": "5.8.2"
   },
   "engines": {
     "node": ">=18"
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.23.1"
+  "version": "10.24.0"
 }

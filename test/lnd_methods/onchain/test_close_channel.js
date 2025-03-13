@@ -197,6 +197,11 @@ const tests = [
     description: 'A channel is closed with a tx fee',
     expected: {transaction_id: '04030201', transaction_vout: 0},
   },
+  {
+    args: makeArgs({is_graceful_close: true}),
+    description: 'A channel is closed with a graceful exit',
+    expected: {transaction_id: '04030201', transaction_vout: 0},
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {
