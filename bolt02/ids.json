@@ -4,6 +4,7 @@
     "bitcoinregtest": "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206",
     "bitcoinsignet": "00000008819873e925422c1ff0f99f7cc9bbb232af63a077a480a3633bee1ef6",
     "bitcointestnet": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
+    "bitcointestnet4": "00000000da84f2bafbbc53dee25a72ae507ff4914b867c565be350b0da8bf043",
     "litecoinmainnet": "12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2",
     "litecoinregtest": "530827f38f93b43ed12af0b3ad25a288dc02ed74d6d7857862df51fc56c416f9",
     "litecointestnet": "4966625a4b2851d9fdee139e56211a0d88575f59ed816ff5e6a63deb4e3e29a0"
