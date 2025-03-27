@@ -47,6 +47,8 @@ export type ForceCloseChannelArgs = AuthenticatedLightningArgs<
 export type CoopCloseChannelArgs = AuthenticatedLightningArgs<
   ExpectedIdOfChannelToClose & {
     is_force_close?: false;
+    /** Is Waiting For Pending Payments to Coop Close Bool */
+    is_graceful_close?: boolean;
     /** Request Sending Local Channel Funds To Address String */
     address?: string;
     /** Fail Cooperative Close Above Fee Rate */
@@ -79,6 +81,8 @@ export type CloseChannelResult = {
  * Requires `info:read`, `offchain:write`, `onchain:write`, `peers:write` permissions
  *
  * `max_tokens_per_vbyte` is not supported in LND 0.15.0 and below
+ * 
+ * `is_graceful_close` is not supported in LND 0.17.5 and below
  */
 export const closeChannel: AuthenticatedLightningMethod<
   CloseChannelArgs,
