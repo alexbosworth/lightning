@@ -26,7 +26,7 @@ module.exports = ({lnd}, cbk) => {
       // Check arguments
       validate: cbk => {
         if (!lnd) {
-          return cbk([400,  'ExpectedAuthenticatedLndToGetCurrrentHeight']);
+          return cbk([400, 'ExpectedAuthenticatedLndToGetCurrrentHeight']);
         }
 
         return cbk();

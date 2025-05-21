@@ -1,6 +1,6 @@
 # Versions
 
-## 10.25.0
+## 10.25.1
 
 - Add support for Testnet4
 

@@ -82,7 +82,7 @@ module.exports = ({lnd}) => {
       return emitError([503, 'UnexpectedBlockEventHashLength']);
     }
 
-    if (!data.height) {
+    if (data.height === undefined) {
       return emitError([503, 'ExpectedHeightInBlockEvent']);
     }
 
