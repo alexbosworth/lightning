@@ -49,6 +49,19 @@ const tests = [
       lnd: {
         wallet: {
           bumpFee: ({}, cbk) => cbk({
+            details: 'invalid output index 999 for transaction with 3 outputs',
+          }),
+        },
+      },
+    }),
+    description: 'Unknown UTXO error is passed back',
+    error: [404, 'SpecifiedOutpointNotFoundInWalletUtxos'],
+  },
+  {
+    args: makeArgs({
+      lnd: {
+        wallet: {
+          bumpFee: ({}, cbk) => cbk({
             details: 'the passed output does not belong to the wallet',
           }),
         },
