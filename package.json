@@ -9,7 +9,7 @@
   "dependencies": {
     "@grpc/grpc-js": "1.13.4",
     "@grpc/proto-loader": "0.7.15",
-    "@types/node": "22.15.21",
+    "@types/node": "24.0.1",
     "@types/request": "2.48.12",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.25.2"
+  "version": "10.25.3"
 }
