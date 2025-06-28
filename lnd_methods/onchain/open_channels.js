@@ -115,8 +115,8 @@ module.exports = (args, cbk) => {
           id: makeId(),
           cooperative_close_address: channel.cooperative_close_address,
           give_tokens: channel.give_tokens,
-          is_private: channel.is_private,
           is_allowing_minimal_reserve: channel.is_allowing_minimal_reserve,
+          is_private: channel.is_private,
           is_simplified_taproot: channel.is_simplified_taproot,
           is_trusted_funding: channel.is_trusted_funding,
           min_htlc_mtokens: channel.min_htlc_mtokens,
@@ -133,6 +133,7 @@ module.exports = (args, cbk) => {
           const baseType = !!channel.is_trusted_funding ? anchors : undefined;
           let isDone = false;
           const isSelfPublish = !!args.is_avoiding_broadcast;
+          const remoteReserve = reserve(!!channel.is_allowing_minimal_reserve);
 
           const commit = !!channel.is_simplified_taproot ? taproot : baseType;
 
@@ -152,8 +153,8 @@ module.exports = (args, cbk) => {
             min_htlc_msat: channel.min_htlc_mtokens || defaultMinHtlcMtokens,
             node_pubkey: bufferFromHex(channel.partner_public_key),
             private: !!channel.is_private,
-            remote_chan_reserve_sat: reserve(!!channel.is_allowing_minimal_reserve),
             push_sat: channel.give_tokens || undefined,
+            remote_chan_reserve_sat: remoteReserve,
             remote_csv_delay: channel.partner_csv_delay || undefined,
             scid_alias: channel.is_trusted_funding && channel.is_private,
             use_base_fee: channel.base_fee_mtokens !== undefined,

@@ -135,7 +135,11 @@ const tests = [
     args: {
       channels: [
         {capacity: 1, partner_public_key: nodeKey1},
-        {capacity: 2, partner_public_key: nodeKey2},
+        {
+          capacity: 2,
+          is_allowing_minimal_reserve: true,
+          partner_public_key: nodeKey2,
+        },
       ],
       lnd: {
         default: {
