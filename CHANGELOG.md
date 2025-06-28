@@ -1,5 +1,9 @@
 # Versions
 
+## 10.26.0
+
+- `openChannels` add `is_allowing_minimal_reserve` to allow low peer reserve
+
 ## 10.25.3
 
 - Add support for LND 0.19.1
