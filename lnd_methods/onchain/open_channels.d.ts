@@ -11,6 +11,7 @@ export type MultipleChannelOpenOptions = Pick<
   | 'description'
   | 'fee_rate'
   | 'give_tokens'
+  | 'is_allowing_minimal_reserve'
   | 'is_private'
   | 'min_htlc_mtokens'
   | 'partner_public_key'
