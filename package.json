@@ -9,7 +9,7 @@
   "dependencies": {
     "@grpc/grpc-js": "1.13.4",
     "@grpc/proto-loader": "0.7.15",
-    "@types/node": "24.0.7",
+    "@types/node": "24.0.15",
     "@types/request": "2.48.12",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
@@ -17,7 +17,7 @@
     "bitcoinjs-lib": "6.1.7",
     "bn.js": "5.2.2",
     "bolt07": "1.9.4",
-    "bolt09": "2.1.0",
+    "bolt09": "2.2.0",
     "ecpair": "3.0.0",
     "invoices": "4.0.0",
     "psbt": "4.0.0",
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.26.0"
+  "version": "10.26.1"
 }

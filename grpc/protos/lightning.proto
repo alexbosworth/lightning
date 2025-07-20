@@ -1381,6 +1381,13 @@ message HTLC {
 
     // Index identifying the htlc on the forwarding channel.
     uint64 forwarding_htlc_index = 7;
+
+    /*
+    Whether the HTLC is locked in. An HTLC is considered locked in when the
+    remote party has sent us the `revoke_and_ack` to irrevocably commit this
+    HTLC.
+    */
+    bool locked_in = 8;
 }
 
 enum CommitmentType {
@@ -1751,6 +1758,10 @@ message ChannelCloseSummary {
 
     //  The confirmed SCID for a zero-conf channel.
     uint64 zero_conf_confirmed_scid = 15 [jstype = JS_STRING];
+
+    // The TLV encoded custom channel data records for this output, which might
+    // be set for custom channels.
+    bytes custom_channel_data = 16;
 }
 
 enum ResolutionType {
@@ -2001,8 +2012,8 @@ message GetInfoResponse {
     bool synced_to_graph = 18;
 
     /*
-    Whether the current node is connected to testnet. This field is
-    deprecated and the network field should be used instead
+    Whether the current node is connected to testnet or testnet4. This field is
+    deprecated and the network field should be used instead.
     */
     bool testnet = 10 [deprecated = true];
 
@@ -2061,13 +2072,6 @@ message Chain {
 
     // The network the node is on (eg regtest, testnet, mainnet)
     string network = 2;
-}
-
-message ConfirmationUpdate {
-    bytes block_sha = 1;
-    int32 block_height = 2;
-
-    uint32 num_confs_left = 3;
 }
 
 message ChannelOpenUpdate {
@@ -2167,6 +2171,8 @@ message CloseStatusUpdate {
 message PendingUpdate {
     bytes txid = 1;
     uint32 output_index = 2;
+    int64 fee_per_vbyte = 3;
+    bool local_close_tx = 4;
 }
 
 message InstantUpdate {
@@ -2967,6 +2973,7 @@ message ChannelEventUpdate {
         ChannelPoint inactive_channel = 4;
         PendingUpdate pending_open_channel = 6;
         ChannelPoint fully_resolved_channel = 7;
+        ChannelPoint channel_funding_timeout = 8;
     }
 
     enum UpdateType {
@@ -2976,6 +2983,7 @@ message ChannelEventUpdate {
         INACTIVE_CHANNEL = 3;
         PENDING_OPEN_CHANNEL = 4;
         FULLY_RESOLVED_CHANNEL = 5;
+        CHANNEL_FUNDING_TIMEOUT = 6;
     }
 
     UpdateType type = 5;
@@ -3150,10 +3158,10 @@ message QueryRoutesRequest {
     map<uint64, bytes> dest_custom_records = 13;
 
     /*
-    The channel id of the channel that must be taken to the first hop. If zero,
-    any channel may be used.
+    Deprecated, use outgoing_chan_ids. The channel id of the channel that must
+    be taken to the first hop. If zero, any channel may be used.
     */
-    uint64 outgoing_chan_id = 14 [jstype = JS_STRING];
+    uint64 outgoing_chan_id = 14 [jstype = JS_STRING, deprecated = true];
 
     /*
     The pubkey of the last hop of the route. If empty, any hop may be used.
@@ -3188,6 +3196,12 @@ message QueryRoutesRequest {
     only, to 1 to optimize for reliability only or a value inbetween for a mix.
     */
     double time_pref = 18;
+
+    /*
+    The channel ids of the channels allowed for the first hop. If empty, any
+    channel may be used.
+    */
+    repeated uint64 outgoing_chan_ids = 20;
 }
 
 message NodePair {
@@ -3408,6 +3422,10 @@ message NodeInfoRequest {
 
     // If true, will include all known channels associated with the node.
     bool include_channels = 2;
+
+    // If true, will include announcements' signatures into ChannelEdge.
+    // Depends on include_channels.
+    bool include_auth_proof = 3;
 }
 
 message NodeInfo {
@@ -3461,11 +3479,37 @@ message RoutingPolicy {
     uint64 max_htlc_msat = 6;
     uint32 last_update = 7;
 
-    // Custom channel update tlv records.
+    // Custom channel update tlv records. These are customized fields that are
+    // not defined by LND and cannot be extracted.
     map<uint64, bytes> custom_records = 8;
 
     int32 inbound_fee_base_msat = 9;
     int32 inbound_fee_rate_milli_msat = 10;
+}
+
+/*
+ChannelAuthProof is the authentication proof (the signature portion) for a
+channel. Using the four signatures contained in the struct, and some
+auxiliary knowledge (the funding script, node identities, and outpoint) nodes
+on the network are able to validate the authenticity and existence of a
+channel.
+*/
+message ChannelAuthProof {
+    // node_sig1 are the raw bytes of the first node signature encoded
+    // in DER format.
+    bytes node_sig1 = 1;
+
+    // bitcoin_sig1 are the raw bytes of the first bitcoin signature of the
+    // MultiSigKey key of the channel encoded in DER format.
+    bytes bitcoin_sig1 = 2;
+
+    // node_sig2 are the raw bytes of the second node signature encoded
+    // in DER format.
+    bytes node_sig2 = 3;
+
+    // bitcoin_sig2 are the raw bytes of the second bitcoin signature of the
+    // MultiSigKey key of the channel encoded in DER format.
+    bytes bitcoin_sig2 = 4;
 }
 
 /*
@@ -3496,6 +3540,13 @@ message ChannelEdge {
 
     // Custom channel announcement tlv records.
     map<uint64, bytes> custom_records = 9;
+
+    // Authentication proof for this channel. This proof contains a set of
+    // signatures binding four identities, which attests to the legitimacy of
+    // the advertised channel. This only is available for advertised channels.
+    // This field is not filled by default. Pass include_auth_proof flag to
+    // DescribeGraph, GetNodeInfo or GetChanInfo to get this data.
+    ChannelAuthProof auth_proof = 10;
 }
 
 message ChannelGraphRequest {
@@ -3505,6 +3556,9 @@ message ChannelGraphRequest {
     channels, and public channels that are not yet announced to the network.
     */
     bool include_unannounced = 1;
+
+    // If true, will include announcements' signatures into ChannelEdge.
+    bool include_auth_proof = 2;
 }
 
 // Returns a new instance of the directed channel graph.
@@ -3556,6 +3610,9 @@ message ChanInfoRequest {
     // The channel point of the channel in format funding_txid:output_index. If
     // chan_id is specified, this field is ignored.
     string chan_point = 2;
+
+    // If true, will include announcements' signatures into ChannelEdge.
+    bool include_auth_proof = 3;
 }
 
 message NetworkInfoRequest {
@@ -3989,6 +4046,12 @@ message BlindedPathConfig {
     blinded paths.
     */
     repeated bytes node_omission_list = 4;
+
+    /*
+    The chained channels list specified via channel id (separated by commas),
+    starting from a channel owned by the receiver node.
+    */
+    repeated uint64 incoming_channel_list = 5;
 }
 
 enum InvoiceHTLCState {
@@ -4652,6 +4715,14 @@ message ForwardingHistoryRequest {
     // Informs the server if the peer alias should be looked up for each
     // forwarding event.
     bool peer_alias_lookup = 5;
+
+    // List of incoming channel ids to filter htlcs received from a
+    // particular channel
+    repeated uint64 incoming_chan_ids = 6;
+
+    // List of outgoing channel ids to filter htlcs being forwarded to a
+    // particular channel
+    repeated uint64 outgoing_chan_ids = 7;
 }
 message ForwardingEvent {
     // Timestamp is the time (unix epoch offset) that this circuit was
@@ -4696,6 +4767,14 @@ message ForwardingEvent {
 
     // The peer alias of the outgoing channel.
     string peer_alias_out = 13;
+
+    // The ID of the incoming HTLC in the payment circuit. This field is
+    // optional and is unset for forwarding events happened before v0.20.
+    optional uint64 incoming_htlc_id = 14;
+
+    // The ID of the outgoing HTLC in the payment circuit. This field is
+    // optional and may be unset for legacy forwarding events.
+    optional uint64 outgoing_htlc_id = 15;
 
     // TODO(roasbeef): add settlement latency?
     //  * use FPE on the chan id?
@@ -5115,6 +5194,22 @@ message RPCMiddlewareRequest {
     intercept message.
     */
     uint64 msg_id = 7;
+
+    /*
+    The metadata pairs that were sent along with the original gRPC request via
+    the golang context.Context using explicit [gRPC
+    metadata](https://grpc.io/docs/guides/metadata/). Context values are not
+    propagated via gRPC and so we send any pairs along explicitly here so that
+    the interceptor can access them.
+    */
+    map<string, MetadataValues> metadata_pairs = 9;
+}
+
+message MetadataValues {
+    /*
+    The set of metadata values that correspond to the metadata key.
+    */
+    repeated string values = 1;
 }
 
 message StreamAuth {
