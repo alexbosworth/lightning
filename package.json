@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "1.13.4",
-    "@grpc/proto-loader": "0.7.15",
-    "@types/node": "24.0.15",
-    "@types/request": "2.48.12",
+    "@grpc/proto-loader": "0.8.0",
+    "@types/node": "24.3.0",
+    "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
     "asyncjs-util": "1.2.12",
@@ -26,8 +26,8 @@
   },
   "description": "Lightning Network client library",
   "devDependencies": {
-    "tsd": "0.32.0",
-    "typescript": "5.8.3"
+    "tsd": "0.33.0",
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": ">=18"
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.26.1"
+  "version": "10.26.2"
 }
