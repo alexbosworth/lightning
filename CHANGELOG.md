@@ -1,6 +1,6 @@
 # Versions
 
-## 10.26.2
+## 10.26.3
 
 - Add support for LND 0.19.3
 
