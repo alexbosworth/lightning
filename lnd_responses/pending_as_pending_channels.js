@@ -41,6 +41,8 @@ const outpointSeparator = ':';
         capacity: <Channel Capacity Tokens Count String>
         channel_point: <Channel Outpoint String>
         commitment_type: <Type of Channel String>
+        confirmation_height: <Best Chain Block Height Funding Seen Number>
+        confirmations_until_active: <Blocks Remaining to Channel Active Number>
         initiator: <Channel Creator Status String>
         local_balance: <Local Balance Tokens String>
         local_chan_reserve_sat: <Local Side Channel Reserve Tokens String>
@@ -97,6 +99,8 @@ const outpointSeparator = ':';
       is_timelocked: <Channel Local Funds Constrained by Timelock Script Bool>
       local_balance: <Channel Local Tokens Balance Number>
       local_reserve: <Channel Local Reserved Tokens Number>
+      [opening_funding_height]: <Funding Seen At Best Block Height Number>
+      [opening_waiting_blocks]: <Open Activation Waiting Blocks Count Number>
       partner_public_key: <Channel Peer Public Key String>
       [pending_balance]: <Tokens Pending Recovery Number>
       [pending_payments]: [{
@@ -247,6 +251,8 @@ module.exports = args => {
 
     sum[pending.channel.channel_point] = {
       funding_expiry: Number(pending.funding_expiry_blocks) || undefined,
+      open_blocks: Number(pending.confirmations_until_active) || undefined,
+      open_height: Number(pending.confirmation_height) || undefined,
       transaction_fee: Number(pending.commit_fee),
       transaction_weight: Number(pending.commit_weight),
     };
@@ -311,6 +317,8 @@ module.exports = args => {
       is_timelocked: forced.timelock_blocks !== undefined,
       local_balance: Number(channel.local_balance),
       local_reserve: Number(channel.local_chan_reserve_sat),
+      opening_funding_height: !chanOpen ? undefined : chanOpen.open_height,
+      opening_waiting_blocks: !chanOpen ? undefined : chanOpen.open_blocks,
       partner_public_key: channel.remote_node_pub,
       pending_balance: pendingTokens || undefined,
       pending_payments: forced.pending_payments || undefined,

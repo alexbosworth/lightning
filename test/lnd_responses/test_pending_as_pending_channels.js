@@ -57,7 +57,8 @@ const makePendingForceClosingChannel = overrides => {
 const makePendingOpenChannel = overrides => {
   const res = {
     channel: makeChannel({}),
-    confirmation_height: 1,
+    confirmation_height: 0,
+    confirmations_until_active: 0,
     commit_fee: '1',
     commit_weight: '1',
     fee_per_kw: '1',
@@ -114,6 +115,8 @@ const makeExpectedPending = overrides => {
     is_timelocked: true,
     local_balance: 1,
     local_reserve: 1,
+    opening_funding_height: undefined,
+    opening_waiting_blocks: undefined,
     partner_public_key: Buffer.alloc(33).toString('hex'),
     pending_balance: 1,
     pending_payments: [{
@@ -435,6 +438,36 @@ const tests = [
     expected: makeExpected({
       pending_channels: [
         makeExpectedPending({transaction_fee: null, transaction_weight: null}),
+      ],
+    }),
+  },
+  {
+    args: makeArgs({
+      pending_force_closing_channels: [],
+      pending_open_channels: [
+        makePendingOpenChannel({
+          confirmation_height: 1,
+          confirmations_until_active: 3,
+        }),
+      ],
+      waiting_close_channels: [],
+    }),
+    description: 'Pending open channels are mapped',
+    expected: makeExpected({
+      pending_channels: [
+        makeExpectedPending({
+          close_transaction_id: undefined,
+          is_closing: false,
+          is_opening: true,
+          is_timelocked: false,
+          opening_funding_height: 1,
+          opening_waiting_blocks: 3,
+          pending_balance: undefined,
+          pending_payments: undefined,
+          recovered_tokens: undefined,
+          timelock_blocks: undefined,
+          timelock_expiration: undefined,
+        }),
       ],
     }),
   },
