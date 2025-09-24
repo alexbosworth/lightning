@@ -69,6 +69,10 @@ export type GetPendingChannelsResult = {
     transaction_weight?: number;
     /** Channel Commitment Transaction Type */
     type?: string;
+    /** Funding Seen At Best Block Height */
+    opening_funding_height?: number;
+    /** Open Activation Waiting Blocks Count */
+    opening_waiting_blocks?: number;
   }[];
 };
 
@@ -79,6 +83,18 @@ export type GetPendingChannelsResult = {
 channel may be opening, closing, or active.
  * 
  * Requires `offchain:read` permission
+ * 
+ * `is_private` is not supported in LND 0.14.5 or before
+ *
+ * `description` is not supported in LND 0.16.4 or before
+ *
+ * `blocks_until_expiry` is not supported in LND 0.16.4 or before
+ *
+ * `close_transaction` is not supported in LND 0.17.5 or before
+ *
+ * `opening_funding_height` is not supported in LND 0.19.3 or before
+ *
+ * `opening_waiting_blocks` is not supported in LND 0.19.3 or before
  */
 export const getPendingChannels: AuthenticatedLightningMethod<
   {lnd: AuthenticatedLnd},
