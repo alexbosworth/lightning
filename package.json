@@ -22,7 +22,7 @@
     "invoices": "4.0.0",
     "psbt": "4.0.0",
     "tiny-secp256k1": "2.2.4",
-    "type-fest": "5.0.0"
+    "type-fest": "5.0.1"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -53,5 +53,5 @@
     "directory": "test/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.27.0"
+  "version": "10.27.1"
 }

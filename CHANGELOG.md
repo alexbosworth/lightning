@@ -1,6 +1,6 @@
 # Versions
 
-## 10.27.0
+## 10.27.1
 
 - `getPendingChannels`: Add support for `opening_funding_height`,
     `opening_waiting_blocks`
