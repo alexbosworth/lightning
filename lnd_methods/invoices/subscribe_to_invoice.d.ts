@@ -76,8 +76,12 @@ export type SubscribeToInvoiceInvoiceUpdatedEvent = {
     mtokens: string;
     /** Pending Payment Channel HTLC Index */
     pending_index?: number;
+    /** HTLC CLTV Timeout Height */
+    timeout: number;
     /** Payment Tokens */
     tokens: number;
+    /** Total Payment Millitokens */
+    total_mtokens?: string;
   }[];
   /** Received Tokens */
   received: number;
