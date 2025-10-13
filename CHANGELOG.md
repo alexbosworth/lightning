@@ -1,5 +1,9 @@
 # Versions
 
+## 10.27.2
+
+- `subscribeToInvoice`: Fix missing types `timeout` and `total_mtokens`
+
 ## 10.27.1
 
 - `getPendingChannels`: Add support for `opening_funding_height`,
