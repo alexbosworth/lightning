@@ -53,6 +53,7 @@ const type = 'router';
       public_key: <Forward Edge Public Key Hex String>
     }]]
     [tokens]: <Tokens To Pay Number>
+    [amp]: <Should Use AMP (atomic multipath payment) Bool>
   }
 
   @returns via cbk or Promise
@@ -130,6 +131,7 @@ module.exports = (args, cbk) => {
             payment: args.payment,
             routes: args.routes,
             tokens: args.tokens,
+            amp: args.amp
           });
 
           const finished = (err, res) => {
