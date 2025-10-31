@@ -51,6 +51,7 @@ const type = 'router';
       public_key: <Forward Edge Public Key Hex String>
     }]]
     [tokens]: <Tokens to Pay Number>
+    [amp]: <Should Use AMP (atomic multipath payment) Bool>
   }
 
   @throws
@@ -214,5 +215,6 @@ module.exports = args => {
     payment: args.payment,
     routes: args.routes,
     tokens: args.tokens,
+    amp: args.amp
   });
 };

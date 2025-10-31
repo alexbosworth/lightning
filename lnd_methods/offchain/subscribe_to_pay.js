@@ -81,6 +81,7 @@ const unsupportedFeatures = [30, 31];
       public_key: <Forward Edge Public Key Hex String>
     }]]
     [tokens]: <Tokens to Probe Number>
+    [amp]: <Should Use AMP (atomic multipath payment) Bool>
   }
 
   @throws
@@ -430,6 +431,7 @@ module.exports = args => {
         route_hints: !hints.length ? undefined : hints,
         time_pref: asTimePreference(args.confidence),
         timeout_seconds: timeoutSecs || defaultTimeoutSeconds,
+        amp: !!args.amp
       });
     }],
 
