@@ -1,5 +1,9 @@
 # Versions
 
+## 10.26.3
+
+- Add support for LND 0.20.0
+
 ## 10.27.2
 
 - `subscribeToInvoice`: Fix missing types `timeout` and `total_mtokens`
