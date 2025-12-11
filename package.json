@@ -48,7 +48,7 @@
     "unit-tests": "node --test && npm run test:types"
   },
   "tsd": {
-    "directory": "test/typescript"
+    "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
   "version": "10.27.4"
