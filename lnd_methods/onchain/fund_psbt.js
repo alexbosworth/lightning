@@ -1,7 +1,6 @@
 const asyncAuto = require('async/auto');
-const {decodePsbt} = require('psbt');
 const {returnResult} = require('asyncjs-util');
-const tinysecp = require('tiny-secp256k1');
+const {Psbt} = require('bitcoinjs-lib');
 const {Transaction} = require('bitcoinjs-lib');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -10,13 +9,14 @@ const asOutpoint = n => `${n.transaction_id}:${n.transaction_vout}`;
 const defaultChangeType = () => 'CHANGE_ADDRESS_TYPE_P2TR';
 const defaultConfirmationTarget = 6;
 const expirationAsDate = epoch => new Date(Number(epoch) * 1e3).toISOString();
-const {fromHex} = Transaction;
+const {fromBuffer} = Transaction;
 const hexFromBuffer = buffer => buffer.toString('hex');
 const {isArray} = Array;
 const {isBuffer} = Buffer;
 const isKnownChangeFormat = format => !format || format === 'p2tr';
 const method = 'fundPsbt';
 const notSupported = /unknown.*walletrpc.WalletKit/;
+const psbtFromHex = hex => Psbt.fromBuffer(Buffer.from(hex, 'hex'));
 const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const type = 'wallet';
 const txIdFromBuffer = buffer => buffer.slice().reverse().toString('hex');
@@ -79,9 +79,6 @@ const txIdFromHash = hash => hash.reverse().toString('hex');
 module.exports = (args, cbk) => {
   return new Promise((resolve, reject) => {
     return asyncAuto({
-      // Import ECPair library
-      ecp: async () => (await import('ecpair')).ECPairFactory(tinysecp),
-
       // Check arguments
       validate: cbk => {
         if (!isKnownChangeFormat(args.change_format)) {
@@ -222,14 +219,15 @@ module.exports = (args, cbk) => {
       }],
 
       // Derive the raw transaction from the funded PSBT
-      tx: ['ecp', 'fund', ({ecp, fund}, cbk) => {
+      tx: ['fund', ({fund}, cbk) => {
         const {psbt} = fund;
 
         try {
-          const tx = fromHex(decodePsbt({ecp, psbt}).unsigned_transaction);
+          const tx = psbtFromHex(psbt).data.globalMap.unsignedTx.toBuffer();
 
-          return cbk(null, tx);
+          return cbk(null, fromBuffer(tx));
         } catch (err) {
+
           return cbk([503, 'FailedToDecodePsbtInFundPsbtResponse', {err}]);
         }
       }],
