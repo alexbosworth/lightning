@@ -307,21 +307,24 @@ module.exports = args => {
   const finalCltv = !args.cltv_delta ? defaultCltvDelta : args.cltv_delta;
 
   asyncAuto({
-    // Determine what features would be used with the payment
-    featureBits: cbk => {
+    // Determine what cltv delta and features would be used with the payment
+    aspects: cbk => {
       // Exit early when there are no features to look at
       if (!args.features && !args.request) {
-        return cbk(null, []);
+        return cbk(null, {features: []});
       }
 
       // Exit early when feature bits are specified directly
       if (!!features) {
-        return cbk(null, features);
+        return cbk(null, {features});
       }
 
       const request = parsePaymentRequest({request: args.request});
 
-      return cbk(null, request.features.map(n => n.bit));
+      return cbk(null, {
+        features: request.features.map(n => n.bit),
+        final_cltv: request.cltv_delta,
+      });
     },
 
     // Determine the block height to figure out the height delta
@@ -354,8 +357,8 @@ module.exports = args => {
     },
 
     // Validate the payment request features
-    checkFeatures: ['featureBits', ({featureBits}, cbk) => {
-      const bit = featureBits.find(n => unsupportedFeatures.includes(n));
+    checkFeatures: ['aspects', ({aspects}, cbk) => {
+      const bit = aspects.features.find(n => unsupportedFeatures.includes(n));
 
       if (!!bit) {
         return cbk([501, 'UnsupportedPaymentFeatureInPayRequest', {bit}]);
@@ -365,17 +368,18 @@ module.exports = args => {
     }],
 
     // Determine the maximum CLTV delta
-    maxCltvDelta: ['getHeight', ({getHeight}, cbk) => {
+    maxCltvDelta: ['aspects', 'getHeight', ({aspects, getHeight}, cbk) => {
       if (!args.max_timeout_height) {
         return cbk();
       }
 
       const currentHeight = getHeight.current_block_height;
+      const lastCltv = !args.request ? finalCltv : aspects.final_cltv;
 
       const maxDelta = cltvLimit(args.max_timeout_height, currentHeight);
 
       // The max cltv delta cannot be lower than the final cltv delta + buffer
-      if (!!maxDelta && !!finalCltv && maxDelta < finalCltv + cltvBuf) {
+      if (!!maxDelta && lastCltv && maxDelta < lastCltv + cltvBuf) {
         return cbk([400, 'MaxTimeoutTooNearCurrentHeightToMakePayment']);
       }
 

@@ -9,7 +9,7 @@
   "dependencies": {
     "@grpc/grpc-js": "1.14.3",
     "@grpc/proto-loader": "0.8.0",
-    "@types/node": "25.0.0",
+    "@types/node": "25.0.1",
     "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
