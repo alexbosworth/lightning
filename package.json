@@ -51,5 +51,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "10.27.4"
+  "version": "10.27.5"
 }

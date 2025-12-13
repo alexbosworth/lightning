@@ -379,8 +379,15 @@ module.exports = args => {
       const maxDelta = cltvLimit(args.max_timeout_height, currentHeight);
 
       // The max cltv delta cannot be lower than the final cltv delta + buffer
-      if (!!maxDelta && lastCltv && maxDelta < lastCltv + cltvBuf) {
-        return cbk([400, 'MaxTimeoutTooNearCurrentHeightToMakePayment']);
+      if (!!maxDelta && !!lastCltv && maxDelta < lastCltv + cltvBuf) {
+        return cbk([
+          400,
+          'MaxTimeoutTooNearCurrentHeightToMakePayment',
+          {
+            last_cltv: lastCltv,
+            max_delta: maxDelta,
+          },
+        ]);
       }
 
       return cbk(null, maxDelta);
