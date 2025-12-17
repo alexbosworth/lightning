@@ -35,6 +35,7 @@ const type = 'router';
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
     request: <BOLT 11 Payment Request String>
     [tokens]: <Tokens To Pay Number>
+    [amp]: <Should Use AMP (atomic multipath payment) Bool>
   }
 
   @returns via cbk or Promise
@@ -108,6 +109,7 @@ module.exports = (args, cbk) => {
           pathfinding_timeout: args.pathfinding_timeout,
           request: args.request,
           tokens: args.tokens,
+          amp: args.amp
         });
 
         const finished = (err, res) => {
