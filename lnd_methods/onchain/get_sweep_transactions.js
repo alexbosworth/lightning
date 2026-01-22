@@ -1,14 +1,14 @@
 const asyncAuto = require('async/auto');
+const {componentsOfTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
-const {Transaction} = require('bitcoinjs-lib');
 
 const getChainTransactions = require('./get_chain_transactions');
 const {isLnd} = require('./../../lnd_requests');
 
-const {fromHex} = Transaction;
 const {isArray} = Array;
 const method = 'listSweeps';
 const notSupportedError = 'unknown service walletrpc.WalletKit';
+const txComponents = transaction => componentsOfTransaction({transaction});
 const type = 'wallet';
 
 /** Get self-transfer spend transactions related to channel closes
@@ -100,14 +100,12 @@ module.exports = ({after, lnd}, cbk) => {
           .filter(({id}) => getSweeps.includes(id))
           .filter(({transaction}) => !!transaction)
           .map(tx => {
-            const {ins} = fromHex(tx.transaction);
+            const {inputs} = txComponents(tx.transaction);
 
-            const spends = ins.map(input => {
-              return {
-                transaction_id: input.hash.reverse().toString('hex'),
-                transaction_vout: input.index,
-              };
-            });
+            const spends = inputs.map(input => ({
+              transaction_id: input.id,
+              transaction_vout: input.vout,
+            }));
 
             const relatedUtxos = spends.map(spend => {
               const spending = getTransactions.transactions.find(({id}) => {
@@ -122,12 +120,10 @@ module.exports = ({after, lnd}, cbk) => {
                 };
               }
 
-              const parentTx = spending.transaction;
-
-              const {value} = fromHex(parentTx).outs[spend.transaction_vout];
+              const parentOutputs = txComponents(spending.transaction).outputs;
 
               return {
-                tokens: value,
+                tokens: parentOutputs[spend.transaction_vout].tokens,
                 transaction_id: spend.transaction_id,
                 transaction_vout: spend.transaction_vout,
               };

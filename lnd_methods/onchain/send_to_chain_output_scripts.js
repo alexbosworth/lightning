@@ -1,11 +1,10 @@
 const asyncAuto = require('async/auto');
+const {idForTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
-const {Transaction} = require('bitcoinjs-lib');
 
 const {isLnd} = require('./../../lnd_requests');
 
 const bufferAsHex = buffer => buffer.toString('hex');
-const {fromBuffer} = Transaction;
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const initialConfirmationCount = 0;
 const {isArray} = Array;
@@ -92,18 +91,20 @@ module.exports = (args, cbk) => {
           }
 
           try {
-            fromBuffer(res.raw_tx).getId();
+            idForTransaction({transaction: bufferAsHex(res.raw_tx)});
           } catch (err) {
             return cbk([500, 'ExpectedRawTransactionInSendToOutputsResponse']);
           }
 
+          const transaction = bufferAsHex(res.raw_tx);
+
           const row = {
+            transaction,
             confirmation_count: initialConfirmationCount,
-            id: fromBuffer(res.raw_tx).getId(),
+            id: idForTransaction({transaction}).id,
             is_confirmed: false,
             is_outgoing: true,
             tokens: args.send_to.reduce((sum, n) => sum + n.tokens, Number()),
-            transaction: bufferAsHex(res.raw_tx),
           };
 
           return cbk(null, row);

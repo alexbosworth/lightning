@@ -1,5 +1,11 @@
 # Versions
 
+## 11.0.0
+
+### Breaking Changes
+
+- End support for node.js 18, require 20 or higher
+
 ## 10.26.5
 
 - `pay`, `payViaPaymentRequest`, `subscribeToPayViaRequest`: Allow short CLTV

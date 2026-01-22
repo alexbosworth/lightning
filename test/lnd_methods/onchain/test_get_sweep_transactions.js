@@ -2,9 +2,9 @@ const {deepStrictEqual} = require('node:assert').strict;
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
-const {Transaction} = require('bitcoinjs-lib');
-
 const {getSweepTransactions} = require('./../../../lnd_methods');
+
+const emptyTx = '01000000000000000000';
 
 const makeDefault = overrides => {
   const methods = {
@@ -17,7 +17,7 @@ const makeDefault = overrides => {
           dest_addresses: ['address'],
           num_confirmations: 1,
           previous_outpoints: [],
-          raw_tx_hex: (new Transaction()).toHex(),
+          raw_tx_hex: emptyTx,
           time_stamp: '1',
           total_fees: '1',
           tx_hash: Buffer.alloc(32).toString('hex'),

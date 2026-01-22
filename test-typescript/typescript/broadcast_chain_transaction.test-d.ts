@@ -4,10 +4,9 @@ import {
   broadcastChainTransaction,
   BroadcastChainTransactionResult,
 } from '../../lnd_methods';
-import {Transaction} from 'bitcoinjs-lib';
 
 const lnd = {} as AuthenticatedLnd;
-const transaction = new Transaction().toHex();
+const transaction = '01000000000000000000';
 const description = 'description';
 
 expectError(broadcastChainTransaction());

@@ -1,25 +1,17 @@
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
-const {Transaction} = require('bitcoinjs-lib');
-
 const {deletePendingChannel} = require('./../../../lnd_methods');
 
-const tx1 = new Transaction();
-const tx2 = new Transaction();
-const tx3 = new Transaction();
-
-tx1.addInput(Buffer.alloc(32, 0), 0);
-tx2.addInput(Buffer.alloc(32, 0), 0);
-tx2.addInput(Buffer.alloc(32, 1), 0);
-tx2.addOutput(Buffer.alloc(10), 1);
-tx3.addInput(Buffer.alloc(32, 2), 0);
+const tx1 = '010000000100000000000000000000000000000000000000000000000000000000000000000000000000ffffffff0000000000';
+const tx2 = '010000000200000000000000000000000000000000000000000000000000000000000000000000000000ffffffff01010101010101010101010101010101010101010101010101010101010101010000000000ffffffff0101000000000000000a0000000000000000000000000000';
+const tx3 = '010000000102020202020202020202020202020202020202020202020202020202020202020000000000ffffffff0000000000';
 
 const makeArgs = overrides => {
   const args = {
-    confirmed_transaction: tx1.toHex(),
+    confirmed_transaction: tx1,
     lnd: {default: {abandonChannel: ({}, cbk) => cbk()}},
-    pending_transaction: tx2.toHex(),
+    pending_transaction: tx2,
     pending_transaction_vout: 0,
   };
 
@@ -40,7 +32,7 @@ const tests = [
     error: [400, 'ExpectedValidConfirmedTxToDeleteChannel'],
   },
   {
-    args: makeArgs({confirmed_transaction: tx2.toHex()}),
+    args: makeArgs({confirmed_transaction: tx2}),
     description: 'Pending transaction must be different from confirmed tx',
     error: [400, 'ExpectedConflictingTransactionToDeleteChannel'],
   },
@@ -65,7 +57,7 @@ const tests = [
     error: [400, 'ExpectedPendingChannelTxVoutToDeleteChannel'],
   },
   {
-    args: makeArgs({confirmed_transaction: tx3.toHex()}),
+    args: makeArgs({confirmed_transaction: tx3}),
     description: 'A conflicting tx is required',
     error: [400, 'FailedToFindConflictingInputInConfirmedTx'],
   },

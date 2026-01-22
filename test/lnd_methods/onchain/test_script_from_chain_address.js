@@ -1,5 +1,6 @@
 const {deepStrictEqual} = require('node:assert').strict;
 const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const scriptFromChainAddress = require('./../../../lnd_methods/onchain/script_from_chain_address');
 
@@ -61,13 +62,24 @@ const tests = [
     description: 'Nothing returned for no recognized address',
     expected: {},
   },
+  {
+    args: {
+      bech32_address: 'bc1p5d7rjq7g6rdk2yhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297',
+    },
+    description: 'Script not derived from p2tr address',
+    expected: {},
+  },
 ];
 
-tests.forEach(({args, description, expected}) => {
+tests.forEach(({args, description, error, expected}) => {
   return test(description, (t, end) => {
-    const {script} = scriptFromChainAddress(args);
+    if (!!error) {
+      throws(() => scriptFromChainAddress(args), new Error(error), 'Got error');
+    } else {
+      const {script} = scriptFromChainAddress(args);
 
-    deepStrictEqual(script, expected.script, 'Script derived from address');
+      deepStrictEqual(script, expected.script, 'Script derived from address');
+    }
 
     return end();
   });

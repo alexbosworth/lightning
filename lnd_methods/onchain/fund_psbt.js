@@ -1,7 +1,7 @@
 const asyncAuto = require('async/auto');
+const {componentsOfTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
-const {Psbt} = require('bitcoinjs-lib');
-const {Transaction} = require('bitcoinjs-lib');
+const {unsignedTxFromPsbt} = require('@alexbosworth/blockchain');
 
 const {isLnd} = require('./../../lnd_requests');
 
@@ -9,18 +9,15 @@ const asOutpoint = n => `${n.transaction_id}:${n.transaction_vout}`;
 const defaultChangeType = () => 'CHANGE_ADDRESS_TYPE_P2TR';
 const defaultConfirmationTarget = 6;
 const expirationAsDate = epoch => new Date(Number(epoch) * 1e3).toISOString();
-const {fromBuffer} = Transaction;
 const hexFromBuffer = buffer => buffer.toString('hex');
 const {isArray} = Array;
 const {isBuffer} = Buffer;
 const isKnownChangeFormat = format => !format || format === 'p2tr';
 const method = 'fundPsbt';
 const notSupported = /unknown.*walletrpc.WalletKit/;
-const psbtFromHex = hex => Psbt.fromBuffer(Buffer.from(hex, 'hex'));
 const strategy = type => !type ? undefined : `STRATEGY_${type.toUpperCase()}`;
 const type = 'wallet';
 const txIdFromBuffer = buffer => buffer.slice().reverse().toString('hex');
-const txIdFromHash = hash => hash.reverse().toString('hex');
 
 /** Lock and optionally select inputs to a partially signed transaction
 
@@ -223,11 +220,12 @@ module.exports = (args, cbk) => {
         const {psbt} = fund;
 
         try {
-          const tx = psbtFromHex(psbt).data.globalMap.unsignedTx.toBuffer();
+          const tx = hexFromBuffer(unsignedTxFromPsbt({psbt}).transaction);
 
-          return cbk(null, fromBuffer(tx));
+          const {inputs, outputs} = componentsOfTransaction({transaction: tx});
+
+          return cbk(null, {inputs, outputs});
         } catch (err) {
-
           return cbk([503, 'FailedToDecodePsbtInFundPsbtResponse', {err}]);
         }
       }],
@@ -243,9 +241,9 @@ module.exports = (args, cbk) => {
         }));
 
         // The funding inputs are encoded in the PSBT's unsigned tx
-        const funding = tx.ins.map(({hash, index}) => ({
-          transaction_id: txIdFromHash(hash),
-          transaction_vout: index,
+        const funding = tx.inputs.map(({id, vout}) => ({
+          transaction_id: id,
+          transaction_vout: vout,
         }));
 
         // Include relevant UTXO locks with inputs
@@ -272,10 +270,10 @@ module.exports = (args, cbk) => {
       {
         return cbk(null, {
           inputs: fundingInputs,
-          outputs: tx.outs.map(({script, value}, index) => ({
+          outputs: tx.outputs.map(({script, tokens}, index) => ({
+            tokens,
             is_change: index === fund.change_output_index,
-            output_script: hexFromBuffer(script),
-            tokens: value,
+            output_script: script,
           })),
           psbt: fund.psbt,
         });

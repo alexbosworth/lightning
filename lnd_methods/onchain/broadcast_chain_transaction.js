@@ -1,11 +1,10 @@
 const asyncAuto = require('async/auto');
+const {idForTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
-const {Transaction} = require('bitcoinjs-lib');
 
 const {isLnd} = require('./../../lnd_requests');
 
 const bufFromHex = hex => Buffer.from(hex, 'hex');
-const {fromHex} = Transaction;
 const method = 'publishTransaction';
 const minRelayFeeError = /^unmatched backend error: -26: mempool min fee not met, (\d*) < (\d*)$/;
 const type = 'wallet';
@@ -37,7 +36,7 @@ module.exports = ({description, lnd, transaction}, cbk) => {
         }
 
         try {
-          fromHex(transaction);
+          idForTransaction({transaction});
         } catch (err) {
           return cbk([400, 'ExpectedTransactionHexStringToBroadcastToPeers']);
         }
@@ -77,7 +76,7 @@ module.exports = ({description, lnd, transaction}, cbk) => {
             return cbk([503, 'FailedToBroadcastRawTransaction', {res}]);
           }
 
-          return cbk(null, {id: fromHex(transaction).getId()});
+          return cbk(null, {id: idForTransaction({transaction}).id});
         });
       }],
     },

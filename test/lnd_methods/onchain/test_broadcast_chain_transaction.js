@@ -2,9 +2,9 @@ const {rejects} = require('node:assert').strict;
 const {strictEqual} = require('node:assert').strict;
 const test = require('node:test');
 
-const {Transaction} = require('bitcoinjs-lib');
-
 const {broadcastChainTransaction} = require('./../../../lnd_methods');
+
+const emptyTx = '01000000000000000000';
 
 const tests = [
   {
@@ -20,7 +20,7 @@ const tests = [
   {
     args: {
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk('err')}},
-      transaction: new Transaction().toHex(),
+      transaction: emptyTx,
     },
     description: 'Expected error is returned',
     error: [503, 'UnexpectedErrBroadcastingRawTx', {err: 'err'}],
@@ -28,7 +28,7 @@ const tests = [
   {
     args: {
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk()}},
-      transaction: new Transaction().toHex(),
+      transaction: emptyTx,
     },
     description: 'A result is required',
     error: [503, 'ExpectedResultOfBroadcastRawTransaction'],
@@ -40,7 +40,7 @@ const tests = [
           publishTransaction: ({}, cbk) => cbk(null, {publish_error: 'err'}),
         },
       },
-      transaction: new Transaction().toHex(),
+      transaction: emptyTx,
     },
     description: 'Failure to broadcast error is returned',
     error: [
@@ -58,7 +58,7 @@ const tests = [
           }),
         },
       },
-      transaction: new Transaction().toHex(),
+      transaction: emptyTx,
     },
     description: 'Minimum relay fee not met',
     error: [
@@ -73,7 +73,7 @@ const tests = [
   {
     args: {
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk(null, {})}},
-      transaction: new Transaction().toHex(),
+      transaction: emptyTx,
     },
     description: 'A transaction is published',
     expected: {

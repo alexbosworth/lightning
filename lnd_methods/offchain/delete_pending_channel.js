@@ -1,11 +1,12 @@
 const asyncAuto = require('async/auto');
+const {componentsOfTransaction} = require('@alexbosworth/blockchain');
+const {idForTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
-const {Transaction} = require('bitcoinjs-lib');
 
-const {fromHex} = Transaction;
 const method = 'abandonChannel';
 const methodUnsupported = 'AbandonChannel RPC call only available in dev builds';
 const txIdAsHash = id => Buffer.from(id, 'hex').reverse();
+const txComponents = transaction => componentsOfTransaction({transaction});
 const type = 'default';
 
 /** Delete a pending channel
@@ -34,7 +35,7 @@ module.exports = (args, cbk) => {
         }
 
         try {
-          fromHex(args.confirmed_transaction);
+          txComponents(args.confirmed_transaction);
         } catch (err) {
           return cbk([400, 'ExpectedValidConfirmedTxToDeleteChannel']);
         }
@@ -52,7 +53,7 @@ module.exports = (args, cbk) => {
         }
 
         try {
-          fromHex(args.pending_transaction);
+          txComponents(args.pending_transaction);
         } catch (err) {
           return cbk([400, 'ExpectedValidPendingTxToDeleteChannel']);
         }
@@ -66,16 +67,16 @@ module.exports = (args, cbk) => {
 
       // Check for a conflicting input between the confirmed and pending txs
       transactionId: ['validate', ({}, cbk) => {
-        const confirmedInputs = fromHex(args.confirmed_transaction).ins;
-        const pending = fromHex(args.pending_transaction);
+        const confirmed = txComponents(args.confirmed_transaction);
+        const pending = txComponents(args.pending_transaction);
 
-        const conflictingInput = pending.ins.find(pendingInput => {
-          return confirmedInputs.find(confirmedInput => {
-            if (!confirmedInput.hash.equals(pendingInput.hash)) {
+        const conflictingInput = pending.inputs.find(pendingInput => {
+          return confirmed.inputs.find(confirmedInput => {
+            if (confirmedInput.id !== pendingInput.id) {
               return false;
             }
 
-            return confirmedInput.index === pendingInput.index;
+            return confirmedInput.vout === pendingInput.vout;
           });
         });
 
@@ -83,8 +84,11 @@ module.exports = (args, cbk) => {
           return cbk([400, 'FailedToFindConflictingInputInConfirmedTx']);
         }
 
+        // Calculate the transaction ID to be sure we are deleting the conflict
+        const {id} = idForTransaction({transaction: args.pending_transaction});
+
         // The pending transaction conflicts with the confirmed transaction
-        return cbk(null, pending.getId());
+        return cbk(null, id);
       }],
 
       // Delete the channel

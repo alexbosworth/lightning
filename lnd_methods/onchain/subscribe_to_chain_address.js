@@ -24,7 +24,7 @@ const type = 'chain';
   Requires `onchain:read` permission
 
   {
-    [bech32_address]: <Address String>
+    [bech32_address]: <Bech32 P2WPKH or P2WSH Address String>
     lnd: <Authenticated LND API Object>
     [min_confirmations]: <Minimum Confirmations Number>
     min_height: <Minimum Transaction Inclusion Blockchain Height Number>

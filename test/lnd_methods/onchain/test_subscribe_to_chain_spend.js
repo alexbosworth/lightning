@@ -3,9 +3,9 @@ const {strictEqual} = require('node:assert').strict;
 const test = require('node:test');
 const {throws} = require('node:assert').strict;
 
-const {Transaction} = require('bitcoinjs-lib');
-
 const {subscribeToChainSpend} = require('./../../../lnd_methods');
+
+const emptyTx = '01000000000000000000';
 
 const tests = [
   {
@@ -16,11 +16,7 @@ const tests = [
       transaction_vout: 0,
     },
     description: 'Confirmation emitted for chain spend',
-    expected: {
-      height: 200,
-      transaction: (new Transaction()).toHex(),
-      vin: 0,
-    },
+    expected: {height: 200, transaction: emptyTx, vin: 0},
   },
   {
     args: {},
@@ -63,7 +59,7 @@ tests.forEach(({args, description, error, expected}) => {
 
     emitter.emit('data', {
       spend: {
-        raw_spending_tx: (new Transaction()).toBuffer(),
+        raw_spending_tx: Buffer.from(emptyTx, 'hex'),
         spending_height: 200,
         spending_input_index: 0,
       },

@@ -1,11 +1,9 @@
 const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
-const {Transaction} = require('bitcoinjs-lib');
 
 const {isLnd} = require('./../../lnd_requests');
 const {rpcSweepAsSweep} = require('./../../lnd_responses');
 
-const {fromHex} = Transaction;
 const {isArray} = Array;
 const method = 'pendingSweeps';
 const notSupportedError = 'unknown service walletrpc.WalletKit';

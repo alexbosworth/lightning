@@ -2,16 +2,16 @@ const {deepStrictEqual} = require('node:assert').strict;
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
-const {Transaction} = require('bitcoinjs-lib');
-
 const {sendToChainOutputScripts} = require('./../../../lnd_methods');
+
+const emptyTx = '01000000000000000000';
 
 const makeArgs = overrides => {
   const args = {
     lnd: {
       wallet: {
         sendOutputs: ({}, cbk) => cbk(null, {
-          raw_tx: new Transaction().toBuffer(),
+          raw_tx: Buffer.from(emptyTx, 'hex'),
         }),
       },
     },

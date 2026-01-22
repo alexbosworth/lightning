@@ -1,13 +1,12 @@
-const {address} = require('bitcoinjs-lib');
-const {payments} = require('bitcoinjs-lib');
+const {decodeBase58Address} = require('@alexbosworth/blockchain');
+const {decodeBech32Address} = require('@alexbosworth/blockchain');
+const {p2pkhOutputScript} = require('@alexbosworth/blockchain');
+const {p2shOutputScript} = require('@alexbosworth/blockchain');
+const {p2wpkhOutputScript} = require('@alexbosworth/blockchain');
+const {p2wshOutputScript} = require('@alexbosworth/blockchain');
 
-const {fromBase58Check} = address;
-const {fromBech32} = address;
-const {p2pkh} = payments;
-const {p2sh} = payments;
+const bufferAsHex = buffer => buffer.toString('hex');
 const p2wpkhAddressLength = 20;
-const {p2wpkh} = payments;
-const {p2wsh} = payments;
 const p2wshAddressLength = 32;
 
 /** Derive output script from on-chain address
@@ -30,9 +29,9 @@ module.exports = args => {
 
   if (!!args.p2pkh_address) {
     try {
-      const {hash} = fromBase58Check(args.p2pkh_address);
+      const {hash} = decodeBase58Address({address: args.p2pkh_address});
 
-      return {script: p2pkh({hash}).output.toString('hex')};
+      return {script: bufferAsHex(p2pkhOutputScript({hash}).script)};
     } catch (err) {
       return {};
     }
@@ -40,23 +39,29 @@ module.exports = args => {
 
   if (!!args.p2sh_address) {
     try {
-      const {hash} = fromBase58Check(args.p2sh_address);
+      const {hash} = decodeBase58Address({address: args.p2sh_address});
 
-      return {script: p2sh({hash}).output.toString('hex')};
+      return {script: bufferAsHex(p2shOutputScript({hash}).script)};
     } catch (err) {
       return {};
     }
   }
 
   try {
-    const {data} = fromBech32(args.bech32_address);
+    const {program, version} = decodeBech32Address({
+      address: args.bech32_address,
+    });
 
-    switch (data.length) {
+    if (!!version) {
+      throw new Error('ExpectedV0VersionForScriptFromChainAddress');
+    }
+
+    switch (program.length) {
     case p2wpkhAddressLength:
-      return {script: p2wpkh({hash: data}).output.toString('hex')};
+      return {script: bufferAsHex(p2wpkhOutputScript({hash: program}).script)};
 
     case p2wshAddressLength:
-      return {script: p2wsh({hash: data}).output.toString('hex')};
+      return {script: bufferAsHex(p2wshOutputScript({hash: program}).script)};
 
     default:
       break;

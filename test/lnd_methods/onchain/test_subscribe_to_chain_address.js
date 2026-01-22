@@ -3,9 +3,9 @@ const {strictEqual} = require('node:assert').strict;
 const test = require('node:test');
 const {throws} = require('node:assert').strict;
 
-const {Transaction} = require('bitcoinjs-lib');
-
 const {subscribeToChainAddress} = require('./../../../lnd_methods');
+
+const emptyTx = '01000000000000000000';
 
 const tests = [
   {
@@ -20,7 +20,7 @@ const tests = [
     expected: {
       block: Buffer.alloc(32).toString('hex'),
       height: 200,
-      transaction: (new Transaction()).toHex(),
+      transaction: emptyTx,
     },
   },
   {
@@ -35,7 +35,7 @@ const tests = [
     expected: {
       block: Buffer.alloc(32).toString('hex'),
       height: 200,
-      transaction: (new Transaction()).toHex(),
+      transaction: emptyTx,
     },
   },
   {
@@ -79,7 +79,7 @@ tests.forEach(({args, description, emitter, error, expected}) => {
       conf: {
         block_hash: Buffer.alloc(32),
         block_height: 200,
-        raw_tx: (new Transaction()).toBuffer(),
+        raw_tx: Buffer.from(emptyTx, 'hex'),
       },
     });
 
