@@ -42,6 +42,37 @@ Methods for working with the Lightning Network
 
 To connect to an LND node, authentication details are required.
 
+## Taproot Assets Support
+
+This library includes support for Taproot Assets via the `tapd` daemon. Currently supported methods:
+
+- **listTaprootAssetBalances**: List Taproot Asset balances
+
+## Tapd Authentication
+
+To connect to a Tapd node, authentication details are required, similar to LND.
+
+Export credentials via CLI or manually:
+
+Run `base64` on the tls.cert and admin.macaroon files to get the encoded
+authentication data to create the Tapd connection. You can find these files in
+the Tapd directory. (~/.tapd or ~/Library/Application Support/Tapd)
+
+    base64 -w0 ~/.tapd/tls.cert
+    base64 -w0 ~/.tapd/data/mainnet/admin.macaroon
+
+You can then use these to interact with your Tapd node directly:
+
+```node
+const {authenticatedTapdGrpc} = require('lightning');
+
+const {tapd} = authenticatedTapdGrpc({
+  cert: 'base64 encoded tls.cert file',
+  macaroon: 'base64 encoded admin.macaroon file',
+  socket: '127.0.0.1:10029',
+});
+```
+
 Export credentials via CLI:
 [balanceofsatoshis](https://github.com/alexbosworth/balanceofsatoshis):
 `npm install -g balanceofsatoshis` and export via `bos credentials --cleartext`
@@ -393,3 +424,7 @@ variables set:
     Verify that a chain address message has a valid ECDSA signature
 - [verifyMessage](https://github.com/alexbosworth/ln-service#verifymessage): Check that a
     message from a node in the graph has a valid signature.
+
+## Taproot Assets Methods
+
+- **listTaprootAssetBalances**: List Taproot Asset balances grouped by asset ID or group key.
