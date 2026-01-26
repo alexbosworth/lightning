@@ -133,7 +133,7 @@ module.exports = tx => {
     confirmation_height: tx.block_height || undefined,
     created_at: new Date(Number(tx.time_stamp) * msPerSec).toISOString(),
     description: tx.label || undefined,
-    fee: Number(tx.total_fees) || undefined,
+    fee: Number(tx.total_fees) ?? undefined,
     id: tx.tx_hash,
     inputs: inputs.filter(n => !!n),
     is_confirmed: !!tx.num_confirmations,
