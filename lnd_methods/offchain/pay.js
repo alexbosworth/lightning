@@ -63,6 +63,7 @@ const payViaRoutes = require('./pay_via_routes');
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
     [request]: <BOLT 11 Payment Request String>
     [tokens]: <Total Tokens To Pay to Payment Request Number>
+    [amp]: <Should Use AMP (atomic multipath payment) Bool>
   }
 
   @returns via cbk or Promise
@@ -142,6 +143,7 @@ module.exports = (args, cbk) => {
           pathfinding_timeout: args.pathfinding_timeout,
           request: args.request,
           tokens: args.tokens,
+          amp: args.amp
         },
         cbk);
       }],
