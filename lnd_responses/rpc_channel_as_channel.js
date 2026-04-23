@@ -61,6 +61,7 @@ const outpointDelimiter = ':';
     total_satoshis_received: <Total Tokens Transferred Inbound String>
     total_satoshis_sent: <Total Tokens Transferred Outbound String>
     unsettled_balance: <Balance In Transaction Tokens String>
+    [peer_scid_alias]: <Peer Assigned Channel Id Number String>
     uptime: <Channel Internal Monitoring Channel Active Seconds Number>
     zero_conf_confirmed_scid: <Trusted Channel Confirmed Id Number String>
   }
@@ -92,6 +93,7 @@ const outpointDelimiter = ':';
     local_min_htlc_mtokens: <Local Minimum HTLC Millitokens String>
     local_reserve: <Local Reserved Tokens Number>
     other_ids: [<Other Channel Id String>]
+    [partner_scid_alias]: <Peer Assigned Standard Format Channel Id String>
     partner_public_key: <Channel Partner Public Key String>
     past_states: <Total Count of Past States Number>
     pending_payments: [{
@@ -256,6 +258,9 @@ module.exports = args => {
     local_min_htlc_mtokens: own.min_htlc_msat,
     local_reserve: Number(own.chan_reserve_sat),
     other_ids: otherIds.map(n => n.channel),
+    partner_scid_alias: args.peer_scid_alias
+      ? chanFormat({number: args.peer_scid_alias}).channel
+      : undefined,
     partner_public_key: args.remote_pubkey,
     past_states: Number(args.num_updates),
     pending_payments: args.pending_htlcs.map(rpcHtlcAsPayment),

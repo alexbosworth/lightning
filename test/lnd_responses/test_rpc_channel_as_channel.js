@@ -87,6 +87,7 @@ const makeExpected = overrides => {
     local_min_htlc_mtokens: '1',
     local_reserve: 1,
     other_ids: [],
+    partner_scid_alias: undefined,
     partner_public_key: '00',
     past_states: 1,
     pending_payments: [{
@@ -249,6 +250,11 @@ const tests = [
     args: makeArgs({alias_scids: ['2', '3'], zero_conf_confirmed_scid: '2'}),
     description: 'RPC channel is mapped to channel with scids',
     expected: makeExpected({id: '0x0x2', other_ids: ['0x0x3']}),
+  },
+  {
+    args: makeArgs({peer_scid_alias: '4'}),
+    description: 'RPC channel is mapped to channel with peer scid alias',
+    expected: makeExpected({partner_scid_alias: '0x0x4'}),
   },
   {
     args: makeArgs({commitment_type: 'ANCHORS', initiator: true}),
