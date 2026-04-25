@@ -60,6 +60,8 @@ export type GetChannelsResult = {
     local_reserve: number;
     /** Other Channel Ids */
     other_ids: string[];
+    /** Peer Assigned Standard Format Channel Id */
+    partner_scid_alias?: string;
     /** Channel Partner Public Key */
     partner_public_key: string;
     /** Past Channel States Count */
