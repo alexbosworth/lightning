@@ -28,6 +28,7 @@ const makeExpected = overrides => {
     local_max_pending_mtokens: '1',
     local_reserve: 1,
     other_ids: [],
+    partner_scid_alias: undefined,
     partner_public_key: 'b',
     past_states: 1,
     pending_payments: [{
