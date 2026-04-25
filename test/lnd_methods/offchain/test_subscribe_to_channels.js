@@ -263,6 +263,7 @@ const tests = [
             local_min_htlc_mtokens: '1',
             local_reserve: 1,
             other_ids: [],
+            partner_scid_alias: undefined,
             partner_public_key: '000000000000000000000000000000000000000000000000000000000000000000',
             past_states: 1,
             pending_payments: [],
