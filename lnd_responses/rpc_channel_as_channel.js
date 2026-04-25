@@ -36,6 +36,7 @@ const outpointDelimiter = ':';
     }
     num_updates: <Updated Channel Count String>
     memo: <Channel Description String>
+    [peer_scid_alias]: <Peer Short Channel Id Alias String>
     pending_htlcs: [{
       amount: <HTLC Tokens Amount String>
       expiration_height: <CLTV Timeout Block Height Number>
@@ -93,8 +94,8 @@ const outpointDelimiter = ':';
     local_min_htlc_mtokens: <Local Minimum HTLC Millitokens String>
     local_reserve: <Local Reserved Tokens Number>
     other_ids: [<Other Channel Id String>]
-    [partner_scid_alias]: <Peer Assigned Standard Format Channel Id String>
     partner_public_key: <Channel Partner Public Key String>
+    [partner_scid_alias]: <Peer Assigned Standard Format Channel Id String>
     past_states: <Total Count of Past States Number>
     pending_payments: [{
       id: <Payment Preimage Hash Hex String>
