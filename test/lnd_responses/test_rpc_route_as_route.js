@@ -9,7 +9,6 @@ const makeRoute = override => {
     hops: [{
       amt_to_forward_msat: '1000',
       chan_id: '1',
-      chan_capacity: 1,
       expiry: 1,
       fee_msat: '1000',
       mpp_record: {payment_addr: Buffer.alloc(1), total_amt_msat: '1'},
@@ -69,7 +68,6 @@ const tests = [
       hops: [{
         amt_to_forward_msat: '1000',
         chan_id: '1',
-        chan_capacity: 1,
         expiry: 1,
         fee_msat: '1000',
         pub_key: 'a',

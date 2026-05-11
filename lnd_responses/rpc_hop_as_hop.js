@@ -7,7 +7,6 @@ const millitokensPerToken = BigInt(1e3);
   {
     amt_to_forward_msat: <Millitokens to Forward String>
     chan_id: <Numeric Format Channel Id String>
-    chan_capacity: <Channel Capacity Number>
     custom_records: {
       <UInt64 String>: <Record Data Buffer>
     }
@@ -27,7 +26,6 @@ const millitokensPerToken = BigInt(1e3);
   @returns
   {
     channel: <Standard Format Channel Id String>
-    channel_capacity: <Channel Capacity Tokens Number>
     fee: <Fee Number>
     fee_mtokens: <Fee Millitokens String>
     forward: <Forward Tokens Number>
@@ -53,10 +51,6 @@ module.exports = hop => {
     throw new Error('ExpectedNumericChannelIdInRpcHopDetails');
   }
 
-  if (hop.chan_capacity === undefined) {
-    throw new Error('ExpectedChannelCapacityTokensNumberInRpcHopDetails');
-  }
-
   if (!hop.fee_msat) {
     throw new Error('ExpectedHtlcForwardingMillitokensFeeInRpcHopDetails');
   }
@@ -79,7 +73,6 @@ module.exports = hop => {
 
   return {
     channel: chanFormat({number: hop.chan_id}).channel,
-    channel_capacity: Number(hop.chan_capacity),
     fee: Number(BigInt(hop.fee_msat) / millitokensPerToken),
     fee_mtokens: hop.fee_msat,
     forward: Number(BigInt(hop.amt_to_forward_msat) / millitokensPerToken),

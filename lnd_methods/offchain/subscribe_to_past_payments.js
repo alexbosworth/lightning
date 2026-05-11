@@ -53,7 +53,6 @@ const unknownFailureMessage = '2 UNKNOWN: unknown failure detail type: <nil>';
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Tokens Rounded Down Number>
         fee_mtokens: <Fee Millitokens String>
         forward_mtokens: <Forward Millitokens String>

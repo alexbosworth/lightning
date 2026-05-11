@@ -35,8 +35,6 @@ export interface SubscribeToPaymentsConfirmedEvent {
     hops: Array<{
       /** Standard Format Channel Id String */
       channel: string;
-      /** Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** Fee Tokens Rounded Down Number */
       fee: number;
       /** Fee Millitokens String */
@@ -113,8 +111,6 @@ export interface SubscribeToPaymentsPayingEvent {
     hops: Array<{
       /** Standard Format Channel Id String */
       channel: string;
-      /** Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** Fee Tokens Rounded Down Number */
       fee: number;
       /** Fee Millitokens String */

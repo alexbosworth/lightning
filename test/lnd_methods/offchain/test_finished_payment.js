@@ -12,7 +12,6 @@ const makeArgs = overrides => {
       fee_mtokens: '1000',
       hops: [{
         channel: '0x0x1',
-        channel_capacity: 1,
         fee: 1,
         fee_mtokens: '1000',
         forward_mtokens: '1000',
@@ -26,7 +25,6 @@ const makeArgs = overrides => {
         fee_mtokens: '1000',
         hops: [{
           channel: '0x0x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward_mtokens: '1000',
@@ -100,7 +98,6 @@ const tests = [
       fee_mtokens: '1000',
       hops: [{
         channel: '0x0x1',
-        channel_capacity: 1,
         fee: 1,
         fee_mtokens: '1000',
         forward_mtokens: '1000',
@@ -114,7 +111,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '0x0x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward_mtokens: '1000',

@@ -45,8 +45,6 @@ export type GetRouteThroughHopsResult = {
     hops: {
       /** Standard Format Channel Id */
       channel: string;
-      /** Channel Capacity Tokens */
-      channel_capacity: number;
       /** Fee */
       fee: number;
       /** Fee Millitokens */

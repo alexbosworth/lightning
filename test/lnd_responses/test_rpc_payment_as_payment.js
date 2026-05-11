@@ -39,7 +39,6 @@ const makeArgs = overrides => {
           {
             amt_to_forward_msat: '1000',
             chan_id: '1',
-            chan_capacity: 1,
             expiry: 1,
             fee_msat: '1000',
             mpp_record: {
@@ -52,7 +51,6 @@ const makeArgs = overrides => {
           {
             amt_to_forward_msat: '1000',
             chan_id: '1',
-            chan_capacity: 1,
             expiry: 1,
             fee_msat: '1000',
             mpp_record: {
@@ -101,7 +99,6 @@ const makeExpected = overrides => {
         hops: [
           {
             channel: '0x0x1',
-            channel_capacity: 1,
             fee: 1,
             fee_mtokens: '1000',
             forward: 1,
@@ -111,7 +108,6 @@ const makeExpected = overrides => {
           },
           {
             channel: '0x0x1',
-            channel_capacity: 1,
             fee: 1,
             fee_mtokens: '1000',
             forward: 1,
@@ -257,7 +253,6 @@ const tests = [
           hops: [{
             amt_to_forward: '100',
             amt_to_forward_msat: '100000',
-            chan_capacity: '1000000',
             chan_id: '487083651170304',
             custom_records: {},
             expiry: 491,
@@ -302,7 +297,6 @@ const tests = [
           fee_mtokens: '0',
           hops: [{
             channel: '443x1x0',
-            channel_capacity: 1000000,
             fee: 0,
             fee_mtokens: '0',
             forward: 100,

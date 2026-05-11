@@ -15,7 +15,6 @@ const expectedRoute = {
   fee_mtokens: '1',
   hops: [{
     channel: '0x0x1',
-    channel_capacity: 1,
     fee: 0,
     fee_mtokens: '1',
     forward: 0,

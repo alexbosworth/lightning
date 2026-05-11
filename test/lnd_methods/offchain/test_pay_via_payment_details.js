@@ -39,7 +39,6 @@ const makePaymentData = overrides => {
         hops: [{
           amt_to_forward_msat: '1000',
           chan_id: '1',
-          chan_capacity: 1,
           expiry: 1,
           fee_msat: '1000',
           mpp_record: {
@@ -168,7 +167,6 @@ const makeExpectedPayment = ({}) => {
       fee_mtokens: '1',
       hops: [{
         channel: '0x0x1',
-        channel_capacity: 1,
         fee: 0,
         fee_mtokens: '1',
         forward: 0,
@@ -182,7 +180,6 @@ const makeExpectedPayment = ({}) => {
         fee_mtokens: '1',
         hops: [{
           channel: '0x0x1',
-          channel_capacity: 1,
           fee: 0,
           fee_mtokens: '1',
           forward: 0,
@@ -213,7 +210,6 @@ const makeLegacyConfirmed = ({}) => {
     route: {
       hops: [{
         amt_to_forward_msat: '1',
-        chan_capacity: '1',
         chan_id: '1',
         expiry: 1,
         fee_msat: '1',

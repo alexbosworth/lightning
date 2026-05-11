@@ -31,8 +31,6 @@ export type SubscribeToPastPaymentsPaymentEvent = {
         {
           /** Standard Format Channel Id String */
           channel: string;
-          /** Channel Capacity Tokens Number */
-          channel_capacity: number;
           /** Fee Tokens Rounded Down Number */
           fee: number;
           /** Fee Millitokens String */

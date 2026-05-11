@@ -8,7 +8,6 @@ const makeArgs = overrides => {
   const args = {
     amt_to_forward_msat: '1000',
     chan_id: '1',
-    chan_capacity: 1,
     expiry: 1,
     fee_msat: '1000',
     mpp_record: {payment_addr: Buffer.alloc(1), total_amt_msat: '1'},
@@ -24,7 +23,6 @@ const makeArgs = overrides => {
 const makeExpected = overrides => {
   const expected = {
     channel: '0x0x1',
-    channel_capacity: 1,
     fee: 1,
     fee_mtokens: '1000',
     forward: 1,
@@ -53,11 +51,6 @@ const tests = [
     args: makeArgs({chan_id: null}),
     description: 'Channel id is expected',
     error: 'ExpectedNumericChannelIdInRpcHopDetails',
-  },
-  {
-    args: makeArgs({chan_capacity: undefined}),
-    description: 'Channel capacity is expected',
-    error: 'ExpectedChannelCapacityTokensNumberInRpcHopDetails',
   },
   {
     args: makeArgs({fee_msat: undefined}),

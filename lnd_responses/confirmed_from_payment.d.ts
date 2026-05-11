@@ -24,8 +24,6 @@ export type ConfirmedFromPaymentArgs = {
         amt_to_forward_msat: string;
         /** Numeric Format Channel Id String */
         chan_id: string;
-        /** Channel Capacity String */
-        chan_capacity: string;
         custom_records: {
           [key: string]: Buffer;
         };
@@ -88,8 +86,6 @@ export type ConfirmedFromPaymentResult = {
   hops: {
     /** First Path Standard Format Channel Id String */
     channel: string;
-    /** First Path Channel Capacity Tokens Number */
-    channel_capacity: number;
     /** First Route Fee Path Rounded Down Number */
     fee: number;
     /** First Path Fee Millitokens String */
@@ -117,8 +113,6 @@ export type ConfirmedFromPaymentResult = {
     hops: {
       /** Standard Format Channel Id String */
       channel: string;
-      /** Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** Fee Tokens Rounded Down Number */
       fee: number;
       /** Fee Millitokens String */

@@ -48,7 +48,6 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
     [probe_timeout_ms]: <Probe Timeout Milliseconds Number>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
-      [channel_capacity]: <Channel Capacity Tokens Number>
       [channel]: <Standard Format Channel Id String>
       [cltv_delta]: <CLTV Blocks Delta Number>
       [fee_rate]: <Fee Rate In Millitokens Per Million Number>
@@ -66,7 +65,6 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
       fee_mtokens: <Route Fee Millitokens String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>

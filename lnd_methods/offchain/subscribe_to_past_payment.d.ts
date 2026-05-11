@@ -22,8 +22,6 @@ export type SubscribeToPastPaymentConfirmedEvent = {
   hops: {
     /** Standard Format Channel Id */
     channel: string;
-    /** Channel Capacity Tokens */
-    channel_capacity: number;
     /** Routing Fee Tokens */
     fee: number;
     /** Fee Millitokens */
@@ -87,8 +85,6 @@ export type SubscribeToPastPaymentPayingEvent = {
     hops: {
       /** Standard Format Channel Id String */
       channel: string;
-      /** Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** Fee Tokens Rounded Down Number */
       fee: number;
       /** Fee Millitokens String */

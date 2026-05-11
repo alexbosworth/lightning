@@ -21,7 +21,6 @@ const payment: ConfirmedFromPaymentArgs = {
           {
             amt_to_forward: '1',
             amt_to_forward_msat: '1000',
-            chan_capacity: '1',
             chan_id: '1',
             custom_records: {'1': Buffer.alloc(1)},
             expiry: 1,

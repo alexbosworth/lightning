@@ -9,7 +9,6 @@ const isNumber = n => !isNaN(n);
     fee_mtokens: <Route Fee Millitokens String>
     hops: [{
       channel: <Standard Format Channel Id String>
-      channel_capacity: <Channel Capacity Tokens Number>
       fee: <Fee Number>
       fee_mtokens: <Fee Millitokens String>
       forward: <Forward Tokens Number>
@@ -41,7 +40,6 @@ const isNumber = n => !isNaN(n);
       amt_to_forward: <Tokens to Forward String>
       amt_to_forward_msat: <Millitokens to Forward String>
       chan_id: <Numeric Format Channel Id String>
-      chan_capacity: <Channel Capacity Number>
       [custom_records]: {<TLV Type Number String>: <TLV Value Buffer Object>}
       expiry: <Timeout Chain Height Number>
       fee: <Fee in Tokens Number>

@@ -13,7 +13,6 @@ const args = {
     hops: [
       {
         channel: '0x0x1',
-        channel_capacity: 1,
         fee: 1,
         fee_mtokens: '1000',
         forward_mtokens: '1000',
@@ -30,7 +29,6 @@ const args = {
         hops: [
           {
             channel: '0x0x1',
-            channel_capacity: 1,
             fee: 1,
             fee_mtokens: '1000',
             forward_mtokens: '1000',

@@ -38,7 +38,6 @@ const unknownWireError = 'unknown wire error';
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -104,7 +103,6 @@ const unknownWireError = 'unknown wire error';
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -139,7 +137,6 @@ const unknownWireError = 'unknown wire error';
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -169,7 +166,6 @@ const unknownWireError = 'unknown wire error';
     fee_mtokens: <Fee Paid Millitokens String>
     hops: [{
       channel: <Standard Format Channel Id String>
-      channel_capacity: <Hop Channel Capacity Tokens Number>
       fee_mtokens: <Hop Forward Fee Millitokens String>
       forward_mtokens: <Hop Forwarded Millitokens String>
       timeout: <Hop CLTV Expiry Block Height Number>
@@ -183,7 +179,6 @@ const unknownWireError = 'unknown wire error';
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>

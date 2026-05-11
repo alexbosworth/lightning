@@ -62,7 +62,6 @@ const type = 'router';
     fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{
       channel: <First Route Standard Format Channel Id String>
-      channel_capacity: <First Route Channel Capacity Tokens Number>
       fee: <First Route Fee Tokens Rounded Down Number>
       fee_mtokens: <First Route Fee Millitokens String>
       forward_mtokens: <First Route Forward Millitokens String>
@@ -75,7 +74,6 @@ const type = 'router';
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <First Route Standard Format Channel Id String>
-        channel_capacity: <First Route Channel Capacity Tokens Number>
         fee: <First Route Fee Tokens Rounded Down Number>
         fee_mtokens: <First Route Fee Millitokens String>
         forward_mtokens: <First Route Forward Millitokens String>

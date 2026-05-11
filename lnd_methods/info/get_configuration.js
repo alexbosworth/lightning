@@ -46,7 +46,7 @@ module.exports = ({lnd}, cbk) => {
 
       // Get configuration info
       getInfo: ['validate', ({}, cbk) => {
-        return lnd[type][method]({}, (err, res) => {
+        return lnd[type][method]({include_log: true}, (err, res) => {
           if (!!err && err.details === errNotFound) {
             return cbk([501, 'GetDebugConfigurationInfoNotSupported']);
           }

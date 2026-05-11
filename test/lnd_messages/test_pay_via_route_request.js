@@ -11,7 +11,6 @@ const makeArgs = overrides => {
       hops: [{
         amt_to_forward_msat: '1',
         chan_id: '1',
-        chan_capacity: 1,
         custom_records: {},
         expiry: 1,
         pub_key: Buffer.alloc(33, 3).toString('hex'),
@@ -37,7 +36,6 @@ const makeExpected = overrides => {
       fee_mtokens: '1',
       hops: [{
         channel: '0x0x1',
-        channel_capacity: 1,
         fee: 0,
         fee_mtokens: '1',
         forward: 0,

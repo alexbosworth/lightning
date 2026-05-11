@@ -27,7 +27,7 @@ option go_package = "github.com/lightningnetwork/lnd/lnrpc/routerrpc";
 // Router is a service that offers advanced interaction with the router
 // subsystem of the daemon.
 service Router {
-    /*
+    /* lncli: `sendpayment`
     SendPaymentV2 attempts to route a payment described by the passed
     PaymentRequest to the final destination. The call returns a stream of
     payment updates. When using this RPC, make sure to set a fee limit, as the
@@ -53,7 +53,7 @@ service Router {
     */
     rpc TrackPayments (TrackPaymentsRequest) returns (stream lnrpc.Payment);
 
-    /*
+    /* lncli: `estimateroutefee`
     EstimateRouteFee allows callers to obtain a lower bound w.r.t how much it
     may cost to send an HTLC to the target end destination.
     */
@@ -70,7 +70,7 @@ service Router {
         option deprecated = true;
     }
 
-    /*
+    /* lncli: `sendtoroute`
     SendToRouteV2 attempts to make a payment via the specified route. This
     method differs from SendPayment in that it allows users to specify a full
     route manually. This can be used for things like rebalancing, and atomic
@@ -195,6 +195,25 @@ service Router {
     */
     rpc XDeleteLocalChanAliases (DeleteAliasesRequest)
         returns (DeleteAliasesResponse);
+
+    /*
+    XFindBaseLocalChanAlias is an experimental API that looks up the base scid
+    for a local chan alias that was registered during the current runtime.
+    */
+    rpc XFindBaseLocalChanAlias (FindBaseAliasRequest)
+        returns (FindBaseAliasResponse);
+
+    /* lncli: `deletefwdhistory`
+    DeleteForwardingHistory allows the caller to delete forwarding history
+    events with a timestamp at or before a specified time. This is useful
+    for implementing data retention policies for privacy purposes. The call
+    deletes events in batches and returns statistics including the total number
+    of events deleted and the aggregate fees earned from those events. The
+    deletion is performed in a transaction-safe manner with configurable batch
+    sizes to avoid holding large database locks.
+    */
+    rpc DeleteForwardingHistory (DeleteForwardingHistoryRequest)
+        returns (DeleteForwardingHistoryResponse);
 }
 
 message SendPaymentRequest {
@@ -904,6 +923,11 @@ enum FailureDetail {
     INVALID_KEYSEND = 20;
     MPP_IN_PROGRESS = 21;
     CIRCULAR_ROUTE = 22;
+    INVOICE_ALREADY_SETTLED = 23;
+    HTLC_INVOICE_TYPE_MISMATCH = 24;
+    AMP_ERROR = 25;
+    AMP_RECONSTRUCTION = 26;
+    EXTERNAL_VALIDATION_FAILED = 27;
 }
 
 enum PaymentState {
@@ -1116,4 +1140,46 @@ message DeleteAliasesRequest {
 
 message DeleteAliasesResponse {
     repeated lnrpc.AliasMap alias_maps = 1;
+}
+
+message FindBaseAliasRequest {
+    // The alias we want to look up the base scid for.
+    uint64 alias = 1;
+}
+
+message FindBaseAliasResponse {
+    // The base scid that resulted from the base scid look up.
+    uint64 base = 1;
+}
+
+message DeleteForwardingHistoryRequest {
+    // Specify the cutoff time for deletion using one of the following options.
+    // Events with a timestamp at or before the cutoff are deleted.
+    oneof time_spec {
+        // Absolute Unix timestamp (seconds). Events at or before this time
+        // are deleted.
+        uint64 delete_before_time = 1;
+
+        // Relative duration string indicating how far back to delete, e.g.
+        // "-30d" deletes events at or before 30 days ago.
+        // Standard Go: "-24h", "-1.5h"
+        // Custom units: "-1d", "-1w", "-1M", "-1y"
+        // Supported: ns, us/µs, ms, s, m, h, d (days), w (weeks),
+        // M (months=30.44d), y (years=365.25d).
+        // Use negative values to specify time in the past.
+        string delete_before_duration = 2;
+    }
+}
+
+message DeleteForwardingHistoryResponse {
+    // Number of forwarding events deleted.
+    uint64 events_deleted = 1;
+
+    // Total fees earned from deleted events (in millisatoshis).
+    // This is the sum of (amt_in - amt_out) for all deleted events, which
+    // can be used for accounting purposes.
+    int64 total_fee_msat = 2;
+
+    // Status message.
+    string status = 3;
 }

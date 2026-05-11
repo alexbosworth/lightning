@@ -13,7 +13,6 @@ const route = {
   fee_mtokens: '1000',
   hops: [{
     channel: '0x0x1',
-    channel_capacity: 1,
     fee_mtokens: '1',
     forward_mtokens: '1',
     public_key: 'public_key',
@@ -244,14 +243,12 @@ const tests = [
           hops: [
             {
               channel: '0x0x1',
-              channel_capacity: 1,
               fee_mtokens: '1',
               forward_mtokens: '1',
               public_key: 'public_key',
             },
             {
               channel: '0x0x1',
-              channel_capacity: 1,
               fee_mtokens: '1',
               forward_mtokens: '1',
               public_key: 'public_key',
@@ -271,14 +268,12 @@ const tests = [
           hops: [
             {
               channel: '0x0x1',
-              channel_capacity: 1,
               fee_mtokens: '1',
               forward_mtokens: '1',
               public_key: 'public_key',
             },
             {
               channel: '0x0x1',
-              channel_capacity: 1,
               fee_mtokens: '1',
               forward_mtokens: '1',
               public_key: 'public_key',
@@ -302,14 +297,12 @@ const tests = [
             hops: [
               {
                 channel: '0x0x1',
-                channel_capacity: 1,
                 fee_mtokens: '1',
                 forward_mtokens: '1',
                 public_key: 'public_key',
               },
               {
                 channel: '0x0x1',
-                channel_capacity: 1,
                 fee_mtokens: '1',
                 forward_mtokens: '1',
                 public_key: 'public_key',

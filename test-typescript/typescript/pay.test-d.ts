@@ -14,7 +14,6 @@ const path = {
       hops: [
         {
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,

@@ -7,23 +7,17 @@ const rpcHopFromHop = require('./../../lnd_requests/rpc_hop_from_hop');
 const tests = [
   {
     args: {},
-    description: 'Channel capacity is expected',
-    error: 'ExpectedNumericChannelCapacityToMapRpcHopFromHop',
-  },
-  {
-    args: {channel_capacity: 1},
     description: 'Forward mtokens are expected',
     error: 'ExpectedForwardMillitokensToMapRpcHopFromHop',
   },
   {
-    args: {channel_capacity: 1, forward_mtokens: '1'},
+    args: {forward_mtokens: '1'},
     description: 'Fee mtokens are expected',
     error: 'ExpectedFeeMillitokensToMapRpcHopFromHop',
   },
   {
     args: {
       channel: '0x0x1',
-      channel_capacity: 1,
       fee: 1,
       fee_mtokens: '1000',
       forward: '1',
@@ -36,7 +30,6 @@ const tests = [
       amt_to_forward: '1',
       amt_to_forward_msat: '1000',
       chan_id: '1',
-      chan_capacity: '1',
       expiry: 1,
       fee: '1',
       fee_msat: '1000',
@@ -47,7 +40,6 @@ const tests = [
   {
     args: {
       channel: '0x0x1',
-      channel_capacity: 1,
       fee: 1,
       fee_mtokens: '1000',
       forward: '1',
@@ -61,7 +53,6 @@ const tests = [
       amt_to_forward: '1',
       amt_to_forward_msat: '1000',
       chan_id: '1',
-      chan_capacity: '1',
       custom_records: {'12': Buffer.from('34', 'hex')},
       expiry: 1,
       fee: '1',

@@ -47,8 +47,6 @@ export type GetRouteToDestinationArgs = AuthenticatedLightningArgs<{
     base_fee_mtokens?: string;
     /** Standard Format Channel Id */
     channel?: string;
-    /** Channel Capacity Tokens */
-    channel_capacity?: number;
     /** CLTV Delta Blocks */
     cltv_delta?: number;
     /** Fee Rate In Millitokens Per Million */
@@ -75,8 +73,6 @@ export type GetRouteToDestinationResult = {
     hops: {
       /** Standard Format Channel Id */
       channel: string;
-      /** Channel Capacity Tokens */
-      channel_capacity: number;
       /** Fee */
       fee: number;
       /** Fee Millitokens */

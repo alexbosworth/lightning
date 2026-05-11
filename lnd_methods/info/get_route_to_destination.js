@@ -72,7 +72,6 @@ const trimByte = 0;
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
       [channel]: <Standard Format Channel Id String>
-      [channel_capacity]: <Channel Capacity Tokens Number>
       [cltv_delta]: <CLTV Delta Blocks Number>
       [fee_rate]: <Fee Rate In Millitokens Per Million Number>
       public_key: <Forward Edge Public Key Hex String>
@@ -90,7 +89,6 @@ const trimByte = 0;
       fee_mtokens: <Route Fee Millitokens String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -204,7 +202,7 @@ module.exports = (args, cbk) => {
       }],
 
       // Determine the outgoing channel
-      outgoingChannel: ['validate', ({}, cbk) => {
+      outgoingChan: ['validate', ({}, cbk) => {
         // Exit early when there is no outgoing channel constraint
         if (!args.outgoing_channel) {
           return cbk();
@@ -246,7 +244,7 @@ module.exports = (args, cbk) => {
         'destinationCustomRecords',
         'destinationFeatures',
         'feeLimitMillitokens',
-        'outgoingChannel',
+        'outgoingChan',
         'routeHints',
         ({
           amountMillitokens,
@@ -254,7 +252,7 @@ module.exports = (args, cbk) => {
           destinationFeatures,
           feeLimitMillitokens,
           cltvLimit,
-          outgoingChannel,
+          outgoingChan,
           routeHints,
         },
         cbk) =>
@@ -274,7 +272,7 @@ module.exports = (args, cbk) => {
             ignored_nodes: ignoreAsIgnoredNodes({ignore}).ignored || undefined,
             ignored_pairs: ignoreAsIgnoredPairs({ignore}).ignored || undefined,
             last_hop_pubkey: bufFromHex(args.incoming_peer) || undefined,
-            outgoing_chan_id: outgoingChannel || undefined,
+            outgoing_chan_ids: !!outgoingChan ? [outgoingChan] : undefined,
             pub_key: args.destination,
             route_hints: routeHints || undefined,
             source_pub_key: args.start || undefined,

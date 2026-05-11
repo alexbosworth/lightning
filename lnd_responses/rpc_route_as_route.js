@@ -9,7 +9,6 @@ const millitokensPerToken = BigInt(1e3);
     hops: [{
       amt_to_forward_msat: <Millitokens to Forward String>
       chan_id: <Numeric Format Channel Id String>
-      chan_capacity: <Channel Capacity Number>
       custom_records: {
         <UInt64 String>: <Record Data Buffer>
       }
@@ -36,7 +35,6 @@ const millitokensPerToken = BigInt(1e3);
     fee_mtokens: <Route Fee Millitokens String>
     hops: [{
       channel: <Standard Format Channel Id String>
-      channel_capacity: <Channel Capacity Tokens Number>
       fee: <Fee Tokens Number>
       fee_mtokens: <Fee Millitokens String>
       forward: <Forward Tokens Number>

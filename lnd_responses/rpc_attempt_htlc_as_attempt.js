@@ -34,7 +34,6 @@ const nsAsMs = ns => Number(BigInt(ns) / BigInt(1e6));
       hops: [{
         amt_to_forward_msat: <Millitokens to Forward String>
         chan_id: <Numeric Format Channel Id String>
-        chan_capacity: <Channel Capacity Number>
         custom_records: {
           <UInt64 String>: <Record Data Buffer>
         }
@@ -72,7 +71,6 @@ const nsAsMs = ns => Number(BigInt(ns) / BigInt(1e6));
       fee_mtokens: <Route Fee Millitokens String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>

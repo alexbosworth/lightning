@@ -68,8 +68,6 @@ export type PayViaPaymentDetailsResult = {
   hops: {
     /** First Route Standard Format Channel Id */
     channel: string;
-    /** First Route Channel Capacity Tokens */
-    channel_capacity: number;
     /** First Route Fee Tokens Rounded Down */
     fee: number;
     /** First Route Fee Millitokens */
@@ -91,8 +89,6 @@ export type PayViaPaymentDetailsResult = {
     hops: {
       /** First Route Standard Format Channel Id */
       channel: string;
-      /** First Route Channel Capacity Tokens */
-      channel_capacity: number;
       /** First Route Fee Tokens Rounded Down */
       fee: number;
       /** First Route Fee Millitokens */

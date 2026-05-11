@@ -46,8 +46,6 @@ export type SubscribeToProbeForRouteArgs = AuthenticatedLightningArgs<{
   routes?: {
     /** Base Routing Fee In Millitokens */
     base_fee_mtokens?: string;
-    /** Channel Capacity Tokens */
-    channel_capacity?: number;
     /** Standard Format Channel Id */
     channel?: string;
     /** CLTV Blocks Delta */
@@ -76,8 +74,6 @@ export type SubscribeToProbeForRouteProbeSuccessEvent = {
     hops: {
       /** Standard Format Channel Id */
       channel: string;
-      /** Channel Capacity Tokens */
-      channel_capacity: number;
       /** Fee */
       fee: number;
       /** Fee Millitokens */
@@ -125,8 +121,6 @@ export type SubscribeToProbeForRouteProbingEvent = {
     hops: {
       /** Standard Format Channel Id */
       channel: string;
-      /** Channel Capacity Tokens */
-      channel_capacity: number;
       /** Fee */
       fee: number;
       /** Fee Millitokens */
@@ -196,8 +190,6 @@ export type SubscribeToProbeForRouteRoutingFailureEvent = {
     hops: {
       /** Standard Format Channel Id */
       channel: string;
-      /** Channel Capacity Tokens */
-      channel_capacity: number;
       /** Fee */
       fee: number;
       /** Fee Millitokens */

@@ -17,8 +17,6 @@ export type PayViaRoutesArgs = AuthenticatedLightningArgs<{
     hops: {
       /** Standard Format Channel Id */
       channel: string;
-      /** Channel Capacity Tokens */
-      channel_capacity: number;
       /** Fee */
       fee: number;
       /** Fee Millitokens */
@@ -68,8 +66,6 @@ export type PayViaRoutesResult = {
   hops: {
     /** Standard Format Channel Id */
     channel: string;
-    /** Hop Channel Capacity Tokens */
-    channel_capacity: number;
     /** Hop Forward Fee Millitokens */
     fee_mtokens: string;
     /** Hop Forwarded Millitokens */

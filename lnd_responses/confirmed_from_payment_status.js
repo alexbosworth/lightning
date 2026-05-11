@@ -22,7 +22,6 @@ const sum = arr => arr.reduce((sum, n) => sum + BigInt(n), BigInt(Number()));
       route: [{
         hops: [{
           amt_to_forward_msat: <Forward Amount Millitokens String>
-          chan_capacity: <Channel Capacity Tokens String>
           chan_id: <Numeric Format Channel Id String>
           custom_records: {
             <Record Type String>: <Record Value Buffer>
@@ -46,7 +45,6 @@ const sum = arr => arr.reduce((sum, n) => sum + BigInt(n), BigInt(Number()));
     [route]: {
       hops: [{
         amt_to_forward_msat: <Forward Amount Millitokens String>
-        chan_capacity: <Channel Capacity Tokens String>
         chan_id: <Numeric Format Channel Id String>
         custom_records: {
           <Record Type String>: <Record Value Buffer>
@@ -75,7 +73,6 @@ const sum = arr => arr.reduce((sum, n) => sum + BigInt(n), BigInt(Number()));
     fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{
       channel: <First Route Standard Format Channel Id String>
-      channel_capacity: <First Route Channel Capacity Tokens Number>
       fee: <First Route Fee Tokens Rounded Down Number>
       fee_mtokens: <First Route Fee Millitokens String>
       forward: <First Route Forward Tokens Number>
@@ -88,7 +85,6 @@ const sum = arr => arr.reduce((sum, n) => sum + BigInt(n), BigInt(Number()));
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Tokens Rounded Down Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -139,7 +135,6 @@ module.exports = ({htlcs, preimage, route}) => {
     fee_mtokens: route.total_fees_msat,
     hops: route.hops.map(hop => ({
       channel: chanFormat({number: hop.chan_id}).channel,
-      channel_capacity: Number(hop.chan_capacity),
       fee: safeTokens({mtokens: hop.fee_msat}).tokens,
       fee_mtokens: hop.fee_msat,
       forward: safeTokens({mtokens: hop.amt_to_forward_msat}).tokens,

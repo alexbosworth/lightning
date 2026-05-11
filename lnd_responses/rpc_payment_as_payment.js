@@ -45,7 +45,6 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
           amt_to_forward: <Tokens to Forward String>
           amt_to_forward_msat: <Millitokens to Forward String>
           chan_id: <Numeric Format Channel Id String>
-          chan_capacity: <Channel Capacity Number>
           expiry: <Timeout Chain Height Number>
           fee: <Fee in Tokens Number>
           fee_msat: <Fee in Millitokens Number>
@@ -121,7 +120,6 @@ const routePublicKeys = route => route.hops.map(n => n.public_key);
         fee_mtokens: <Route Fee Millitokens String>
         hops: [{
           channel: <Standard Format Channel Id String>
-          channel_capacity: <Channel Capacity Tokens Number>
           fee: <Fee Number>
           fee_mtokens: <Fee Millitokens String>
           forward: <Forward Tokens Number>

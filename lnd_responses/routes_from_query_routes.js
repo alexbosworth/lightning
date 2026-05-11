@@ -16,7 +16,6 @@ const successDenominator = 1e6;
       routes: [{
         hops: [{
           amt_to_forward_msat: <Amount to Forward Millitokens String>
-          chan_capacity: <Channel Capacity Tokens String>
           chan_id: <Numeric Format Channel Id String>
           custom_records: {
             <Record Type String>: <Record Value Buffer>
@@ -46,7 +45,6 @@ const successDenominator = 1e6;
       fee_mtokens: <Route Fee Millitokens String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -124,7 +122,6 @@ module.exports = ({response}) => {
         hops: route.hops.map(h => {
           return {
             channel: chanFormat({number: h.chan_id}).channel,
-            channel_capacity: Number(h.chan_capacity),
             fee: safeTokens({mtokens: h.fee_msat}).tokens,
             fee_mtokens: h.fee_msat,
             forward: safeTokens({mtokens: h.amt_to_forward_msat}).tokens,

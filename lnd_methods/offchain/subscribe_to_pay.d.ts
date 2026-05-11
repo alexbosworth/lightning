@@ -86,8 +86,6 @@ export type SubscribeToPayConfirmedEvent = {
   hops: {
     /** First Route Standard Format Channel Id String> */
     channel: string;
-    /** First Route Channel Capacity Tokens Number> */
-    channel_capacity: number;
     /** First Route Fee Tokens Rounded Down Number> */
     fee: number;
     /** First Route Fee Millitokens String> */
@@ -111,8 +109,6 @@ export type SubscribeToPayConfirmedEvent = {
     hops: {
       /** First Route Standard Format Channel Id String> */
       channel: string;
-      /** First Route Channel Capacity Tokens Number> */
-      channel_capacity: number;
       /** First Route Fee Tokens Rounded Down Number> */
       fee: number;
       /** First Route Fee Millitokens String> */
@@ -160,8 +156,6 @@ export type SubscribeToPayFailedEvent = {
     hops: {
       /** Standard Format Channel Id String> */
       channel: string;
-      /** Channel Capacity Tokens Number> */
-      channel_capacity: number;
       /** Hop Forwarding Fee Rounded Down Tokens Number> */
       fee: number;
       /** Hop Forwarding Fee Millitokens String> */
@@ -207,8 +201,6 @@ export type SubscribeToPayPayingEvent = {
     hops: {
       /** Standard Format Channel Id String> */
       channel: string;
-      /** Channel Capacity Tokens Number> */
-      channel_capacity: number;
       /** Fee Tokens Rounded Down Number> */
       fee: number;
       /** Fee Millitokens String> */
@@ -260,8 +252,6 @@ export type SubscribeToRoutingFailureEvent = {
     hops: {
       /** Standard Format Channel Id String> */
       channel: string;
-      /** Channel Capacity Tokens Number> */
-      channel_capacity: number;
       /** Fee Number> */
       fee: number;
       /** Fee Millitokens String> */

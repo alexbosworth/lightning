@@ -12,7 +12,6 @@ const route = {
   hops: [
     {
       channel: 'channel',
-      channel_capacity: 1,
       fee: 1,
       fee_mtokens: '1',
       forward: 1,

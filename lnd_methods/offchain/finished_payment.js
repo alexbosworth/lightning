@@ -10,7 +10,6 @@ const {returnResult} = require('asyncjs-util');
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <First Route Standard Format Channel Id String>
-        channel_capacity: <First Route Channel Capacity Tokens Number>
         fee: <First Route Fee Tokens Rounded Down Number>
         fee_mtokens: <First Route Fee Millitokens String>
         forward_mtokens: <First Route Forward Millitokens String>
@@ -23,7 +22,6 @@ const {returnResult} = require('asyncjs-util');
         fee_mtokens: <Total Fee Millitokens Paid String>
         hops: [{
           channel: <First Route Standard Format Channel Id String>
-          channel_capacity: <First Route Channel Capacity Tokens Number>
           fee: <First Route Fee Tokens Rounded Down Number>
           fee_mtokens: <First Route Fee Millitokens String>
           forward_mtokens: <First Route Forward Millitokens String>
@@ -49,7 +47,6 @@ const {returnResult} = require('asyncjs-util');
         fee_mtokens: <Route Total Fee Millitokens String>
         hops: [{
           channel: <Standard Format Channel Id String>
-          channel_capacity: <Channel Capacity Tokens Number>
           fee: <Hop Forwarding Fee Rounded Down Tokens Number>
           fee_mtokens: <Hop Forwarding Fee Millitokens String>
           forward: <Hop Forwarding Tokens Rounded Down Number>
@@ -73,7 +70,6 @@ const {returnResult} = require('asyncjs-util');
     fee_mtokens: <Total Fee Millitokens To Pay String>
     hops: [{
       channel: <Standard Format Channel Id String>
-      channel_capacity: <Channel Capacity Tokens Number>
       fee_mtokens: <Fee Millitokens String>
       forward_mtokens: <Forward Millitokens String>
       public_key: <Public Key Hex String>
@@ -86,7 +82,6 @@ const {returnResult} = require('asyncjs-util');
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <First Route Standard Format Channel Id String>
-        channel_capacity: <First Route Channel Capacity Tokens Number>
         fee: <First Route Fee Tokens Rounded Down Number>
         fee_mtokens: <First Route Fee Millitokens String>
         forward_mtokens: <First Route Forward Millitokens String>

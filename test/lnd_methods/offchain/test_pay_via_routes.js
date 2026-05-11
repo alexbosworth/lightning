@@ -94,7 +94,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,
@@ -121,7 +120,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,
@@ -152,7 +150,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,
@@ -178,7 +175,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [...Array(21)].map(() => ({
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,
@@ -214,7 +210,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,
@@ -284,7 +279,6 @@ const tests = [
         hops: [
           {
             channel: '1x1x1',
-            channel_capacity: 1,
             fee: 1,
             fee_mtokens: '1000',
             forward: 1,
@@ -294,7 +288,6 @@ const tests = [
           },
           {
             channel: '0x116x52145',
-            channel_capacity: 1,
             fee: 1,
             fee_mtokens: '1000',
             forward: 1,
@@ -355,7 +348,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '1x1x1',
-          channel_capacity: 1,
           fee: 1,
           fee_mtokens: '1000',
           forward: 1,
@@ -375,7 +367,6 @@ const tests = [
       fee_mtokens: '1000',
       hops: [{
         channel: '1x1x1',
-        channel_capacity: 1,
         fee: 1,
         fee_mtokens: '1000',
         forward: 1,

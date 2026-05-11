@@ -27,7 +27,6 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
           amt_to_forward: <Tokens to Forward String>
           amt_to_forward_msat: <Millitokens to Forward String>
           chan_id: <Numeric Format Channel Id String>
-          chan_capacity: <Channel Capacity Tokens String>
           custom_records: {
             <UInt64 String>: <Record Data Buffer>
           }
@@ -72,7 +71,6 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
     fee_mtokens: <Total Fee Millitokens Paid String>
     hops: [{
       channel: <First Path Standard Format Channel Id String>
-      channel_capacity: <First Path Channel Capacity Tokens Number>
       fee: <First Route Fee Path Rounded Down Number>
       fee_mtokens: <First Path Fee Millitokens String>
       forward: <First Path Forward Tokens Number>
@@ -88,7 +86,6 @@ const nsAsDate = ns => new Date(Number(BigInt(ns) / BigInt(1e6)));
       fee_mtokens: <Total Fee Millitokens Paid String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Tokens Rounded Down Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>

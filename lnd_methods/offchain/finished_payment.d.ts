@@ -12,8 +12,6 @@ export type FinishedPaymentArgs = AuthenticatedLightningArgs<{
     hops: {
       /** First Route Standard Format Channel Id String */
       channel: string;
-      /** First Route Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** First Route Fee Tokens Rounded Down Number */
       fee: number;
       /** First Route Fee Millitokens String */
@@ -37,8 +35,6 @@ export type FinishedPaymentArgs = AuthenticatedLightningArgs<{
       hops: {
         /** First Route Standard Format Channel Id String */
         channel: string;
-        /** First Route Channel Capacity Tokens Number */
-        channel_capacity: number;
         /** First Route Fee Tokens Rounded Down Number */
         fee: number;
         /** First Route Fee Millitokens String */
@@ -81,8 +77,6 @@ export type FinishedPaymentArgs = AuthenticatedLightningArgs<{
       hops: {
         /** Standard Format Channel Id String */
         channel: string;
-        /** Channel Capacity Tokens Number */
-        channel_capacity: number;
         /** Hop Forwarding Fee Rounded Down Tokens Number */
         fee: number;
         /** Hop Forwarding Fee Millitokens String */
@@ -118,8 +112,6 @@ export type FinishedPaymentResult = {
   hops: {
     /** Standard Format Channel Id String */
     channel: string;
-    /** Channel Capacity Tokens Number */
-    channel_capacity: number;
     /** Fee Millitokens String */
     fee_mtokens: string;
     /** Forward Millitokens String */
@@ -141,8 +133,6 @@ export type FinishedPaymentResult = {
     hops: {
       /** First Route Standard Format Channel Id String */
       channel: string;
-      /** First Route Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** First Route Fee Tokens Rounded Down Number */
       fee: number;
       /** First Route Fee Millitokens String */

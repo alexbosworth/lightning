@@ -56,7 +56,6 @@ const tests = [
         fee_mtokens: '1000',
         hops: [{
           channel: '1352793x157x0',
-          channel_capacity: 16270430,
           fee: 1,
           fee_mtokens: '1000',
           forward: 830497,
@@ -81,7 +80,6 @@ const tests = [
         hops: [{
           amt_to_forward: '830497',
           amt_to_forward_msat: '830497000',
-          chan_capacity: '16270430',
           chan_id: '1487411633484267520',
           custom_records: [{
             type: recordType,

@@ -80,8 +80,6 @@ export type ProbeForRouteResult = {
     hops: {
       /** Standard Format Channel Id String */
       channel: string;
-      /** Channel Capacity Tokens Number */
-      channel_capacity: number;
       /** Fee Number */
       fee: number;
       /** Fee Millitokens String */

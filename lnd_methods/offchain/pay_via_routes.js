@@ -24,7 +24,6 @@ const notFound = -1;
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
-        channel_capacity: <Channel Capacity Tokens Number>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -60,7 +59,6 @@ const notFound = -1;
     fee_mtokens: <Fee Paid Millitokens String>
     hops: [{
       channel: <Standard Format Channel Id String>
-      channel_capacity: <Hop Channel Capacity Tokens Number>
       fee_mtokens: <Hop Forward Fee Millitokens String>
       forward_mtokens: <Hop Forwarded Millitokens String>
       timeout: <Hop CLTV Expiry Block Height Number>
@@ -151,7 +149,6 @@ module.exports = (args, cbk) => {
               fee_mtokens: result.success.fee_mtokens,
               hops: result.success.hops.map(hop => ({
                 channel: hop.channel,
-                channel_capacity: hop.channel_capacity,
                 fee: hop.fee,
                 fee_mtokens: hop.fee_mtokens,
                 forward: hop.forward,
