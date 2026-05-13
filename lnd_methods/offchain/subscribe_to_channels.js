@@ -167,7 +167,7 @@ module.exports = ({lnd}) => {
     }
 
     if (!update.type || !update.type.toLowerCase) {
-      return emitError(asError('ExpectedEventTypeInChannelSubscription'));
+      return;
     }
 
     const updateType = update.type.toLowerCase();

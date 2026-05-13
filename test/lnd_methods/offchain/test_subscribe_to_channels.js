@@ -153,26 +153,6 @@ const tests = [
     },
   },
   {
-    args: {lnd: makeLnd({data: {}})},
-    description: 'Channel data type is expected',
-    expected: {
-      events: [{
-        data: new Error('ExpectedEventTypeInChannelSubscription'),
-        event: 'error',
-      }],
-    },
-  },
-  {
-    args: {lnd: makeLnd({data: {type: 1}})},
-    description: 'Channel data type string is expected',
-    expected: {
-      events: [{
-        data: new Error('ExpectedEventTypeInChannelSubscription'),
-        event: 'error',
-      }],
-    },
-  },
-  {
     args: {lnd: makeLnd({data: {type: 'event'}})},
     description: 'Channel data details are expected',
     expected: {
