@@ -70,6 +70,8 @@ export type SubscribeToPayOptionsArgs = {
   }[][];
   /** Tokens to Pay Number> */
   tokens?: number;
+  /** Use AMP (atomic multipath payment) Bool> */
+  amp?: boolean;
 };
 
 export type SubscribeToPayArgs = AuthenticatedLightningArgs<
