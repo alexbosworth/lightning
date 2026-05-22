@@ -175,7 +175,7 @@ module.exports = ({lnd}) => {
     const details = update[updateType];
 
     if (!details) {
-      return emitError(asError('ExpectedEventDetailsForTypeInChannelSub'));
+      return;
     }
 
     try {

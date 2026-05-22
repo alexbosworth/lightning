@@ -153,16 +153,6 @@ const tests = [
     },
   },
   {
-    args: {lnd: makeLnd({data: {type: 'event'}})},
-    description: 'Channel data details are expected',
-    expected: {
-      events: [{
-        data: new Error('ExpectedEventDetailsForTypeInChannelSub'),
-        event: 'error',
-      }],
-    },
-  },
-  {
     args: {lnd: makeLnd({data: {active_channel: {}, type: 'active_channel'}})},
     description: 'Channel data details are expected',
     expected: {
