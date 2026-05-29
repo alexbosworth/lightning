@@ -87,10 +87,6 @@ module.exports = forward => {
     throw new Error('ExpectedOutgoingExpiryHeightInRpcForwardRequest');
   }
 
-  if (forward.outgoing_expiry > forward.incoming_expiry) {
-    throw new Error('ExpectedIncomingForwardExpiryHigherThanOutgoingExpiry');
-  }
-
   if (!forward.outgoing_requested_chan_id) {
     throw new Error('ExpectedOutgoingRequestedChannelIdInRpcForwardRequest');
   }
@@ -101,10 +97,6 @@ module.exports = forward => {
 
   const incomingAmount = BigInt(forward.incoming_amount_msat);
   const outgoingAmount = BigInt(forward.outgoing_amount_msat);
-
-  if (incomingAmount < outgoingAmount) {
-    throw new Error('UnexpectedNegativeFeeInRpcForwardRequest');
-  }
 
   const hasOnion = !!forward.onion_blob && !!forward.onion_blob.length;
   const totalFeeAmount = incomingAmount - outgoingAmount;

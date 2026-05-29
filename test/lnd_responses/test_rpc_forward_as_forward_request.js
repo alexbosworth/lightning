@@ -70,11 +70,6 @@ const tests = [
     error: 'ExpectedOutgoingExpiryHeightInRpcForwardRequest',
   },
   {
-    args: makeForward({outgoing_expiry: 3}),
-    description: 'An outgoing expiry height is expected',
-    error: 'ExpectedIncomingForwardExpiryHigherThanOutgoingExpiry',
-  },
-  {
     args: makeForward({outgoing_requested_chan_id: undefined}),
     description: 'An outgoing requested channel id is expected',
     error: 'ExpectedOutgoingRequestedChannelIdInRpcForwardRequest',
@@ -83,11 +78,6 @@ const tests = [
     args: makeForward({payment_hash: undefined}),
     description: 'A payment preimage hash is expected',
     error: 'ExpectedPaymentHashBufferInRpcForwardRequest',
-  },
-  {
-    args: makeForward({outgoing_amount_msat: '3'}),
-    description: 'Outgoing amount should be equal or less than incoming',
-    error: 'UnexpectedNegativeFeeInRpcForwardRequest',
   },
   {
     args: makeForward({}),
