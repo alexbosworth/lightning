@@ -110,6 +110,11 @@ module.exports = ({lnd}) => {
         tokens: request.tokens,
       });
     } catch (err) {
+      sub.write({
+        action: forwardPaymentActions.reject,
+        incoming_circuit_key: data.incoming_circuit_key,
+      });
+
       return emitErr([503, err.message]);
     }
   });
