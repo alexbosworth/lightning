@@ -22,7 +22,7 @@ export type LightningCallback<TResult = void, TErrorDetails = any> = (
   result: TResult extends void ? undefined : TResult,
 ) => void;
 
-export type LightningMethod<
+export type GenericMethod<
   TArgs = EmptyObject,
   TResult = void,
   TErrorDetails = any,
@@ -30,6 +30,12 @@ export type LightningMethod<
   (args: TArgs): Promise<TResult>;
   (args: TArgs, callback: LightningCallback<TResult, TErrorDetails>): void;
 };
+
+export type LightningMethod<
+  TArgs = EmptyObject,
+  TResult = void,
+  TErrorDetails = any,
+> = GenericMethod<TArgs, TResult, TErrorDetails>;
 
 export type AuthenticatedLightningMethod<
   TArgs extends {lnd: AuthenticatedLnd} = {lnd: AuthenticatedLnd},
