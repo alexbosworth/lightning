@@ -10,7 +10,7 @@
     "@alexbosworth/blockchain": "3.2.0",
     "@grpc/grpc-js": "1.14.4",
     "@grpc/proto-loader": "0.8.1",
-    "@types/node": "25.9.1",
+    "@types/node": "25.9.3",
     "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
@@ -51,5 +51,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "12.1.0"
+  "version": "12.1.1"
 }
