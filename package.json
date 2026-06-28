@@ -10,12 +10,12 @@
     "@alexbosworth/blockchain": "3.2.0",
     "@grpc/grpc-js": "1.14.4",
     "@grpc/proto-loader": "0.8.1",
-    "@types/node": "25.9.3",
+    "@types/node": "26.0.1",
     "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
     "asyncjs-util": "1.2.12",
-    "bn.js": "5.2.3",
+    "bn.js": "5.2.4",
     "bolt07": "1.9.5",
     "bolt09": "2.2.0",
     "invoices": "5.0.2",
@@ -51,5 +51,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "12.1.1"
+  "version": "12.1.2"
 }
