@@ -56,6 +56,8 @@ export type PayViaPaymentDetailsArgs = AuthenticatedLightningArgs<{
   }[][];
   /** Tokens To Pay */
   tokens?: number;
+  /** Use AMP (atomic multipath payment) Bool> */
+  amp?: boolean;
 }>;
 
 export type PayViaPaymentDetailsResult = {
