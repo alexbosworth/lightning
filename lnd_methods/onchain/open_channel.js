@@ -14,6 +14,7 @@ const minChannelTokens = 20000;
 const method = 'openChannel';
 const reserve = isDust => isDust ? 354 : undefined;
 const simplifiedTaprootChannelType = 'SIMPLE_TAPROOT';
+const standardTaprootChannelType = 'TAPROOT';
 const type = 'default';
 
 /** Open a new channel.
@@ -44,6 +45,9 @@ const type = 'default';
   `is_simplified_taproot` is not supported on LND 0.16.4 and below and requires
   `--protocol.simple-taproot-chans` set on both sides.
 
+  `is_standard_taproot` is not supported on LND 0.21.0 and below and requires
+  `--protocol.simple-taproot-chans` set on both sides.
+
   {
     [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
     [chain_fee_tokens_per_vbyte]: <Chain Fee Tokens Per VByte Number>
@@ -59,6 +63,7 @@ const type = 'default';
     [is_max_funding]: <Use Maximal Chain Funds For Local Funding Bool>
     [is_private]: <Channel is Private Bool> // Defaults to false
     [is_simplified_taproot]: <Channel is Simplified Taproot Type Bool>
+    [is_standard_taproot]: <Channel is Standard Taproot Type Bool>
     [is_trusted_funding]: <Accept Funding as Trusted Bool>
     lnd: <Authenticated LND API Object>
     [local_tokens]: <Total Channel Capacity Tokens Number>
@@ -186,6 +191,10 @@ module.exports = (args, cbk) => {
 
         if (!!args.is_simplified_taproot) {
           options.commitment_type = simplifiedTaprootChannelType;
+        }
+
+        if (!!args.is_standard_taproot) {
+          options.commitment_type = standardTaprootChannelType;
         }
 
         const channelOpen = args.lnd.default.openChannel(options);

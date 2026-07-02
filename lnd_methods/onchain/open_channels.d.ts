@@ -17,6 +17,7 @@ export type MultipleChannelOpenOptions = Pick<
   | 'partner_public_key'
   | 'partner_csv_delay'
   | 'is_simplified_taproot'
+  | 'is_standard_taproot'
 > & {
   /** Channel Capacity Tokens */
   capacity: number;

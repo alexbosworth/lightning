@@ -1,5 +1,10 @@
 # Versions
 
+## 12.2.0
+
+- `openChannel`, `openChannels`: Add support for standard P2TR channels:
+    `is_standard_taproot`
+
 ## 12.1.2
 
 - Add support for LND 0.21.1

@@ -19,6 +19,7 @@ const makeId = () => randomBytes(32);
 const method = 'openChannel';
 const reserve = isDust => isDust ? 354 : undefined;
 const taproot = 'SIMPLE_TAPROOT';
+const taproot2 = 'TAPROOT';
 const type = 'default';
 
 /** Open one or more channels
@@ -48,6 +49,9 @@ const type = 'default';
   `is_simplified_taproot` is not supported on LND 0.16.4 and below and requires
   `--protocol.simple-taproot-chans` set on both sides.
 
+  `is_standard_taproot` is not supported on LND 0.21.0 and below and requires
+  `--protocol.simple-taproot-chans` set on both sides.
+
   {
     channels: [{
       [base_fee_mtokens]: <Routing Base Fee Millitokens Charged String>
@@ -59,6 +63,7 @@ const type = 'default';
       [is_allowing_minimal_reserve]: <Allow Peer to Have Minimal Reserve Bool>
       [is_private]: <Channel is Private Bool> // Defaults to false
       [is_simplified_taproot]: <Channel is Simplified Taproot Type Bool>
+      [is_standard_taproot]: <Channel is Standard Taproot Type Bool>
       [is_trusted_funding]: <Peer Should Avoid Waiting For Confirmation Bool>
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
       [partner_csv_delay]: <Peer Output CSV Delay Number>
@@ -118,6 +123,7 @@ module.exports = (args, cbk) => {
           is_allowing_minimal_reserve: channel.is_allowing_minimal_reserve,
           is_private: channel.is_private,
           is_simplified_taproot: channel.is_simplified_taproot,
+          is_standard_taproot: channel.is_standard_taproot,
           is_trusted_funding: channel.is_trusted_funding,
           min_htlc_mtokens: channel.min_htlc_mtokens,
           partner_public_key: channel.partner_public_key,
@@ -137,10 +143,13 @@ module.exports = (args, cbk) => {
 
           const commit = !!channel.is_simplified_taproot ? taproot : baseType;
 
+          // After simplified taproot there is a new standard mode for taproot
+          const cType = !!channel.is_standard_taproot ? taproot2 : commit;
+
           const channelOpen = args.lnd[type][method]({
             base_fee: channel.base_fee_mtokens || undefined,
             close_address: channel.cooperative_close_address || undefined,
-            commitment_type: commit,
+            commitment_type: cType,
             fee_rate: channel.fee_rate,
             funding_shim: {
               psbt_shim: {
