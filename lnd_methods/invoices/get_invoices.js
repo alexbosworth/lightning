@@ -2,7 +2,6 @@ const asyncAuto = require('async/auto');
 const asyncRetry = require('async/retry');
 const {returnResult} = require('asyncjs-util');
 
-const {htlcAsPayment} = require('./../../lnd_responses');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcInvoiceAsInvoice} = require('./../../lnd_responses');
 const {sortBy} = require('./../../arrays');

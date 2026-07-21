@@ -146,9 +146,20 @@ const tests = [
     error: 'ExpectedArrayOfResponseHtlcs',
   },
   {
-    args: makeInput({htlcs: [{}]}),
+    args: makeInput({htlcs: [{
+      accept_height: 1,
+      accept_time: '1',
+      amt_msat: '1',
+      chan_id: '1',
+      custom_records: {'1': Buffer.alloc(32)},
+      expiry_height: 0,
+      htlc_index: '1',
+      mpp_total_amt_msat: '1',
+      resolve_time: '1',
+      state: 'STATE',
+    }]}),
     description: 'Valid invoice htlcs are expected',
-    error: 'ExpectedAcceptHeightInResponseHtlc',
+    error: 'ExpectedHtlcExpiryHeightInResponseHtlc',
   },
   {
     args: makeInput({is_keysend: undefined, payment_request: undefined}),
@@ -250,6 +261,38 @@ const tests = [
       description_hash: undefined,
       request: undefined,
     }),
+  },
+  {
+    args: makeInput({
+      htlcs: [
+        {
+          accept_height: 1,
+          accept_time: '1',
+          amt_msat: '1',
+          chan_id: '1',
+          custom_records: {'1': Buffer.alloc(32)},
+          expiry_height: 1,
+          htlc_index: '1',
+          mpp_total_amt_msat: '1',
+          resolve_time: '1',
+          state: 'STATE',
+        },
+        {
+          accept_height: 0,
+          accept_time: '0',
+          amt_msat: '1',
+          chan_id: '1',
+          custom_records: {'1': Buffer.alloc(32)},
+          expiry_height: 1,
+          htlc_index: '1',
+          mpp_total_amt_msat: '1',
+          resolve_time: '1',
+          state: 'STATE',
+        },
+      ],
+    }),
+    description: 'HTLCs that were not accepted are ignored',
+    expected: makeExpected({}),
   },
 ];
 

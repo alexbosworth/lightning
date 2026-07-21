@@ -1,5 +1,9 @@
 # Versions
 
+## 12.2.1
+
+- `subscribeToInvoices`: Ignore HTLCs that were not accepted to the invoice
+
 ## 12.2.0
 
 - `openChannel`, `openChannels`: Add support for standard P2TR channels:

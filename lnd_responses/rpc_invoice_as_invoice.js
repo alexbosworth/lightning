@@ -145,7 +145,7 @@ module.exports = args => {
     throw new Error('ExpectedArrayOfResponseHtlcs');
   }
 
-  args.htlcs.forEach(htlc => htlcAsPayment(htlc));
+  args.htlcs.filter(n => !!n.accept_height).forEach(n => htlcAsPayment(n));
 
   if (args.memo === undefined) {
     throw new Error('ExpectedMemoInLookupInvoiceResponse');
@@ -208,7 +208,7 @@ module.exports = args => {
     is_push: isAmpPush || args.is_keysend || undefined,
     mtokens: args.value_msat === '0' ? mtok : args.value_msat,
     payment: hasPaymentId ? payment : undefined,
-    payments: args.htlcs.map(htlcAsPayment),
+    payments: args.htlcs.filter(n => !!n.accept_height).map(htlcAsPayment),
     received: Number(args.amt_paid_sat),
     received_mtokens: args.amt_paid_msat,
     request: args.payment_request || undefined,
