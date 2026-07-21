@@ -111,6 +111,26 @@ const tests = [
     },
   },
   {
+    args: makeHtlc({accept_height: 0, accept_time: '0', state: 'CANCELED'}),
+    description: 'Never accepted HTLC mapped to payment',
+    expected: {
+      canceled_at: '1970-01-01T00:00:01.000Z',
+      confirmed_at: undefined,
+      created_at: '1970-01-01T00:00:00.000Z',
+      created_height: 0,
+      in_channel: '0x0x1',
+      is_canceled: true,
+      is_confirmed: false,
+      is_held: false,
+      messages: [{type: '16', value: '01'}],
+      mtokens: '1',
+      pending_index: undefined,
+      timeout: 1,
+      tokens: 0,
+      total_mtokens: undefined,
+    },
+  },
+  {
     args: makeHtlc({mpp_total_amt_msat: '1', state: 'ACCEPTED'}),
     description: 'Accepted HTLC mapped to payment',
     expected: {

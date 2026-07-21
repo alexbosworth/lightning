@@ -50,11 +50,11 @@ const mtokensPerToken = BigInt(1e3);
   }
 */
 module.exports = args => {
-  if (!args.accept_height) {
+  if (args.accept_height === undefined) {
     throw new Error('ExpectedAcceptHeightInResponseHtlc');
   }
 
-  if (!args.accept_time) {
+  if (args.accept_time === undefined) {
     throw new Error('ExpectedAcceptTimeInResponseHtlc');
   }
 
