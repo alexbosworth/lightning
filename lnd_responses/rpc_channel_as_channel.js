@@ -259,7 +259,7 @@ module.exports = args => {
     local_min_htlc_mtokens: own.min_htlc_msat,
     local_reserve: Number(own.chan_reserve_sat),
     other_ids: otherIds.map(n => n.channel),
-    partner_scid_alias: args.peer_scid_alias
+    partner_scid_alias: !!Number(args.peer_scid_alias)
       ? chanFormat({number: args.peer_scid_alias}).channel
       : undefined,
     partner_public_key: args.remote_pubkey,

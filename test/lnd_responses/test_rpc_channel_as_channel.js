@@ -257,6 +257,11 @@ const tests = [
     expected: makeExpected({partner_scid_alias: '0x0x4'}),
   },
   {
+    args: makeArgs({peer_scid_alias: '0'}),
+    description: 'A zero peer scid alias is treated as no alias',
+    expected: makeExpected({partner_scid_alias: undefined}),
+  },
+  {
     args: makeArgs({commitment_type: 'ANCHORS', initiator: true}),
     description: 'Initiated RPC channel is mapped to channel',
     expected: makeExpected({
