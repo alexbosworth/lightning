@@ -221,9 +221,11 @@ module.exports = args => {
   }
 
   const commitWeight = Number(args.commit_weight);
+  const hasPeerScidAlias = !!Number(args.peer_scid_alias);
   const {height} = parseThawHeight({id: args.chan_id, thaw: args.thaw_height});
   const own = args.local_constraints;
   const peer = args.remote_constraints;
+  const peerScidAlias = args.peer_scid_alias || '0';
   const pushAmount = Number(args.push_amount_sat) || Number();
   const [transactionId, vout] = args.channel_point.split(outpointDelimiter);
   const uptime = Number(args.uptime) * msPerSec;
@@ -231,6 +233,7 @@ module.exports = args => {
 
   const channelId = !!Number(zeroConfRealId) ? zeroConfRealId : args.chan_id;
   const downtime = Number(args.lifetime) * msPerSec - uptime;
+  const peerAliasId = chanFormat({number: peerScidAlias}).channel;
 
   const otherIds = args.alias_scids
     .filter(n => n !== channelId)
@@ -259,9 +262,7 @@ module.exports = args => {
     local_min_htlc_mtokens: own.min_htlc_msat,
     local_reserve: Number(own.chan_reserve_sat),
     other_ids: otherIds.map(n => n.channel),
-    partner_scid_alias: !!Number(args.peer_scid_alias)
-      ? chanFormat({number: args.peer_scid_alias}).channel
-      : undefined,
+    partner_scid_alias: hasPeerScidAlias ? peerAliasId : undefined,
     partner_public_key: args.remote_pubkey,
     past_states: Number(args.num_updates),
     pending_payments: args.pending_htlcs.map(rpcHtlcAsPayment),

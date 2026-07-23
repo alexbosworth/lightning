@@ -1,5 +1,9 @@
 # Versions
 
+## 12.2.2
+
+- `getChannels`: Correct issue where peer alias scid was invalid
+
 ## 12.2.1
 
 - `subscribeToInvoices`: Ignore HTLCs that were not accepted to the invoice
