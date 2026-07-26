@@ -1,5 +1,9 @@
 # Versions
 
+## 12.2.3
+
+- Add support for LND 0.20.2
+
 ## 12.2.2
 
 - `getChannels`: Correct issue where peer alias scid was invalid
