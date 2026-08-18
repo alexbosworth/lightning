@@ -7,10 +7,10 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@alexbosworth/blockchain": "3.2.0",
+    "@alexbosworth/blockchain": "4.2.0",
     "@grpc/grpc-js": "1.14.4",
     "@grpc/proto-loader": "0.8.1",
-    "@types/node": "26.1.1",
+    "@types/node": "26.2.0",
     "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
@@ -18,7 +18,7 @@
     "bn.js": "5.2.5",
     "bolt07": "1.9.5",
     "bolt09": "2.2.0",
-    "invoices": "5.0.2",
+    "invoices": "6.1.0",
     "psbt": "5.0.0",
     "type-fest": "5.8.0"
   },
@@ -43,7 +43,7 @@
     "url": "https://github.com/alexbosworth/lightning.git"
   },
   "scripts": {
-    "test": "npx nyc@17.1.0 node --experimental-test-coverage --test && npm run test:types",
+    "test": "node --experimental-test-coverage --test && npm run test:types",
     "test:types": "tsd",
     "unit-tests": "node --test && npm run test:types"
   },
@@ -51,5 +51,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "12.2.3"
+  "version": "12.2.6"
 }
