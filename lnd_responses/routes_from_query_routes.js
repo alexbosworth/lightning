@@ -1,8 +1,8 @@
-const BN = require('bn.js');
 const {chanFormat} = require('bolt07');
 
 const {safeTokens} = require('./../bolt00');
 
+const asTypeNumber = n => BigInt(`0x${n.toString('hex') || '00'}`).toString();
 const {isArray} = Array;
 const {keys} = Object;
 const mtokensPerToken = BigInt(1e3);
@@ -133,7 +133,7 @@ module.exports = ({response}) => {
         messages: keys((lastHop || {}).custom_records || {}).map(type => {
           const rawType = Buffer.from(type, 'ascii').reverse();
 
-          const typeNumber = new BN(rawType).toString();
+          const typeNumber = asTypeNumber(rawType);
 
           return {
             type: typeNumber,

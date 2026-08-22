@@ -1,6 +1,5 @@
 const asyncAuto = require('async/auto');
 const asyncRetry = require('async/retry');
-const BN = require('bn.js');
 const {chanNumber} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 

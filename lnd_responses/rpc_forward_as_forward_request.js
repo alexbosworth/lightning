@@ -1,8 +1,8 @@
-const BN = require('bn.js');
 const {chanFormat} = require('bolt07');
 
 const {safeTokens} = require('./../bolt00');
 
+const asTypeNumber = n => BigInt(`0x${n.toString('hex') || '00'}`).toString();
 const bufferAsHex = buffer => buffer.toString('hex');
 const {isBuffer} = Buffer;
 const {keys} = Object;
@@ -112,7 +112,7 @@ module.exports = forward => {
       const rawType = Buffer.from(type, 'ascii').reverse();
 
       return {
-        type: new BN(rawType).toString(),
+        type: asTypeNumber(rawType),
         value: forward.custom_records[type].toString('hex'),
       };
     }),

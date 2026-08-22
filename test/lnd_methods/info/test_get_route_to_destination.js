@@ -3,8 +3,6 @@ const EventEmitter = require('events');
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
-const BN = require('bn.js');
-
 const {getInfoResponse} = require('./../fixtures');
 const {getRouteToDestination} = require('./../../../');
 
