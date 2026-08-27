@@ -3,15 +3,14 @@ const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
 const {sendToChainOutputScripts} = require('./../../../lnd_methods');
-
-const emptyTx = '01000000000000000000';
+const {transaction, transactionId} = require('./../fixtures/transaction');
 
 const makeArgs = overrides => {
   const args = {
     lnd: {
       wallet: {
         sendOutputs: ({}, cbk) => cbk(null, {
-          raw_tx: Buffer.from(emptyTx, 'hex'),
+          raw_tx: Buffer.from(transaction, 'hex'),
         }),
       },
     },
@@ -53,24 +52,24 @@ const tests = [
     args: makeArgs({}),
     description: 'Send coins',
     expected: {
+      transaction,
       confirmation_count: 0,
-      id: 'd21633ba23f70118185227be58a63527675641ad37967e2aa461559f577aec43',
+      id: transactionId,
       is_confirmed: false,
       is_outgoing: true,
       tokens: 1,
-      transaction: '01000000000000000000',
     },
   },
   {
     args: makeArgs({utxo_selection: 'random'}),
     description: 'Send coins with coin selection',
     expected: {
+      transaction,
       confirmation_count: 0,
-      id: 'd21633ba23f70118185227be58a63527675641ad37967e2aa461559f577aec43',
+      id: transactionId,
       is_confirmed: false,
       is_outgoing: true,
       tokens: 1,
-      transaction: '01000000000000000000',
     },
   },
 ];

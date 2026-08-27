@@ -1,6 +1,6 @@
 {
   "allowScripts": {
-    "protobufjs@7.6.5": true
+    "protobufjs@7.6.6": true
   },
   "author": {
     "name": "Alex Bosworth",
@@ -10,10 +10,10 @@
     "url": "https://github.com/alexbosworth/lightning/issues"
   },
   "dependencies": {
-    "@alexbosworth/blockchain": "4.5.1",
+    "@alexbosworth/blockchain": "4.5.3",
     "@grpc/grpc-js": "1.14.4",
     "@grpc/proto-loader": "0.8.1",
-    "@types/node": "26.2.0",
+    "@types/node": "26.4.0",
     "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
@@ -53,5 +53,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "12.2.8"
+  "version": "12.2.9"
 }

@@ -3,8 +3,7 @@ const {strictEqual} = require('node:assert').strict;
 const test = require('node:test');
 
 const {broadcastChainTransaction} = require('./../../../lnd_methods');
-
-const emptyTx = '01000000000000000000';
+const {transaction, transactionId} = require('./../fixtures/transaction');
 
 const tests = [
   {
@@ -19,28 +18,28 @@ const tests = [
   },
   {
     args: {
+      transaction,
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk('err')}},
-      transaction: emptyTx,
     },
     description: 'Expected error is returned',
     error: [503, 'UnexpectedErrBroadcastingRawTx', {err: 'err'}],
   },
   {
     args: {
+      transaction,
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk()}},
-      transaction: emptyTx,
     },
     description: 'A result is required',
     error: [503, 'ExpectedResultOfBroadcastRawTransaction'],
   },
   {
     args: {
+      transaction,
       lnd: {
         wallet: {
           publishTransaction: ({}, cbk) => cbk(null, {publish_error: 'err'}),
         },
       },
-      transaction: emptyTx,
     },
     description: 'Failure to broadcast error is returned',
     error: [
@@ -51,6 +50,7 @@ const tests = [
   },
   {
     args: {
+      transaction,
       lnd: {
         wallet: {
           publishTransaction: ({}, cbk) => cbk({
@@ -58,7 +58,6 @@ const tests = [
           }),
         },
       },
-      transaction: emptyTx,
     },
     description: 'Minimum relay fee not met',
     error: [
@@ -72,12 +71,12 @@ const tests = [
   },
   {
     args: {
+      transaction,
       lnd: {wallet: {publishTransaction: ({}, cbk) => cbk(null, {})}},
-      transaction: emptyTx,
     },
     description: 'A transaction is published',
     expected: {
-      id: 'd21633ba23f70118185227be58a63527675641ad37967e2aa461559f577aec43',
+      id: transactionId,
     },
   },
 ];

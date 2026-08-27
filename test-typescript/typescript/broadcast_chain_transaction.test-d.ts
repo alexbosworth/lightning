@@ -6,7 +6,7 @@ import {
 } from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
-const transaction = '01000000000000000000';
+const transaction = '010000000111111111111111111111111111111111111111111111111111111111111111110000000000ffffffff010100000000000000015100000000';
 const description = 'description';
 
 expectError(broadcastChainTransaction());

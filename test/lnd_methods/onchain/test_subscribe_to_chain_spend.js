@@ -4,8 +4,7 @@ const test = require('node:test');
 const {throws} = require('node:assert').strict;
 
 const {subscribeToChainSpend} = require('./../../../lnd_methods');
-
-const emptyTx = '01000000000000000000';
+const {transaction} = require('./../fixtures/transaction');
 
 const tests = [
   {
@@ -16,7 +15,7 @@ const tests = [
       transaction_vout: 0,
     },
     description: 'Confirmation emitted for chain spend',
-    expected: {height: 200, transaction: emptyTx, vin: 0},
+    expected: {transaction, height: 200, vin: 0},
   },
   {
     args: {},
@@ -59,7 +58,7 @@ tests.forEach(({args, description, error, expected}) => {
 
     emitter.emit('data', {
       spend: {
-        raw_spending_tx: Buffer.from(emptyTx, 'hex'),
+        raw_spending_tx: Buffer.from(transaction, 'hex'),
         spending_height: 200,
         spending_input_index: 0,
       },

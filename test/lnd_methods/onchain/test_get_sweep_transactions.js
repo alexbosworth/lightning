@@ -3,8 +3,7 @@ const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
 const {getSweepTransactions} = require('./../../../lnd_methods');
-
-const emptyTx = '01000000000000000000';
+const {transaction, transactionInputId} = require('./../fixtures/transaction');
 
 const makeDefault = overrides => {
   const methods = {
@@ -17,7 +16,7 @@ const makeDefault = overrides => {
           dest_addresses: ['address'],
           num_confirmations: 1,
           previous_outpoints: [],
-          raw_tx_hex: emptyTx,
+          raw_tx_hex: transaction,
           time_stamp: '1',
           total_fees: '1',
           tx_hash: Buffer.alloc(32).toString('hex'),
@@ -93,6 +92,7 @@ const tests = [
     description: 'Sweep transactions are returned',
     expected: {
       transactions: [{
+        transaction,
         block_id: Buffer.alloc(32).toString('hex'),
         confirmation_count: 1,
         confirmation_height: 1,
@@ -103,9 +103,11 @@ const tests = [
         is_confirmed: true,
         is_outgoing: false,
         output_addresses: ['address'],
-        spends: [],
+        spends: [{
+          transaction_id: transactionInputId,
+          transaction_vout: 0,
+        }],
         tokens: 1,
-        transaction: '01000000000000000000',
       }],
     },
   },
