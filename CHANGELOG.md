@@ -1,5 +1,10 @@
 # Versions
 
+## 12.2.11
+
+- Add support for LND 0.21.3
+- Add support for LND 0.20.4
+
 ## 12.2.10
 
 - Add support for LND 0.21.2
