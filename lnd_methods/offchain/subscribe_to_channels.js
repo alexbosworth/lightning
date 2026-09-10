@@ -166,11 +166,27 @@ module.exports = ({lnd}) => {
       return emitError(asError('ExpectedEventDetailsInChannelSubscription'));
     }
 
-    if (!update.type || !update.type.toLowerCase) {
+    const updateType = (() => {
+      if (!!update.type && !!update.type.toLowerCase && !!update[update.type.toLowerCase()]) {
+        return update.type.toLowerCase();
+      }
+
+      if (!!update.channel && !!update[update.channel]) {
+        return update.channel;
+      }
+
+      return [
+        updateActive,
+        updateInactive,
+        updateClosed,
+        updateOpened,
+        updateOpening,
+      ].find(k => !!update[k]);
+    })();
+
+    if (!updateType) {
       return;
     }
-
-    const updateType = update.type.toLowerCase();
 
     const details = update[updateType];
 

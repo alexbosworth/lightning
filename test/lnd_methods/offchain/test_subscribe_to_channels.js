@@ -269,6 +269,68 @@ const tests = [
       ],
     },
   },
+  {
+    args: {
+      lnd: makeLnd({
+        data: {
+          active_channel: {
+            funding_txid_bytes: Buffer.alloc(32),
+            output_index: 0,
+          },
+        },
+      }),
+    },
+    description: 'Channel active event is emitted when type is omitted',
+    expected: {
+      events: [{
+        data: {
+          is_active: true,
+          transaction_id: Buffer.alloc(32).toString('hex'),
+          transaction_vout: 0,
+        },
+        event: 'channel_active_changed',
+      }],
+    },
+  },
+  {
+    args: {
+      lnd: makeLnd({
+        data: {
+          active_channel: {
+            funding_txid_bytes: Buffer.alloc(32),
+            output_index: 0,
+          },
+          channel: 'active_channel',
+          type: 'OPEN_CHANNEL',
+        },
+      }),
+    },
+    description: 'Channel active event is emitted when type is defaulted to OPEN_CHANNEL',
+    expected: {
+      events: [{
+        data: {
+          is_active: true,
+          transaction_id: Buffer.alloc(32).toString('hex'),
+          transaction_vout: 0,
+        },
+        event: 'channel_active_changed',
+      }],
+    },
+  },
+  {
+    args: {lnd: makeLnd({data: {}})},
+    description: 'Empty channel event update is ignored',
+    expected: {
+      events: [],
+    },
+  },
+  {
+    args: {lnd: makeLnd({data: {type: 1}})},
+    description: 'Numeric channel event type is ignored',
+    expected: {
+      events: [],
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {
