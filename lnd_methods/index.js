@@ -107,6 +107,7 @@ const {removePeer} = require('./peers');
 const {requestBatchedFeeIncrease} = require('./onchain');
 const {requestChainFeeIncrease} = require('./onchain');
 const {revokeAccess} = require('./macaroon');
+const {sendMessage} = require('./offchain');
 const {sendMessageToPeer} = require('./offchain');
 const {sendToChainAddress} = require('./onchain');
 const {sendToChainAddresses} = require('./onchain');
@@ -129,6 +130,7 @@ const {subscribeToForwards} = require('./offchain');
 const {subscribeToGraph} = require('./info');
 const {subscribeToInvoice} = require('./invoices');
 const {subscribeToInvoices} = require('./invoices');
+const {subscribeToMessages} = require('./offchain');
 const {subscribeToOpenRequests} = require('./offchain');
 const {subscribeToPastPayment} = require('./offchain');
 const {subscribeToPastPayments} = require('./offchain');
@@ -268,6 +270,7 @@ module.exports = {
   requestBatchedFeeIncrease,
   requestChainFeeIncrease,
   revokeAccess,
+  sendMessage,
   sendMessageToPeer,
   sendToChainAddress,
   sendToChainAddresses,
@@ -290,6 +293,7 @@ module.exports = {
   subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
+  subscribeToMessages,
   subscribeToOpenRequests,
   subscribeToPastPayment,
   subscribeToPastPayments,

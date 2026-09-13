@@ -31,6 +31,7 @@ const rpcHopAsHop = require('./rpc_hop_as_hop');
 const rpcInvoiceAsInvoice = require('./rpc_invoice_as_invoice');
 const rpcNetworkAsNetworkInfo = require('./rpc_network_as_network_info');
 const rpcNodeAsNode = require('./rpc_node_as_node');
+const rpcOnionMessageAsMessage = require('./rpc_onion_message_as_message');
 const rpcOutpointAsUpdate = require('./rpc_outpoint_as_update');
 const rpcPaymentAsPayment = require('./rpc_payment_as_payment');
 const rpcPeerAsPeer = require('./rpc_peer_as_peer');
@@ -77,6 +78,7 @@ module.exports = {
   rpcInvoiceAsInvoice,
   rpcNetworkAsNetworkInfo,
   rpcNodeAsNode,
+  rpcOnionMessageAsMessage,
   rpcOutpointAsUpdate,
   rpcPaymentAsPayment,
   rpcPeerAsPeer,

@@ -291,6 +291,8 @@ variables set:
     Ask for a CPFP chain fee rate increase on a pending confirm UTXO.
 - [revokeAccess](https://github.com/alexbosworth/ln-service#revokeaccess): Remove the access
     privileges of a previously issued access token macaroon credential.
+- [sendMessage](https://github.com/alexbosworth/ln-service#sendmessage): Send an onion message
+    over the network into a published blinded path.
 - [sendMessageToPeer](https://github.com/alexbosworth/ln-service#sendmessagetopeer): Send
     message to a connected peer.
 - [sendToChainAddress](https://github.com/alexbosworth/ln-service#sendtochainaddress): Send
@@ -335,6 +337,8 @@ variables set:
     of status updates for incoming payments.
 - [subscribeToInvoices](https://github.com/alexbosworth/ln-service#subscribetoinvoices): Get
     notified of status updates on past created invoices.
+- [subscribeToMessages](https://github.com/alexbosworth/ln-service#subscribetomessages):
+    Listen for incoming network onion messages.
 - [subscribeToOpenRequests](https://github.com/alexbosworth/ln-service#subscribetoopenrequests):
     Get notified on requests to open an inbound channel and interactively accept or reject them.
 - [subscribeToPastPayment](https://github.com/alexbosworth/ln-service#subscribetopastpayment):

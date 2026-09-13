@@ -37,11 +37,13 @@ const payViaRoutes = require('./pay_via_routes');
 const probeForRoute = require('./probe_for_route');
 const recoverFundsFromChannel = require('./recover_funds_from_channel');
 const recoverFundsFromChannels = require('./recover_funds_from_channels');
+const sendMessage = require('./send_message');
 const sendMessageToPeer = require('./send_message_to_peer');
 const subscribeToBackups = require('./subscribe_to_backups');
 const subscribeToChannels = require('./subscribe_to_channels');
 const subscribeToForwardRequests = require('./subscribe_to_forward_requests');
 const subscribeToForwards = require('./subscribe_to_forwards');
+const subscribeToMessages = require('./subscribe_to_messages');
 const subscribeToOpenRequests = require('./subscribe_to_open_requests');
 const subscribeToPastPayment = require('./subscribe_to_past_payment');
 const subscribeToPastPayments = require('./subscribe_to_past_payments');
@@ -97,11 +99,13 @@ module.exports = {
   probeForRoute,
   recoverFundsFromChannel,
   recoverFundsFromChannels,
+  sendMessage,
   sendMessageToPeer,
   subscribeToBackups,
   subscribeToChannels,
   subscribeToForwardRequests,
   subscribeToForwards,
+  subscribeToMessages,
   subscribeToOpenRequests,
   subscribeToPastPayment,
   subscribeToPastPayments,

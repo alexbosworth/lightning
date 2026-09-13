@@ -425,6 +425,10 @@
     "method": "DeleteMacaroonId",
     "type": "default"
   },
+  "sendMessage": {
+    "method": "SendOnionMessage",
+    "type": "default"
+  },
   "sendMessageToPeer": {
     "method": "SendCustomMessage",
     "type": "default"
@@ -512,6 +516,10 @@
   },
   "subscribeToInvoices": {
     "method": "SubscribeInvoices",
+    "type": "default"
+  },
+  "subscribeToMessages": {
+    "method": "SubscribeOnionMessages",
     "type": "default"
   },
   "subscribeToOpenRequests": {

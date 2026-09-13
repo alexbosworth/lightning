@@ -107,6 +107,7 @@ const {removePeer} = require('./lnd_methods');
 const {requestBatchedFeeIncrease} = require('./lnd_methods');
 const {requestChainFeeIncrease} = require('./lnd_methods');
 const {revokeAccess} = require('./lnd_methods');
+const {sendMessage} = require('./lnd_methods');
 const {sendMessageToPeer} = require('./lnd_methods');
 const {sendToChainAddress} = require('./lnd_methods');
 const {sendToChainAddresses} = require('./lnd_methods');
@@ -129,6 +130,7 @@ const {subscribeToForwards} = require('./lnd_methods');
 const {subscribeToGraph} = require('./lnd_methods');
 const {subscribeToInvoice} = require('./lnd_methods');
 const {subscribeToInvoices} = require('./lnd_methods');
+const {subscribeToMessages} = require('./lnd_methods');
 const {subscribeToOpenRequests} = require('./lnd_methods');
 const {subscribeToPastPayment} = require('./lnd_methods');
 const {subscribeToPastPayments} = require('./lnd_methods');
@@ -269,6 +271,7 @@ module.exports = {
   requestBatchedFeeIncrease,
   requestChainFeeIncrease,
   revokeAccess,
+  sendMessage,
   sendMessageToPeer,
   sendToChainAddress,
   sendToChainAddresses,
@@ -291,6 +294,7 @@ module.exports = {
   subscribeToGraph,
   subscribeToInvoice,
   subscribeToInvoices,
+  subscribeToMessages,
   subscribeToOpenRequests,
   subscribeToPastPayment,
   subscribeToPastPayments,
