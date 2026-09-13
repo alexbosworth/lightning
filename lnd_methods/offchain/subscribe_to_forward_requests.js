@@ -6,6 +6,7 @@ const {rpcForwardAsForwardRequest} = require('./../../lnd_responses');
 
 const bufferFromHex = hex => Buffer.from(hex, 'hex');
 const event = 'forward_request';
+const isNegative = n => BigInt(n) < BigInt(0);
 const method = 'htlcInterceptor';
 const type = 'router';
 
@@ -13,6 +14,9 @@ const type = 'router';
 
   Note that the outbound channel is only the requested channel, another may be
   selected internally to complete the forward.
+
+  Invalid requests that have invalid fees or CLTVs cannot be forwarded and are
+  not emitted, they are released for LND to fail
 
   Requires `offchain:read`, `offchain:write` permission
 
@@ -81,6 +85,14 @@ module.exports = ({lnd}) => {
   sub.on('data', data => {
     try {
       const request = rpcForwardAsForwardRequest(data);
+
+      // Exit early and let LND fail requests that cannot possibly be forwarded
+      if (isNegative(request.fee_mtokens) || isNegative(request.cltv_delta)) {
+        return sub.write({
+          action: forwardPaymentActions.accept,
+          incoming_circuit_key: data.incoming_circuit_key,
+        });
+      }
 
       return emitter.emit(event, {
         accept: async () => await sub.write({

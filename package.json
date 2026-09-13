@@ -22,7 +22,7 @@
     "bolt07": "2.0.0",
     "bolt09": "3.0.0",
     "invoices": "6.1.4",
-    "psbt": "6.0.3",
+    "psbt": "6.0.4",
     "type-fest": "5.9.0"
   },
   "description": "Lightning Network client library",
@@ -54,5 +54,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "12.3.0"
+  "version": "12.3.1"
 }
