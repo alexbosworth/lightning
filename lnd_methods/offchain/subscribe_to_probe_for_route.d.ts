@@ -4,11 +4,33 @@ import {
   LightningError,
 } from '../../typescript';
 
+/** Blinded Path */
+export type SubscribeToProbeForRouteBlindedPath = {
+  /** Accumulated Base Fee Millitokens */
+  base_fee_mtokens: string;
+  /** Accumulated CLTV Expiry Delta */
+  cltv_delta: number;
+  /** Accumulated Fee Rate Millitokens Per Million */
+  fee_rate: number;
+  hops: {
+    /** Encrypted Recipient Data Hex */
+    encrypted_data: string;
+    /** Relaying Node Public Key Hex */
+    relay_key: string;
+  }[];
+  /** Introduction Node Public Key Hex */
+  introduction_node?: string;
+  /** First Hop Path Key Public Key Hex */
+  key: string;
+  /** Maximum HTLC Millitokens */
+  max_htlc_mtokens?: string;
+  /** Minimum HTLC Millitokens */
+  min_htlc_mtokens?: string;
+};
+
 export type SubscribeToProbeForRouteArgs = AuthenticatedLightningArgs<{
   /** Final CLTV Delta */
   cltv_delta?: number;
-  /** Destination Public Key Hex */
-  destination: string;
   features?: {
     /** Feature Bit */
     bit: number;
@@ -59,7 +81,20 @@ export type SubscribeToProbeForRouteArgs = AuthenticatedLightningArgs<{
   tokens?: number;
   /** Total Millitokens Across Paths */
   total_mtokens?: string;
-}>;
+} & (
+  | {
+      /** Destination Public Key Hex */
+      destination: string;
+      /** Blinded Paths */
+      paths?: SubscribeToProbeForRouteBlindedPath[];
+    }
+  | {
+      /** Destination Public Key Hex */
+      destination?: string;
+      /** Blinded Paths */
+      paths: SubscribeToProbeForRouteBlindedPath[];
+    }
+)>;
 
 export type SubscribeToProbeForRouteErrorEvent = LightningError<undefined>;
 
@@ -74,6 +109,8 @@ export type SubscribeToProbeForRouteProbeSuccessEvent = {
     hops: {
       /** Standard Format Channel Id */
       channel: string;
+      /** Blinded Path Encrypted Data Hex */
+      encrypted_data?: string;
       /** Fee */
       fee: number;
       /** Fee Millitokens */
@@ -82,6 +119,8 @@ export type SubscribeToProbeForRouteProbeSuccessEvent = {
       forward: number;
       /** Forward Millitokens */
       forward_mtokens: string;
+      /** Blinded Path Key Hex */
+      path_key?: string;
       /** Public Key Hex */
       public_key: string;
       /** Timeout Block Height */
@@ -242,5 +281,7 @@ export type SubscribeToProbeForRouteRoutingFailureEvent = {
  * Subscribe to a probe attempt
  *
  * Requires `offchain:write` permission
+ *
+ * `paths` are blinded paths. If using, `destination` is not required.
  */
 export const subscribeToProbeForRoute: AuthenticatedLightningSubscription<SubscribeToProbeForRouteArgs>;

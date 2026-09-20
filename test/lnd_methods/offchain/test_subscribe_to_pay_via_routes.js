@@ -7,6 +7,7 @@ const {throws} = require('node:assert').strict;
 const {subscribeToPayViaRoutes} = require('./../../../');
 
 const deletePayment = ({}, cbk) => cbk();
+const noDeletePayment = ({}, cbk) => cbk(new Error('UnexpectedDeletePayment'));
 
 const route = {
   fee: 1,
@@ -112,6 +113,33 @@ const tests = [
         default: {deletePayment},
         router: {sendToRouteV2: ({}, cbk) => cbk('err')},
       },
+      routes: [{
+        fee: 1,
+        fee_mtokens: '1000',
+        hops: [{
+          channel: '0x0x1',
+          encrypted_data: '00',
+          fee_mtokens: '1',
+          forward_mtokens: '1',
+          public_key: 'public_key',
+        }],
+        payment: Buffer.alloc(32).toString('hex'),
+        tokens: 1,
+      }],
+    },
+    description: 'A route that cannot be encoded is passed back as an error',
+    expected: {
+      attempts: [],
+      error: [400, 'ExpectedValidRouteToPayViaRoutes'],
+      failures: [],
+    },
+  },
+  {
+    args: {
+      lnd: {
+        default: {deletePayment},
+        router: {sendToRouteV2: ({}, cbk) => cbk('err')},
+      },
       routes: [route],
     },
     description: 'An unexpected payment error is passed back',
@@ -175,6 +203,39 @@ const tests = [
         default: {deletePayment},
         router: {
           sendToRouteV2: ({}, cbk) => cbk(null, {
+            preimage: Buffer.alloc(32),
+            resolve_time_ns: '1700000000000000000',
+          }),
+        },
+      },
+      routes: [route],
+    },
+    description: 'A success is returned with the settlement time',
+    expected: {
+      attempts: [{route}],
+      failures: [],
+      success: {
+        route,
+        confirmed_at: '2023-11-14T22:13:20.000Z',
+        fee: route.fee,
+        fee_mtokens: route.fee_mtokens,
+        hops: route.hops,
+        id: Buffer.alloc(32).toString('hex'),
+        mtokens: route.mtokens,
+        safe_fee: undefined,
+        safe_tokens: undefined,
+        secret: Buffer.alloc(32).toString('hex'),
+        tokens: route.tokens,
+      },
+    },
+  },
+  {
+    args: {
+      id: Buffer.alloc(32).toString('hex'),
+      lnd: {
+        default: {deletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
             preimage: 'preimage',
           }),
         },
@@ -186,6 +247,40 @@ const tests = [
       attempts: [{route}],
       error: [503, 'UnexpectedResultWhenPayingViaSendToRouteSync'],
       failures: [],
+    },
+  },
+  {
+    args: {
+      id: Buffer.alloc(32).toString('hex'),
+      lnd: {
+        default: {deletePayment: noDeletePayment},
+        router: {
+          sendToRouteV2: ({}, cbk) => cbk(null, {
+            failure: {
+              chan_id: '1',
+              code: 'UNKNOWN_FAILURE',
+            },
+            preimage: Buffer.alloc(Number()),
+          }),
+        },
+      },
+      routes: [route],
+    },
+    description: 'A real payment failure does not delete the payment',
+    expected: {
+      attempts: [{route}],
+      failures: [{
+        route,
+        channel: undefined,
+        height: undefined,
+        index: undefined,
+        mtokens: undefined,
+        policy: null,
+        public_key: undefined,
+        reason: 'UnknownFailure',
+        timeout_height: undefined,
+        update: undefined,
+      }],
     },
   },
   {

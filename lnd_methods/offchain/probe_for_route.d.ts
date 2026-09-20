@@ -12,12 +12,34 @@ export type ProbeForRouteNode = RouteNode & {
 
 export type ProbeForRouteRoutes = ProbeForRouteNode[][];
 
+/** Blinded Path */
+export type ProbeForRouteBlindedPath = {
+  /** Accumulated Base Fee Millitokens String */
+  base_fee_mtokens: string;
+  /** Accumulated CLTV Expiry Delta Number */
+  cltv_delta: number;
+  /** Accumulated Fee Rate Millitokens Per Million Number */
+  fee_rate: number;
+  hops: {
+    /** Encrypted Recipient Data Hex String */
+    encrypted_data: string;
+    /** Relaying Node Public Key Hex String */
+    relay_key: string;
+  }[];
+  /** Introduction Node Public Key Hex String */
+  introduction_node?: string;
+  /** First Hop Path Key Public Key Hex String */
+  key: string;
+  /** Maximum HTLC Millitokens String */
+  max_htlc_mtokens?: string;
+  /** Minimum HTLC Millitokens String */
+  min_htlc_mtokens?: string;
+};
+
 export type ProbeForRouteArgs = AuthenticatedLightningArgs<
   {
     /** Final CLTV Delta Number */
     cltv_delta?: number;
-    /** Destination Public Key Hex String */
-    destination: string;
     features?: {
       /** Feature Bit Number */
       bit: number;
@@ -57,16 +79,30 @@ export type ProbeForRouteArgs = AuthenticatedLightningArgs<
     routes?: ProbeForRouteRoutes;
     /** Total Millitokens Across Paths String */
     total_mtokens?: string;
-  } & MergeExclusive<
-    {
-      /** Millitokens to Pay String */
-      mtokens: string;
-    },
-    {
-      /** Tokens Number */
-      tokens: number;
-    }
-  >
+  } & (
+    | {
+        /** Destination Public Key Hex String */
+        destination: string;
+        /** Blinded Paths */
+        paths?: ProbeForRouteBlindedPath[];
+      }
+    | {
+        /** Destination Public Key Hex String */
+        destination?: string;
+        /** Blinded Paths */
+        paths: ProbeForRouteBlindedPath[];
+      }
+  ) &
+    MergeExclusive<
+      {
+        /** Millitokens to Pay String */
+        mtokens: string;
+      },
+      {
+        /** Tokens Number */
+        tokens: number;
+      }
+    >
 >;
 
 export type ProbeForRouteResult = {
@@ -80,6 +116,8 @@ export type ProbeForRouteResult = {
     hops: {
       /** Standard Format Channel Id String */
       channel: string;
+      /** Blinded Path Encrypted Data Hex String */
+      encrypted_data?: string;
       /** Fee Number */
       fee: number;
       /** Fee Millitokens String */
@@ -88,6 +126,8 @@ export type ProbeForRouteResult = {
       forward: number;
       /** Forward Millitokens String */
       forward_mtokens: string;
+      /** Blinded Path Key Hex String */
+      path_key?: string;
       /** Forward Edge Public Key Hex String */
       public_key: string;
       /** Timeout Block Height Number */
@@ -122,6 +162,8 @@ export type ProbeForRouteResult = {
  * When probing to a payment request, make sure to specify the fields encoded in the payment request such as `cltv_delta`.
  *
  * If `total_mtokens` are specified, a `payment` nonce is required.
+ *
+ * `paths` are blinded paths. If using, `destination` is not required.
  *
  * Requires `offchain:write` permission
  */

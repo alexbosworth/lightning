@@ -24,6 +24,7 @@ const notFound = -1;
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
+        [encrypted_data]: <Blinded Path Encrypted Data Hex String>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -32,6 +33,7 @@ const notFound = -1;
           type: <Message Type Number String>
           value: <Message Raw Value Hex Encoded String>
         }]
+        [path_key]: <Blinded Path Key Hex String>
         [public_key]: <Public Key Hex String>
         timeout: <Timeout Block Height Number>
       }]

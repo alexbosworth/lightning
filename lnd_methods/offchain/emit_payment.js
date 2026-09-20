@@ -46,7 +46,7 @@ module.exports = ({data, emitter}) => {
       return emitter.emit('paying', pendingFromPayment(data));
 
     default:
-      return;
+      break;
     }
   } catch (err) {
     if (!emitter.listenerCount('error')) {

@@ -38,6 +38,7 @@ const unknownWireError = 'unknown wire error';
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
+        [encrypted_data]: <Blinded Path Encrypted Data Hex String>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
@@ -46,6 +47,7 @@ const unknownWireError = 'unknown wire error';
           type: <Message Type Number String>
           value: <Message Raw Value Hex Encoded String>
         }]
+        [path_key]: <Blinded Path Key Hex String>
         public_key: <Public Key Hex String>
         timeout: <Timeout Block Height Number>
       }]
@@ -250,13 +252,22 @@ module.exports = args => {
       // Wait for subscription pick up
       waitForSubscribers: cbk => nextTick(cbk),
 
+      // Derive the route in RPC format
+      rpcRoute: ['waitForSubscribers', ({}, cbk) => {
+        try {
+          return cbk(null, rpcRouteFromRoute(route));
+        } catch (err) {
+          return cbk([400, 'ExpectedValidRouteToPayViaRoutes', {err}]);
+        }
+      }],
+
       // Try paying
-      attempt: ['waitForSubscribers', ({}, cbk) => {
+      attempt: ['rpcRoute', ({rpcRoute}, cbk) => {
         emitter.emit('paying', {route});
 
         return args.lnd.router[method]({
           payment_hash: Buffer.from(id, 'hex'),
-          route: rpcRouteFromRoute(route),
+          route: rpcRoute,
         },
         (err, res) => {
           if (!!err && err.details === unknownWireError) {

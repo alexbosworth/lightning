@@ -16,6 +16,8 @@ export type SubscribeToPayViaRoutesArgs = AuthenticatedLightningArgs<{
     hops: {
       /** Standard Format Channel Id */
       channel: string;
+      /** Blinded Path Encrypted Data Hex */
+      encrypted_data?: string;
       /** Fee */
       fee: number;
       /** Fee Millitokens */
@@ -24,6 +26,14 @@ export type SubscribeToPayViaRoutesArgs = AuthenticatedLightningArgs<{
       forward: number;
       /** Forward Millitokens */
       forward_mtokens: string;
+      messages?: {
+        /** Message Type number */
+        type: string;
+        /** Message Raw Value Hex Encoded */
+        value: string;
+      }[];
+      /** Blinded Path Key Hex */
+      path_key?: string;
       /** Public Key Hex */
       public_key: string;
       /** Timeout Block Height */

@@ -11,19 +11,19 @@
   },
   "dependencies": {
     "@alexbosworth/blockchain": "4.8.0",
-    "@grpc/grpc-js": "1.14.4",
+    "@grpc/grpc-js": "1.14.5",
     "@grpc/proto-loader": "0.8.1",
-    "@types/node": "26.5.1",
+    "@types/node": "26.6.2",
     "@types/request": "2.48.13",
     "@types/ws": "8.18.1",
     "async": "3.2.6",
     "asyncjs-util": "1.2.12",
-    "bolt04": "1.0.0",
+    "bolt04": "1.2.0",
     "bolt07": "2.0.0",
     "bolt09": "3.0.0",
-    "invoices": "6.1.4",
+    "invoices": "6.2.0",
     "psbt": "6.0.4",
-    "type-fest": "5.9.0"
+    "type-fest": "5.10.0"
   },
   "description": "Lightning Network client library",
   "devDependencies": {
@@ -54,5 +54,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "12.3.1"
+  "version": "12.4.0"
 }

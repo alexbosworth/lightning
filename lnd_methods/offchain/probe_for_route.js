@@ -19,10 +19,12 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
   Preferred `confidence` is not supported on LND 0.14.5 and below
 
+  `paths` are blinded paths. If using, `destination` is not required.
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
     [confidence]: <Preferred Route Confidence Number Out of One Million Number>
-    destination: <Destination Public Key Hex String>
+    [destination]: <Destination Public Key Hex String>
     [features]: [{
       bit: <Feature Bit Number>
     }]
@@ -44,6 +46,19 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
     [mtokens]: <Millitokens to Pay String>
     [outgoing_channel]: <Outgoing Channel Id String>
     [path_timeout_ms]: <Time to Spend On A Path Milliseconds Number>
+    [paths]: [{
+      base_fee_mtokens: <Accumulated Base Fee Millitokens String>
+      cltv_delta: <Accumulated CLTV Expiry Delta Number>
+      fee_rate: <Accumulated Fee Rate Millitokens Per Million Number>
+      hops: [{
+        encrypted_data: <Encrypted Recipient Data Hex String>
+        relay_key: <Relaying Node Public Key Hex String>
+      }]
+      [introduction_node]: <Introduction Node Public Key Hex String>
+      key: <First Hop Path Key Public Key Hex String>
+      [max_htlc_mtokens]: <Maximum HTLC Millitokens String>
+      [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
+    }]
     [payment]: <Payment Identifier Hex String>
     [probe_timeout_ms]: <Probe Timeout Milliseconds Number>
     [routes]: [[{
@@ -65,10 +80,12 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
       fee_mtokens: <Route Fee Millitokens String>
       hops: [{
         channel: <Standard Format Channel Id String>
+        [encrypted_data]: <Blinded Path Encrypted Data Hex String>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
         forward_mtokens: <Forward Millitokens String>
+        [path_key]: <Blinded Path Key Hex String>
         public_key: <Forward Edge Public Key Hex String>
         timeout: <Timeout Block Height Number>
       }]
@@ -91,8 +108,12 @@ module.exports = (args, cbk) => {
     return asyncAuto({
       // Check arguments
       validate: cbk => {
-        if (!args.destination || !isHex(args.destination)) {
+        if (!args.paths && (!args.destination || !isHex(args.destination))) {
           return cbk([400, 'ExpectedDestinationKeyHexStringForRouteProbe']);
+        }
+
+        if (!!args.paths && !isArray(args.paths)) {
+          return cbk([400, 'ExpectedArrayOfBlindedPathsToProbeForRoute']);
         }
 
         if (!!args.ignore && !isArray(args.ignore)) {
@@ -114,29 +135,35 @@ module.exports = (args, cbk) => {
       probe: ['validate', ({}, cbk) => {
         const result = {};
         let isFinished = false;
+        let sub;
         let timeout;
 
-        const sub = subscribeToProbeForRoute({
-          cltv_delta: args.cltv_delta,
-          confidence: args.confidence,
-          destination: args.destination,
-          features: args.features,
-          ignore: args.ignore,
-          incoming_peer: args.incoming_peer,
-          is_ignoring_past_failures: args.is_ignoring_past_failures,
-          lnd: args.lnd,
-          max_fee: args.max_fee,
-          max_fee_mtokens: args.max_fee_mtokens,
-          max_timeout_height: args.max_timeout_height,
-          messages: args.messages,
-          mtokens: args.mtokens,
-          outgoing_channel: args.outgoing_channel,
-          path_timeout_ms: args.path_timeout_ms,
-          payment: args.payment,
-          routes: args.routes,
-          tokens: args.tokens,
-          total_mtokens: args.total_mtokens,
-        });
+        try {
+          sub = subscribeToProbeForRoute({
+            cltv_delta: args.cltv_delta,
+            confidence: args.confidence,
+            destination: args.destination,
+            features: args.features,
+            ignore: args.ignore,
+            incoming_peer: args.incoming_peer,
+            is_ignoring_past_failures: args.is_ignoring_past_failures,
+            lnd: args.lnd,
+            max_fee: args.max_fee,
+            max_fee_mtokens: args.max_fee_mtokens,
+            max_timeout_height: args.max_timeout_height,
+            messages: args.messages,
+            mtokens: args.mtokens,
+            outgoing_channel: args.outgoing_channel,
+            path_timeout_ms: args.path_timeout_ms,
+            paths: args.paths,
+            payment: args.payment,
+            routes: args.routes,
+            tokens: args.tokens,
+            total_mtokens: args.total_mtokens,
+          });
+        } catch (err) {
+          return cbk([400, err.message]);
+        }
 
         const finished = (err, res) => {
           sub.removeAllListeners();

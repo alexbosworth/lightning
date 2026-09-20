@@ -5,15 +5,19 @@ const asyncWhilst = require('async/whilst');
 
 const {getRouteToDestination} = require('./../info');
 const {getIdentity} = require('./../info');
+const isBlindedPath = require('./is_blinded_path');
 const {isLnd} = require('./../../lnd_requests');
 const {mtokensAmount} = require('./../../bolt00');
+const routeIntoBlindedPath = require('./route_into_blinded_path');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
+const targetsForBlindedPaths = require('./targets_for_blinded_paths');
 
 const defaultPathTimeoutMs = 1000 * 60;
 const defaultProbeTimeoutMs = 1000 * 60 * 60 * 24;
 const {isArray} = Array;
 const isIgnoreFailure = reason => reason === 'TemporaryChannelFailure';
 const isPublicKey = n => /^[0-9A-F]{66}$/i.test(n);
+const isNotFound = err => isArray(err) && err[1] === 'TargetNotFoundError';
 const {nextTick} = process;
 
 /** Subscribe to a probe attempt
@@ -22,10 +26,12 @@ const {nextTick} = process;
 
   Preferred `confidence` is not supported on LND 0.14.5 and below
 
+  `paths` are blinded paths. If using, `destination` is not required.
+
   {
     [cltv_delta]: <Final CLTV Delta Number>
     [confidence]: <Preferred Route Confidence Number Out of One Million Number>
-    destination: <Destination Public Key Hex String>
+    [destination]: <Destination Public Key Hex String>
     [features]: [{
       bit: <Feature Bit Number>
     }]
@@ -45,6 +51,19 @@ const {nextTick} = process;
     [mtokens]: <Millitokens to Probe String>
     [outgoing_channel]: <Outgoing Channel Id String>
     [path_timeout_ms]: <Skip Individual Path Attempt After Milliseconds Number>
+    [paths]: [{
+      base_fee_mtokens: <Accumulated Base Fee Millitokens String>
+      cltv_delta: <Accumulated CLTV Expiry Delta Number>
+      fee_rate: <Accumulated Fee Rate Millitokens Per Million Number>
+      hops: [{
+        encrypted_data: <Encrypted Recipient Data Hex String>
+        relay_key: <Relaying Node Public Key Hex String>
+      }]
+      [introduction_node]: <Introduction Node Public Key Hex String>
+      key: <First Hop Path Key Public Key Hex String>
+      [max_htlc_mtokens]: <Maximum HTLC Millitokens String>
+      [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
+    }]
     [payment]: <Payment Identifier Hex Strimng>
     [probe_timeout_ms]: <Fail Entire Probe After Milliseconds Number>
     [routes]: [[{
@@ -72,10 +91,12 @@ const {nextTick} = process;
       fee_mtokens: <Total Fee Millitokens To Pay String>
       hops: [{
         channel: <Standard Format Channel Id String>
+        [encrypted_data]: <Blinded Path Encrypted Data Hex String>
         fee: <Fee Number>
         fee_mtokens: <Fee Millitokens String>
         forward: <Forward Tokens Number>
         forward_mtokens: <Forward Millitokens String>
+        [path_key]: <Blinded Path Key Hex String>
         public_key: <Public Key Hex String>
         timeout: <Timeout Block Height Number>
       }]
@@ -174,8 +195,28 @@ const {nextTick} = process;
   }
 */
 module.exports = args => {
-  if (!isPublicKey(args.destination)) {
+  if (!args.paths && !isPublicKey(args.destination)) {
     throw new Error('ExpectedDestinationPublicKeyToSubscribeToProbe');
+  }
+
+  if (!!args.paths && (!isArray(args.paths) || !args.paths.length)) {
+    throw new Error('ExpectedArrayOfBlindedPathsToSubscribeToProbe');
+  }
+
+  if (!!args.paths && !args.paths.every(isBlindedPath)) {
+    throw new Error('ExpectedValidBlindedPathsToSubscribeToProbe');
+  }
+
+  if (!!args.paths && !!args.messages && !!args.messages.length) {
+    throw new Error('ExpectedNoMessagesToProbeToBlindedPaths');
+  }
+
+  if (!!args.paths && !!args.payment) {
+    throw new Error('ExpectedNoPaymentIdentifierToProbeToBlindedPaths');
+  }
+
+  if (!!args.paths && !!args.routes && !!args.routes.length) {
+    throw new Error('ExpectedNoRouteHintsToProbeToBlindedPaths');
   }
 
   if (!!args.ignore && !isArray(args.ignore)) {
@@ -195,12 +236,41 @@ module.exports = args => {
     throw new Error('ExpectedTokenAmountToSubscribeToProbe');
   }
 
+  const maxFee = !args.paths ? {} : mtokensAmount({
+    mtokens: args.max_fee_mtokens,
+    tokens: args.max_fee,
+  });
+
+  // Probing to a destination looks for a route directly to the destination
+  const destinationTargets = !!args.paths ? [] : [{
+    mtokens,
+    cltv_delta: args.cltv_delta,
+    destination: args.destination,
+    features: args.features,
+    max_fee: args.max_fee,
+    max_fee_mtokens: args.max_fee_mtokens,
+    messages: args.messages,
+    payment: args.payment,
+    routes: args.routes,
+    total_mtokens: args.total_mtokens,
+  }];
+
+  // Probing to a blinded path looks for a route to the path introduction node
+  const pathTargets = !args.paths ? {targets: []} : targetsForBlindedPaths({
+    mtokens,
+    max_fee_mtokens: maxFee.mtokens,
+    paths: args.paths,
+  });
+
   const emitter = new EventEmitter();
   const ignore = [];
   let isErrored = false;
-  let isFinal = false;
   let isTimedOut = false;
+  let targetIndex = Number();
+  const targets = destinationTargets.concat(pathTargets.targets);
   const temporaryChannelFailures = [];
+
+  let isFinal = !targets.length;
 
   if (!!args.ignore) {
     args.ignore.forEach(n => ignore.push({
@@ -220,6 +290,27 @@ module.exports = args => {
     return emitter.emit('error', err);
   };
 
+  const emitSuccess = ({route, target}) => {
+    // Exit early when the probe was to the destination directly
+    if (!target.path) {
+      return emitter.emit('probe_success', {route});
+    }
+
+    // The route to the introduction node is continued into the blinded path
+    try {
+      const extended = routeIntoBlindedPath({
+        mtokens,
+        route,
+        path: target.path,
+        total_mtokens: args.total_mtokens,
+      });
+
+      return emitter.emit('probe_success', {route: extended.route});
+    } catch (err) {
+      return emitError([503, 'FailedToExtendRouteIntoBlindedPath', {err}]);
+    }
+  };
+
   const probeTimeout = setTimeout(() => {
     isFinal = true;
     isTimedOut = true;
@@ -235,6 +326,8 @@ module.exports = args => {
   asyncWhilst(
     cbk => nextTick(() => cbk(null, !isFinal)),
     cbk => {
+      const target = targets[targetIndex];
+
       return asyncAuto({
         // Get public key
         getInfo: cbk => getIdentity({lnd: args.lnd}, cbk),
@@ -242,24 +335,31 @@ module.exports = args => {
         // Get the next route
         getNextRoute: cbk => {
           return getRouteToDestination({
-            mtokens,
-            cltv_delta: args.cltv_delta,
+            cltv_delta: target.cltv_delta,
             confidence: args.confidence,
-            destination: args.destination,
-            features: args.features,
+            destination: target.destination,
+            features: target.features,
             ignore: ignore.concat(temporaryChannelFailures),
             incoming_peer: args.incoming_peer,
             lnd: args.lnd,
-            max_fee: args.max_fee,
-            max_fee_mtokens: args.max_fee_mtokens,
+            max_fee: target.max_fee,
+            max_fee_mtokens: target.max_fee_mtokens,
             max_timeout_height: args.max_timeout_height,
-            messages: args.messages,
+            messages: target.messages,
+            mtokens: target.mtokens,
             outgoing_channel: args.outgoing_channel,
-            payment: args.payment,
-            routes: args.routes,
-            total_mtokens: args.total_mtokens,
+            payment: target.payment,
+            routes: target.routes,
+            total_mtokens: target.total_mtokens,
           },
-          cbk);
+          (err, res) => {
+            // A blinded path introduction node may not be present in the graph
+            if (!!err && !!target.path && isNotFound(err)) {
+              return cbk(null, {});
+            }
+
+            return cbk(err, res);
+          });
         },
 
         // Attempt paying the route
@@ -318,7 +418,7 @@ module.exports = args => {
 
             // Exit early when the probe found a completed route
             if (!!isFinal) {
-              return emitter.emit('probe_success', {route: failure.route});
+              return emitSuccess({target, route: failure.route});
             }
 
             if (!!failure.index && isIgnoreFailure(failure.reason)) {
@@ -372,8 +472,11 @@ module.exports = args => {
           return cbk();
         }
 
+        // Move on to the next target when there are no more routes to try
         if (!res.getNextRoute.route) {
-          isFinal = true;
+          targetIndex++;
+
+          isFinal = !targets[targetIndex];
         }
 
         return cbk();
