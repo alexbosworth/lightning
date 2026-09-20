@@ -67,7 +67,7 @@ const trimByte = 0;
     }]
     [mtokens]: <Tokens to Send String>
     [outgoing_channel]: <Outgoing Channel Id String>
-    [payment]: <Payment Identifier Hex Strimng>
+    [payment]: <Payment Identifier Hex String>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
       [channel]: <Standard Format Channel Id String>

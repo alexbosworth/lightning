@@ -64,7 +64,7 @@ const {nextTick} = process;
       [max_htlc_mtokens]: <Maximum HTLC Millitokens String>
       [min_htlc_mtokens]: <Minimum HTLC Millitokens String>
     }]
-    [payment]: <Payment Identifier Hex Strimng>
+    [payment]: <Payment Identifier Hex String>
     [probe_timeout_ms]: <Fail Entire Probe After Milliseconds Number>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>

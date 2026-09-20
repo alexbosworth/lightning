@@ -7,7 +7,7 @@ const bufferFromHex = hex => Buffer.from(hex, 'hex');
       type: <Message To Final Destination Type Number String>
       value: <Message To Final Destination Raw Value Hex Encoded String>
     }]
-    [payment]: <Payment Identifier Hex Strimng>
+    [payment]: <Payment Identifier Hex String>
     [total_mtokens]: <Total Millitokens of Shards String>
   }
 
