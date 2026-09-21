@@ -8,10 +8,12 @@ const defaultType = 'ecdsa';
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
 const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const isSchnorrSig = signature => signature.length === 64;
+const isString = n => typeof n === 'string';
 const method = 'signMessage';
 const type = 'signer';
 const types = {ecdsa: 'ecdsa', schnorr: 'schnorr'};
 const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
+const utf8AsBuffer = utf8 => Buffer.from(utf8, 'utf8');
 
 /** Sign a sha256 hash of arbitrary bytes
 
@@ -23,11 +25,14 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
 
   `schnorr` signature type is not supported on LND 0.15.0 and below
 
+  `tag` is not supported on LND 0.17.5 and below and requires `schnorr` type
+
   {
     key_family: <Key Family Number>
     key_index: <Key Index Number>
     lnd: <Authenticated LND API Object>
     preimage: <Bytes To Hash and Sign Hex Encoded String>
+    [tag]: <BIP-340 Tagged Hash Tag UTF8 String>
     [type]: <Signature Type String>
   }
 
@@ -61,6 +66,14 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedKnownSignatureTypeToSignBytes']);
         }
 
+        if (args.tag !== undefined && (!isString(args.tag) || !args.tag)) {
+          return cbk([400, 'ExpectedNonEmptyTagStringToSignBytes']);
+        }
+
+        if (!!args.tag && args.type !== types.schnorr) {
+          return cbk([400, 'ExpectedSchnorrSignatureTypeToSignTaggedBytes']);
+        }
+
         return cbk();
       },
 
@@ -70,6 +83,7 @@ module.exports = (args, cbk) => {
           key_loc: {key_family: args.key_family, key_index: args.key_index},
           msg: hexAsBuffer(args.preimage),
           schnorr_sig: args.type === types.schnorr || undefined,
+          tag: !!args.tag ? utf8AsBuffer(args.tag) : undefined,
         },
         (err, res) => {
           if (!!err && err.message === unimplementedError) {

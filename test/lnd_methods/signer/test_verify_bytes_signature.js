@@ -43,6 +43,21 @@ const tests = [
     error: [400, 'ExpectedSignatureToVerifyBytesSignature'],
   },
   {
+    args: makeArgs({override: {tag: 1}}),
+    description: 'A tag is expected to be a string',
+    error: [400, 'ExpectedNonEmptyTagStringToVerifyBytesSignature'],
+  },
+  {
+    args: makeArgs({override: {tag: ''}}),
+    description: 'A tag is expected to be non empty',
+    error: [400, 'ExpectedNonEmptyTagStringToVerifyBytesSignature'],
+  },
+  {
+    args: makeArgs({override: {tag: 'tag'}}),
+    description: 'A tag requires a schnorr signature',
+    error: [400, 'ExpectedSchnorrSignatureToVerifyTaggedBytes'],
+  },
+  {
     args: makeArgs({
       override: {
         lnd: makeLnd({
@@ -71,6 +86,55 @@ const tests = [
   {
     args: makeArgs({}),
     description: 'No valid attribute returns error',
+    expected: {is_valid: true},
+  },
+  {
+    args: makeArgs({
+      override: {
+        lnd: {
+          signer: {
+            verifyMessage: (args, cbk) => {
+              if (args.tag !== undefined) {
+                return cbk([500, 'ExpectedNoTagInVerifyMessageRequest']);
+              }
+
+              return cbk(null, {valid: true});
+            },
+          },
+        },
+      },
+    }),
+    description: 'No tag is passed when no tag is specified',
+    expected: {is_valid: true},
+  },
+  {
+    args: makeArgs({
+      override: {
+        lnd: {
+          signer: {
+            verifyMessage: (args, cbk) => {
+              if (!Buffer.isBuffer(args.tag)) {
+                return cbk([500, 'ExpectedTagBytesInVerifyMessageRequest']);
+              }
+
+              if (args.tag.toString('utf8') !== 'BIP0322-signed-message') {
+                return cbk([500, 'ExpectedUtf8TagInVerifyMessageRequest']);
+              }
+
+              if (args.is_schnorr_sig !== true) {
+                return cbk([500, 'ExpectedSchnorrSigInVerifyMessageRequest']);
+              }
+
+              return cbk(null, {valid: true});
+            },
+          },
+        },
+        public_key: Buffer.alloc(32).toString('hex'),
+        signature: Buffer.alloc(64).toString('hex'),
+        tag: 'BIP0322-signed-message',
+      },
+    }),
+    description: 'A tag is passed as utf8 bytes to verify a tagged hash',
     expected: {is_valid: true},
   },
 ];

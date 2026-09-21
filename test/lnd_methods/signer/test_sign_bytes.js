@@ -49,6 +49,26 @@ const tests = [
     error: [400, 'ExpectedKnownSignatureTypeToSignBytes'],
   },
   {
+    args: makeArgs({override: {tag: 1, type: 'schnorr'}}),
+    description: 'A tag is expected to be a string',
+    error: [400, 'ExpectedNonEmptyTagStringToSignBytes'],
+  },
+  {
+    args: makeArgs({override: {tag: '', type: 'schnorr'}}),
+    description: 'A tag is expected to be non empty',
+    error: [400, 'ExpectedNonEmptyTagStringToSignBytes'],
+  },
+  {
+    args: makeArgs({override: {tag: 'tag'}}),
+    description: 'A tag requires the schnorr signature type',
+    error: [400, 'ExpectedSchnorrSignatureTypeToSignTaggedBytes'],
+  },
+  {
+    args: makeArgs({override: {tag: 'tag', type: undefined}}),
+    description: 'A tag requires the schnorr signature type to be specified',
+    error: [400, 'ExpectedSchnorrSignatureTypeToSignTaggedBytes'],
+  },
+  {
     args: makeArgs({
       override: {
         lnd: makeLnd({
@@ -94,6 +114,54 @@ const tests = [
       override: {type: 'schnorr'}, signature: Buffer.alloc(64).toString('hex'),
     }),
     description: 'Schnorr signature is supported',
+    expected: {signature: Buffer.alloc(64).toString('hex')},
+  },
+  {
+    args: makeArgs({
+      override: {
+        lnd: {
+          signer: {
+            signMessage: (args, cbk) => {
+              if (args.tag !== undefined) {
+                return cbk([500, 'ExpectedNoTagInSignMessageRequest']);
+              }
+
+              return cbk(null, {signature: Buffer.from('00', 'hex')});
+            },
+          },
+        },
+      },
+    }),
+    description: 'No tag is passed when no tag is specified',
+    expected: {signature: '00'},
+  },
+  {
+    args: makeArgs({
+      override: {
+        lnd: {
+          signer: {
+            signMessage: (args, cbk) => {
+              if (!Buffer.isBuffer(args.tag)) {
+                return cbk([500, 'ExpectedTagBytesInSignMessageRequest']);
+              }
+
+              if (args.tag.toString('utf8') !== 'BIP0322-signed-message') {
+                return cbk([500, 'ExpectedUtf8TagInSignMessageRequest']);
+              }
+
+              if (args.schnorr_sig !== true) {
+                return cbk([500, 'ExpectedSchnorrSigInSignMessageRequest']);
+              }
+
+              return cbk(null, {signature: Buffer.alloc(64)});
+            },
+          },
+        },
+        tag: 'BIP0322-signed-message',
+        type: 'schnorr',
+      },
+    }),
+    description: 'A tag is passed as utf8 bytes to sign a tagged hash',
     expected: {signature: Buffer.alloc(64).toString('hex')},
   },
 ];

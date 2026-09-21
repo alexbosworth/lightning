@@ -9,6 +9,7 @@ const lnd = {} as AuthenticatedLnd;
 const preimage = Buffer.alloc(32).toString('hex');
 const public_key = Buffer.alloc(33).toString('hex');
 const signature = '00';
+const tag = 'tag';
 
 expectError(verifyBytesSignature());
 expectError(verifyBytesSignature({}));
@@ -26,6 +27,9 @@ expectError(verifyBytesSignature({lnd, preimage, signature}));
 expectError(verifyBytesSignature({lnd, public_key}));
 expectError(verifyBytesSignature({lnd, public_key, signature}));
 expectError(verifyBytesSignature({lnd, signature}));
+expectError(
+  verifyBytesSignature({lnd, preimage, public_key, signature, tag: 1})
+);
 
 expectType<VerifyBytesSignatureResult>(
   await verifyBytesSignature({
@@ -33,6 +37,16 @@ expectType<VerifyBytesSignatureResult>(
     preimage,
     public_key,
     signature,
+  })
+);
+
+expectType<VerifyBytesSignatureResult>(
+  await verifyBytesSignature({
+    lnd,
+    preimage,
+    public_key,
+    signature,
+    tag,
   })
 );
 

@@ -5,6 +5,7 @@ const {isLnd} = require('./../../lnd_requests');
 
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const isSchnorrSignatureLength = signature => signature.length === 128;
+const isString = n => typeof n === 'string';
 const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
 
 /** Verify signature of arbitrary bytes
@@ -17,11 +18,14 @@ const unimplementedError = '12 UNIMPLEMENTED: unknown service signrpc.Signer';
 
   Validating `schnorr` signatures is unsupported in LND 0.15.0 and below
 
+  `tag` is not supported on LND 0.17.5 and below
+
   {
     lnd: <Authenticated LND API Object>
     preimage: <Message Preimage Bytes Hex Encoded String>
     public_key: <Signature Valid For Public Key Hex String>
     signature: <Signature Hex String>
+    [tag]: <BIP-340 Tagged Hash Tag UTF8 String>
   }
 
   @returns via cbk or Promise
@@ -50,6 +54,14 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedSignatureToVerifyBytesSignature']);
         }
 
+        if (args.tag !== undefined && (!isString(args.tag) || !args.tag)) {
+          return cbk([400, 'ExpectedNonEmptyTagStringToVerifyBytesSignature']);
+        }
+
+        if (!!args.tag && !isSchnorrSignatureLength(args.signature)) {
+          return cbk([400, 'ExpectedSchnorrSignatureToVerifyTaggedBytes']);
+        }
+
         return cbk();
       },
 
@@ -60,6 +72,7 @@ module.exports = (args, cbk) => {
           msg: Buffer.from(args.preimage, 'hex'),
           pubkey: Buffer.from(args.public_key, 'hex'),
           signature: Buffer.from(args.signature, 'hex'),
+          tag: !!args.tag ? Buffer.from(args.tag, 'utf8') : undefined,
         },
         (err, res) => {
           if (!!err && err.message === unimplementedError) {

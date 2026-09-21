@@ -6,6 +6,8 @@ const lnd = {} as AuthenticatedLnd;
 const key_family = 0;
 const key_index = 0;
 const preimage = '00';
+const tag = 'tag';
+const type = 'schnorr';
 
 expectError(signBytes());
 expectError(signBytes({}));
@@ -23,6 +25,8 @@ expectError(signBytes({lnd, preimage}));
 expectError(signBytes({lnd, key_family, key_index}));
 expectError(signBytes({lnd, key_index, preimage}));
 expectError(signBytes({lnd, key_family, preimage}));
+expectError(signBytes({lnd, key_family, key_index, preimage, tag: 1}));
+expectError(signBytes({lnd, key_family, key_index, preimage, type: 'type'}));
 
 expectType<SignBytesResult>(
   await signBytes({
@@ -30,6 +34,17 @@ expectType<SignBytesResult>(
     key_family,
     key_index,
     preimage,
+  })
+);
+
+expectType<SignBytesResult>(
+  await signBytes({
+    lnd,
+    key_family,
+    key_index,
+    preimage,
+    tag,
+    type,
   })
 );
 
