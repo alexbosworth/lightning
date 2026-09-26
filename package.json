@@ -33,6 +33,21 @@
   "engines": {
     "node": ">=22"
   },
+  "files": [
+    "CHANGELOG.md",
+    "arrays",
+    "bolt00",
+    "bolt02",
+    "grpc",
+    "index.d.ts",
+    "index.js",
+    "lnd_grpc",
+    "lnd_messages",
+    "lnd_methods",
+    "lnd_requests",
+    "lnd_responses",
+    "typescript"
+  ],
   "keywords": [
     "grpc",
     "lightning-network",
@@ -54,5 +69,5 @@
     "directory": "test-typescript/typescript"
   },
   "types": "index.d.ts",
-  "version": "13.0.0"
+  "version": "13.0.1"
 }
