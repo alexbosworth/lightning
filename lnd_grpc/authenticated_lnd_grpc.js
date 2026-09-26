@@ -7,6 +7,8 @@ const {defaultSocket} = require('./../grpc');
 const grpcCredentials = require('./grpc_credentials');
 const grpcOptions = require('./grpc_options');
 const {grpcSslCipherSuites} = require('./../grpc');
+const {keepaliveTimeMs} = require('./../grpc');
+const {keepaliveTimeoutMs} = require('./../grpc');
 const {maxReceiveMessageLength} = require('./../grpc');
 const {packageTypes} = require('./../grpc');
 const {protoFiles} = require('./../grpc');
@@ -57,6 +59,8 @@ module.exports = ({cert, macaroon, path, socket}) => {
   }
 
   const params = {
+    'grpc.keepalive_time_ms': keepaliveTimeMs,
+    'grpc.keepalive_timeout_ms': keepaliveTimeoutMs,
     'grpc.max_receive_message_length': -1,
     'grpc.max_send_message_length': -1,
   };

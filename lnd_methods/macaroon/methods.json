@@ -515,7 +515,7 @@
     "type": "invoices"
   },
   "subscribeToInvoices": {
-    "method": "SubscribeInvoices",
+    "methods": ["ListInvoices", "SubscribeInvoices"],
     "type": "default"
   },
   "subscribeToMessages": {

@@ -2,17 +2,28 @@ const {featureFlagDetails} = require('bolt09');
 
 const htlcAsPayment = require('./htlc_as_payment');
 
+const bySettleIndex = (a, b) => Number(b.settle_index) - Number(a.settle_index);
 const dateFrom = epoch => new Date(1e3 * epoch).toISOString();
 const emptyHash = Buffer.alloc(32).toString('hex');
 const {isArray} = Array;
+const isSettledSet = n => !!Number(n.settle_index);
 const {keys} = Object;
 const msPerSec = 1e3;
 const mtokensPerToken = BigInt(1e3);
+const {values} = Object;
 
 /** RPC Invoice as Invoice
 
   {
     add_index: <Invoice Added Index String>
+    [amp_invoice_state]: {
+      <Set Id Hex String>: {
+        amt_paid_msat: <Set Amount Received Millitokens String>
+        settle_index: <Set Settled Index String>
+        settle_time: <Set Confirmation Date Epoch Seconds String>
+        state: <Set HTLCs State String>
+      }
+    }
     amt_paid_msat: <Amount Received Millitokens String>
     amt_paid_sat: <Amount Received Tokens String>
     cltv_expiry: <CLTV Expiration Delta String>
@@ -171,24 +182,32 @@ module.exports = args => {
     throw new Error('ExpectedTokensValueInLookupInvoiceResponse');
   }
 
-  const confirmedIndex = Number(args.settle_index);
+  // AMP invoices settle by HTLC set, the newest settled set is the settlement
+  const sets = values(args.amp_invoice_state || {}).filter(isSettledSet);
+
+  const ampSettled = sets.sort(bySettleIndex)[0] || {};
+
+  const confirmedIndex = Number(args.settle_index) || ampSettled.settle_index;
   const createdAtEpochTime = Number(args.creation_date);
   const descHash = args.description_hash;
   const expiresInMs = Number(args.expiry) * msPerSec;
+  const hasSettleDate = !!Number(args.settle_date);
   const isAmpPush = !args.payment_request && !!args.is_amp;
   const isConfirmed = args.state === 'SETTLED';
   const mtok = (BigInt(args.value) * mtokensPerToken).toString();
   const payment = args.payment_addr.toString('hex');
-  const settleDate = args.settle_date;
 
   const createdAtMs = createdAtEpochTime * msPerSec;
   const hasPaymentId = !!payment && payment !== emptyHash;
+  const settleDate = hasSettleDate ? args.settle_date : ampSettled.settle_time;
+
+  const confirmedAt = !!settleDate ? dateFrom(settleDate) : undefined;
 
   return {
     chain_address: args.fallback_addr || undefined,
     cltv_delta: Number(args.cltv_expiry),
-    confirmed_at: isConfirmed ? dateFrom(settleDate) : undefined,
-    confirmed_index: confirmedIndex || undefined,
+    confirmed_at: isConfirmed ? confirmedAt : undefined,
+    confirmed_index: Number(confirmedIndex) || undefined,
     created_at: new Date(createdAtMs).toISOString(),
     description: args.memo,
     description_hash: !descHash.length ? undefined : descHash.toString('hex'),

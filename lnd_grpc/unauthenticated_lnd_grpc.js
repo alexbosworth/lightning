@@ -7,6 +7,8 @@ const {defaultSocket} = require('./../grpc');
 const grpcOptions = require('./grpc_options');
 const grpcSsl = require('./grpc_ssl');
 const {grpcSslCipherSuites} = require('./../grpc');
+const {keepaliveTimeMs} = require('./../grpc');
+const {keepaliveTimeoutMs} = require('./../grpc');
 const {packageTypes} = require('./../grpc');
 const {protoFiles} = require('./../grpc');
 const {protosDir} = require('./../grpc');
@@ -45,6 +47,11 @@ module.exports = ({cert, path, socket}) => {
     process.env.GRPC_SSL_CIPHER_SUITES = grpcSslCipherSuites;
   }
 
+  const params = {
+    'grpc.keepalive_time_ms': keepaliveTimeMs,
+    'grpc.keepalive_timeout_ms': keepaliveTimeoutMs,
+  };
+
   // Assemble different services from their proto files
   return {
     lnd: keys(unauthenticatedServiceTypes).reduce((services, type) => {
@@ -58,7 +65,8 @@ module.exports = ({cert, path, socket}) => {
 
       services[type] = new rpc[packageTypes[service]][service](
         lndSocket,
-        credentials
+        credentials,
+        params
       );
 
       return services;

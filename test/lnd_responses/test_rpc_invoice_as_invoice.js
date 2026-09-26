@@ -217,6 +217,58 @@ const tests = [
   },
   {
     args: makeInput({
+      amp_invoice_state: {
+        '00': {
+          amt_paid_msat: '1000',
+          settle_index: '2',
+          settle_time: '2',
+          state: 'SETTLED',
+        },
+        '01': {
+          amt_paid_msat: '1000',
+          settle_index: '3',
+          settle_time: '3',
+          state: 'SETTLED',
+        },
+        '02': {
+          amt_paid_msat: '0',
+          settle_index: '0',
+          settle_time: '0',
+          state: 'ACCEPTED',
+        },
+      },
+      is_amp: true,
+      is_keysend: false,
+      settle_date: '0',
+      settle_index: '0',
+      state: 'SETTLED',
+    }),
+    description: 'AMP invoice settled by set takes the newest set settlement',
+    expected: makeExpected({
+      confirmed_at: '1970-01-01T00:00:03.000Z',
+      confirmed_index: 3,
+      is_confirmed: true,
+      is_push: undefined,
+    }),
+  },
+  {
+    args: makeInput({
+      is_amp: true,
+      is_keysend: false,
+      settle_date: '0',
+      settle_index: '0',
+      state: 'SETTLED',
+    }),
+    description: 'A settled invoice without a settle date has no confirmed at',
+    expected: makeExpected({
+      confirmed_at: undefined,
+      confirmed_index: undefined,
+      is_confirmed: true,
+      is_push: undefined,
+    }),
+  },
+  {
+    args: makeInput({
       payment_request: undefined,
       state: 'SETTLED',
       value_msat: '0',
