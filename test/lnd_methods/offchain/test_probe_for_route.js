@@ -67,14 +67,20 @@ const introductionResponse = {
 };
 
 // Make an LND that returns a route once and then has a result for the probe
-const makeLnd = ({response, sendToRouteV2}) => {
+const makeLnd = ({outgoing, response, sendToRouteV2}) => {
   let isRouteReturned = false;
 
   const lnd = {
     default: {
       deletePayment,
       getInfo: ({}, cbk) => cbk(null, getInfoResponse),
-      queryRoutes: ({}, cbk) => {
+      queryRoutes: (args, cbk) => {
+        const outgoingIds = JSON.stringify(args.outgoing_chan_ids);
+
+        if (!!outgoing && outgoingIds !== JSON.stringify(outgoing)) {
+          return cbk('UnexpectedOutgoingChannelIdsInQueryRoutes');
+        }
+
         if (isRouteReturned) {
           return cbk(null, {routes: []});
         }
@@ -180,6 +186,32 @@ const tests = [
       tokens: 1,
     },
     description: 'A probe that finds a route returns the route',
+    expected: {route: expectedRoute},
+  },
+  {
+    args: {
+      destination,
+      lnd: makeLnd({
+        outgoing: ['1099511693313'],
+        sendToRouteV2: reachDestination,
+      }),
+      outgoing_channel: '1x1x1',
+      tokens: 1,
+    },
+    description: 'A probe sends the outgoing channel as an outgoing channel id',
+    expected: {route: expectedRoute},
+  },
+  {
+    args: {
+      destination,
+      lnd: makeLnd({
+        outgoing: ['1099511693313', '2199023386626'],
+        sendToRouteV2: reachDestination,
+      }),
+      outgoing_channels: ['1x1x1', '2x2x2'],
+      tokens: 1,
+    },
+    description: 'A probe sends multiple outgoing channels as channel ids',
     expected: {route: expectedRoute},
   },
   {

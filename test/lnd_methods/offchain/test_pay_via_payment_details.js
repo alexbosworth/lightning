@@ -106,11 +106,14 @@ const makeLnd = args => {
       },
     },
     router: {
-      sendPaymentV2: ({}) => {
+      sendPaymentV2: params => {
         const data = args.data || makePaymentData({});
         const emitter = new EventEmitter();
+        const outgoingIds = JSON.stringify(params.outgoing_chan_ids);
 
-        if (!!args.is_end) {
+        if (!!args.outgoing && outgoingIds !== JSON.stringify(args.outgoing)) {
+          process.nextTick(() => emitter.emit('error', 'UnexpectedOutIds'));
+        } else if (!!args.is_end) {
           process.nextTick(() => emitter.emit('end'));
         } else if (!!args.err) {
           process.nextTick(() => emitter.emit('error', args.err));
@@ -277,6 +280,39 @@ const tests = [
   {
     args: makeArgs({}),
     description: 'A payment attempt times out',
+    error: [503, 'PaymentAttemptsTimedOut'],
+  },
+  {
+    args: makeArgs({outgoing_channels: 'channels'}),
+    description: 'Outgoing channels must be an array',
+    error: [400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay'],
+  },
+  {
+    args: makeArgs({outgoing_channels: [12345]}),
+    description: 'Outgoing channels must be standard format channel ids',
+    error: [400, 'ExpectedStandardFormatOutgoingChannelIdsToPay'],
+  },
+  {
+    args: makeArgs({outgoing_channel: 12345}),
+    description: 'The outgoing channel must be a standard format channel id',
+    error: [400, 'ExpectedStandardFormatOutgoingChannelIdsToPay'],
+  },
+  {
+    args: makeArgs({lnd: makeLnd({outgoing: ['1']})}),
+    description: 'The outgoing channel is sent as an outgoing channel id',
+    error: [503, 'PaymentAttemptsTimedOut'],
+  },
+  {
+    args: makeArgs({
+      lnd: makeLnd({outgoing: ['1099511693313', '2199023386626']}),
+      outgoing_channels: ['1x1x1', '2x2x2'],
+    }),
+    description: 'Multiple outgoing channels are sent as outgoing channel ids',
+    error: [503, 'PaymentAttemptsTimedOut'],
+  },
+  {
+    args: makeArgs({lnd: makeLnd({outgoing: ['1']}), outgoing_channels: []}),
+    description: 'An empty set of outgoing channels uses the outgoing channel',
     error: [503, 'PaymentAttemptsTimedOut'],
   },
   {

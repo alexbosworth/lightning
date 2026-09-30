@@ -1,5 +1,18 @@
 # Versions
 
+## 13.1.0
+
+- `getRouteToDestination`, `isDestinationPayable`, `probeForRoute`,
+    `subscribeToProbeForRoute`: Add `outgoing_channels` to constrain the first
+    hop to a set of outgoing channels
+- `payViaPaymentDetails`, `subscribeToPayViaDetails`: Fix `outgoing_channels`
+    constraint not being passed along to the payment
+- `isDestinationPayable`, `pay`, `payViaPaymentDetails`,
+    `payViaPaymentRequest`, `subscribeToPayViaDetails`,
+    `subscribeToPayViaRequest`: Fix `outgoing_channel` constraint being ignored
+    due to removal of the deprecated singular outgoing channel id field in the
+    LND 0.21.0 protos
+
 ## 13.0.1
 
 ### Breaking Changes

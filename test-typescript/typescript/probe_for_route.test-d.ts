@@ -7,6 +7,7 @@ const lnd = {} as AuthenticatedLnd;
 const destination = 'destination';
 const tokens = 21;
 const mtokens = '21';
+const outgoing_channels = ['0x0x1', '0x0x2'];
 const paths = [
   {
     base_fee_mtokens: '1',
@@ -29,6 +30,9 @@ expectError(probeForRoute({lnd, destination}));
 expectError(probeForRoute({lnd, paths}));
 expectError(probeForRoute({lnd, tokens}));
 expectError(probeForRoute({lnd, mtokens}));
+expectError(
+  probeForRoute({lnd, destination, tokens, outgoing_channels: '0x0x1'})
+);
 
 expectType<ProbeForRouteResult>(
   await probeForRoute({lnd, destination, tokens})
@@ -39,6 +43,9 @@ expectType<ProbeForRouteResult>(
 );
 expectType<ProbeForRouteResult>(
   await probeForRoute({lnd, destination, mtokens})
+);
+expectType<ProbeForRouteResult>(
+  await probeForRoute({lnd, destination, outgoing_channels, tokens})
 );
 
 expectType<void>(

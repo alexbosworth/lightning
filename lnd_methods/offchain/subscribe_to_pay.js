@@ -334,21 +334,26 @@ module.exports = args => {
 
     // Determine channel id restrictions if applicable
     outgoingChannelIds: cbk => {
-      if (!args.outgoing_channels) {
-        return cbk();
-      }
-
-      if (!isArray(args.outgoing_channels)) {
+      if (!!args.outgoing_channels && !isArray(args.outgoing_channels)) {
         return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay']);
       }
 
-      if (!!args.outgoing_channel && !args.outgoing_channels) {
-        return cbk(null, [numberFromChannel(args.outgoing_channel)]);
+      const channels = args.outgoing_channels || [];
+      const single = [channel].filter(n => !!n);
+
+      // Multiple outgoing channels take precedence over a single channel
+      const outgoing = !!channels.length ? channels : single;
+
+      // Exit early when there is no outgoing channel constraint
+      if (!outgoing.length) {
+        return cbk();
       }
 
-      return cbk(null, args.outgoing_channels.map(channel => {
-        return chanNumber({channel}).number;
-      }));
+      try {
+        return cbk(null, outgoing.map(n => numberFromChannel(n)));
+      } catch (err) {
+        return cbk([400, 'ExpectedStandardFormatOutgoingChannelIdsToPay']);
+      }
     },
 
     // Validate the payment request features
@@ -409,9 +414,6 @@ module.exports = args => {
       },
       {});
 
-      const singleOut = !channel ? undefined : chanNumber({channel}).number;
-      const hasOutIds = !!outgoingChannelIds && !!outgoingChannelIds.length;
-
       return cbk(null, {
         allow_self_payment: true,
         amt: amounts.tokens,
@@ -428,7 +430,6 @@ module.exports = args => {
         max_parts: args.max_paths || defaultMaxPaths,
         max_shard_size_msat: args.max_path_mtokens || undefined,
         no_inflight_updates: false,
-        outgoing_chan_id: !hasOutIds ? singleOut : undefined,
         outgoing_chan_ids: outgoingChannelIds,
         payment_addr: !!args.payment ? hexToBuf(args.payment) : undefined,
         payment_hash: !args.id ? undefined : hexToBuf(args.id),

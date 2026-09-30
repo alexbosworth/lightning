@@ -20,6 +20,8 @@ export type IsDestinationPayableArgs = AuthenticatedLightningArgs<{
   mtokens?: string;
   /** Pay Out of Outgoing Standard Format Channel Id String */
   outgoing_channel?: string;
+  /** Pay Out of Outgoing Standard Format Channel Ids String */
+  outgoing_channels?: string[];
   /** Time to Spend Finding a Route Milliseconds Number */
   pathfinding_timeout?: number;
   routes?: {

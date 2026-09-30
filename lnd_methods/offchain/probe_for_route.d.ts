@@ -70,6 +70,8 @@ export type ProbeForRouteArgs = AuthenticatedLightningArgs<
     }[];
     /** Outgoing Channel Id String */
     outgoing_channel?: string;
+    /** Outgoing Channel Ids String */
+    outgoing_channels?: string[];
     /** Time to Spend On A Path Milliseconds Number */
     path_timeout_ms?: number;
     /** Payment Identifier Hex String */

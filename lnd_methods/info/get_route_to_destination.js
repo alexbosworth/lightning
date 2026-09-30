@@ -67,6 +67,7 @@ const trimByte = 0;
     }]
     [mtokens]: <Tokens to Send String>
     [outgoing_channel]: <Outgoing Channel Id String>
+    [outgoing_channels]: [<Outgoing Channel Ids String>]
     [payment]: <Payment Identifier Hex String>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
@@ -131,6 +132,18 @@ module.exports = (args, cbk) => {
             chanNumber({channel: args.outgoing_channel});
           } catch (err) {
             return cbk([400, 'ExpectedStandardFormatChannelIdForOutChannel']);
+          }
+        }
+
+        if (!!args.outgoing_channels && !isArray(args.outgoing_channels)) {
+          return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToGetRoute']);
+        }
+
+        if (!!args.outgoing_channels) {
+          try {
+            args.outgoing_channels.forEach(channel => chanNumber({channel}));
+          } catch (err) {
+            return cbk([400, 'ExpectedStandardFormatChannelIdsForOutChannels']);
           }
         }
 
@@ -200,14 +213,20 @@ module.exports = (args, cbk) => {
         return getHeight({lnd: args.lnd}, cbk);
       }],
 
-      // Determine the outgoing channel
-      outgoingChan: ['validate', ({}, cbk) => {
+      // Determine the outgoing channels
+      outgoingChans: ['validate', ({}, cbk) => {
+        const channels = args.outgoing_channels || [];
+        const single = [args.outgoing_channel].filter(n => !!n);
+
+        // Multiple outgoing channels take precedence over a single channel
+        const outgoing = !!channels.length ? channels : single;
+
         // Exit early when there is no outgoing channel constraint
-        if (!args.outgoing_channel) {
+        if (!outgoing.length) {
           return cbk();
         }
 
-        return cbk(null, chanNumber({channel: args.outgoing_channel}).number);
+        return cbk(null, outgoing.map(n => chanNumber({channel: n}).number));
       }],
 
       // Derive hop hints in RPC format
@@ -243,7 +262,7 @@ module.exports = (args, cbk) => {
         'destinationCustomRecords',
         'destinationFeatures',
         'feeLimitMillitokens',
-        'outgoingChan',
+        'outgoingChans',
         'routeHints',
         ({
           amountMillitokens,
@@ -251,7 +270,7 @@ module.exports = (args, cbk) => {
           destinationFeatures,
           feeLimitMillitokens,
           cltvLimit,
-          outgoingChan,
+          outgoingChans,
           routeHints,
         },
         cbk) =>
@@ -271,7 +290,7 @@ module.exports = (args, cbk) => {
             ignored_nodes: ignoreAsIgnoredNodes({ignore}).ignored || undefined,
             ignored_pairs: ignoreAsIgnoredPairs({ignore}).ignored || undefined,
             last_hop_pubkey: bufFromHex(args.incoming_peer) || undefined,
-            outgoing_chan_ids: !!outgoingChan ? [outgoingChan] : undefined,
+            outgoing_chan_ids: outgoingChans,
             pub_key: args.destination,
             route_hints: routeHints || undefined,
             source_pub_key: args.start || undefined,

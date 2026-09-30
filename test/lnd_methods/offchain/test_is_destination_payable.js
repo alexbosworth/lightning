@@ -106,11 +106,14 @@ const makeLnd = args => {
       },
     },
     router: {
-      sendPaymentV2: ({}) => {
+      sendPaymentV2: params => {
         const data = args.data || makePaymentData({});
         const emitter = new EventEmitter();
+        const outgoingIds = JSON.stringify(params.outgoing_chan_ids);
 
-        if (!!args.is_end) {
+        if (!!args.outgoing && outgoingIds !== JSON.stringify(args.outgoing)) {
+          process.nextTick(() => emitter.emit('error', 'UnexpectedOutIds'));
+        } else if (!!args.is_end) {
           process.nextTick(() => emitter.emit('end'));
         } else if (!!args.err) {
           process.nextTick(() => emitter.emit('error', args.err));
@@ -254,6 +257,19 @@ const tests = [
   {
     args: makeArgs({}),
     description: 'A payment attempt times out',
+    expected: {is_payable: false},
+  },
+  {
+    args: makeArgs({lnd: makeLnd({outgoing: ['1']})}),
+    description: 'The outgoing channel is sent as an outgoing channel id',
+    expected: {is_payable: false},
+  },
+  {
+    args: makeArgs({
+      lnd: makeLnd({outgoing: ['1099511693313', '2199023386626']}),
+      outgoing_channels: ['1x1x1', '2x2x2'],
+    }),
+    description: 'Multiple outgoing channels are sent as outgoing channel ids',
     expected: {is_payable: false},
   },
 ];

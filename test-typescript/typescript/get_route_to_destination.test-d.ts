@@ -13,6 +13,7 @@ const messages = [
     value: 'value',
   },
 ];
+const outgoing_channels = ['0x0x1', '0x0x2'];
 const payment = '00';
 const routes = [
   [
@@ -31,6 +32,9 @@ expectError(getRouteToDestination());
 expectError(getRouteToDestination({}));
 expectError(getRouteToDestination({destination}));
 expectError(getRouteToDestination({lnd}));
+expectError(
+  getRouteToDestination({lnd, destination, outgoing_channels: '0x0x1'})
+);
 
 expectType<GetRouteToDestinationResult>(
   await getRouteToDestination({lnd, destination})
@@ -40,6 +44,7 @@ expectType<GetRouteToDestinationResult>(
     lnd,
     destination,
     messages,
+    outgoing_channels,
     payment,
     routes,
     total_mtokens,

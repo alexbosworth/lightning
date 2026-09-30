@@ -8,7 +8,7 @@ const {getRouteToDestination} = require('./../../../');
 
 const customRecords = {};
 
-const makeLnd = ({custom, err, res}) => {
+const makeLnd = ({custom, err, outgoing, res}) => {
   const response = {
     routes: [{
       hops: [{
@@ -42,7 +42,15 @@ const makeLnd = ({custom, err, res}) => {
     },
     default: {
       getInfo: ({}, cbk) => cbk(null, getInfoResponse),
-      queryRoutes: ({}, cbk) => cbk(err, res !== undefined ? res : response),
+      queryRoutes: (args, cbk) => {
+        const outgoingIds = JSON.stringify(args.outgoing_chan_ids);
+
+        if (!!outgoing && outgoingIds !== JSON.stringify(outgoing)) {
+          return cbk('UnexpectedOutgoingChannelIdsInQueryRoutes');
+        }
+
+        return cbk(err, res !== undefined ? res : response);
+      },
     },
   };
 };
@@ -66,6 +74,31 @@ const makeArgs = override => {
   Object.keys(override).forEach(key => args[key] = override[key]);
 
   return args;
+};
+
+const expectedRoute = {
+  route: {
+    confidence: 1000000,
+    fee: 0,
+    fee_mtokens: '1',
+    hops: [{
+      channel: '0x0x1',
+      fee: 0,
+      fee_mtokens: '1',
+      forward: 0,
+      forward_mtokens: '1',
+      public_key: '00',
+      timeout: 1,
+    }],
+    messages: [],
+    mtokens: '1',
+    payment: '00',
+    safe_fee: 1,
+    safe_tokens: 1,
+    timeout: 1,
+    tokens: 0,
+    total_mtokens: '1',
+  },
 };
 
 const tests = [
@@ -93,6 +126,16 @@ const tests = [
     args: makeArgs({outgoing_channel: 12345}),
     description: 'Outgoing channel is expected in standard format',
     error: [400, 'ExpectedStandardFormatChannelIdForOutChannel'],
+  },
+  {
+    args: makeArgs({outgoing_channels: 'channels'}),
+    description: 'Outgoing channels are expected as an array',
+    error: [400, 'ExpectedArrayOfOutgoingChannelIdsToGetRoute'],
+  },
+  {
+    args: makeArgs({outgoing_channels: [12345]}),
+    description: 'Outgoing channels are expected in standard format',
+    error: [400, 'ExpectedStandardFormatChannelIdsForOutChannels'],
   },
   {
     args: makeArgs({payment: undefined}),
@@ -187,6 +230,32 @@ const tests = [
         total_mtokens: undefined,
       },
     },
+  },
+  {
+    args: makeArgs({
+      lnd: makeLnd({outgoing: ['1099511693313']}),
+      outgoing_channel: '1x1x1',
+    }),
+    description: 'The outgoing channel is sent as an outgoing channel id',
+    expected: expectedRoute,
+  },
+  {
+    args: makeArgs({
+      lnd: makeLnd({outgoing: ['1099511693313', '2199023386626']}),
+      outgoing_channel: '0x0x0',
+      outgoing_channels: ['1x1x1', '2x2x2'],
+    }),
+    description: 'Multiple outgoing channels are sent as outgoing channel ids',
+    expected: expectedRoute,
+  },
+  {
+    args: makeArgs({
+      lnd: makeLnd({outgoing: ['1099511693313']}),
+      outgoing_channel: '1x1x1',
+      outgoing_channels: [],
+    }),
+    description: 'An empty set of outgoing channels uses the outgoing channel',
+    expected: expectedRoute,
   },
   {
     args: makeArgs({}),

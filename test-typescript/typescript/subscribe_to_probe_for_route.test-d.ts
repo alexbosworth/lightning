@@ -5,6 +5,7 @@ import {subscribeToProbeForRoute} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const destination = 'destination';
+const outgoing_channels = ['0x0x1', '0x0x2'];
 const paths = [
   {
     base_fee_mtokens: '1',
@@ -20,9 +21,15 @@ expectError(subscribeToProbeForRoute({}));
 expectError(subscribeToProbeForRoute({destination}));
 expectError(subscribeToProbeForRoute({paths}));
 expectError(subscribeToProbeForRoute({lnd}));
+expectError(
+  subscribeToProbeForRoute({lnd, destination, outgoing_channels: '0x0x1'})
+);
 
 expectType<events.EventEmitter>(subscribeToProbeForRoute({lnd, destination}));
 expectType<events.EventEmitter>(subscribeToProbeForRoute({lnd, paths}));
 expectType<events.EventEmitter>(
   subscribeToProbeForRoute({lnd, destination, paths})
+);
+expectType<events.EventEmitter>(
+  subscribeToProbeForRoute({lnd, destination, outgoing_channels})
 );

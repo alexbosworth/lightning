@@ -350,6 +350,36 @@ const tests = [
   {
     args: {
       destination: Buffer.alloc(33).toString('hex'),
+      lnd: makeLnd({}),
+      outgoing_channels: ['1x1x1', '2x2x2'],
+      probe_timeout_ms: 1,
+      tokens: 1,
+    },
+    description: 'A probe sends outgoing channels with route queries',
+    expected: {
+      failures: [],
+      requests: [
+        {
+          amt_msat: '1000',
+          dest_features: undefined,
+          final_cltv_delta: 46,
+          outgoing_chan_ids: ['1099511693313', '2199023386626'],
+          pub_key: Buffer.alloc(33).toString('hex'),
+        },
+        {
+          amt_msat: '1000',
+          dest_features: undefined,
+          final_cltv_delta: 46,
+          outgoing_chan_ids: ['1099511693313', '2199023386626'],
+          pub_key: Buffer.alloc(33).toString('hex'),
+        },
+      ],
+      routes: [expectedRoute],
+    },
+  },
+  {
+    args: {
+      destination: Buffer.alloc(33).toString('hex'),
       lnd: makeLnd({getInfo: ({}, cbk) => cbk('err')}),
       tokens: 1,
     },
@@ -809,6 +839,10 @@ tests.forEach(({args, description, error, expected}) => {
 
             if (!!expected.requests.find(n => !!n.fee_limit)) {
               query.fee_limit = request.fee_limit;
+            }
+
+            if (!!expected.requests.find(n => !!n.outgoing_chan_ids)) {
+              query.outgoing_chan_ids = request.outgoing_chan_ids;
             }
 
             return query;

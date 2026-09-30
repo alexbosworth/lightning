@@ -23,6 +23,7 @@ const defaultTokens = 1;
     [max_timeout_height]: <Maximum Height of Payment Timeout Number>
     [mtokens]: <Paying Millitokens String>
     [outgoing_channel]: <Pay Out of Outgoing Standard Format Channel Id String>
+    [outgoing_channels]: [<Pay Out of Outgoing Standard Channel Ids String>]
     [pathfinding_timeout]: <Time to Spend Finding a Route Milliseconds Number>
     [routes]: [[{
       [base_fee_mtokens]: <Base Routing Fee In Millitokens String>
@@ -69,6 +70,7 @@ module.exports = (args, cbk) => {
           max_timeout_height: args.max_timeout_height,
           mtokens: isDefaultTokens ? defaultMillitokens : args.mtokens,
           outgoing_channel: args.outgoing_channel,
+          outgoing_channels: args.outgoing_channels,
           pathfinding_timeout: args.pathfinding_timeout,
           routes: args.routes,
           tokens: isDefaultTokens ? defaultTokens : args.tokens,

@@ -50,6 +50,7 @@ const {nextTick} = process;
     }]
     [mtokens]: <Millitokens to Probe String>
     [outgoing_channel]: <Outgoing Channel Id String>
+    [outgoing_channels]: [<Outgoing Channel Ids String>]
     [path_timeout_ms]: <Skip Individual Path Attempt After Milliseconds Number>
     [paths]: [{
       base_fee_mtokens: <Accumulated Base Fee Millitokens String>
@@ -348,6 +349,7 @@ module.exports = args => {
             messages: target.messages,
             mtokens: target.mtokens,
             outgoing_channel: args.outgoing_channel,
+            outgoing_channels: args.outgoing_channels,
             payment: target.payment,
             routes: target.routes,
             total_mtokens: target.total_mtokens,

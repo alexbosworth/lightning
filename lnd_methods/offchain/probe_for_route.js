@@ -45,6 +45,7 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
     }]
     [mtokens]: <Millitokens to Pay String>
     [outgoing_channel]: <Outgoing Channel Id String>
+    [outgoing_channels]: [<Outgoing Channel Ids String>]
     [path_timeout_ms]: <Time to Spend On A Path Milliseconds Number>
     [paths]: [{
       base_fee_mtokens: <Accumulated Base Fee Millitokens String>
@@ -154,6 +155,7 @@ module.exports = (args, cbk) => {
             messages: args.messages,
             mtokens: args.mtokens,
             outgoing_channel: args.outgoing_channel,
+            outgoing_channels: args.outgoing_channels,
             path_timeout_ms: args.path_timeout_ms,
             paths: args.paths,
             payment: args.payment,

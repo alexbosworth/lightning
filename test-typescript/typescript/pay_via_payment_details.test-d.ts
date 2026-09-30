@@ -22,6 +22,7 @@ const args = {
   ],
   mtokens: '1000',
   outgoing_channel: '0x0x1',
+  outgoing_channels: ['0x0x1', '0x0x2'],
   pathfinding_timeout: 1,
   routes: [
     [
@@ -45,6 +46,9 @@ expectError(payViaPaymentDetails({destination, routes}));
 expectError(payViaPaymentDetails({routes}));
 expectError(payViaPaymentDetails({lnd}));
 expectError(payViaPaymentDetails({lnd, routes}));
+expectError(
+  payViaPaymentDetails({lnd, destination, outgoing_channels: '0x0x1'})
+);
 
 expectType<PayViaPaymentDetailsResult>(
   await payViaPaymentDetails({

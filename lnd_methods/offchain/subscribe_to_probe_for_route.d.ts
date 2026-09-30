@@ -59,6 +59,8 @@ export type SubscribeToProbeForRouteArgs = AuthenticatedLightningArgs<{
   mtokens?: string;
   /** Outgoing Channel Id */
   outgoing_channel?: string;
+  /** Outgoing Channel Ids */
+  outgoing_channels?: string[];
   /** Skip Individual Path Attempt After Milliseconds */
   path_timeout_ms?: number;
   /** Payment Identifier Hex */

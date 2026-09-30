@@ -40,6 +40,8 @@ export type GetRouteToDestinationArgs = AuthenticatedLightningArgs<{
   mtokens?: string;
   /** Outgoing Channel Id */
   outgoing_channel?: string;
+  /** Outgoing Channel Ids */
+  outgoing_channels?: string[];
   /** Payment Identifier Hex */
   payment?: string;
   routes?: {
