@@ -1,5 +1,10 @@
 # Versions
 
+## 13.1.1
+
+- Add support for LND 0.21.4
+- Add support for LND 0.20.5
+
 ## 13.1.0
 
 - `getRouteToDestination`, `isDestinationPayable`, `probeForRoute`,
