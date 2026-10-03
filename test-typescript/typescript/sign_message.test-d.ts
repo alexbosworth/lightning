@@ -1,19 +1,23 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {signMessage, SignMessageResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const message = 'message';
 
-expectError(signMessage());
-expectError(signMessage({}));
-expectError(signMessage({message}));
-expectError(signMessage({lnd}));
+// @ts-expect-error
+signMessage();
+// @ts-expect-error
+signMessage({});
+// @ts-expect-error
+signMessage({message});
+// @ts-expect-error
+signMessage({lnd});
 
-expectType<SignMessageResult>(await signMessage({lnd, message}));
+expectType<SignMessageResult>()(await signMessage({lnd, message}));
 
-expectType<void>(
+expectType<void>()(
   signMessage({lnd, message}, (error, result) => {
-    expectType<SignMessageResult>(result);
+    expectType<SignMessageResult>()(result);
   })
 );

@@ -1,18 +1,21 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {partiallySignPsbt, PartiallySignPsbtResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const psbt = 'psbt';
 
-expectError(partiallySignPsbt());
-expectError(partiallySignPsbt({}));
-expectError(partiallySignPsbt({lnd}));
+// @ts-expect-error
+partiallySignPsbt();
+// @ts-expect-error
+partiallySignPsbt({});
+// @ts-expect-error
+partiallySignPsbt({lnd});
 
-expectType<PartiallySignPsbtResult>(await partiallySignPsbt({lnd, psbt}));
+expectType<PartiallySignPsbtResult>()(await partiallySignPsbt({lnd, psbt}));
 
-expectType<void>(
+expectType<void>()(
   partiallySignPsbt({lnd, psbt}, (error, result) => {
-    expectType<PartiallySignPsbtResult>(result);
+    expectType<PartiallySignPsbtResult>()(result);
   })
 );

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {fundPsbt, FundPsbtResult} from '../../lnd_methods';
 
@@ -13,21 +13,25 @@ const inputs = [
 ];
 const outputs = [{address: 'address', tokens: 1}];
 
-expectError(fundPsbt());
-expectError(fundPsbt({}));
-expectError(fundPsbt({lnd}));
-expectError(fundPsbt({lnd, psbt, outputs})); // Cannot specify both a psbt output and raw outputs
+// @ts-expect-error
+fundPsbt();
+// @ts-expect-error
+fundPsbt({});
+// @ts-expect-error
+fundPsbt({lnd});
+// @ts-expect-error
+fundPsbt({lnd, psbt, outputs}); // Cannot specify both a psbt output and raw outputs
 
-expectType<FundPsbtResult>(await fundPsbt({lnd, psbt, inputs}));
-expectType<FundPsbtResult>(await fundPsbt({lnd, outputs, inputs}));
+expectType<FundPsbtResult>()(await fundPsbt({lnd, psbt, inputs}));
+expectType<FundPsbtResult>()(await fundPsbt({lnd, outputs, inputs}));
 
-expectType<void>(
+expectType<void>()(
   fundPsbt({lnd, psbt}, (error, result) => {
-    expectType<FundPsbtResult>(result);
+    expectType<FundPsbtResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   fundPsbt({lnd, outputs}, (error, result) => {
-    expectType<FundPsbtResult>(result);
+    expectType<FundPsbtResult>()(result);
   })
 );

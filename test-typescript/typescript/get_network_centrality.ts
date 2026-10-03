@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getNetworkCentrality,
@@ -7,13 +7,15 @@ import {
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getNetworkCentrality());
-expectError(getNetworkCentrality({}));
+// @ts-expect-error
+getNetworkCentrality();
+// @ts-expect-error
+getNetworkCentrality({});
 
-expectType<GetNetworkCentralityResult>(await getNetworkCentrality({lnd}));
+expectType<GetNetworkCentralityResult>()(await getNetworkCentrality({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getNetworkCentrality({lnd}, (error, result) => {
-    expectType<GetNetworkCentralityResult>(result);
+    expectType<GetNetworkCentralityResult>()(result);
   })
 );

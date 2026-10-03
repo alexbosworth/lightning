@@ -1,5 +1,5 @@
 import * as events from 'events';
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {subscribeToChainSpend} from '../../lnd_methods';
 
@@ -17,35 +17,44 @@ const transaction_vout = 0;
 const args = {lnd, min_height};
 const argsWithOptional = {...args, transaction_id, transaction_vout};
 
-expectError(subscribeToChainSpend());
-expectError(subscribeToChainSpend({}));
-expectError(subscribeToChainSpend({lnd}));
-expectError(subscribeToChainSpend({...args, output_script, bech32_address}));
-expectError(subscribeToChainSpend({...args, output_script, p2pkh_address}));
-expectError(subscribeToChainSpend({...args, output_script, p2sh_address}));
-expectError(subscribeToChainSpend({...args, bech32_address, p2pkh_address}));
-expectError(subscribeToChainSpend({...args, bech32_address, p2sh_address}));
-expectError(subscribeToChainSpend({...args, p2sh_address, p2pkh_address}));
+// @ts-expect-error
+subscribeToChainSpend();
+// @ts-expect-error
+subscribeToChainSpend({});
+// @ts-expect-error
+subscribeToChainSpend({lnd});
+// @ts-expect-error
+subscribeToChainSpend({...args, output_script, bech32_address});
+// @ts-expect-error
+subscribeToChainSpend({...args, output_script, p2pkh_address});
+// @ts-expect-error
+subscribeToChainSpend({...args, output_script, p2sh_address});
+// @ts-expect-error
+subscribeToChainSpend({...args, bech32_address, p2pkh_address});
+// @ts-expect-error
+subscribeToChainSpend({...args, bech32_address, p2sh_address});
+// @ts-expect-error
+subscribeToChainSpend({...args, p2sh_address, p2pkh_address});
 
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...args, output_script})
 );
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...argsWithOptional, output_script})
 );
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...args, bech32_address})
 );
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...argsWithOptional, bech32_address})
 );
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...args, p2pkh_address})
 );
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...argsWithOptional, p2pkh_address})
 );
-expectType<events.EventEmitter>(subscribeToChainSpend({...args, p2sh_address}));
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(subscribeToChainSpend({...args, p2sh_address}));
+expectType<events.EventEmitter>()(
   subscribeToChainSpend({...argsWithOptional, p2sh_address})
 );

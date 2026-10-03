@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getChannelBalance, GetChannelBalanceResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getChannelBalance());
-expectError(getChannelBalance({}));
+// @ts-expect-error
+getChannelBalance();
+// @ts-expect-error
+getChannelBalance({});
 
-expectType<GetChannelBalanceResult>(await getChannelBalance({lnd}));
+expectType<GetChannelBalanceResult>()(await getChannelBalance({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getChannelBalance({lnd}, (error, result) => {
-    expectType<GetChannelBalanceResult>(result);
+    expectType<GetChannelBalanceResult>()(result);
   })
 );

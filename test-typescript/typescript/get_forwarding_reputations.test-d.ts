@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getForwardingReputations,
@@ -7,15 +7,17 @@ import {
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getForwardingReputations());
-expectError(getForwardingReputations({}));
+// @ts-expect-error
+getForwardingReputations();
+// @ts-expect-error
+getForwardingReputations({});
 
-expectType<GetForwardingReputationsResult>(
+expectType<GetForwardingReputationsResult>()(
   await getForwardingReputations({lnd})
 );
 
-expectType<void>(
+expectType<void>()(
   getForwardingReputations({lnd}, (error, result) => {
-    expectType<GetForwardingReputationsResult>(result);
+    expectType<GetForwardingReputationsResult>()(result);
   })
 );

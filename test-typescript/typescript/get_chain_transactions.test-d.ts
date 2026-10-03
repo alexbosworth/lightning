@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getChainTransactions,
@@ -10,21 +10,23 @@ const lnd = {} as AuthenticatedLnd;
 const before = 2;
 const after = 1;
 
-expectError(getChainTransactions());
-expectError(getChainTransactions({}));
+// @ts-expect-error
+getChainTransactions();
+// @ts-expect-error
+getChainTransactions({});
 
-expectType<GetChainTransactionsResult>(await getChainTransactions({lnd}));
-expectType<GetChainTransactionsResult>(
+expectType<GetChainTransactionsResult>()(await getChainTransactions({lnd}));
+expectType<GetChainTransactionsResult>()(
   await getChainTransactions({lnd, before, after})
 );
 
-expectType<void>(
+expectType<void>()(
   getChainTransactions({lnd}, (error, result) => {
-    expectType<GetChainTransactionsResult>(result);
+    expectType<GetChainTransactionsResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getChainTransactions({lnd, before, after}, (error, result) => {
-    expectType<GetChainTransactionsResult>(result);
+    expectType<GetChainTransactionsResult>()(result);
   })
 );

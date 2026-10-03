@@ -1,17 +1,21 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {recoverFundsFromChannels} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const backup = 'backup';
 
-expectError(recoverFundsFromChannels());
-expectError(recoverFundsFromChannels({}));
-expectError(recoverFundsFromChannels({backup}));
-expectError(recoverFundsFromChannels({lnd}));
+// @ts-expect-error
+recoverFundsFromChannels();
+// @ts-expect-error
+recoverFundsFromChannels({});
+// @ts-expect-error
+recoverFundsFromChannels({backup});
+// @ts-expect-error
+recoverFundsFromChannels({lnd});
 
-expectType<void>(await recoverFundsFromChannels({lnd, backup}));
+expectType<void>()(await recoverFundsFromChannels({lnd, backup}));
 
-expectType<void>(
+expectType<void>()(
   recoverFundsFromChannels({lnd, backup}, (error, result) => {})
 );

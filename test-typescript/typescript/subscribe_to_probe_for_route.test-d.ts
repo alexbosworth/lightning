@@ -1,5 +1,5 @@
 import * as events from 'events';
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {subscribeToProbeForRoute} from '../../lnd_methods';
 
@@ -16,20 +16,24 @@ const paths = [
   },
 ];
 
-expectError(subscribeToProbeForRoute());
-expectError(subscribeToProbeForRoute({}));
-expectError(subscribeToProbeForRoute({destination}));
-expectError(subscribeToProbeForRoute({paths}));
-expectError(subscribeToProbeForRoute({lnd}));
-expectError(
-  subscribeToProbeForRoute({lnd, destination, outgoing_channels: '0x0x1'})
-);
+// @ts-expect-error
+subscribeToProbeForRoute();
+// @ts-expect-error
+subscribeToProbeForRoute({});
+// @ts-expect-error
+subscribeToProbeForRoute({destination});
+// @ts-expect-error
+subscribeToProbeForRoute({paths});
+// @ts-expect-error
+subscribeToProbeForRoute({lnd});
+// @ts-expect-error
+subscribeToProbeForRoute({lnd, destination, outgoing_channels: '0x0x1'});
 
-expectType<events.EventEmitter>(subscribeToProbeForRoute({lnd, destination}));
-expectType<events.EventEmitter>(subscribeToProbeForRoute({lnd, paths}));
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(subscribeToProbeForRoute({lnd, destination}));
+expectType<events.EventEmitter>()(subscribeToProbeForRoute({lnd, paths}));
+expectType<events.EventEmitter>()(
   subscribeToProbeForRoute({lnd, destination, paths})
 );
-expectType<events.EventEmitter>(
+expectType<events.EventEmitter>()(
   subscribeToProbeForRoute({lnd, destination, outgoing_channels})
 );

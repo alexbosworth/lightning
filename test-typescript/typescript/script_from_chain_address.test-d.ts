@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   scriptFromChainAddress,
@@ -10,21 +10,25 @@ const bech32_address =
 const p2pkh_address = '1Cak4mhFsBG3X8xtqSnZsAHWzhUWTW31bR';
 const p2sh_address = '3EENzQdQS3BvvnkeJjC5uVwUKFuTczpnok';
 
-expectError(scriptFromChainAddress());
-expectError(scriptFromChainAddress({}));
-expectError(scriptFromChainAddress({bech32_address, p2pkh_address}));
-expectError(scriptFromChainAddress({bech32_address, p2sh_address}));
-expectError(scriptFromChainAddress({p2pkh_address, p2sh_address}));
-expectError(
-  scriptFromChainAddress({bech32_address, p2pkh_address, p2sh_address})
-);
+// @ts-expect-error
+scriptFromChainAddress();
+// @ts-expect-error
+scriptFromChainAddress({});
+// @ts-expect-error
+scriptFromChainAddress({bech32_address, p2pkh_address});
+// @ts-expect-error
+scriptFromChainAddress({bech32_address, p2sh_address});
+// @ts-expect-error
+scriptFromChainAddress({p2pkh_address, p2sh_address});
+// @ts-expect-error
+scriptFromChainAddress({bech32_address, p2pkh_address, p2sh_address});
 
-expectType<ScriptFromChainAddressResult>(
+expectType<ScriptFromChainAddressResult>()(
   scriptFromChainAddress({bech32_address})
 );
-expectType<ScriptFromChainAddressResult>(
+expectType<ScriptFromChainAddressResult>()(
   scriptFromChainAddress({p2pkh_address})
 );
-expectType<ScriptFromChainAddressResult>(
+expectType<ScriptFromChainAddressResult>()(
   scriptFromChainAddress({p2sh_address})
 );

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   isDestinationPayable,
@@ -9,23 +9,26 @@ const lnd = {} as AuthenticatedLnd;
 const destination = 'destination';
 const outgoing_channels = ['0x0x1', '0x0x2'];
 
-expectError(isDestinationPayable());
-expectError(isDestinationPayable({}));
-expectError(isDestinationPayable({destination}));
-expectError(isDestinationPayable({lnd}));
-expectError(
-  isDestinationPayable({lnd, destination, outgoing_channels: '0x0x1'})
-);
+// @ts-expect-error
+isDestinationPayable();
+// @ts-expect-error
+isDestinationPayable({});
+// @ts-expect-error
+isDestinationPayable({destination});
+// @ts-expect-error
+isDestinationPayable({lnd});
+// @ts-expect-error
+isDestinationPayable({lnd, destination, outgoing_channels: '0x0x1'});
 
-expectType<IsDestinationPayableResult>(
+expectType<IsDestinationPayableResult>()(
   await isDestinationPayable({lnd, destination})
 );
-expectType<IsDestinationPayableResult>(
+expectType<IsDestinationPayableResult>()(
   await isDestinationPayable({lnd, destination, outgoing_channels})
 );
 
-expectType<void>(
+expectType<void>()(
   isDestinationPayable({lnd, destination}, (error, result) => {
-    expectType<IsDestinationPayableResult>(result);
+    expectType<IsDestinationPayableResult>()(result);
   })
 );

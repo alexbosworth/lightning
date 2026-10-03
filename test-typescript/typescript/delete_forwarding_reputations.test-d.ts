@@ -1,12 +1,14 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {deleteForwardingReputations} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(deleteForwardingReputations());
-expectError(deleteForwardingReputations({}));
+// @ts-expect-error
+deleteForwardingReputations();
+// @ts-expect-error
+deleteForwardingReputations({});
 
-expectType<void>(await deleteForwardingReputations({lnd}));
+expectType<void>()(await deleteForwardingReputations({lnd}));
 
-expectType<void>(deleteForwardingReputations({lnd}, () => {}));
+expectType<void>()(deleteForwardingReputations({lnd}, () => {}));

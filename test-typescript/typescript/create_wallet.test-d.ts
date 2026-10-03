@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {UnauthenticatedLnd} from '../../lnd_grpc';
 import {createWallet, CreateWalletResult} from '../../lnd_methods';
 
@@ -8,26 +8,37 @@ const passphrase = 'passphrase';
 const password = 'password';
 const seed = 'seed';
 
-expectError(createWallet());
-expectError(createWallet({}));
-expectError(createWallet({lnd}));
-expectError(createWallet({passphrase}));
-expectError(createWallet({password}));
-expectError(createWallet({seed}));
-expectError(createWallet({lnd, passphrase}));
-expectError(createWallet({lnd, password}));
-expectError(createWallet({lnd, seed}));
-expectError(createWallet({lnd, passphrase, password}));
-expectError(createWallet({lnd, passphrase, seed}));
+// @ts-expect-error
+createWallet();
+// @ts-expect-error
+createWallet({});
+// @ts-expect-error
+createWallet({lnd});
+// @ts-expect-error
+createWallet({passphrase});
+// @ts-expect-error
+createWallet({password});
+// @ts-expect-error
+createWallet({seed});
+// @ts-expect-error
+createWallet({lnd, passphrase});
+// @ts-expect-error
+createWallet({lnd, password});
+// @ts-expect-error
+createWallet({lnd, seed});
+// @ts-expect-error
+createWallet({lnd, passphrase, password});
+// @ts-expect-error
+createWallet({lnd, passphrase, seed});
 
-expectType<CreateWalletResult>(await createWallet({lnd, password, seed}));
-expectType<CreateWalletResult>(
+expectType<CreateWalletResult>()(await createWallet({lnd, password, seed}));
+expectType<CreateWalletResult>()(
   await createWallet({lnd, passphrase, password, seed})
 );
 
 createWallet({lnd, password, seed}, (err, res) => {
-  expectType<CreateWalletResult>(res);
+  expectType<CreateWalletResult>()(res);
 });
 createWallet({lnd, passphrase, password, seed}, (err, res) => {
-  expectType<CreateWalletResult>(res);
+  expectType<CreateWalletResult>()(res);
 });

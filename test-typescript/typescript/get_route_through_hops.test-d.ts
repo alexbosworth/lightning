@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getRouteThroughHops,
@@ -10,34 +10,39 @@ const public_keys = ['a'];
 const tokens = 1;
 const mtokens = '1';
 
-expectError(getRouteThroughHops());
-expectError(getRouteThroughHops({}));
-expectError(getRouteThroughHops({public_keys}));
-expectError(getRouteThroughHops({lnd}));
-expectError(getRouteThroughHops({lnd, tokens, mtokens})); // Specifying both mtokens and tokens is not supported
+// @ts-expect-error
+getRouteThroughHops();
+// @ts-expect-error
+getRouteThroughHops({});
+// @ts-expect-error
+getRouteThroughHops({public_keys});
+// @ts-expect-error
+getRouteThroughHops({lnd});
+// @ts-expect-error
+getRouteThroughHops({lnd, tokens, mtokens}); // Specifying both mtokens and tokens is not supported
 
-expectType<GetRouteThroughHopsResult>(
+expectType<GetRouteThroughHopsResult>()(
   await getRouteThroughHops({lnd, public_keys})
 );
-expectType<GetRouteThroughHopsResult>(
+expectType<GetRouteThroughHopsResult>()(
   await getRouteThroughHops({lnd, public_keys, tokens})
 );
-expectType<GetRouteThroughHopsResult>(
+expectType<GetRouteThroughHopsResult>()(
   await getRouteThroughHops({lnd, public_keys, mtokens})
 );
 
-expectType<void>(
+expectType<void>()(
   getRouteThroughHops({lnd, public_keys}, (error, result) => {
-    expectType<GetRouteThroughHopsResult>(result);
+    expectType<GetRouteThroughHopsResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getRouteThroughHops({lnd, public_keys, tokens}, (error, result) => {
-    expectType<GetRouteThroughHopsResult>(result);
+    expectType<GetRouteThroughHopsResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getRouteThroughHops({lnd, public_keys, mtokens}, (error, result) => {
-    expectType<GetRouteThroughHopsResult>(result);
+    expectType<GetRouteThroughHopsResult>()(result);
   })
 );

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {proposeChannel} from '../../lnd_methods';
 
@@ -34,11 +34,13 @@ const argsWithOptionalProperties = {
   is_private,
 };
 
-expectError(proposeChannel());
-expectError(proposeChannel({}));
+// @ts-expect-error
+proposeChannel();
+// @ts-expect-error
+proposeChannel({});
 
-expectType<void>(await proposeChannel(args));
-expectType<void>(await proposeChannel(argsWithOptionalProperties));
+expectType<void>()(await proposeChannel(args));
+expectType<void>()(await proposeChannel(argsWithOptionalProperties));
 
-expectType<void>(proposeChannel(args, (error) => {}));
-expectType<void>(proposeChannel(argsWithOptionalProperties, (error) => {}));
+expectType<void>()(proposeChannel(args, (error) => {}));
+expectType<void>()(proposeChannel(argsWithOptionalProperties, (error) => {}));

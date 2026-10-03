@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {requestChainFeeIncrease} from '../../lnd_methods';
 
@@ -12,32 +12,34 @@ const target_confirmations = 3;
 
 const args = {lnd, transaction_id, transaction_vout};
 
-expectError(requestChainFeeIncrease());
-expectError(requestChainFeeIncrease({lnd}));
-expectError(requestChainFeeIncrease({lnd, transaction_id, transaction_vout}));
+// @ts-expect-error
+requestChainFeeIncrease();
+// @ts-expect-error
+requestChainFeeIncrease({lnd});
+// @ts-expect-error
+requestChainFeeIncrease({lnd, transaction_id, transaction_vout});
 // ExpectedEitherFeeRateOrTargetNotBothToBumpFee
-expectError(
-  requestChainFeeIncrease({
-    ...args,
-    fee_tokens_per_vbyte,
-    target_confirmations,
-  })
-);
+// @ts-expect-error
+requestChainFeeIncrease({
+  ...args,
+  fee_tokens_per_vbyte,
+  target_confirmations,
+});
 
-expectType<void>(
+expectType<void>()(
   await requestChainFeeIncrease({...args, fee_tokens_per_vbyte})
 );
-expectType<void>(
+expectType<void>()(
   await requestChainFeeIncrease({...args, target_confirmations})
 );
 
-expectType<void>(
+expectType<void>()(
   requestChainFeeIncrease(
     {...args, fee_tokens_per_vbyte},
     (error, result) => {}
   )
 );
-expectType<void>(
+expectType<void>()(
   requestChainFeeIncrease(
     {...args, target_confirmations},
     (error, result) => {}

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {updatePathfindingSettings} from '../../lnd_methods';
 
@@ -9,11 +9,13 @@ const max_payment_records = 1;
 const node_ignore_rate = 1;
 const penalty_half_life_ms = 1;
 
-expectError(updatePathfindingSettings());
-expectError(updatePathfindingSettings({}));
+// @ts-expect-error
+updatePathfindingSettings();
+// @ts-expect-error
+updatePathfindingSettings({});
 
-expectType<void>(await updatePathfindingSettings({lnd}));
-expectType<void>(
+expectType<void>()(await updatePathfindingSettings({lnd}));
+expectType<void>()(
   await updatePathfindingSettings({
     lnd,
     baseline_success_rate,
@@ -23,8 +25,8 @@ expectType<void>(
   })
 );
 
-expectType<void>(updatePathfindingSettings({lnd}, () => {}));
-expectType<void>(
+expectType<void>()(updatePathfindingSettings({lnd}, () => {}));
+expectType<void>()(
   updatePathfindingSettings(
     {
       lnd,

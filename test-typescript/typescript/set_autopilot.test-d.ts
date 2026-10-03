@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {setAutopilot} from '../../lnd_methods';
 
@@ -17,17 +17,21 @@ const argsWithDisabled = {...args, is_enabled: false} as const;
 const argsWithNodes = {...args, candidate_nodes};
 const argsWithNodesAndEnabled = {...argsWithNodes, is_enabled: true} as const;
 
-expectError(setAutopilot());
-expectError(setAutopilot({}));
-expectError(setAutopilot({lnd})); // Nodes or enabled status is required
-expectError(setAutopilot({lnd, candidate_nodes, is_enabled: false}));
+// @ts-expect-error
+setAutopilot();
+// @ts-expect-error
+setAutopilot({});
+// @ts-expect-error
+setAutopilot({lnd}); // Nodes or enabled status is required
+// @ts-expect-error
+setAutopilot({lnd, candidate_nodes, is_enabled: false});
 
-expectType<void>(await setAutopilot(argsWithEnabled));
-expectType<void>(await setAutopilot(argsWithDisabled));
-expectType<void>(await setAutopilot(argsWithNodes));
-expectType<void>(await setAutopilot(argsWithNodesAndEnabled));
+expectType<void>()(await setAutopilot(argsWithEnabled));
+expectType<void>()(await setAutopilot(argsWithDisabled));
+expectType<void>()(await setAutopilot(argsWithNodes));
+expectType<void>()(await setAutopilot(argsWithNodesAndEnabled));
 
-expectType<void>(setAutopilot(argsWithEnabled, (error) => {}));
-expectType<void>(setAutopilot(argsWithDisabled, (error) => {}));
-expectType<void>(setAutopilot(argsWithNodes, (error) => {}));
-expectType<void>(setAutopilot(argsWithNodesAndEnabled, (error) => {}));
+expectType<void>()(setAutopilot(argsWithEnabled, (error) => {}));
+expectType<void>()(setAutopilot(argsWithDisabled, (error) => {}));
+expectType<void>()(setAutopilot(argsWithNodes, (error) => {}));
+expectType<void>()(setAutopilot(argsWithNodesAndEnabled, (error) => {}));

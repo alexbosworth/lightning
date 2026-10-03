@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   routeFailureKeys,
@@ -13,8 +13,10 @@ const route = {
   ],
 };
 
-expectError(routeFailureKeys());
-expectError(routeFailureKeys({}));
+// @ts-expect-error
+routeFailureKeys();
+// @ts-expect-error
+routeFailureKeys({});
 
-expectType<RouteFailureKeysResult>(routeFailureKeys({route}));
-expectType<RouteFailureKeysResult>(routeFailureKeys({failure, route}));
+expectType<RouteFailureKeysResult>()(routeFailureKeys({route}));
+expectType<RouteFailureKeysResult>()(routeFailureKeys({failure, route}));

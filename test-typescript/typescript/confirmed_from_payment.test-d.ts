@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {
   confirmedFromPayment,
   ConfirmedFromPaymentArgs,
@@ -53,7 +53,9 @@ const payment: ConfirmedFromPaymentArgs = {
   value_sat: '1',
 };
 
-expectError(confirmedFromPayment());
-expectError(confirmedFromPayment({}));
+// @ts-expect-error
+confirmedFromPayment();
+// @ts-expect-error
+confirmedFromPayment({});
 
-expectType<ConfirmedFromPaymentResult>(confirmedFromPayment(payment));
+expectType<ConfirmedFromPaymentResult>()(confirmedFromPayment(payment));

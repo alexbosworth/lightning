@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {verifyBackups, VerifyBackupsResult} from '../../lnd_methods';
 
@@ -11,19 +11,27 @@ const channels = [
   },
 ];
 
-expectError(verifyBackups());
-expectError(verifyBackups({}));
-expectError(verifyBackups({channels}));
-expectError(verifyBackups({backup, channels}));
-expectError(verifyBackups({backup}));
-expectError(verifyBackups({lnd}));
-expectError(verifyBackups({lnd, backup}));
-expectError(verifyBackups({lnd, channels}));
+// @ts-expect-error
+verifyBackups();
+// @ts-expect-error
+verifyBackups({});
+// @ts-expect-error
+verifyBackups({channels});
+// @ts-expect-error
+verifyBackups({backup, channels});
+// @ts-expect-error
+verifyBackups({backup});
+// @ts-expect-error
+verifyBackups({lnd});
+// @ts-expect-error
+verifyBackups({lnd, backup});
+// @ts-expect-error
+verifyBackups({lnd, channels});
 
-expectType<VerifyBackupsResult>(await verifyBackups({lnd, backup, channels}));
+expectType<VerifyBackupsResult>()(await verifyBackups({lnd, backup, channels}));
 
-expectType<void>(
+expectType<void>()(
   verifyBackups({lnd, backup, channels}, (error, result) => {
-    expectType<VerifyBackupsResult>(result);
+    expectType<VerifyBackupsResult>()(result);
   })
 );

@@ -1,11 +1,13 @@
 import * as events from 'events';
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {subscribeToForwards} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(subscribeToForwards());
-expectError(subscribeToForwards({}));
+// @ts-expect-error
+subscribeToForwards();
+// @ts-expect-error
+subscribeToForwards({});
 
-expectType<events.EventEmitter>(subscribeToForwards({lnd}));
+expectType<events.EventEmitter>()(subscribeToForwards({lnd}));

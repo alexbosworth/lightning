@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getInvoices, GetInvoicesResult} from '../../lnd_methods';
 
@@ -7,39 +7,43 @@ const limit = 100;
 const token = 'token';
 const is_unconfirmed = true;
 
-expectError(getInvoices());
-expectError(getInvoices({}));
-expectError(getInvoices({lnd, limit, token}));
-expectError(getInvoices({lnd, limit, token, is_unconfirmed}));
+// @ts-expect-error
+getInvoices();
+// @ts-expect-error
+getInvoices({});
+// @ts-expect-error
+getInvoices({lnd, limit, token});
+// @ts-expect-error
+getInvoices({lnd, limit, token, is_unconfirmed});
 
-expectType<GetInvoicesResult>(await getInvoices({lnd}));
-expectType<GetInvoicesResult>(await getInvoices({lnd, limit}));
-expectType<GetInvoicesResult>(await getInvoices({lnd, limit, is_unconfirmed}));
-expectType<GetInvoicesResult>(await getInvoices({lnd, token}));
-expectType<GetInvoicesResult>(await getInvoices({lnd, token, is_unconfirmed}));
+expectType<GetInvoicesResult>()(await getInvoices({lnd}));
+expectType<GetInvoicesResult>()(await getInvoices({lnd, limit}));
+expectType<GetInvoicesResult>()(await getInvoices({lnd, limit, is_unconfirmed}));
+expectType<GetInvoicesResult>()(await getInvoices({lnd, token}));
+expectType<GetInvoicesResult>()(await getInvoices({lnd, token, is_unconfirmed}));
 
-expectType<void>(
+expectType<void>()(
   getInvoices({lnd}, (error, result) => {
-    expectType<GetInvoicesResult>(result);
+    expectType<GetInvoicesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getInvoices({lnd, limit}, (error, result) => {
-    expectType<GetInvoicesResult>(result);
+    expectType<GetInvoicesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getInvoices({lnd, limit, is_unconfirmed}, (error, result) => {
-    expectType<GetInvoicesResult>(result);
+    expectType<GetInvoicesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getInvoices({lnd, token}, (error, result) => {
-    expectType<GetInvoicesResult>(result);
+    expectType<GetInvoicesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getInvoices({lnd, token, is_unconfirmed}, (error, result) => {
-    expectType<GetInvoicesResult>(result);
+    expectType<GetInvoicesResult>()(result);
   })
 );

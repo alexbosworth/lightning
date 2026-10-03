@@ -13,8 +13,7 @@
     "@alexbosworth/blockchain": "4.9.0",
     "@grpc/grpc-js": "1.14.5",
     "@grpc/proto-loader": "0.8.1",
-    "@types/node": "26.6.3",
-    "@types/request": "2.48.13",
+    "@types/node": "26.6.4",
     "@types/ws": "8.18.2",
     "async": "3.2.6",
     "asyncjs-util": "1.2.12",
@@ -27,7 +26,6 @@
   },
   "description": "Lightning Network client library",
   "devDependencies": {
-    "tsd": "0.33.0",
     "typescript": "7.0.2"
   },
   "engines": {
@@ -62,12 +60,9 @@
   },
   "scripts": {
     "test": "node --experimental-test-coverage --test && npm run test:types",
-    "test:types": "tsd",
+    "test:types": "tsc -p test-typescript",
     "unit-tests": "node --test && npm run test:types"
   },
-  "tsd": {
-    "directory": "test-typescript/typescript"
-  },
   "types": "index.d.ts",
-  "version": "13.1.1"
+  "version": "13.1.2"
 }

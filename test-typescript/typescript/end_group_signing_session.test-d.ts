@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {
   endGroupSigningSession,
   EndGroupSigningSessionResult,
@@ -9,24 +9,28 @@ const lnd = {} as AuthenticatedLnd;
 const id = 'id';
 const signatures = ['signature'];
 
-expectError(endGroupSigningSession());
-expectError(endGroupSigningSession({}));
-expectError(endGroupSigningSession({lnd}));
-expectError(endGroupSigningSession({id}));
+// @ts-expect-error
+endGroupSigningSession();
+// @ts-expect-error
+endGroupSigningSession({});
+// @ts-expect-error
+endGroupSigningSession({lnd});
+// @ts-expect-error
+endGroupSigningSession({id});
 
-expectType<EndGroupSigningSessionResult>(
+expectType<EndGroupSigningSessionResult>()(
   await endGroupSigningSession({lnd, id})
 );
-expectType<EndGroupSigningSessionResult>(
+expectType<EndGroupSigningSessionResult>()(
   await endGroupSigningSession({lnd, id, signatures})
 );
-expectType<void>(
+expectType<void>()(
   endGroupSigningSession({lnd, id}, (err, res) => {
-    expectType<EndGroupSigningSessionResult>(res);
+    expectType<EndGroupSigningSessionResult>()(res);
   })
 );
-expectType<void>(
+expectType<void>()(
   endGroupSigningSession({lnd, id, signatures}, (err, res) => {
-    expectType<EndGroupSigningSessionResult>(res);
+    expectType<EndGroupSigningSessionResult>()(res);
   })
 );

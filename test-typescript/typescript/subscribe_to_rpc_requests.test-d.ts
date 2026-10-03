@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   subscribeToRpcRequests,
@@ -11,11 +11,13 @@ const is_intercepting_close_channel_requests = true;
 const is_intercepting_open_channel_requests = true;
 const is_intercepting_pay_via_routes_requests = true;
 
-expectError(subscribeToRpcRequests());
-expectError(subscribeToRpcRequests({}));
+// @ts-expect-error
+subscribeToRpcRequests();
+// @ts-expect-error
+subscribeToRpcRequests({});
 
-expectType<SubscribeToRpcRequestsResult>(await subscribeToRpcRequests({lnd}));
-expectType<SubscribeToRpcRequestsResult>(
+expectType<SubscribeToRpcRequestsResult>()(await subscribeToRpcRequests({lnd}));
+expectType<SubscribeToRpcRequestsResult>()(
   await subscribeToRpcRequests({
     lnd,
     id,
@@ -25,12 +27,12 @@ expectType<SubscribeToRpcRequestsResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   subscribeToRpcRequests({lnd}, (err, res) => {
-    expectType<SubscribeToRpcRequestsResult>(res);
+    expectType<SubscribeToRpcRequestsResult>()(res);
   })
 );
-expectType<void>(
+expectType<void>()(
   subscribeToRpcRequests(
     {
       lnd,
@@ -40,7 +42,7 @@ expectType<void>(
       is_intercepting_pay_via_routes_requests,
     },
     (err, res) => {
-      expectType<SubscribeToRpcRequestsResult>(res);
+      expectType<SubscribeToRpcRequestsResult>()(res);
     }
   )
 );

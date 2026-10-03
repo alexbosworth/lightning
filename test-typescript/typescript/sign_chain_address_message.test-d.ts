@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   signChainAddressMessage,
@@ -9,10 +9,12 @@ const lnd = {} as AuthenticatedLnd;
 const address = '';
 const message = '';
 
-expectError(signChainAddressMessage({lnd, address}));
-expectError(signChainAddressMessage({lnd, message}));
+// @ts-expect-error
+signChainAddressMessage({lnd, address});
+// @ts-expect-error
+signChainAddressMessage({lnd, message});
 
-expectType<SignChainAddressMessageResult>(
+expectType<SignChainAddressMessageResult>()(
   await signChainAddressMessage({
     lnd,
     address,
@@ -20,8 +22,8 @@ expectType<SignChainAddressMessageResult>(
   }),
 );
 
-expectType<void>(
+expectType<void>()(
   signChainAddressMessage({lnd, address, message}, (error, result) => {
-    expectType<SignChainAddressMessageResult>(result);
+    expectType<SignChainAddressMessageResult>()(result);
   }),
 );

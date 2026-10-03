@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {verifyAccess, VerifyAccessResult} from '../../lnd_methods';
 
@@ -6,18 +6,23 @@ const lnd = {} as AuthenticatedLnd;
 const macaroon = 'macaroon';
 const permissions = ['entity:action'];
 
-expectError(verifyAccess());
-expectError(verifyAccess({}));
-expectError(verifyAccess({lnd}));
-expectError(verifyAccess({lnd, macaroon}));
-expectError(verifyAccess({lnd, permissions}));
+// @ts-expect-error
+verifyAccess();
+// @ts-expect-error
+verifyAccess({});
+// @ts-expect-error
+verifyAccess({lnd});
+// @ts-expect-error
+verifyAccess({lnd, macaroon});
+// @ts-expect-error
+verifyAccess({lnd, permissions});
 
-expectType<VerifyAccessResult>(
+expectType<VerifyAccessResult>()(
   await verifyAccess({lnd, macaroon, permissions})
 );
 
-expectType<void>(
+expectType<void>()(
   verifyAccess({lnd, macaroon, permissions}, (err, res) => {
-    expectType<VerifyAccessResult>(res);
+    expectType<VerifyAccessResult>()(res);
   })
 );

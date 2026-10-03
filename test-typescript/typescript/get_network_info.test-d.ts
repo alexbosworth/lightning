@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getNetworkInfo, GetNetworkInfoResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getNetworkInfo());
-expectError(getNetworkInfo({}));
+// @ts-expect-error
+getNetworkInfo();
+// @ts-expect-error
+getNetworkInfo({});
 
-expectType<GetNetworkInfoResult>(await getNetworkInfo({lnd}));
+expectType<GetNetworkInfoResult>()(await getNetworkInfo({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getNetworkInfo({lnd}, (error, result) => {
-    expectType<GetNetworkInfoResult>(result);
+    expectType<GetNetworkInfoResult>()(result);
   })
 );

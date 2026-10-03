@@ -1,15 +1,19 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {deletePayment} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const id = '0';
 
-expectError(deletePayment());
-expectError(deletePayment({}));
-expectError(deletePayment({lnd}));
-expectError(deletePayment({id}));
+// @ts-expect-error
+deletePayment();
+// @ts-expect-error
+deletePayment({});
+// @ts-expect-error
+deletePayment({lnd});
+// @ts-expect-error
+deletePayment({id});
 
-expectType<void>(await deletePayment({lnd, id}));
+expectType<void>()(await deletePayment({lnd, id}));
 
-expectType<void>(deletePayment({lnd, id}, () => {}));
+expectType<void>()(deletePayment({lnd, id}, () => {}));

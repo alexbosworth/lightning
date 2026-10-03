@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getForwardingConfidence,
@@ -10,29 +10,45 @@ const from = 'from';
 const mtokens = '100';
 const to = 'to';
 
-expectError(getForwardingConfidence());
-expectError(getForwardingConfidence({}));
-expectError(getForwardingConfidence({from}));
-expectError(getForwardingConfidence({from, to}));
-expectError(getForwardingConfidence({from, mtokens}));
-expectError(getForwardingConfidence({from, to, mtokens}));
-expectError(getForwardingConfidence({to}));
-expectError(getForwardingConfidence({to, mtokens}));
-expectError(getForwardingConfidence({mtokens}));
-expectError(getForwardingConfidence({lnd}));
-expectError(getForwardingConfidence({lnd, from}));
-expectError(getForwardingConfidence({lnd, from, to}));
-expectError(getForwardingConfidence({lnd, from, mtokens}));
-expectError(getForwardingConfidence({lnd, to}));
-expectError(getForwardingConfidence({lnd, to, mtokens}));
-expectError(getForwardingConfidence({lnd, mtokens}));
+// @ts-expect-error
+getForwardingConfidence();
+// @ts-expect-error
+getForwardingConfidence({});
+// @ts-expect-error
+getForwardingConfidence({from});
+// @ts-expect-error
+getForwardingConfidence({from, to});
+// @ts-expect-error
+getForwardingConfidence({from, mtokens});
+// @ts-expect-error
+getForwardingConfidence({from, to, mtokens});
+// @ts-expect-error
+getForwardingConfidence({to});
+// @ts-expect-error
+getForwardingConfidence({to, mtokens});
+// @ts-expect-error
+getForwardingConfidence({mtokens});
+// @ts-expect-error
+getForwardingConfidence({lnd});
+// @ts-expect-error
+getForwardingConfidence({lnd, from});
+// @ts-expect-error
+getForwardingConfidence({lnd, from, to});
+// @ts-expect-error
+getForwardingConfidence({lnd, from, mtokens});
+// @ts-expect-error
+getForwardingConfidence({lnd, to});
+// @ts-expect-error
+getForwardingConfidence({lnd, to, mtokens});
+// @ts-expect-error
+getForwardingConfidence({lnd, mtokens});
 
-expectType<GetForwardingConfidenceResult>(
+expectType<GetForwardingConfidenceResult>()(
   await getForwardingConfidence({lnd, from, to, mtokens})
 );
 
-expectType<void>(
+expectType<void>()(
   getForwardingConfidence({lnd, from, to, mtokens}, (error, result) => {
-    expectType<GetForwardingConfidenceResult>(result);
+    expectType<GetForwardingConfidenceResult>()(result);
   })
 );

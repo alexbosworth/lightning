@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {attemptRoute} from '../../lnd_methods/offchain/attempt_route';
 
@@ -33,14 +33,17 @@ const route = {
   total_mtokens: '1',
 };
 
-expectError(attemptRoute());
-expectError(attemptRoute({}));
-expectError(attemptRoute({lnd}));
+// @ts-expect-error
+attemptRoute();
+// @ts-expect-error
+attemptRoute({});
+// @ts-expect-error
+attemptRoute({lnd});
 
-expectType<void>(
+expectType<void>()(
   await attemptRoute({lnd, max_timeout_height, path_timeout_ms, public_key})
 );
-expectType<void>(
+expectType<void>()(
   await attemptRoute({
     lnd,
     max_timeout_height,
@@ -50,10 +53,10 @@ expectType<void>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   attemptRoute({lnd, max_timeout_height, path_timeout_ms, public_key}, () => {})
 );
-expectType<void>(
+expectType<void>()(
   attemptRoute(
     {lnd, max_timeout_height, path_timeout_ms, public_key, route},
     () => {}

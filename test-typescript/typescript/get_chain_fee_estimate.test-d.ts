@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getChainFeeEstimate,
@@ -10,25 +10,29 @@ const lnd = {} as AuthenticatedLnd;
 const send_to = [{address: 'address', tokens: 1}];
 const target_confirmations = 6;
 
-expectError(getChainFeeEstimate());
-expectError(getChainFeeEstimate({}));
-expectError(getChainFeeEstimate({send_to}));
-expectError(getChainFeeEstimate({lnd}));
+// @ts-expect-error
+getChainFeeEstimate();
+// @ts-expect-error
+getChainFeeEstimate({});
+// @ts-expect-error
+getChainFeeEstimate({send_to});
+// @ts-expect-error
+getChainFeeEstimate({lnd});
 
-expectType<GetChainFeeEstimateResult>(
+expectType<GetChainFeeEstimateResult>()(
   await getChainFeeEstimate({lnd, send_to})
 );
-expectType<GetChainFeeEstimateResult>(
+expectType<GetChainFeeEstimateResult>()(
   await getChainFeeEstimate({lnd, send_to, target_confirmations})
 );
 
-expectType<void>(
+expectType<void>()(
   getChainFeeEstimate({lnd, send_to}, (error, result) => {
-    expectType<GetChainFeeEstimateResult>(result);
+    expectType<GetChainFeeEstimateResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getChainFeeEstimate({lnd, send_to, target_confirmations}, (error, result) => {
-    expectType<GetChainFeeEstimateResult>(result);
+    expectType<GetChainFeeEstimateResult>()(result);
   })
 );

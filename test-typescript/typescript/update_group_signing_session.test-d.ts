@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {
   updateGroupSigningSession,
   UpdateGroupSigningSessionResult,
@@ -10,20 +10,32 @@ const hash = 'hash';
 const id = 'id';
 const nonces = ['nonce'];
 
-expectError(updateGroupSigningSession());
-expectError(updateGroupSigningSession({}));
-expectError(updateGroupSigningSession({lnd}));
-expectError(updateGroupSigningSession({hash}));
-expectError(updateGroupSigningSession({id}));
-expectError(updateGroupSigningSession({nonces}));
-expectError(updateGroupSigningSession({lnd, hash}));
-expectError(updateGroupSigningSession({lnd, id}));
-expectError(updateGroupSigningSession({lnd, nonces}));
-expectError(updateGroupSigningSession({lnd, hash, id}));
-expectError(updateGroupSigningSession({lnd, hash, nonces}));
-expectError(updateGroupSigningSession({lnd, id, nonces}));
+// @ts-expect-error
+updateGroupSigningSession();
+// @ts-expect-error
+updateGroupSigningSession({});
+// @ts-expect-error
+updateGroupSigningSession({lnd});
+// @ts-expect-error
+updateGroupSigningSession({hash});
+// @ts-expect-error
+updateGroupSigningSession({id});
+// @ts-expect-error
+updateGroupSigningSession({nonces});
+// @ts-expect-error
+updateGroupSigningSession({lnd, hash});
+// @ts-expect-error
+updateGroupSigningSession({lnd, id});
+// @ts-expect-error
+updateGroupSigningSession({lnd, nonces});
+// @ts-expect-error
+updateGroupSigningSession({lnd, hash, id});
+// @ts-expect-error
+updateGroupSigningSession({lnd, hash, nonces});
+// @ts-expect-error
+updateGroupSigningSession({lnd, id, nonces});
 
-expectType<UpdateGroupSigningSessionResult>(
+expectType<UpdateGroupSigningSessionResult>()(
   await updateGroupSigningSession({lnd, hash, id, nonces})
 );
-expectType<void>(updateGroupSigningSession({lnd, hash, id, nonces}, () => {}));
+expectType<void>()(updateGroupSigningSession({lnd, hash, id, nonces}, () => {}));

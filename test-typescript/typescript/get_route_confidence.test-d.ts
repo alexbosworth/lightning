@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getRouteConfidence, GetRouteConfidenceResult} from '../../lnd_methods';
 
@@ -12,25 +12,31 @@ const hops = [
   },
 ];
 
-expectError(getRouteConfidence());
-expectError(getRouteConfidence({}));
-expectError(getRouteConfidence({lnd}));
-expectError(getRouteConfidence({hops}));
-expectError(getRouteConfidence({from}));
-expectError(getRouteConfidence({lnd, from}));
+// @ts-expect-error
+getRouteConfidence();
+// @ts-expect-error
+getRouteConfidence({});
+// @ts-expect-error
+getRouteConfidence({lnd});
+// @ts-expect-error
+getRouteConfidence({hops});
+// @ts-expect-error
+getRouteConfidence({from});
+// @ts-expect-error
+getRouteConfidence({lnd, from});
 
-expectType<GetRouteConfidenceResult>(await getRouteConfidence({lnd, hops}));
-expectType<GetRouteConfidenceResult>(
+expectType<GetRouteConfidenceResult>()(await getRouteConfidence({lnd, hops}));
+expectType<GetRouteConfidenceResult>()(
   await getRouteConfidence({lnd, hops, from})
 );
 
-expectType<void>(
+expectType<void>()(
   getRouteConfidence({lnd, hops}, (error, result) => {
-    expectType<GetRouteConfidenceResult>(result);
+    expectType<GetRouteConfidenceResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getRouteConfidence({lnd, hops, from}, (error, result) => {
-    expectType<GetRouteConfidenceResult>(result);
+    expectType<GetRouteConfidenceResult>()(result);
   })
 );

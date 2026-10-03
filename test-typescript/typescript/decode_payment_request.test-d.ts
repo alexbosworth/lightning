@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   decodePaymentRequest,
@@ -8,17 +8,21 @@ import {
 const lnd = {} as AuthenticatedLnd;
 const request = 'request';
 
-expectError(decodePaymentRequest());
-expectError(decodePaymentRequest({}));
-expectError(decodePaymentRequest({request}));
-expectError(decodePaymentRequest({lnd}));
+// @ts-expect-error
+decodePaymentRequest();
+// @ts-expect-error
+decodePaymentRequest({});
+// @ts-expect-error
+decodePaymentRequest({request});
+// @ts-expect-error
+decodePaymentRequest({lnd});
 
-expectType<DecodePaymentRequestResult>(
+expectType<DecodePaymentRequestResult>()(
   await decodePaymentRequest({lnd, request})
 );
 
-expectType<void>(
+expectType<void>()(
   decodePaymentRequest({lnd, request}, (error, result) => {
-    expectType<DecodePaymentRequestResult>(result);
+    expectType<DecodePaymentRequestResult>()(result);
   })
 );

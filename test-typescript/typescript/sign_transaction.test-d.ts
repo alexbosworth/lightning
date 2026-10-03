@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {signTransaction, SignTransactionResult} from '../../lnd_methods';
 
@@ -21,23 +21,31 @@ const spending = [
 ];
 const transaction = '00';
 
-expectError(signTransaction());
-expectError(signTransaction({}));
-expectError(signTransaction({inputs}));
-expectError(signTransaction({transaction}));
-expectError(signTransaction({inputs, transaction}));
-expectError(signTransaction({lnd}));
-expectError(signTransaction({lnd, inputs}));
-expectError(signTransaction({lnd, transaction}));
+// @ts-expect-error
+signTransaction();
+// @ts-expect-error
+signTransaction({});
+// @ts-expect-error
+signTransaction({inputs});
+// @ts-expect-error
+signTransaction({transaction});
+// @ts-expect-error
+signTransaction({inputs, transaction});
+// @ts-expect-error
+signTransaction({lnd});
+// @ts-expect-error
+signTransaction({lnd, inputs});
+// @ts-expect-error
+signTransaction({lnd, transaction});
 
-expectType<SignTransactionResult>(
+expectType<SignTransactionResult>()(
   await signTransaction({
     lnd,
     inputs,
     transaction,
   })
 );
-expectType<SignTransactionResult>(
+expectType<SignTransactionResult>()(
   await signTransaction({
     lnd,
     inputs,
@@ -46,13 +54,13 @@ expectType<SignTransactionResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   signTransaction({lnd, inputs, transaction}, (error, result) => {
-    expectType<SignTransactionResult>(result);
+    expectType<SignTransactionResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   signTransaction({lnd, inputs, transaction, spending}, (error, result) => {
-    expectType<SignTransactionResult>(result);
+    expectType<SignTransactionResult>()(result);
   })
 );

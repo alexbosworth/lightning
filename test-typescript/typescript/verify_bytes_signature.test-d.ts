@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   verifyBytesSignature,
@@ -11,27 +11,42 @@ const public_key = Buffer.alloc(33).toString('hex');
 const signature = '00';
 const tag = 'tag';
 
-expectError(verifyBytesSignature());
-expectError(verifyBytesSignature({}));
-expectError(verifyBytesSignature({preimage}));
-expectError(verifyBytesSignature({preimage, public_key}));
-expectError(verifyBytesSignature({preimage, signature}));
-expectError(verifyBytesSignature({preimage, public_key, signature}));
-expectError(verifyBytesSignature({public_key}));
-expectError(verifyBytesSignature({public_key, signature}));
-expectError(verifyBytesSignature({signature}));
-expectError(verifyBytesSignature({lnd}));
-expectError(verifyBytesSignature({lnd, preimage}));
-expectError(verifyBytesSignature({lnd, preimage, public_key}));
-expectError(verifyBytesSignature({lnd, preimage, signature}));
-expectError(verifyBytesSignature({lnd, public_key}));
-expectError(verifyBytesSignature({lnd, public_key, signature}));
-expectError(verifyBytesSignature({lnd, signature}));
-expectError(
-  verifyBytesSignature({lnd, preimage, public_key, signature, tag: 1})
-);
+// @ts-expect-error
+verifyBytesSignature();
+// @ts-expect-error
+verifyBytesSignature({});
+// @ts-expect-error
+verifyBytesSignature({preimage});
+// @ts-expect-error
+verifyBytesSignature({preimage, public_key});
+// @ts-expect-error
+verifyBytesSignature({preimage, signature});
+// @ts-expect-error
+verifyBytesSignature({preimage, public_key, signature});
+// @ts-expect-error
+verifyBytesSignature({public_key});
+// @ts-expect-error
+verifyBytesSignature({public_key, signature});
+// @ts-expect-error
+verifyBytesSignature({signature});
+// @ts-expect-error
+verifyBytesSignature({lnd});
+// @ts-expect-error
+verifyBytesSignature({lnd, preimage});
+// @ts-expect-error
+verifyBytesSignature({lnd, preimage, public_key});
+// @ts-expect-error
+verifyBytesSignature({lnd, preimage, signature});
+// @ts-expect-error
+verifyBytesSignature({lnd, public_key});
+// @ts-expect-error
+verifyBytesSignature({lnd, public_key, signature});
+// @ts-expect-error
+verifyBytesSignature({lnd, signature});
+// @ts-expect-error
+verifyBytesSignature({lnd, preimage, public_key, signature, tag: 1});
 
-expectType<VerifyBytesSignatureResult>(
+expectType<VerifyBytesSignatureResult>()(
   await verifyBytesSignature({
     lnd,
     preimage,
@@ -40,7 +55,7 @@ expectType<VerifyBytesSignatureResult>(
   })
 );
 
-expectType<VerifyBytesSignatureResult>(
+expectType<VerifyBytesSignatureResult>()(
   await verifyBytesSignature({
     lnd,
     preimage,
@@ -50,11 +65,11 @@ expectType<VerifyBytesSignatureResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   verifyBytesSignature(
     {lnd, preimage, public_key, signature},
     (error, result) => {
-      expectType<VerifyBytesSignatureResult>(result);
+      expectType<VerifyBytesSignatureResult>()(result);
     }
   )
 );

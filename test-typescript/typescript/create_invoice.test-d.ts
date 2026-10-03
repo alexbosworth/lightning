@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {createInvoice, CreateInvoiceResult} from '../../lnd_methods';
 import {Routes} from '../../typescript';
@@ -21,11 +21,13 @@ const routes: Routes = [[{
   public_key: 'pubkey'
 }]];
 
-expectError(createInvoice());
-expectError(createInvoice({}));
+// @ts-expect-error
+createInvoice();
+// @ts-expect-error
+createInvoice({});
 
-expectType<CreateInvoiceResult>(await createInvoice({lnd}));
-expectType<CreateInvoiceResult>(
+expectType<CreateInvoiceResult>()(await createInvoice({lnd}));
+expectType<CreateInvoiceResult>()(
   await createInvoice({
     lnd,
     cltv_delta,
@@ -40,12 +42,12 @@ expectType<CreateInvoiceResult>(
  })
 );
 
-expectType<void>(
+expectType<void>()(
   createInvoice({lnd}, (error, result) => {
-    expectType<CreateInvoiceResult>(result);
+    expectType<CreateInvoiceResult>()(result);
  })
 );
-expectType<void>(
+expectType<void>()(
   createInvoice(
     {
       lnd,
@@ -61,7 +63,7 @@ expectType<void>(
       tokens,
    },
     (error, result) => {
-      expectType<CreateInvoiceResult>(result);
+      expectType<CreateInvoiceResult>()(result);
    }
   )
 );

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getPathfindingSettings,
@@ -7,13 +7,15 @@ import {
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getPathfindingSettings());
-expectError(getPathfindingSettings({}));
+// @ts-expect-error
+getPathfindingSettings();
+// @ts-expect-error
+getPathfindingSettings({});
 
-expectType<GetPathfindingSettingsResult>(await getPathfindingSettings({lnd}));
+expectType<GetPathfindingSettingsResult>()(await getPathfindingSettings({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getPathfindingSettings({lnd}, (error, result) => {
-    expectType<GetPathfindingSettingsResult>(result);
+    expectType<GetPathfindingSettingsResult>()(result);
   })
 );

@@ -1,5 +1,5 @@
-import {expectError, expectType} from 'tsd';
-import * as ws from 'ws';
+import {expectType} from '../expect';
+import {WebSocketServer} from 'ws';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   sendToChainAddresses,
@@ -12,7 +12,7 @@ const address = 'address';
 const tokens = 1;
 const send_to = [{address, tokens}];
 
-const wss = [new ws.Server()];
+const wss = [new WebSocketServer()];
 const log = console.log;
 const description = 'description';
 const fee_tokens_per_vbyte = 1;
@@ -29,29 +29,33 @@ const argsWithOptional = {
   utxo_confirmations,
 };
 
-expectError(sendToChainAddresses());
-expectError(sendToChainAddresses({}));
-expectError(sendToChainAddresses({lnd}));
-expectError(sendToChainAddresses({lnd, send_to, wss})); // A log method is expected to send to chain address
+// @ts-expect-error
+sendToChainAddresses();
+// @ts-expect-error
+sendToChainAddresses({});
+// @ts-expect-error
+sendToChainAddresses({lnd});
+// @ts-expect-error
+sendToChainAddresses({lnd, send_to, wss}); // A log method is expected to send to chain address
 
-expectType<SendToChainAddressesResult>(await sendToChainAddresses(args));
-expectType<SendToChainAddressesResult>(await sendToChainAddresses(argsWithWss));
-expectType<SendToChainAddressesResult>(
+expectType<SendToChainAddressesResult>()(await sendToChainAddresses(args));
+expectType<SendToChainAddressesResult>()(await sendToChainAddresses(argsWithWss));
+expectType<SendToChainAddressesResult>()(
   await sendToChainAddresses(argsWithOptional)
 );
 
-expectType<void>(
+expectType<void>()(
   sendToChainAddresses(args, (error, result) => {
-    expectType<SendToChainAddressesResult>(result);
+    expectType<SendToChainAddressesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   sendToChainAddresses(argsWithWss, (error, result) => {
-    expectType<SendToChainAddressesResult>(result);
+    expectType<SendToChainAddressesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   sendToChainAddresses(argsWithOptional, (error, result) => {
-    expectType<SendToChainAddressesResult>(result);
+    expectType<SendToChainAddressesResult>()(result);
   })
 );

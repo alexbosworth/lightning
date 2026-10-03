@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {openChannel, OpenChannelResult} from '../../lnd_methods';
 
@@ -13,18 +13,25 @@ const give_tokens = 1;
 const is_max_funding = true;
 const inputs = [{transaction_id: 'id', transaction_vout: 0}];
 
-expectError(openChannel());
-expectError(openChannel({}));
-expectError(openChannel({local_tokens}));
-expectError(openChannel({partner_public_key}));
-expectError(openChannel({lnd}));
-expectError(openChannel({lnd, local_tokens}));
-expectError(openChannel({lnd, partner_public_key}));
+// @ts-expect-error
+openChannel();
+// @ts-expect-error
+openChannel({});
+// @ts-expect-error
+openChannel({local_tokens});
+// @ts-expect-error
+openChannel({partner_public_key});
+// @ts-expect-error
+openChannel({lnd});
+// @ts-expect-error
+openChannel({lnd, local_tokens});
+// @ts-expect-error
+openChannel({lnd, partner_public_key});
 
-expectType<OpenChannelResult>(
+expectType<OpenChannelResult>()(
   await openChannel({lnd, local_tokens, partner_public_key})
 );
-expectType<OpenChannelResult>(
+expectType<OpenChannelResult>()(
   await openChannel({
     lnd,
     local_tokens,
@@ -37,12 +44,12 @@ expectType<OpenChannelResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   openChannel({lnd, local_tokens, partner_public_key}, (error, result) => {
-    expectType<OpenChannelResult>(result);
+    expectType<OpenChannelResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   openChannel(
     {
       lnd,
@@ -55,7 +62,7 @@ expectType<void>(
       inputs,
     },
     (error, result) => {
-      expectType<OpenChannelResult>(result);
+      expectType<OpenChannelResult>()(result);
     }
   )
 );

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {sendMessageToPeer} from '../../lnd_methods';
 
@@ -7,18 +7,23 @@ const message = 'msg';
 const public_key = 'pubkey';
 const type = 2;
 
-expectError(sendMessageToPeer());
-expectError(sendMessageToPeer({}));
-expectError(sendMessageToPeer({lnd}));
-expectError(sendMessageToPeer({lnd, message}));
-expectError(sendMessageToPeer({lnd, public_key}));
+// @ts-expect-error
+sendMessageToPeer();
+// @ts-expect-error
+sendMessageToPeer({});
+// @ts-expect-error
+sendMessageToPeer({lnd});
+// @ts-expect-error
+sendMessageToPeer({lnd, message});
+// @ts-expect-error
+sendMessageToPeer({lnd, public_key});
 
-expectType<void>(await sendMessageToPeer({lnd, message, public_key}));
-expectType<void>(await sendMessageToPeer({lnd, message, public_key, type}));
+expectType<void>()(await sendMessageToPeer({lnd, message, public_key}));
+expectType<void>()(await sendMessageToPeer({lnd, message, public_key, type}));
 
-expectType<void>(
+expectType<void>()(
   sendMessageToPeer({lnd, message, public_key}, (error, result) => {})
 );
-expectType<void>(
+expectType<void>()(
   sendMessageToPeer({lnd, message, public_key, type}, (error, result) => {})
 );

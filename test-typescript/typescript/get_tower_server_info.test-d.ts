@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getTowerServerInfo, GetTowerServerInfoResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getTowerServerInfo());
-expectError(getTowerServerInfo({}));
+// @ts-expect-error
+getTowerServerInfo();
+// @ts-expect-error
+getTowerServerInfo({});
 
-expectType<GetTowerServerInfoResult>(await getTowerServerInfo({lnd}));
+expectType<GetTowerServerInfoResult>()(await getTowerServerInfo({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getTowerServerInfo({lnd}, (error, result) => {
-    expectType<GetTowerServerInfoResult>(result);
+    expectType<GetTowerServerInfoResult>()(result);
   })
 );

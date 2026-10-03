@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {unlockUtxo} from '../../lnd_methods';
 
@@ -10,10 +10,13 @@ const transaction_vout = 0;
 
 const args = {lnd, id, transaction_id, transaction_vout};
 
-expectError(unlockUtxo());
-expectError(unlockUtxo({}));
-expectError(unlockUtxo({lnd}));
+// @ts-expect-error
+unlockUtxo();
+// @ts-expect-error
+unlockUtxo({});
+// @ts-expect-error
+unlockUtxo({lnd});
 
-expectType<void>(await unlockUtxo(args));
+expectType<void>()(await unlockUtxo(args));
 
-expectType<void>(unlockUtxo(args, (error) => {}));
+expectType<void>()(unlockUtxo(args, (error) => {}));

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getRouteToDestination,
@@ -28,18 +28,21 @@ const routes = [
 ];
 const total_mtokens = '1';
 
-expectError(getRouteToDestination());
-expectError(getRouteToDestination({}));
-expectError(getRouteToDestination({destination}));
-expectError(getRouteToDestination({lnd}));
-expectError(
-  getRouteToDestination({lnd, destination, outgoing_channels: '0x0x1'})
-);
+// @ts-expect-error
+getRouteToDestination();
+// @ts-expect-error
+getRouteToDestination({});
+// @ts-expect-error
+getRouteToDestination({destination});
+// @ts-expect-error
+getRouteToDestination({lnd});
+// @ts-expect-error
+getRouteToDestination({lnd, destination, outgoing_channels: '0x0x1'});
 
-expectType<GetRouteToDestinationResult>(
+expectType<GetRouteToDestinationResult>()(
   await getRouteToDestination({lnd, destination})
 );
-expectType<GetRouteToDestinationResult>(
+expectType<GetRouteToDestinationResult>()(
   await getRouteToDestination({
     lnd,
     destination,
@@ -51,16 +54,16 @@ expectType<GetRouteToDestinationResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   getRouteToDestination({lnd, destination}, (error, result) => {
-    expectType<GetRouteToDestinationResult>(result);
+    expectType<GetRouteToDestinationResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getRouteToDestination(
     {lnd, destination, messages, payment, routes, total_mtokens},
     (error, result) => {
-      expectType<GetRouteToDestinationResult>(result);
+      expectType<GetRouteToDestinationResult>()(result);
     }
   )
 );

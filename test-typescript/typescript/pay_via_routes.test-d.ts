@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {payViaRoutes, PayViaRoutesResult} from '../../lnd_methods';
 
@@ -24,15 +24,19 @@ const routes = [
   },
 ];
 
-expectError(payViaRoutes());
-expectError(payViaRoutes({}));
-expectError(payViaRoutes({routes}));
-expectError(payViaRoutes({lnd}));
+// @ts-expect-error
+payViaRoutes();
+// @ts-expect-error
+payViaRoutes({});
+// @ts-expect-error
+payViaRoutes({routes});
+// @ts-expect-error
+payViaRoutes({lnd});
 
-expectType<PayViaRoutesResult>(await payViaRoutes({lnd, routes}));
+expectType<PayViaRoutesResult>()(await payViaRoutes({lnd, routes}));
 
-expectType<void>(
+expectType<void>()(
   payViaRoutes({lnd, routes}, (error, result) => {
-    expectType<PayViaRoutesResult>(result);
+    expectType<PayViaRoutesResult>()(result);
   })
 );

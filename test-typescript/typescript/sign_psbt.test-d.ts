@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {signPsbt, SignPsbtResult} from '../../lnd_methods';
 
@@ -6,14 +6,17 @@ const lnd = {} as AuthenticatedLnd;
 
 const psbt = 'psbt';
 
-expectError(signPsbt());
-expectError(signPsbt({}));
-expectError(signPsbt({lnd}));
+// @ts-expect-error
+signPsbt();
+// @ts-expect-error
+signPsbt({});
+// @ts-expect-error
+signPsbt({lnd});
 
-expectType<SignPsbtResult>(await signPsbt({lnd, psbt}));
+expectType<SignPsbtResult>()(await signPsbt({lnd, psbt}));
 
-expectType<void>(
+expectType<void>()(
   signPsbt({lnd, psbt}, (error, result) => {
-    expectType<SignPsbtResult>(result);
+    expectType<SignPsbtResult>()(result);
   })
 );

@@ -1,14 +1,18 @@
 import * as events from 'events';
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {subscribeToInvoice} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const id = '00';
 
-expectError(subscribeToInvoice());
-expectError(subscribeToInvoice({}));
-expectError(subscribeToInvoice({id}));
-expectError(subscribeToInvoice({lnd}));
+// @ts-expect-error
+subscribeToInvoice();
+// @ts-expect-error
+subscribeToInvoice({});
+// @ts-expect-error
+subscribeToInvoice({id});
+// @ts-expect-error
+subscribeToInvoice({lnd});
 
-expectType<events.EventEmitter>(subscribeToInvoice({lnd, id}));
+expectType<events.EventEmitter>()(subscribeToInvoice({lnd, id}));

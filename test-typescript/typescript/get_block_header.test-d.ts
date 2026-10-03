@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {getBlockHeader, GetBlockHeaderResult} from '../../lnd_methods';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 
@@ -6,21 +6,25 @@ const lnd = {} as AuthenticatedLnd;
 const height = 0;
 const id = 'id';
 
-expectError(getBlockHeader());
-expectError(getBlockHeader({}));
-expectError(getBlockHeader({lnd}));
-expectError(getBlockHeader({height, id}));
+// @ts-expect-error
+getBlockHeader();
+// @ts-expect-error
+getBlockHeader({});
+// @ts-expect-error
+getBlockHeader({lnd});
+// @ts-expect-error
+getBlockHeader({height, id});
 
-expectType<GetBlockHeaderResult>(await getBlockHeader({lnd, height}));
-expectType<GetBlockHeaderResult>(await getBlockHeader({lnd, id}));
+expectType<GetBlockHeaderResult>()(await getBlockHeader({lnd, height}));
+expectType<GetBlockHeaderResult>()(await getBlockHeader({lnd, id}));
 
-expectType<void>(
+expectType<void>()(
   getBlockHeader({lnd, height}, (error, result) => {
-    expectType<GetBlockHeaderResult>(result);
+    expectType<GetBlockHeaderResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getBlockHeader({lnd, id}, (error, result) => {
-    expectType<GetBlockHeaderResult>(result);
+    expectType<GetBlockHeaderResult>()(result);
   })
 );

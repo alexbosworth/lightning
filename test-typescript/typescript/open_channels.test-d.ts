@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {openChannels, OpenChannelsResult} from '../../lnd_methods';
 
@@ -26,25 +26,28 @@ const channelsWithOptionalProperties = channels.map((channel) => ({
   partner_socket,
 }));
 
-expectError(openChannels());
-expectError(openChannels({}));
-expectError(openChannels({lnd}));
+// @ts-expect-error
+openChannels();
+// @ts-expect-error
+openChannels({});
+// @ts-expect-error
+openChannels({lnd});
 
-expectType<OpenChannelsResult>(await openChannels({lnd, channels}));
-expectType<OpenChannelsResult>(
+expectType<OpenChannelsResult>()(await openChannels({lnd, channels}));
+expectType<OpenChannelsResult>()(
   await openChannels({lnd, channels: channelsWithOptionalProperties})
 );
 
-expectType<void>(
+expectType<void>()(
   openChannels({lnd, channels}, (error, result) => {
-    expectType<OpenChannelsResult>(result);
+    expectType<OpenChannelsResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   openChannels(
     {lnd, channels: channelsWithOptionalProperties},
     (error, result) => {
-      expectType<OpenChannelsResult>(result);
+      expectType<OpenChannelsResult>()(result);
     }
   )
 );

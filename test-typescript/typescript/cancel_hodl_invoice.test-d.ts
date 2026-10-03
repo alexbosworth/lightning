@@ -1,14 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {cancelHodlInvoice} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 const id = '00';
 
-expectError(cancelHodlInvoice());
-expectError(cancelHodlInvoice({}));
-expectError(cancelHodlInvoice({id}));
-expectError(cancelHodlInvoice({lnd}));
+// @ts-expect-error
+cancelHodlInvoice();
+// @ts-expect-error
+cancelHodlInvoice({});
+// @ts-expect-error
+cancelHodlInvoice({id});
+// @ts-expect-error
+cancelHodlInvoice({lnd});
 
-expectType<void>(await cancelHodlInvoice({lnd, id}));
-expectType<void>(cancelHodlInvoice({lnd, id}, error => {}));
+expectType<void>()(await cancelHodlInvoice({lnd, id}));
+expectType<void>()(cancelHodlInvoice({lnd, id}, error => {}));

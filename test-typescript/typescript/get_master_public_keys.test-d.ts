@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getMasterPublicKeys,
@@ -7,13 +7,15 @@ import {
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getMasterPublicKeys());
-expectError(getMasterPublicKeys({}));
+// @ts-expect-error
+getMasterPublicKeys();
+// @ts-expect-error
+getMasterPublicKeys({});
 
-expectType<GetMasterPublicKeysResult>(await getMasterPublicKeys({lnd}));
+expectType<GetMasterPublicKeysResult>()(await getMasterPublicKeys({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getMasterPublicKeys({lnd}, (error, result) => {
-    expectType<GetMasterPublicKeysResult>(result);
+    expectType<GetMasterPublicKeysResult>()(result);
   })
 );

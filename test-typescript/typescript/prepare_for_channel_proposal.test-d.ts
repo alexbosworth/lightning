@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   prepareForChannelProposal,
@@ -14,11 +14,14 @@ const transaction_vout = 0;
 const cooperative_close_delay = 1;
 const id = 'id';
 
-expectError(prepareForChannelProposal());
-expectError(prepareForChannelProposal({}));
-expectError(prepareForChannelProposal({lnd}));
+// @ts-expect-error
+prepareForChannelProposal();
+// @ts-expect-error
+prepareForChannelProposal({});
+// @ts-expect-error
+prepareForChannelProposal({lnd});
 
-expectType<PrepareForChannelProposalResult>(
+expectType<PrepareForChannelProposalResult>()(
   await prepareForChannelProposal({
     lnd,
     key_index,
@@ -27,7 +30,7 @@ expectType<PrepareForChannelProposalResult>(
     transaction_vout,
   })
 );
-expectType<PrepareForChannelProposalResult>(
+expectType<PrepareForChannelProposalResult>()(
   await prepareForChannelProposal({
     lnd,
     key_index,
@@ -39,15 +42,15 @@ expectType<PrepareForChannelProposalResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   prepareForChannelProposal(
     {lnd, key_index, remote_key, transaction_id, transaction_vout},
     (error, result) => {
-      expectType<PrepareForChannelProposalResult>(result);
+      expectType<PrepareForChannelProposalResult>()(result);
     }
   )
 );
-expectType<void>(
+expectType<void>()(
   prepareForChannelProposal(
     {
       lnd,
@@ -59,7 +62,7 @@ expectType<void>(
       id,
     },
     (error, result) => {
-      expectType<PrepareForChannelProposalResult>(result);
+      expectType<PrepareForChannelProposalResult>()(result);
     }
   )
 );

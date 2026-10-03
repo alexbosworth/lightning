@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getPendingChannels, GetPendingChannelsResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getPendingChannels());
-expectError(getPendingChannels({}));
+// @ts-expect-error
+getPendingChannels();
+// @ts-expect-error
+getPendingChannels({});
 
-expectType<GetPendingChannelsResult>(await getPendingChannels({lnd}));
+expectType<GetPendingChannelsResult>()(await getPendingChannels({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getPendingChannels({lnd}, (error, result) => {
-    expectType<GetPendingChannelsResult>(result);
+    expectType<GetPendingChannelsResult>()(result);
   })
 );

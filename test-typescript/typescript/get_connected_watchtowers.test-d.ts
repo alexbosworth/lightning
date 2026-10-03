@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getConnectedWatchtowers,
@@ -9,30 +9,33 @@ const lnd = {} as AuthenticatedLnd;
 const is_anchor = true;
 const is_taproot = true;
 
-expectError(getConnectedWatchtowers());
-expectError(getConnectedWatchtowers({}));
-expectError(getConnectedWatchtowers({is_anchor}));
+// @ts-expect-error
+getConnectedWatchtowers();
+// @ts-expect-error
+getConnectedWatchtowers({});
+// @ts-expect-error
+getConnectedWatchtowers({is_anchor});
 
-expectType<GetConnectedWatchTowersResult>(await getConnectedWatchtowers({lnd}));
-expectType<GetConnectedWatchTowersResult>(
+expectType<GetConnectedWatchTowersResult>()(await getConnectedWatchtowers({lnd}));
+expectType<GetConnectedWatchTowersResult>()(
   await getConnectedWatchtowers({lnd, is_anchor})
 );
-expectType<GetConnectedWatchTowersResult>(
+expectType<GetConnectedWatchTowersResult>()(
   await getConnectedWatchtowers({lnd, is_taproot})
 );
 
-expectType<void>(
+expectType<void>()(
   getConnectedWatchtowers({lnd}, (error, result) => {
-    expectType<GetConnectedWatchTowersResult>(result);
+    expectType<GetConnectedWatchTowersResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getConnectedWatchtowers({lnd, is_anchor}, (error, result) => {
-    expectType<GetConnectedWatchTowersResult>(result);
+    expectType<GetConnectedWatchTowersResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getConnectedWatchtowers({lnd, is_taproot}, (error, result) => {
-    expectType<GetConnectedWatchTowersResult>(result);
+    expectType<GetConnectedWatchTowersResult>()(result);
   })
 );

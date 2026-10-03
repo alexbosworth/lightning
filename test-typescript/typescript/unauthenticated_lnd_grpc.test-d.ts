@@ -1,11 +1,11 @@
-import {expectType, expectError} from 'tsd';
+import {expectType} from '../expect';
 import {unauthenticatedLndGrpc, UnauthenticatedLnd} from '../../lnd_grpc';
 
-expectType<{lnd: UnauthenticatedLnd}>(unauthenticatedLndGrpc({}));
-expectType<{lnd: UnauthenticatedLnd}>(unauthenticatedLndGrpc({cert: '00'}));
-expectType<{lnd: UnauthenticatedLnd}>(
+expectType<{lnd: UnauthenticatedLnd}>()(unauthenticatedLndGrpc({}));
+expectType<{lnd: UnauthenticatedLnd}>()(unauthenticatedLndGrpc({cert: '00'}));
+expectType<{lnd: UnauthenticatedLnd}>()(
   unauthenticatedLndGrpc({socket: 'socket'})
 );
-expectType<{lnd: UnauthenticatedLnd}>(
+expectType<{lnd: UnauthenticatedLnd}>()(
   unauthenticatedLndGrpc({cert: '00', socket: 'socket'})
 );

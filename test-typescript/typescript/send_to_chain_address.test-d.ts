@@ -1,5 +1,5 @@
-import {expectError, expectType} from 'tsd';
-import * as ws from 'ws';
+import {expectType} from '../expect';
+import {WebSocketServer} from 'ws';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {sendToChainAddress, SendToChainAddressResult} from '../../lnd_methods';
 
@@ -8,7 +8,7 @@ const lnd = {} as AuthenticatedLnd;
 const address = 'address';
 const tokens = 1;
 
-const wss = [new ws.Server()];
+const wss = [new WebSocketServer()];
 const log = console.log;
 const description = 'description';
 const fee_tokens_per_vbyte = 1;
@@ -26,39 +26,47 @@ const argsWithOptional = {
   utxo_confirmations,
 };
 
-expectError(sendToChainAddress());
-expectError(sendToChainAddress({}));
-expectError(sendToChainAddress({lnd}));
-expectError(sendToChainAddress({lnd, address}));
-expectError(sendToChainAddress({lnd, tokens}));
-expectError(sendToChainAddress({lnd, is_send_all: true}));
-expectError(sendToChainAddress({lnd, address, tokens, is_send_all: true})); // Expected either send all or tokens to send to chain address
-expectError(sendToChainAddress({lnd, address, tokens, wss})); // A log method is expected to send to chain address
+// @ts-expect-error
+sendToChainAddress();
+// @ts-expect-error
+sendToChainAddress({});
+// @ts-expect-error
+sendToChainAddress({lnd});
+// @ts-expect-error
+sendToChainAddress({lnd, address});
+// @ts-expect-error
+sendToChainAddress({lnd, tokens});
+// @ts-expect-error
+sendToChainAddress({lnd, is_send_all: true});
+// @ts-expect-error
+sendToChainAddress({lnd, address, tokens, is_send_all: true}); // Expected either send all or tokens to send to chain address
+// @ts-expect-error
+sendToChainAddress({lnd, address, tokens, wss}); // A log method is expected to send to chain address
 
-expectType<SendToChainAddressResult>(await sendToChainAddress(args));
-expectType<SendToChainAddressResult>(await sendToChainAddress(argsWithSendAll));
-expectType<SendToChainAddressResult>(await sendToChainAddress(argsWithWss));
-expectType<SendToChainAddressResult>(
+expectType<SendToChainAddressResult>()(await sendToChainAddress(args));
+expectType<SendToChainAddressResult>()(await sendToChainAddress(argsWithSendAll));
+expectType<SendToChainAddressResult>()(await sendToChainAddress(argsWithWss));
+expectType<SendToChainAddressResult>()(
   await sendToChainAddress(argsWithOptional)
 );
 
-expectType<void>(
+expectType<void>()(
   sendToChainAddress(args, (error, result) => {
-    expectType<SendToChainAddressResult>(result);
+    expectType<SendToChainAddressResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   sendToChainAddress(argsWithSendAll, (error, result) => {
-    expectType<SendToChainAddressResult>(result);
+    expectType<SendToChainAddressResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   sendToChainAddress(argsWithWss, (error, result) => {
-    expectType<SendToChainAddressResult>(result);
+    expectType<SendToChainAddressResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   sendToChainAddress(argsWithOptional, (error, result) => {
-    expectType<SendToChainAddressResult>(result);
+    expectType<SendToChainAddressResult>()(result);
   })
 );

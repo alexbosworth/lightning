@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getPendingChainBalance,
@@ -7,13 +7,15 @@ import {
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getPendingChainBalance());
-expectError(getPendingChainBalance({}));
+// @ts-expect-error
+getPendingChainBalance();
+// @ts-expect-error
+getPendingChainBalance({});
 
-expectType<GetPendingChainBalanceResult>(await getPendingChainBalance({lnd}));
+expectType<GetPendingChainBalanceResult>()(await getPendingChainBalance({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getPendingChainBalance({lnd}, (error, result) => {
-    expectType<GetPendingChainBalanceResult>(result);
+    expectType<GetPendingChainBalanceResult>()(result);
   })
 );

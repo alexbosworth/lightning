@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {UnauthenticatedLnd} from '../../lnd_grpc';
 import {changePassword} from '../../lnd_methods';
 
@@ -7,16 +7,23 @@ const lnd = {} as UnauthenticatedLnd;
 const current_password = '123';
 const new_password = '456';
 
-expectError(changePassword());
-expectError(changePassword({}));
-expectError(changePassword({lnd}));
-expectError(changePassword({current_password}));
-expectError(changePassword({new_password}));
-expectError(changePassword({lnd, current_password}));
-expectError(changePassword({lnd, new_password}));
+// @ts-expect-error
+changePassword();
+// @ts-expect-error
+changePassword({});
+// @ts-expect-error
+changePassword({lnd});
+// @ts-expect-error
+changePassword({current_password});
+// @ts-expect-error
+changePassword({new_password});
+// @ts-expect-error
+changePassword({lnd, current_password});
+// @ts-expect-error
+changePassword({lnd, new_password});
 
-expectType<void>(await changePassword({current_password, new_password, lnd}));
+expectType<void>()(await changePassword({current_password, new_password, lnd}));
 
-expectType<void>(
+expectType<void>()(
   changePassword({current_password, new_password, lnd}, () => {})
 );

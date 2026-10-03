@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getChainBalance, GetChainBalanceResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getChainBalance());
-expectError(getChainBalance({}));
+// @ts-expect-error
+getChainBalance();
+// @ts-expect-error
+getChainBalance({});
 
-expectType<GetChainBalanceResult>(await getChainBalance({lnd}));
+expectType<GetChainBalanceResult>()(await getChainBalance({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getChainBalance({lnd}, (error, result) => {
-    expectType<GetChainBalanceResult>(result);
+    expectType<GetChainBalanceResult>()(result);
   })
 );

@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {updateRoutingFees, UpdateRoutingFeesResult} from '../../lnd_methods';
 
@@ -12,24 +12,27 @@ const args = {
   transaction_vout: 0,
 };
 
-expectError(updateRoutingFees());
-expectError(updateRoutingFees({}));
-expectError(
-  updateRoutingFees({lnd, base_fee_mtokens: '1', base_fee_tokens: 1})
-); // A single unit format base fee is expected
-expectError(updateRoutingFees({lnd, transaction_id: '1'})); // A full chanpoint with vout is required for an update
-expectError(updateRoutingFees({lnd, transaction_vout: 0})); // A full chanpoint is required for a routing fee update
+// @ts-expect-error
+updateRoutingFees();
+// @ts-expect-error
+updateRoutingFees({});
+// @ts-expect-error
+updateRoutingFees({lnd, base_fee_mtokens: '1', base_fee_tokens: 1}); // A single unit format base fee is expected
+// @ts-expect-error
+updateRoutingFees({lnd, transaction_id: '1'}); // A full chanpoint with vout is required for an update
+// @ts-expect-error
+updateRoutingFees({lnd, transaction_vout: 0}); // A full chanpoint is required for a routing fee update
 
-expectType<UpdateRoutingFeesResult>(await updateRoutingFees({lnd}));
-expectType<UpdateRoutingFeesResult>(await updateRoutingFees({lnd, ...args}));
+expectType<UpdateRoutingFeesResult>()(await updateRoutingFees({lnd}));
+expectType<UpdateRoutingFeesResult>()(await updateRoutingFees({lnd, ...args}));
 
-expectType<void>(
+expectType<void>()(
   updateRoutingFees({lnd}, (error, result) => {
-    expectType<UpdateRoutingFeesResult>(result);
+    expectType<UpdateRoutingFeesResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   updateRoutingFees({lnd, ...args}, (error, result) => {
-    expectType<UpdateRoutingFeesResult>(result);
+    expectType<UpdateRoutingFeesResult>()(result);
   })
 );

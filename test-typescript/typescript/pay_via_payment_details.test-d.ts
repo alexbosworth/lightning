@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   payViaPaymentDetails,
@@ -39,38 +39,44 @@ const args = {
 };
 const {destination, routes} = args;
 
-expectError(payViaPaymentDetails());
-expectError(payViaPaymentDetails({}));
-expectError(payViaPaymentDetails({destination}));
-expectError(payViaPaymentDetails({destination, routes}));
-expectError(payViaPaymentDetails({routes}));
-expectError(payViaPaymentDetails({lnd}));
-expectError(payViaPaymentDetails({lnd, routes}));
-expectError(
-  payViaPaymentDetails({lnd, destination, outgoing_channels: '0x0x1'})
-);
+// @ts-expect-error
+payViaPaymentDetails();
+// @ts-expect-error
+payViaPaymentDetails({});
+// @ts-expect-error
+payViaPaymentDetails({destination});
+// @ts-expect-error
+payViaPaymentDetails({destination, routes});
+// @ts-expect-error
+payViaPaymentDetails({routes});
+// @ts-expect-error
+payViaPaymentDetails({lnd});
+// @ts-expect-error
+payViaPaymentDetails({lnd, routes});
+// @ts-expect-error
+payViaPaymentDetails({lnd, destination, outgoing_channels: '0x0x1'});
 
-expectType<PayViaPaymentDetailsResult>(
+expectType<PayViaPaymentDetailsResult>()(
   await payViaPaymentDetails({
     lnd,
     destination,
     routes,
   })
 );
-expectType<PayViaPaymentDetailsResult>(
+expectType<PayViaPaymentDetailsResult>()(
   await payViaPaymentDetails({
     lnd,
     ...args,
   })
 );
 
-expectType<void>(
+expectType<void>()(
   payViaPaymentDetails({lnd, destination, routes}, (error, result) => {
-    expectType<PayViaPaymentDetailsResult>(result);
+    expectType<PayViaPaymentDetailsResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   payViaPaymentDetails({lnd, ...args}, (error, result) => {
-    expectType<PayViaPaymentDetailsResult>(result);
+    expectType<PayViaPaymentDetailsResult>()(result);
   })
 );

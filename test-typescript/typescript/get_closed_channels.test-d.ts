@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getClosedChannels, GetClosedChannelsResult} from '../../lnd_methods';
 
@@ -9,11 +9,13 @@ const is_funding_cancel = true;
 const is_local_force_close = true;
 const is_remote_force_close = true;
 
-expectError(getClosedChannels());
-expectError(getClosedChannels({}));
+// @ts-expect-error
+getClosedChannels();
+// @ts-expect-error
+getClosedChannels({});
 
-expectType<GetClosedChannelsResult>(await getClosedChannels({lnd}));
-expectType<GetClosedChannelsResult>(
+expectType<GetClosedChannelsResult>()(await getClosedChannels({lnd}));
+expectType<GetClosedChannelsResult>()(
   await getClosedChannels({
     lnd,
     is_breach_close,
@@ -24,12 +26,12 @@ expectType<GetClosedChannelsResult>(
   })
 );
 
-expectType<void>(
+expectType<void>()(
   getClosedChannels({lnd}, (error, result) => {
-    expectType<GetClosedChannelsResult>(result);
+    expectType<GetClosedChannelsResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   getClosedChannels(
     {
       lnd,
@@ -40,7 +42,7 @@ expectType<void>(
       is_remote_force_close,
     },
     (error, result) => {
-      expectType<GetClosedChannelsResult>(result);
+      expectType<GetClosedChannelsResult>()(result);
     }
   )
 );

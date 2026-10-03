@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   AuthenticatedLightningArgs,
@@ -13,6 +13,8 @@ const authenticatedLightningMethod: TestMethod = async () => {};
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(authenticatedLightningMethod());
-expectError(authenticatedLightningMethod({}));
-expectType(authenticatedLightningMethod({lnd}));
+// @ts-expect-error
+authenticatedLightningMethod();
+// @ts-expect-error
+authenticatedLightningMethod({});
+expectType<Promise<TestResult>>()(authenticatedLightningMethod({lnd}));

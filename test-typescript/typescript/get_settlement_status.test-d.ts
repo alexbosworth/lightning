@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   getSettlementStatus,
@@ -9,18 +9,23 @@ const lnd = {} as AuthenticatedLnd;
 const channel = 'channel id';
 const payment = 0;
 
-expectError(getSettlementStatus());
-expectError(getSettlementStatus({}));
-expectError(getSettlementStatus({lnd}));
-expectError(getSettlementStatus({lnd, channel}));
-expectError(getSettlementStatus({lnd, payment}));
+// @ts-expect-error
+getSettlementStatus();
+// @ts-expect-error
+getSettlementStatus({});
+// @ts-expect-error
+getSettlementStatus({lnd});
+// @ts-expect-error
+getSettlementStatus({lnd, channel});
+// @ts-expect-error
+getSettlementStatus({lnd, payment});
 
-expectType<GetSettlementStatusResult>(
+expectType<GetSettlementStatusResult>()(
   await getSettlementStatus({lnd, channel, payment})
 );
 
-expectType<void>(
+expectType<void>()(
   getSettlementStatus({lnd, channel, payment}, (error, result) => {
-    expectType<GetSettlementStatusResult>(result);
+    expectType<GetSettlementStatusResult>()(result);
   })
 );

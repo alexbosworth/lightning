@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   finishedPayment,
@@ -47,19 +47,21 @@ const args = {
   },
 };
 
-expectError(finishedPayment());
-expectError(finishedPayment({}));
+// @ts-expect-error
+finishedPayment();
+// @ts-expect-error
+finishedPayment({});
 
-expectType<FinishedPaymentResult>(await finishedPayment({lnd}));
-expectType<FinishedPaymentResult>(await finishedPayment({lnd, ...args}));
+expectType<FinishedPaymentResult>()(await finishedPayment({lnd}));
+expectType<FinishedPaymentResult>()(await finishedPayment({lnd, ...args}));
 
-expectType<void>(
+expectType<void>()(
   finishedPayment({lnd}, (error, result) => {
-    expectType<FinishedPaymentResult>(result);
+    expectType<FinishedPaymentResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   finishedPayment({lnd, ...args}, (error, result) => {
-    expectType<FinishedPaymentResult>(result);
+    expectType<FinishedPaymentResult>()(result);
   })
 );

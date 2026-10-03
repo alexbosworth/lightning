@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getNetworkGraph, GetNetworkGraphResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getNetworkGraph());
-expectError(getNetworkGraph({}));
+// @ts-expect-error
+getNetworkGraph();
+// @ts-expect-error
+getNetworkGraph({});
 
-expectType<GetNetworkGraphResult>(await getNetworkGraph({lnd}));
+expectType<GetNetworkGraphResult>()(await getNetworkGraph({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getNetworkGraph({lnd}, (error, result) => {
-    expectType<GetNetworkGraphResult>(result);
+    expectType<GetNetworkGraphResult>()(result);
   })
 );

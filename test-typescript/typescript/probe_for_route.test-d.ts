@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {probeForRoute, ProbeForRouteResult} from '../../lnd_methods';
 
@@ -18,43 +18,52 @@ const paths = [
   },
 ];
 
-expectError(probeForRoute());
-expectError(probeForRoute({}));
+// @ts-expect-error
+probeForRoute();
+// @ts-expect-error
+probeForRoute({});
 
-expectError(probeForRoute({lnd}));
-expectError(probeForRoute({destination}));
-expectError(probeForRoute({tokens}));
-expectError(probeForRoute({mtokens}));
+// @ts-expect-error
+probeForRoute({lnd});
+// @ts-expect-error
+probeForRoute({destination});
+// @ts-expect-error
+probeForRoute({tokens});
+// @ts-expect-error
+probeForRoute({mtokens});
 
-expectError(probeForRoute({lnd, destination}));
-expectError(probeForRoute({lnd, paths}));
-expectError(probeForRoute({lnd, tokens}));
-expectError(probeForRoute({lnd, mtokens}));
-expectError(
-  probeForRoute({lnd, destination, tokens, outgoing_channels: '0x0x1'})
-);
+// @ts-expect-error
+probeForRoute({lnd, destination});
+// @ts-expect-error
+probeForRoute({lnd, paths});
+// @ts-expect-error
+probeForRoute({lnd, tokens});
+// @ts-expect-error
+probeForRoute({lnd, mtokens});
+// @ts-expect-error
+probeForRoute({lnd, destination, tokens, outgoing_channels: '0x0x1'});
 
-expectType<ProbeForRouteResult>(
+expectType<ProbeForRouteResult>()(
   await probeForRoute({lnd, destination, tokens})
 );
-expectType<ProbeForRouteResult>(await probeForRoute({lnd, paths, tokens}));
-expectType<ProbeForRouteResult>(
+expectType<ProbeForRouteResult>()(await probeForRoute({lnd, paths, tokens}));
+expectType<ProbeForRouteResult>()(
   await probeForRoute({lnd, destination, paths, tokens})
 );
-expectType<ProbeForRouteResult>(
+expectType<ProbeForRouteResult>()(
   await probeForRoute({lnd, destination, mtokens})
 );
-expectType<ProbeForRouteResult>(
+expectType<ProbeForRouteResult>()(
   await probeForRoute({lnd, destination, outgoing_channels, tokens})
 );
 
-expectType<void>(
+expectType<void>()(
   probeForRoute({lnd, destination, tokens}, (error, result) => {
-    expectType<ProbeForRouteResult>(result);
+    expectType<ProbeForRouteResult>()(result);
   })
 );
-expectType<void>(
+expectType<void>()(
   probeForRoute({lnd, destination, mtokens}, (error, result) => {
-    expectType<ProbeForRouteResult>(result);
+    expectType<ProbeForRouteResult>()(result);
   })
 );

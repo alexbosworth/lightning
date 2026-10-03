@@ -1,11 +1,13 @@
 import * as events from 'events';
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {subscribeToPastPayments} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(subscribeToPastPayments());
-expectError(subscribeToPastPayments({}));
+// @ts-expect-error
+subscribeToPastPayments();
+// @ts-expect-error
+subscribeToPastPayments({});
 
-expectType<events.EventEmitter>(subscribeToPastPayments({lnd}));
+expectType<events.EventEmitter>()(subscribeToPastPayments({lnd}));

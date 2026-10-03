@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getMethods, GetMethodsResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getMethods());
-expectError(getMethods({}));
+// @ts-expect-error
+getMethods();
+// @ts-expect-error
+getMethods({});
 
-expectType<GetMethodsResult>(await getMethods({lnd}));
+expectType<GetMethodsResult>()(await getMethods({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getMethods({lnd}, (error, result) => {
-    expectType<GetMethodsResult>(result);
+    expectType<GetMethodsResult>()(result);
   })
 );

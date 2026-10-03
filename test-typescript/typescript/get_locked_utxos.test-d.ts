@@ -1,16 +1,18 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {getLockedUtxos, GetLockedUtxosResult} from '../../lnd_methods';
 
 const lnd = {} as AuthenticatedLnd;
 
-expectError(getLockedUtxos());
-expectError(getLockedUtxos({}));
+// @ts-expect-error
+getLockedUtxos();
+// @ts-expect-error
+getLockedUtxos({});
 
-expectType<GetLockedUtxosResult>(await getLockedUtxos({lnd}));
+expectType<GetLockedUtxosResult>()(await getLockedUtxos({lnd}));
 
-expectType<void>(
+expectType<void>()(
   getLockedUtxos({lnd}, (error, result) => {
-    expectType<GetLockedUtxosResult>(result);
+    expectType<GetLockedUtxosResult>()(result);
   })
 );

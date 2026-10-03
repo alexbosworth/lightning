@@ -1,4 +1,4 @@
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {updateChainTransaction} from '../../lnd_methods';
 
@@ -8,12 +8,17 @@ const id = Buffer.alloc(32).toString('hex');
 const description = 'description';
 const args = {lnd, id, description};
 
-expectError(updateChainTransaction());
-expectError(updateChainTransaction({}));
-expectError(updateChainTransaction({lnd}));
-expectError(updateChainTransaction({lnd, id}));
-expectError(updateChainTransaction({lnd, description}));
+// @ts-expect-error
+updateChainTransaction();
+// @ts-expect-error
+updateChainTransaction({});
+// @ts-expect-error
+updateChainTransaction({lnd});
+// @ts-expect-error
+updateChainTransaction({lnd, id});
+// @ts-expect-error
+updateChainTransaction({lnd, description});
 
-expectType<void>(await updateChainTransaction(args));
+expectType<void>()(await updateChainTransaction(args));
 
-expectType<void>(updateChainTransaction(args, (error) => {}));
+expectType<void>()(updateChainTransaction(args, (error) => {}));

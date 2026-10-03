@@ -1,5 +1,5 @@
 import * as events from 'events';
-import {expectError, expectType} from 'tsd';
+import {expectType} from '../expect';
 import {AuthenticatedLnd} from '../../lnd_grpc';
 import {
   subscribeToPayViaRoutes,
@@ -29,10 +29,14 @@ const routes: SubscribeToPayViaRoutesArgs['routes'] = [
 ];
 const id = Buffer.alloc(32).toString('hex');
 
-expectError(subscribeToPayViaRoutes());
-expectError(subscribeToPayViaRoutes({}));
-expectError(subscribeToPayViaRoutes({routes}));
-expectError(subscribeToPayViaRoutes({lnd}));
+// @ts-expect-error
+subscribeToPayViaRoutes();
+// @ts-expect-error
+subscribeToPayViaRoutes({});
+// @ts-expect-error
+subscribeToPayViaRoutes({routes});
+// @ts-expect-error
+subscribeToPayViaRoutes({lnd});
 
-expectType<events.EventEmitter>(subscribeToPayViaRoutes({lnd, routes}));
-expectType<events.EventEmitter>(subscribeToPayViaRoutes({lnd, id, routes}));
+expectType<events.EventEmitter>()(subscribeToPayViaRoutes({lnd, routes}));
+expectType<events.EventEmitter>()(subscribeToPayViaRoutes({lnd, id, routes}));
