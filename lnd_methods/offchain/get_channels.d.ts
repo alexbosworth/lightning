@@ -82,7 +82,7 @@ export type GetChannelsResult = {
       /** Payment Index on Outbound Channel */
       out_payment?: number;
       /** Payment Attempt Id */
-      payment?: number;
+      payment: number;
       /** Chain Height Expiration */
       timeout: number;
       /** Payment Tokens */
@@ -127,9 +127,6 @@ export type GetChannelsResult = {
  * Get channels
  * 
  * Requires `offchain:read` permission
- * 
- * `in_channel`, `in_payment`, `is_forward`, `out_channel`, `out_payment`,
-`payment` are not supported on LND 0.11.1 and below
  * 
  * `is_trusted_funding` is not supported on LND 0.15.0 and below
  */

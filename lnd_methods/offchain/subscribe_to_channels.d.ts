@@ -106,8 +106,20 @@ export type SubscribeToChannelsChannelOpenedEvent = {
   pending_payments: {
     /** Payment Preimage Hash Hex */
     id: string;
+    /** Forward Inbound From Channel Id */
+    in_channel?: string;
+    /** Payment Index on Inbound Channel */
+    in_payment?: number;
+    /** Payment is a Forward */
+    is_forward?: boolean;
     /** Payment Is Outgoing */
     is_outgoing: boolean;
+    /** Forward Outbound To Channel Id */
+    out_channel?: string;
+    /** Payment Index on Outbound Channel */
+    out_payment?: number;
+    /** Payment Attempt Id */
+    payment: number;
     /** Chain Height Expiration */
     timeout: number;
     /** Payment Tokens */

@@ -105,7 +105,7 @@ const outpointDelimiter = ':';
       is_outgoing: <Payment Is Outgoing Bool>
       [out_channel]: <Forwarding to Channel Id String>
       [out_payment]: <Forwarding to Channel Payment Id Number>
-      [payment]: <Payment Attempt Id Number>
+      payment: <Payment Attempt Id Number>
       timeout: <Chain Height Expiration Number>
       tokens: <Payment Tokens Number>
     }]

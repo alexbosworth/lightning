@@ -12,9 +12,6 @@ const type = 'default';
 
   Requires `offchain:read` permission
 
-  `in_channel`, `in_payment`, `is_forward`, `out_channel`, `out_payment`,
-  `payment` are not supported on LND 0.11.1 and below
-
   `is_trusted_funding` is not supported on LND 0.15.0 and below
 
   `description` is not supported on LND 0.16.4 and below
@@ -64,7 +61,7 @@ const type = 'default';
         is_outgoing: <Payment Is Outgoing Bool>
         [out_channel]: <Forward Outbound To Channel Id String>
         [out_payment]: <Payment Index on Outbound Channel Number>
-        [payment]: <Payment Attempt Id Number>
+        payment: <Payment Attempt Id Number>
         timeout: <Chain Height Expiration Number>
         tokens: <Payment Tokens Number>
       }]

@@ -8,7 +8,10 @@ const makeInput = overrides => {
   const response = {
     amount: '1',
     expiration_height: 1,
+    forwarding_channel: '0',
+    forwarding_htlc_index: '0',
     hash_lock: Buffer.alloc(32),
+    htlc_index: '0',
     incoming: true,
   };
 
@@ -27,7 +30,7 @@ const makeExpected = overrides => {
     is_outgoing: false,
     out_channel: undefined,
     out_payment: undefined,
-    payment: undefined,
+    payment: 0,
     timeout: 1,
     tokens: 1,
   };
@@ -106,6 +109,51 @@ const tests = [
       is_outgoing: true,
       payment: 1,
     }),
+  },
+  {
+    args: makeInput({htlc_index: '0'}),
+    description: 'HTLC with a zero index is mapped to payment zero',
+    expected: makeExpected({payment: 0}),
+  },
+  {
+    args: makeInput({
+      forwarding_channel: '1',
+      forwarding_htlc_index: '0',
+      htlc_index: '1',
+      incoming: false,
+    }),
+    description: 'Outgoing forward with zero paired index has in payment',
+    expected: makeExpected({
+      in_channel: '0x0x1',
+      in_payment: 0,
+      is_forward: true,
+      is_outgoing: true,
+      payment: 1,
+    }),
+  },
+  {
+    args: makeInput({
+      forwarding_channel: '1',
+      forwarding_htlc_index: '0',
+      htlc_index: '1',
+    }),
+    description: 'Incoming forward with zero paired index has out payment',
+    expected: makeExpected({
+      is_forward: true,
+      out_channel: '0x0x1',
+      out_payment: 0,
+      payment: 1,
+    }),
+  },
+  {
+    args: makeInput({htlc_index: '2'}),
+    description: 'Incoming non-forward HTLC has no paired payment index',
+    expected: makeExpected({payment: 2}),
+  },
+  {
+    args: makeInput({htlc_index: '2', incoming: false}),
+    description: 'Outgoing non-forward HTLC has no paired payment index',
+    expected: makeExpected({is_outgoing: true, payment: 2}),
   },
 ];
 

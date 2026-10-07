@@ -101,7 +101,13 @@ const updateOpening = 'pending_open_channel';
     past_states: <Total Count of Past Channel States Number>
     pending_payments: [{
       id: <Payment Preimage Hash Hex String>
+      [in_channel]: <Forward Inbound From Channel Id String>
+      [in_payment]: <Payment Index on Inbound Channel Number>
+      [is_forward]: <Payment is a Forward Bool>
       is_outgoing: <Payment Is Outgoing Bool>
+      [out_channel]: <Forward Outbound To Channel Id String>
+      [out_payment]: <Payment Index on Outbound Channel Number>
+      payment: <Payment Attempt Id Number>
       timeout: <Chain Height Expiration Number>
       tokens: <Payment Tokens Number>
     }]

@@ -27,7 +27,7 @@ const isBoolean = n => n === false || n === true;
     is_outgoing: <Payment Is Outgoing Bool>
     [out_channel]: <Forward Outbound To Channel Id String>
     [out_payment]: <Payment Index on Outbound Channel Number>
-    [payment]: <Payment Attempt Id Number>
+    payment: <Payment Attempt Id Number>
     timeout: <Chain Height Expiration Number>
     tokens: <Payment Tokens Number>
   }
@@ -71,12 +71,12 @@ module.exports = args => {
   return {
     id: bufferAsHex(args.hash_lock),
     in_channel: !!isOutgoing && !!between ? between : undefined,
-    in_payment: !!isOutgoing && !!betweenIndex ? betweenIndex : undefined,
+    in_payment: !!isOutgoing && isForward ? betweenIndex : undefined,
     is_forward: isForward || undefined,
     is_outgoing: !args.incoming,
     out_channel: !isOutgoing && !!between ? between : undefined,
-    out_payment: !isOutgoing && !!betweenIndex ? betweenIndex : undefined,
-    payment: !!Number(args.htlc_index) ? Number(args.htlc_index) : undefined,
+    out_payment: !isOutgoing && isForward ? betweenIndex : undefined,
+    payment: Number(args.htlc_index),
     timeout: args.expiration_height,
     tokens: Number(args.amount),
   };
