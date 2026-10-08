@@ -55,7 +55,7 @@ module.exports = ({lnd}, cbk) => {
 
             const [, message] = err;
 
-            if (message !== 'FailedToConnectToDaemon') {
+            if (message !== connectionFailureMessage) {
               return cbk([503, 'ExpectedDaemonShutdown']);
             }
 

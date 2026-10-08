@@ -39,8 +39,6 @@ export type SubscribeToInvoiceInvoiceUpdatedEvent = {
   is_confirmed: boolean;
   /** HTLC is Held */
   is_held?: boolean;
-  /** Invoice is Outgoing */
-  is_outgoing: boolean;
   /** Invoice is Private */
   is_private: boolean;
   /** Invoiced Millitokens */

@@ -2,13 +2,10 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const {infoAsWalletInfo} = require('./../../lnd_responses');
+const isConnectionFailure = require('./is_connection_failure');
 const {isLnd} = require('./../../lnd_requests');
 
-const cannotConnectMessage = 'failed to connect to all addresses';
-const connectFailMessage = '14 UNAVAILABLE: channel is in state TRANSIENT_FAILURE';
-const connectionFailureLndErrorMessage = 'Connect Failed';
 const lockedLndErrorMessage = 'unknown service lnrpc.Lightning';
-const noConnectionMessage = 'No connection established';
 
 /** Get overall wallet info.
 
@@ -61,19 +58,7 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'LndLocked']);
           }
 
-          if (!!err && err.details === cannotConnectMessage) {
-            return cbk([503, 'FailedToConnectToDaemon']);
-          }
-
-          if (!!err && err.details === connectionFailureLndErrorMessage) {
-            return cbk([503, 'FailedToConnectToDaemon']);
-          }
-
-          if (!!err && err.message === connectFailMessage) {
-            return cbk([503, 'FailedToConnectToDaemon']);
-          }
-
-          if (!!err && err.details === noConnectionMessage) {
+          if (isConnectionFailure({err})) {
             return cbk([503, 'FailedToConnectToDaemon']);
           }
 

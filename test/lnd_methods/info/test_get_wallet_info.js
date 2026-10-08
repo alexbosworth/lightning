@@ -44,6 +44,50 @@ const tests = [
     error: [503, 'FailedToConnectToDaemon'],
   },
   {
+    args: {
+      lnd: makeLnd({
+        err: {
+          details: 'No connection established. Last error: Error: connect ECONNREFUSED 127.0.0.1:10009. Resolution note: ',
+        },
+      }),
+    },
+    description: 'No connection with last error details returns error',
+    error: [503, 'FailedToConnectToDaemon'],
+  },
+  {
+    args: {
+      lnd: makeLnd({
+        err: {
+          details: 'failed to connect to all addresses; last error: UNKNOWN: ipv4:127.0.0.1:10009: Failed to connect to remote host: Connection refused',
+        },
+      }),
+    },
+    description: 'Failed to connect with last error details returns error',
+    error: [503, 'FailedToConnectToDaemon'],
+  },
+  {
+    args: {
+      lnd: makeLnd({
+        err: {
+          code: 14,
+          details: 'Connection dropped',
+          message: '14 UNAVAILABLE: Connection dropped',
+        },
+      }),
+    },
+    description: 'Unavailable status code returns connect fail error',
+    error: [503, 'FailedToConnectToDaemon'],
+  },
+  {
+    args: {
+      lnd: makeLnd({
+        err: {message: '13 INTERNAL: Received RST_STREAM: read ECONNRESET'},
+      }),
+    },
+    description: 'Connection reset message returns connect fail error',
+    error: [503, 'FailedToConnectToDaemon'],
+  },
+  {
     args: {lnd: makeLnd({err: 'err'})},
     description: 'Generic failure returns back the error',
     error: [503, 'GetWalletInfoErr', {err: 'err'}],

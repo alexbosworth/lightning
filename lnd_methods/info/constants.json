@@ -1,5 +1,15 @@
 {
   "blocksBuffer": 6,
+  "connectionFailureMessages": [
+    "channel is in state transient_failure",
+    "connect failed",
+    "connection dropped",
+    "econnrefused",
+    "econnreset",
+    "failed to connect to all addresses",
+    "no connection established",
+    "server is shutting down"
+  ],
   "defaultCltv": 40,
   "defaultTokens": 0,
   "externalType": "externalscore",
