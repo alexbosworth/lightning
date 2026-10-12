@@ -1,7 +1,13 @@
+const {createECDH} = require('node:crypto');
+const {createHash} = require('node:crypto');
 const {deepStrictEqual} = require('node:assert').strict;
 const EventEmitter = require('node:events');
 const test = require('node:test');
 const {throws} = require('node:assert').strict;
+
+const {chanNumber} = require('bolt07');
+const {decryptBlindedPath} = require('bolt04');
+const {paymentPathFromChannels} = require('bolt04');
 
 const {getInfoResponse} = require('./../fixtures');
 const {queryRoutesResponse} = require('./../fixtures');
@@ -278,6 +284,227 @@ const makeLnd = ({count, getInfo, response, sendToRouteV2}) => {
   return lnd;
 };
 
+const sha256 = n => createHash('sha256').update(n).digest();
+
+// The public key of a private key number
+const publicKeyFor = number => {
+  const ecdh = createECDH('secp256k1');
+
+  ecdh.setPrivateKey(Buffer.from(number.toString(16).padStart(64, '0'), 'hex'));
+
+  return ecdh.getPublicKey('hex', 'compressed');
+};
+
+// The node has private key one so its shared point with a path key is the key
+const self = publicKeyFor(1);
+const peer = publicKeyFor(2);
+const other = publicKeyFor(3);
+
+// Forwarding policies of the nodes of a channel
+const policiesFor = keys => keys.map(key => ({
+  base_fee_mtokens: '1000',
+  cltv_delta: 40,
+  fee_rate: 100,
+  max_htlc_mtokens: '100000000',
+  min_htlc_mtokens: '1',
+  public_key: key,
+}));
+
+// The channel of the node with the peer
+const selfChannel = id => ({id, policies: policiesFor([self, peer])});
+
+// A path that starts at the node and goes over a channel to the peer
+const makeSelfPath = ({channel, destination, hops}) => paymentPathFromChannels({
+  channels: !channel ? [] : [selfChannel(channel)],
+  cltv_delta: 18,
+  current_block_height: 100,
+  destination: destination || peer,
+  hop_count: hops,
+  max_mtokens: '100000000',
+});
+
+// A path that starts at the node and goes through the peer to another node
+const throughPeerPath = paymentPathFromChannels({
+  channels: [
+    selfChannel('1x2x3'),
+    {id: '4x5x6', policies: policiesFor([peer, other])},
+  ],
+  cltv_delta: 18,
+  current_block_height: 100,
+  destination: other,
+  max_mtokens: '100000000',
+});
+
+// The next path key after the hop of the node at the start of a path
+const nextPathKey = path => decryptBlindedPath({
+  encrypted: path.hops[0].encrypted_data,
+  key: path.key,
+  secret: sha256(Buffer.from(path.key, 'hex')).toString('hex'),
+}).next_path_key;
+
+// Paths over a channel and over an alias, to an unknown channel, and to self
+const selfPath = makeSelfPath({channel: '1x2x3'});
+const aliasPath = makeSelfPath({channel: '16000000x0x1', hops: 3});
+const lostPath = makeSelfPath({channel: '9x9x9'});
+const toSelfPath = makeSelfPath({destination: self, hops: 3});
+
+// A path that starts at the node with a path key that is not a curve point
+const offCurvePath = Object.assign({}, selfPath, {key: `02${'05'.repeat(32)}`});
+
+// A path that starts at the node with no fees for the fee the node charges
+const underpaidPath = Object.assign({}, selfPath, {
+  base_fee_mtokens: '0',
+  fee_rate: 0,
+});
+
+// The private channel of the node with the peer, known by an alias too
+const peerChannel = {
+  active: true,
+  alias_scids: [chanNumber({channel: '16000000x0x1'}).number],
+  capacity: '1',
+  chan_id: chanNumber({channel: '1x2x3'}).number,
+  channel_point: `${Buffer.alloc(32).toString('hex')}:0`,
+  commit_fee: '1',
+  commit_weight: '1',
+  commitment_type: 'ANCHORS',
+  fee_per_kw: '1',
+  local_balance: '1',
+  local_chan_reserve_sat: '1',
+  local_constraints: {},
+  num_updates: '1',
+  pending_htlcs: [],
+  private: true,
+  remote_balance: '1',
+  remote_chan_reserve_sat: '1',
+  remote_constraints: {},
+  remote_pubkey: peer,
+  thaw_height: 0,
+  total_satoshis_received: '1',
+  total_satoshis_sent: '1',
+  unsettled_balance: '1',
+};
+
+// The route to the peer in query routes format, for what the node forwards
+const peerRpcRoute = {
+  hops: [{
+    amt_to_forward_msat: '1000',
+    chan_id: chanNumber({channel: '1x2x3'}).number,
+    custom_records: {},
+    expiry: 124,
+    fee_msat: '0',
+    pub_key: peer,
+  }],
+  total_amt: '1',
+  total_amt_msat: '1000',
+  total_fees: '0',
+  total_fees_msat: '0',
+  total_time_lock: 124,
+};
+
+// The route to the peer as probed
+const peerRoute = {
+  confidence: 1000000,
+  fee: 0,
+  fee_mtokens: '0',
+  hops: [{
+    channel: '1x2x3',
+    fee: 0,
+    fee_mtokens: '0',
+    forward: 1,
+    forward_mtokens: '1000',
+    public_key: peer,
+    timeout: 124,
+  }],
+  messages: [],
+  mtokens: '1000',
+  payment: undefined,
+  safe_fee: 0,
+  safe_tokens: 1,
+  timeout: 124,
+  tokens: 1,
+  total_mtokens: undefined,
+};
+
+// The route to the peer continued into the rest of the path past the node
+const selfPathRoute = {
+  confidence: 1000000,
+  fee: 0,
+  fee_mtokens: '0',
+  hops: [{
+    channel: '1x2x3',
+    encrypted_data: selfPath.hops[1].encrypted_data,
+    fee: 0,
+    fee_mtokens: '0',
+    forward: 1,
+    forward_mtokens: '1000',
+    path_key: nextPathKey(selfPath),
+    public_key: peer,
+    timeout: 124,
+  }],
+  mtokens: '1000',
+  safe_fee: 0,
+  safe_tokens: 1,
+  timeout: 124,
+  tokens: 1,
+  total_mtokens: undefined,
+};
+
+// The route to the peer continued into the rest of the path with a dummy hop
+const aliasPathRoute = {
+  confidence: 1000000,
+  fee: 0,
+  fee_mtokens: '0',
+  hops: [
+    {
+      channel: '1x2x3',
+      encrypted_data: aliasPath.hops[1].encrypted_data,
+      fee: 0,
+      fee_mtokens: '0',
+      forward: 0,
+      forward_mtokens: '0',
+      path_key: nextPathKey(aliasPath),
+      public_key: peer,
+      timeout: 0,
+    },
+    {
+      channel: '0x0x0',
+      encrypted_data: aliasPath.hops[2].encrypted_data,
+      fee: 0,
+      fee_mtokens: '0',
+      forward: 1,
+      forward_mtokens: '1000',
+      public_key: aliasPath.hops[2].relay_key,
+      timeout: 106,
+    },
+  ],
+  mtokens: '1000',
+  safe_fee: 0,
+  safe_tokens: 1,
+  timeout: 124,
+  tokens: 1,
+  total_mtokens: undefined,
+};
+
+// Make an LND that is the introduction node of paths to its peer
+const makeSelfLnd = ({deriveSharedKey, routes}) => {
+  const lnd = makeBlindedLnd({routes: routes || {[peer]: peerRpcRoute}});
+
+  const info = Object.assign({}, getInfoResponse, {identity_pubkey: self});
+
+  lnd.default.getChanInfo = ({}, cbk) => cbk({details: 'edge not found'});
+  lnd.default.getInfo = ({}, cbk) => cbk(null, info);
+  lnd.default.listChannels = ({}, cbk) => cbk(null, {channels: [peerChannel]});
+
+  // The shared key of the node and a path key is the hash of the path key
+  lnd.signer = {
+    deriveSharedKey: deriveSharedKey || (({ephemeral_pubkey}, cbk) => {
+      return cbk(null, {shared_key: sha256(ephemeral_pubkey)});
+    }),
+  };
+
+  return lnd;
+};
+
 const tests = [
   {
     args: {},
@@ -317,6 +544,26 @@ const tests = [
     },
     description: 'A blinded path must allow the amount to probe',
     error: 'ExpectedBlindedPathAllowingAmountToProbe',
+  },
+  {
+    args: {
+      lnd: makeBlindedLnd({routes: {}}),
+      max_fee_mtokens: 'max',
+      paths: [makePath({})],
+      tokens: 1,
+    },
+    description: 'A max fee for blinded paths is expected to be millitokens',
+    error: 'ExpectedMaxFeeMillitokensToProbeToBlindedPaths',
+  },
+  {
+    args: {
+      lnd: makeBlindedLnd({routes: {}}),
+      max_fee_mtokens: '-1',
+      paths: [makePath({})],
+      tokens: 1,
+    },
+    description: 'A max fee for blinded paths is not expected to be negative',
+    error: 'ExpectedMaxFeeMillitokensToProbeToBlindedPaths',
   },
   {
     args: {destination: Buffer.alloc(33).toString('hex'), ignore: 'ignore'},
@@ -785,7 +1032,274 @@ const tests = [
       })],
     },
   },
+  {
+    args: {lnd: makeSelfLnd({}), paths: [selfPath], tokens: 1},
+    description: 'A path that starts at the node is probed from the next node',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1000',
+        dest_features: undefined,
+        final_cltv_delta: 24,
+        pub_key: peer,
+      }],
+      routes: [peerRoute],
+      success: selfPathRoute,
+    },
+  },
+  {
+    args: {lnd: makeSelfLnd({}), paths: [aliasPath], tokens: 1},
+    description: 'A path that starts at the node over an alias is probed',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1000',
+        dest_features: undefined,
+        final_cltv_delta: 24,
+        pub_key: peer,
+      }],
+      routes: [peerRoute],
+      success: aliasPathRoute,
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({}),
+      max_fee_mtokens: '1000',
+      paths: [selfPath],
+      tokens: 1,
+    },
+    description: 'The fee of the node is left in the max fee of the route',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1000',
+        dest_features: undefined,
+        fee_limit: {fixed_msat: '1000'},
+        final_cltv_delta: 24,
+        pub_key: peer,
+      }],
+      routes: [peerRoute],
+      success: selfPathRoute,
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({}),
+      max_fee_mtokens: '10',
+      paths: [makePath({}), selfPath],
+      tokens: 1,
+    },
+    description: 'A path past the node fits a max fee under the node fee',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1000',
+        dest_features: undefined,
+        fee_limit: {fixed_msat: '10'},
+        final_cltv_delta: 24,
+        pub_key: peer,
+      }],
+      routes: [peerRoute],
+      success: selfPathRoute,
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({routes: {}}),
+      max_fee_mtokens: '1001',
+      paths: [throughPeerPath],
+      tokens: 1,
+    },
+    description: 'The rest of a path past the node counts against the max fee',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '2001',
+        dest_features: undefined,
+        fee_limit: {fixed_msat: '0'},
+        final_cltv_delta: 64,
+        pub_key: peer,
+      }],
+      routes: [],
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({routes: {[introductionNode]: introductionRpcRoute}}),
+      paths: [underpaidPath, makePath({})],
+      tokens: 1,
+    },
+    description: 'A path with fees under the fee of the node is left out',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1011',
+        dest_features: undefined,
+        final_cltv_delta: 46,
+        pub_key: introductionNode,
+      }],
+      routes: [introductionRoute],
+      success: blindedRoute,
+    },
+  },
+  {
+    args: {lnd: makeSelfLnd({}), paths: [toSelfPath], tokens: 1},
+    description: 'A path that ends at the node is a payment to self',
+    expected: {
+      error: [400, 'CannotPayToOwnNodeViaBlindedPath'],
+      failures: [],
+      requests: [],
+      routes: [],
+    },
+  },
+  {
+    args: {lnd: makeSelfLnd({}), paths: [makePath({}), selfPath], tokens: 1},
+    description: 'Paths where only some start at the node are all probed',
+    expected: {
+      failures: [],
+      requests: [
+        {
+          amt_msat: '1011',
+          dest_features: undefined,
+          final_cltv_delta: 46,
+          pub_key: introductionNode,
+        },
+        {
+          amt_msat: '1000',
+          dest_features: undefined,
+          final_cltv_delta: 24,
+          pub_key: peer,
+        },
+      ],
+      routes: [peerRoute],
+      success: selfPathRoute,
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({routes: {[introductionNode]: introductionRpcRoute}}),
+      paths: [lostPath, makePath({})],
+      tokens: 1,
+    },
+    description: 'A path that starts at the node with no next peer is left out',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1011',
+        dest_features: undefined,
+        final_cltv_delta: 46,
+        pub_key: introductionNode,
+      }],
+      routes: [introductionRoute],
+      success: blindedRoute,
+    },
+  },
+  {
+    args: {lnd: makeSelfLnd({}), paths: [lostPath], tokens: 1},
+    description: 'A probe errors when no paths are left past the node',
+    expected: {
+      error: [503, 'FailedToStepPastOwnNodeInBlindedPaths'],
+      failures: [],
+      requests: [],
+      routes: [],
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({
+        deriveSharedKey: ({}, cbk) => cbk('err'),
+        routes: {[introductionNode]: introductionRpcRoute},
+      }),
+      paths: [offCurvePath, makePath({})],
+      tokens: 1,
+    },
+    description: 'A path at the node with an invalid path key is left out',
+    expected: {
+      failures: [],
+      requests: [{
+        amt_msat: '1011',
+        dest_features: undefined,
+        final_cltv_delta: 46,
+        pub_key: introductionNode,
+      }],
+      routes: [introductionRoute],
+      success: blindedRoute,
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({
+        deriveSharedKey: ({ephemeral_pubkey}, cbk) => setTimeout(() => {
+          return cbk(null, {shared_key: sha256(ephemeral_pubkey)});
+        },
+        50),
+      }),
+      paths: [selfPath],
+      probe_timeout_ms: 1,
+      tokens: 1,
+    },
+    description: 'A probe can time out while stepping past the node',
+    expected: {
+      error: [503, 'ProbeTimeout'],
+      failures: [],
+      requests: [],
+      routes: [],
+    },
+  },
+  {
+    args: {
+      lnd: makeSelfLnd({
+        deriveSharedKey: ({}, cbk) => cbk('err'),
+        routes: {[introductionNode]: introductionRpcRoute},
+      }),
+      paths: [selfPath, makePath({})],
+      tokens: 1,
+    },
+    description: 'A failure to step past the node is an error',
+    expected: {
+      error: [503, 'UnexpetedErrorDerivingSharedKey', {err: 'err'}],
+      failures: [],
+      requests: [],
+      routes: [],
+    },
+  },
 ];
+
+test('A probe to blinded paths looks up the node identity once', (t, end) => {
+  const lnd = makeSelfLnd({routes: {[introductionNode]: introductionRpcRoute}});
+  const {getInfo} = lnd.default;
+  let lookups = 0;
+
+  lnd.default.getInfo = (args, cbk) => {
+    lookups++;
+
+    return getInfo(args, cbk);
+  };
+
+  // The first path has no route, so the probe tries routes twice
+  const sub = subscribeToProbeForRoute({
+    lnd,
+    paths: [
+      makePath({
+        hops: [
+          {encrypted_data: '03', relay_key: otherIntroductionNode},
+          {encrypted_data: '04', relay_key: blindedKey},
+        ],
+        introduction_node: otherIntroductionNode,
+      }),
+      makePath({}),
+    ],
+    tokens: 1,
+  });
+
+  sub.on('end', () => {
+    deepStrictEqual(lnd.requests.length, 2, 'Got routes for both paths');
+    deepStrictEqual(lookups, 1, 'Node identity is looked up once');
+
+    return end();
+  });
+});
 
 tests.forEach(({args, description, error, expected}) => {
   return test(description, (t, end) => {

@@ -1,6 +1,12 @@
+const {createECDH} = require('node:crypto');
+const {createHash} = require('node:crypto');
 const {deepStrictEqual} = require('node:assert').strict;
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
+
+const {chanNumber} = require('bolt07');
+const {decryptBlindedPath} = require('bolt04');
+const {paymentPathFromChannels} = require('bolt04');
 
 const {getInfoResponse} = require('./../fixtures');
 const {probeForRoute} = require('./../../../');
@@ -116,6 +122,95 @@ const failEarly = ({}, cbk) => cbk(null, {
   preimage: Buffer.alloc(Number()),
 });
 
+const sha256 = n => createHash('sha256').update(n).digest();
+
+// The public key of a private key number
+const publicKeyFor = number => {
+  const ecdh = createECDH('secp256k1');
+
+  ecdh.setPrivateKey(Buffer.from(number.toString(16).padStart(64, '0'), 'hex'));
+
+  return ecdh.getPublicKey('hex', 'compressed');
+};
+
+// The node has private key one so its shared point with a path key is the key
+const self = publicKeyFor(1);
+const peer = publicKeyFor(2);
+
+// A path that starts at the node, or that is a path to the node itself
+const makeSelfPath = ({destination, hops}) => paymentPathFromChannels({
+  channels: destination === self ? [] : [{
+    id: '1x2x3',
+    policies: [self, peer].map(key => ({
+      base_fee_mtokens: '1000',
+      cltv_delta: 40,
+      fee_rate: 100,
+      max_htlc_mtokens: '100000000',
+      min_htlc_mtokens: '1',
+      public_key: key,
+    })),
+  }],
+  cltv_delta: 18,
+  current_block_height: 100,
+  destination: destination || peer,
+  hop_count: hops,
+  max_mtokens: '100000000',
+});
+
+const selfPath = makeSelfPath({});
+const toSelfPath = makeSelfPath({destination: self, hops: 3});
+
+// The route to the peer of the node in RPC format, for what the node forwards
+const peerResponse = {
+  routes: [{
+    hops: [{
+      amt_to_forward_msat: '1000',
+      chan_id: chanNumber({channel: '1x2x3'}).number,
+      custom_records: {},
+      expiry: 124,
+      fee_msat: '0',
+      pub_key: peer,
+    }],
+    total_amt: '1',
+    total_amt_msat: '1000',
+    total_fees: '0',
+    total_fees_msat: '0',
+    total_time_lock: 124,
+  }],
+  success_prob: 1,
+};
+
+// Make an LND that is the introduction node of a path to its peer
+const makeSelfLnd = () => {
+  const lnd = makeLnd({
+    response: peerResponse,
+    sendToRouteV2: reachDestination,
+  });
+
+  const info = Object.assign({}, getInfoResponse, {identity_pubkey: self});
+
+  // The channel to the peer is found in the graph
+  lnd.default.getChanInfo = ({}, cbk) => cbk(null, {
+    capacity: '1',
+    chan_point: `${Buffer.alloc(32).toString('hex')}:0`,
+    channel_id: chanNumber({channel: '1x2x3'}).number,
+    node1_pub: peer,
+    node2_pub: self,
+  });
+
+  lnd.default.getInfo = ({}, cbk) => cbk(null, info);
+  lnd.default.listChannels = ({}, cbk) => cbk(null, {channels: []});
+
+  // The shared key of the node and a path key is the hash of the path key
+  lnd.signer = {
+    deriveSharedKey: ({ephemeral_pubkey}, cbk) => {
+      return cbk(null, {shared_key: sha256(ephemeral_pubkey)});
+    },
+  };
+
+  return lnd;
+};
+
 const tests = [
   {
     args: {},
@@ -150,6 +245,16 @@ const tests = [
     },
     description: 'A probe subscription argument error is returned',
     error: [400, 'ExpectedDestinationPublicKeyToSubscribeToProbe'],
+  },
+  {
+    args: {
+      lnd: makeLnd({sendToRouteV2: reachDestination}),
+      max_fee_mtokens: 'max',
+      paths: [path],
+      tokens: 1,
+    },
+    description: 'An invalid max fee for blinded paths is an argument error',
+    error: [400, 'ExpectedMaxFeeMillitokensToProbeToBlindedPaths'],
   },
   {
     args: {
@@ -260,6 +365,43 @@ const tests = [
         total_mtokens: undefined,
       },
     },
+  },
+  {
+    args: {lnd: makeSelfLnd(), paths: [selfPath], tokens: 1},
+    description: 'A probe to a path that starts at the node starts past it',
+    expected: {
+      route: {
+        confidence: 1000000,
+        fee: 0,
+        fee_mtokens: '0',
+        hops: [{
+          channel: '1x2x3',
+          encrypted_data: selfPath.hops[1].encrypted_data,
+          fee: 0,
+          fee_mtokens: '0',
+          forward: 1,
+          forward_mtokens: '1000',
+          path_key: decryptBlindedPath({
+            encrypted: selfPath.hops[0].encrypted_data,
+            key: selfPath.key,
+            secret: sha256(Buffer.from(selfPath.key, 'hex')).toString('hex'),
+          }).next_path_key,
+          public_key: peer,
+          timeout: 124,
+        }],
+        mtokens: '1000',
+        safe_fee: 0,
+        safe_tokens: 1,
+        timeout: 124,
+        tokens: 1,
+        total_mtokens: undefined,
+      },
+    },
+  },
+  {
+    args: {lnd: makeSelfLnd(), paths: [toSelfPath], tokens: 1},
+    description: 'A probe to a path that ends at the node is an error',
+    error: [400, 'CannotPayToOwnNodeViaBlindedPath'],
   },
 ];
 

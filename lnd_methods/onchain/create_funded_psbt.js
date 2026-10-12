@@ -104,19 +104,22 @@ module.exports = (args, cbk) => {
 
       // Construct the PSBT that is needed for coin select type funding
       funding: ['validate', ({}, cbk) => {
-        const {psbt} = createPsbt({
-          change_type: defaultChangeType(args.change_type),
-          outputs: args.outputs || [],
-          timelock: args.timelock,
-          utxos: (args.inputs || []).map(input => ({
-            id: input.transaction_id,
-            sequence: input.sequence,
-            vout: input.transaction_vout,
-          })),
-          version: args.version,
-        });
+        try {
+          const {psbt} = createPsbt({
+            outputs: args.outputs || [],
+            timelock: args.timelock,
+            utxos: (args.inputs || []).map(input => ({
+              id: input.transaction_id,
+              sequence: input.sequence,
+              vout: input.transaction_vout,
+            })),
+            version: args.version,
+          });
 
-        return cbk(null, hexAsBuffer(psbt));
+          return cbk(null, hexAsBuffer(psbt));
+        } catch (err) {
+          return cbk([400, 'FailedToCreatePsbtToFund', {err: err.message}]);
+        }
       }],
 
       // Determine the minimum confirmations for UTXOs to select

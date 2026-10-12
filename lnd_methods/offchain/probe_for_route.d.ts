@@ -168,6 +168,8 @@ export type ProbeForRouteResult = {
  * `paths` are blinded paths. If using, `destination` is not required.
  *
  * Requires `offchain:write` permission
+ *
+ * Requires `signer:generate` permission when a blinded path in `paths` starts at the node itself
  */
 export const probeForRoute: AuthenticatedLightningMethod<
   ProbeForRouteArgs,

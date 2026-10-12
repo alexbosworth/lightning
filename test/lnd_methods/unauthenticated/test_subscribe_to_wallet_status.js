@@ -1,143 +1,163 @@
 const {deepStrictEqual} = require('node:assert').strict;
 const EventEmitter = require('node:events');
-const {rejects} = require('node:assert').strict;
+const {promisify} = require('node:util');
 const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToWalletStatus} = require('./../../../lnd_methods');
 
-const makeLnd = overrides => {
-  const data = {state: 'LOCKED'};
+const allEvents = [
+  'absent',
+  'active',
+  'error',
+  'locked',
+  'ready',
+  'starting',
+  'waiting',
+];
+const nextTick = promisify(process.nextTick);
 
-  Object.keys(overrides).forEach(k => data[k] = overrides[k]);
+// Make an LND that sends a state or an error to its wallet status subscription
+const makeLnd = ({data, err}) => {
+  const subscription = new EventEmitter();
+
+  subscription.cancels = 0;
+  subscription.cancel = () => subscription.cancels++;
 
   return {
     status: {
       subscribeState: ({}) => {
-        const emitter = new EventEmitter();
+        process.nextTick(() => {
+          if (err !== undefined) {
+            return subscription.emit('error', err);
+          }
 
-        emitter.cancel = () => {};
+          return subscription.emit('data', data);
+        });
 
-        if (overrides.data === undefined) {
-          process.nextTick(() => emitter.emit('data', data));
-        } else {
-          process.nextTick(() => emitter.emit('data', overrides.data));
-        }
-
-        return emitter;
+        return subscription;
       },
     },
+    subscription,
   };
 };
 
 const tests = [
   {
-    args: {
-      lnd: {
-        status: {
-          subscribeState: ({}) => {
-            const emitter = new EventEmitter();
-
-            emitter.cancel = () => {};
-
-            process.nextTick(() => emitter.emit('error', 'err'));
-
-            return emitter;
-          },
-        },
-      },
-    },
-    description: 'Errors are returned',
-    error: 'err',
+    args: {},
+    description: 'An LND object is required',
+    error: 'ExpectedAuthenticatedLndToSubscribeToWalletStatus',
   },
   {
-    args: {
-      lnd: {
-        status: {
-          subscribeState: ({}) => {
-            const emitter = new EventEmitter();
-
-            emitter.cancel = () => {};
-
-            process.nextTick(() => emitter.emit('error', {
-              details: 'Cancelled on client',
-            }));
-
-            return emitter;
-          },
-        },
-      },
-    },
-    description: 'Errors are returned',
-    error: {details: 'Cancelled on client'},
+    args: {lnd: {}},
+    description: 'An LND object with a status subscription is required',
+    error: 'ExpectedAuthenticatedLndToSubscribeToWalletStatus',
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'NON_EXISTING'}})},
+    description: 'Absent wallet state emitted',
+    expected: {events: [{data: {}, event: 'absent'}], is_listening: true},
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'RPC_ACTIVE'}})},
+    description: 'Active wallet state emitted',
+    expected: {events: [{data: {}, event: 'active'}], is_listening: true},
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'LOCKED'}})},
+    description: 'Locked wallet state emitted',
+    expected: {events: [{data: {}, event: 'locked'}], is_listening: true},
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'SERVER_ACTIVE'}})},
+    description: 'Ready server state emitted',
+    expected: {events: [{data: {}, event: 'ready'}], is_listening: true},
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'UNLOCKED'}})},
+    description: 'Starting wallet state emitted',
+    expected: {events: [{data: {}, event: 'starting'}], is_listening: true},
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'WAITING_TO_START'}})},
+    description: 'Waiting to start state emitted',
+    expected: {events: [{data: {}, event: 'waiting'}], is_listening: true},
+  },
+  {
+    args: {lnd: makeLnd({data: {state: 'UNKNOWN_STATE'}})},
+    description: 'An unknown state emits nothing',
+    expected: {events: [], is_listening: true},
   },
   {
     args: {lnd: makeLnd({data: null})},
     description: 'A state is expected',
-    error: new Error('ExpectedStateFromWalletStatus'),
+    expected: {
+      events: [{
+        data: new Error('ExpectedStateFromWalletStatus'),
+        event: 'error',
+      }],
+      is_listening: true,
+    },
   },
   {
-    args: {lnd: makeLnd({})},
-    description: 'Wallet state emitted',
+    args: {lnd: makeLnd({err: 'err'})},
+    description: 'Errors are passed back',
+    expected: {events: [{data: 'err', event: 'error'}], is_listening: true},
   },
   {
-    args: {lnd: makeLnd({state: 'NON_EXISTING'})},
-    description: 'Absent wallet state emitted',
+    args: {lnd: makeLnd({err: {details: 'Cancelled on client'}})},
+    description: 'A cancel error stops listening to the subscription',
+    expected: {
+      events: [{data: {details: 'Cancelled on client'}, event: 'error'}],
+      is_listening: false,
+    },
   },
   {
-    args: {lnd: makeLnd({state: 'RPC_ACTIVE'})},
-    description: 'Active wallet state emitted',
+    args: {lnd: makeLnd({err: 'err'})},
+    description: 'Errors are not emitted when nobody is listening for them',
+    expected: {events: [], is_listening: true},
+    listen: ['locked'],
   },
   {
-    args: {lnd: makeLnd({state: 'SERVER_ACTIVE'})},
-    description: 'Active server state emitted',
-  },
-  {
-    args: {lnd: makeLnd({state: 'WAITING_TO_START'})},
-    description: 'Server waiting to start',
-  },
-  {
-    args: {lnd: makeLnd({state: 'undefined_state'})},
-    description: 'Server emitted an unknown event',
-  },
-  {
-    args: {lnd: makeLnd({state: 'UNLOCKED'})},
-    description: 'Starting state emitted',
+    args: {lnd: makeLnd({data: {state: 'LOCKED'}})},
+    description: 'Subscription is cancelled when all listeners are removed',
+    expected: {cancels: [0, 1], events: [], is_listening: true},
+    listen: ['active', 'error'],
   },
 ];
 
-tests.forEach(({args, description, error, expected}) => {
-  return test(description, (t, end) => {
-    try {
-      subscribeToWalletStatus({});
-    } catch (err) {
-      deepStrictEqual(
-        err,
-        new Error('ExpectedAuthenticatedLndToSubscribeToWalletStatus'), 'lnd');
+tests.forEach(({args, description, error, expected, listen}) => {
+  return test(description, async () => {
+    if (!!error) {
+      throws(() => subscribeToWalletStatus(args), new Error(error), 'Error');
+
+      return;
     }
 
+    const events = [];
+    const {subscription} = args.lnd;
     const sub = subscribeToWalletStatus(args);
 
-    if (!!error) {
-      sub.once('error', err => {
-        deepStrictEqual(err, error, 'Got expected error');
+    (listen || allEvents).forEach(event => {
+      return sub.on(event, data => events.push({data, event}));
+    });
 
-        subscribeToWalletStatus(args);
+    await nextTick();
 
-        process.nextTick(() => {
-          sub.removeAllListeners();
+    const isListening = !!subscription.listenerCount('data');
 
-          return end();
-        });
-      });
-    } else {
-      if (!expected) {
-        return end();
-      }
+    deepStrictEqual(events, expected.events, 'Got expected events');
+    deepStrictEqual(isListening, expected.is_listening, 'Listening to LND');
 
-      sub.once('absent', () => end());
-      sub.once('active', () => end());
-      sub.once('locked', () => end());
-      sub.once('starting', () => end());
+    // Stop listening one event at a time, noting when LND gets cancelled
+    const cancels = (listen || allEvents).map(event => {
+      sub.removeAllListeners(event);
+
+      return subscription.cancels;
+    });
+
+    if (!!expected.cancels) {
+      deepStrictEqual(cancels, expected.cancels, 'Got expected cancels');
     }
 
     return;

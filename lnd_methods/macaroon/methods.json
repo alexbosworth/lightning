@@ -564,6 +564,9 @@
   },
   "subscribeToProbeForRoute": {
     "depends_on": [
+      "diffieHellmanComputeSecret",
+      "getChannel",
+      "getChannels",
       "getIdentity",
       "getRouteToDestination",
       "subscribeToPayViaRoutes"

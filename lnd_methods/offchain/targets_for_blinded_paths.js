@@ -2,17 +2,14 @@ const blindedPathFee = require('./blinded_path_fee');
 
 const {isArray} = Array;
 const isMtokens = n => typeof n === 'string' && /^\d+$/.test(n);
-const lessFee = (max, fee) => (BigInt(max) - BigInt(fee)).toString();
 const sumOf = (a, b) => (BigInt(a) + BigInt(b)).toString();
 
 /** Derive probe targets to deliver an amount through blinded paths
 
-  Targets are the introduction nodes of the paths, with the amount and the
-  maximum fee adjusted for the path fees. Paths that have fees beyond the
-  maximum fee are not included as targets.
+  Targets are the introduction nodes of the paths, with the amount adjusted for
+  the path fees.
 
   {
-    [max_fee_mtokens]: <Maximum Fee Millitokens String>
     mtokens: <Millitokens To Deliver String>
     paths: [{
       base_fee_mtokens: <Accumulated Base Fee Millitokens String>
@@ -37,17 +34,12 @@ const sumOf = (a, b) => (BigInt(a) + BigInt(b)).toString();
     targets: [{
       cltv_delta: <Introduction Node Final CLTV Delta Number>
       destination: <Introduction Node Public Key Hex String>
-      [max_fee_mtokens]: <Maximum Fee To Introduction Node Millitokens String>
       mtokens: <Millitokens To Send To Introduction Node String>
       path: <Blinded Path Object>
     }]
   }
 */
-module.exports = ({max_fee_mtokens, mtokens, paths}) => {
-  if (max_fee_mtokens !== undefined && !isMtokens(max_fee_mtokens)) {
-    throw new Error('ExpectedMaxFeeMillitokensToDeriveTargetsForBlindedPaths');
-  }
-
+module.exports = ({mtokens, paths}) => {
   if (!isMtokens(mtokens)) {
     throw new Error('ExpectedMillitokensToDeriveTargetsForBlindedPaths');
   }
@@ -78,24 +70,12 @@ module.exports = ({max_fee_mtokens, mtokens, paths}) => {
     throw new Error('ExpectedBlindedPathAllowingAmountToProbe');
   }
 
-  const fees = allowed.map(path => {
-    return {path, fee: blindedPathFee({mtokens, path}).fee_mtokens};
-  });
-
-  const hasMaxFee = max_fee_mtokens !== undefined;
-
-  // Paths that have fees beyond the maximum fee cannot be used
-  const affordable = fees.filter(({fee}) => {
-    return !hasMaxFee || BigInt(fee) <= BigInt(max_fee_mtokens);
-  });
-
   return {
-    targets: affordable.map(({fee, path}) => ({
+    targets: allowed.map(path => ({
       path,
       cltv_delta: path.cltv_delta,
       destination: path.introduction_node || path.hops[0].relay_key,
-      max_fee_mtokens: !hasMaxFee ? undefined : lessFee(max_fee_mtokens, fee),
-      mtokens: sumOf(mtokens, fee),
+      mtokens: sumOf(mtokens, blindedPathFee({mtokens, path}).fee_mtokens),
     })),
   };
 };

@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 
 const asyncAuto = require('async/auto');
+const asyncMapSeries = require('async/mapSeries');
 const asyncWhilst = require('async/whilst');
 
 const {getRouteToDestination} = require('./../info');
@@ -10,12 +11,14 @@ const {isLnd} = require('./../../lnd_requests');
 const {mtokensAmount} = require('./../../bolt00');
 const routeIntoBlindedPath = require('./route_into_blinded_path');
 const subscribeToPayViaRoutes = require('./subscribe_to_pay_via_routes');
+const targetPastSelf = require('./target_past_self');
 const targetsForBlindedPaths = require('./targets_for_blinded_paths');
 
 const defaultPathTimeoutMs = 1000 * 60;
 const defaultProbeTimeoutMs = 1000 * 60 * 60 * 24;
 const {isArray} = Array;
 const isIgnoreFailure = reason => reason === 'TemporaryChannelFailure';
+const isMtokens = n => typeof n === 'string' && /^\d+$/.test(n);
 const isPublicKey = n => /^[0-9A-F]{66}$/i.test(n);
 const isNotFound = err => isArray(err) && err[1] === 'TargetNotFoundError';
 const {nextTick} = process;
@@ -23,6 +26,9 @@ const {nextTick} = process;
 /** Subscribe to a probe attempt
 
   Requires `offchain:write` permission
+
+  Requires `signer:generate` permission when a blinded path in `paths` starts
+  at the node itself
 
   Preferred `confidence` is not supported on LND 0.14.5 and below
 
@@ -242,6 +248,10 @@ module.exports = args => {
     tokens: args.max_fee,
   });
 
+  if (maxFee.mtokens !== undefined && !isMtokens(maxFee.mtokens)) {
+    throw new Error('ExpectedMaxFeeMillitokensToProbeToBlindedPaths');
+  }
+
   // Probing to a destination looks for a route directly to the destination
   const destinationTargets = !!args.paths ? [] : [{
     mtokens,
@@ -259,7 +269,6 @@ module.exports = args => {
   // Probing to a blinded path looks for a route to the path introduction node
   const pathTargets = !args.paths ? {targets: []} : targetsForBlindedPaths({
     mtokens,
-    max_fee_mtokens: maxFee.mtokens,
     paths: args.paths,
   });
 
@@ -268,7 +277,7 @@ module.exports = args => {
   let isErrored = false;
   let isTimedOut = false;
   let targetIndex = Number();
-  const targets = destinationTargets.concat(pathTargets.targets);
+  let targets = destinationTargets.concat(pathTargets.targets);
   const temporaryChannelFailures = [];
 
   let isFinal = !targets.length;
@@ -324,14 +333,40 @@ module.exports = args => {
   },
   args.probe_timeout_ms || defaultProbeTimeoutMs);
 
-  asyncWhilst(
+  // Finish the probe, emitting the error that ended it when there is one
+  const finish = err => {
+    // Exit early when the probe timed out
+    if (!!isTimedOut) {
+      return;
+    }
+
+    clearTimeout(probeTimeout);
+
+    if (!!err) {
+      emitError(err);
+    }
+
+    emitter.emit('end');
+
+    return;
+  };
+
+  // Try routes to the targets, with the identity key when it is already known
+  const probe = key => asyncWhilst(
     cbk => nextTick(() => cbk(null, !isFinal)),
     cbk => {
       const target = targets[targetIndex];
 
       return asyncAuto({
         // Get public key
-        getInfo: cbk => getIdentity({lnd: args.lnd}, cbk),
+        getInfo: cbk => {
+          // Exit early when the public key is already known
+          if (!!key) {
+            return cbk(null, {public_key: key});
+          }
+
+          return getIdentity({lnd: args.lnd}, cbk);
+        },
 
         // Get the next route
         getNextRoute: cbk => {
@@ -484,23 +519,92 @@ module.exports = args => {
         return cbk();
       });
     },
-    err => {
-      // Exit early when the probe timed out
-      if (!!isTimedOut) {
-        return;
-      }
-
-      clearTimeout(probeTimeout);
-
-      if (!!err) {
-        emitError(err);
-      }
-
-      emitter.emit('end');
-
-      return;
-    },
+    finish,
   );
+
+  asyncAuto({
+    // Wait for subscribers to the probe events
+    waitForSubscribers: cbk => nextTick(cbk),
+
+    // Get the identity key of the node when probing to blinded paths
+    getKey: ['waitForSubscribers', ({}, cbk) => {
+      // Exit early when there are no blinded paths to probe to
+      if (!pathTargets.targets.length) {
+        return cbk(null, {});
+      }
+
+      return getIdentity({lnd: args.lnd}, cbk);
+    }],
+
+    // Step past the node in blinded paths that start at the node
+    stepPastSelf: ['getKey', ({getKey}, cbk) => {
+      const id = getKey.public_key;
+
+      // Exit early when there is no blinded path that starts at the node
+      if (!targets.some(n => !!n.path && n.destination === id)) {
+        return cbk();
+      }
+
+      return asyncMapSeries(targets, (target, cbk) => {
+        return targetPastSelf({id, mtokens, target, lnd: args.lnd}, cbk);
+      },
+      cbk);
+    }],
+
+    // The targets to probe are the targets past the node
+    targetsPastSelf: ['stepPastSelf', ({stepPastSelf}, cbk) => {
+      // Exit early when no paths were stepped past the node
+      if (!stepPastSelf) {
+        return cbk();
+      }
+
+      // Paths that cannot be stepped past the node are left out
+      targets = stepPastSelf.map(n => n.target).filter(n => !!n);
+
+      if (!targets.length) {
+        return cbk([503, 'FailedToStepPastOwnNodeInBlindedPaths']);
+      }
+
+      return cbk();
+    }],
+
+    // Leave out blinded paths with fees beyond the max fee
+    limitFees: ['targetsPastSelf', ({}, cbk) => {
+      // Exit early when there is no max fee
+      if (maxFee.mtokens === undefined) {
+        return cbk();
+      }
+
+      const max = BigInt(maxFee.mtokens);
+
+      // The path fee is what is sent to a path beyond the amount to deliver
+      const pathFee = target => BigInt(target.mtokens) - BigInt(mtokens);
+
+      // The max fee left after the path fee is the max fee of the route to it
+      targets = targets.filter(n => pathFee(n) <= max).map(target => ({
+        cltv_delta: target.cltv_delta,
+        destination: target.destination,
+        max_fee_mtokens: (max - pathFee(target)).toString(),
+        mtokens: target.mtokens,
+        path: target.path,
+      }));
+
+      // A probe has nothing to try when no paths are within the max fee
+      if (!targets.length) {
+        isFinal = true;
+      }
+
+      return cbk();
+    }],
+  },
+  (err, res) => {
+    // Exit early when the probe cannot start
+    if (!!err) {
+      return finish(err);
+    }
+
+    return probe(res.getKey.public_key);
+  });
 
   return emitter;
 };

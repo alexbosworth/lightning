@@ -59,6 +59,15 @@ const tests = [
     error: [400, 'ExpectedAuthenticatedLndToCreateFundedPsbt'],
   },
   {
+    args: makeArgs({outputs: [{script: '00', tokens: -1}]}),
+    description: 'A valid PSBT template is required',
+    error: [
+      400,
+      'FailedToCreatePsbtToFund',
+      {err: 'ExpectedNonNegativeIntegerTokensForNewPsbtOutput'},
+    ],
+  },
+  {
     args: makeArgs({lnd: {wallet: {fundPsbt: ({}, cbk) => cbk(unsupported)}}}),
     description: 'Unsupported error is passed back',
     error: [501, 'CreateFundedPsbtMethodNotSupported'],

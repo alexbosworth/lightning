@@ -17,6 +17,9 @@ const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 
   Requires `offchain:write` permission
 
+  Requires `signer:generate` permission when a blinded path in `paths` starts
+  at the node itself
+
   Preferred `confidence` is not supported on LND 0.14.5 and below
 
   `paths` are blinded paths. If using, `destination` is not required.

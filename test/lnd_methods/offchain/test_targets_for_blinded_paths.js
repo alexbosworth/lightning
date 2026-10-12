@@ -29,11 +29,6 @@ const makePath = overrides => {
 
 const tests = [
   {
-    args: {max_fee_mtokens: 1, mtokens: '1000', paths: [makePath({})]},
-    description: 'A max fee millitokens string is expected when specified',
-    error: 'ExpectedMaxFeeMillitokensToDeriveTargetsForBlindedPaths',
-  },
-  {
     args: {paths: [makePath({})]},
     description: 'Millitokens to deliver are expected',
     error: 'ExpectedMillitokensToDeriveTargetsForBlindedPaths',
@@ -60,7 +55,6 @@ const tests = [
       targets: [{
         cltv_delta: 40,
         destination: introductionNode,
-        max_fee_mtokens: undefined,
         mtokens: '1011',
         path: makePath({}),
       }],
@@ -68,19 +62,25 @@ const tests = [
   },
   {
     args: {
-      max_fee_mtokens: '15',
       mtokens: '1000',
       paths: [makePath({}), makePath({base_fee_mtokens: '20'})],
     },
-    description: 'Paths with fees beyond the max fee are not targets',
+    description: 'Each path target is sent the amount plus its path fee',
     expected: {
-      targets: [{
-        cltv_delta: 40,
-        destination: introductionNode,
-        max_fee_mtokens: '4',
-        mtokens: '1011',
-        path: makePath({}),
-      }],
+      targets: [
+        {
+          cltv_delta: 40,
+          destination: introductionNode,
+          mtokens: '1011',
+          path: makePath({}),
+        },
+        {
+          cltv_delta: 40,
+          destination: introductionNode,
+          mtokens: '1021',
+          path: makePath({base_fee_mtokens: '20'}),
+        },
+      ],
     },
   },
   {
@@ -93,7 +93,6 @@ const tests = [
       targets: [{
         cltv_delta: 40,
         destination: introductionNode,
-        max_fee_mtokens: undefined,
         mtokens: '1011',
         path: makePath({introduction_node: undefined, max_htlc_mtokens: '0'}),
       }],
