@@ -214,7 +214,7 @@ const tests = [
   },
   {
     args: makeArgs({
-      override: {lnd: makeLnd(null, {close_initiator: 'UNKNOWN'})},
+      override: {lnd: makeLnd(null, {close_initiator: 'INITIATOR_UNKNOWN'})},
     }),
     description: 'Unknown close initiator is returned as undefined',
     expected: {
@@ -225,7 +225,7 @@ const tests = [
   },
   {
     args: makeArgs({
-      override: {lnd: makeLnd(null, {open_initiator: 'UNKNOWN'})},
+      override: {lnd: makeLnd(null, {open_initiator: 'INITIATOR_UNKNOWN'})},
     }),
     description: 'Unknown open initiator is returned as undefined',
     expected: {

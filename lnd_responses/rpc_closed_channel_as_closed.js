@@ -10,10 +10,8 @@ const fundingCanceled = 'FUNDING_CANCELED';
 const initiatorLocal = 'INITIATOR_LOCAL';
 const initiatorRemote = 'INITIATOR_REMOTE';
 const {isArray} = Array;
-const local = 'LOCAL';
 const localForceClose = 'LOCAL_FORCE_CLOSE';
 const outpointSeparator = ':';
-const remote = 'REMOTE';
 const remoteForceClose = 'REMOTE_FORCE_CLOSE';
 
 /** RPC closed local channel as close details
@@ -125,7 +123,6 @@ module.exports = chan => {
     .filter(n => n !== chan.zero_conf_confirmed_scid)
     .map(number => chanFormat({number}));
 
-  const closer = chan.close_initiator;
   const finalTimeLock = Number(chan.time_locked_balance);
   const hasCloseTx = chan.closing_tx_hash !== emptyTxId;
   const hasId = chan.chan_id !== emptyChanId;
@@ -136,23 +133,21 @@ module.exports = chan => {
   const zeroConfId = chan.zero_conf_confirmed_scid;
 
   const closeTxId = !hasCloseTx ? undefined : chan.closing_tx_hash;
-  const isLocalCooperativeClose = closer === initiatorLocal;
-  const isRemoteCooperativeClose = closer === initiatorRemote;
   const number = !!Number(zeroConfId) ? zeroConfId : chan.chan_id;
 
   const chanId = !hasId ? null : chanFormat({number});
 
   // Try and determine if the channel was opened by our peer
-  if (chan.open_initiator === local) {
+  if (chan.open_initiator === initiatorLocal) {
     isPartnerInitiated = false;
-  } else if (chan.open_initiator === remote) {
+  } else if (chan.open_initiator === initiatorRemote) {
     isPartnerInitiated = true;
   }
 
   // Try and determine if the channel was closed by our peer
-  if (chan.close_initiator === local) {
+  if (chan.close_initiator === initiatorLocal) {
     isPartnerClosed = false;
-  } else if (chan.close_initiator === remote) {
+  } else if (chan.close_initiator === initiatorRemote) {
     isPartnerClosed = true;
   }
 

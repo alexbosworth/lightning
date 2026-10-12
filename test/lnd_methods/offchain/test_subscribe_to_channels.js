@@ -39,7 +39,7 @@ const makeLnd = ({data, err}) => {
               channel_point: '00:0',
               close_height: 1,
               closing_tx_hash: Buffer.alloc(32).toString('hex'),
-              open_initiator: 'LOCAL',
+              open_initiator: 'INITIATOR_LOCAL',
               remote_pubkey: Buffer.alloc(33).toString('hex'),
               resolutions: [],
               settled_balance: '1',
@@ -134,6 +134,59 @@ const makeLnd = ({data, err}) => {
       }),
     },
   };
+};
+
+const makeClosedArgs = overrides => {
+  const closedChannel = {
+    alias_scids: [],
+    capacity: '1',
+    chan_id: '1',
+    channel_point: '00:0',
+    close_height: 1,
+    close_initiator: 'INITIATOR_UNKNOWN',
+    close_type: 'COOPERATIVE_CLOSE',
+    closing_tx_hash: Buffer.alloc(32).toString('hex'),
+    open_initiator: 'INITIATOR_UNKNOWN',
+    remote_pubkey: Buffer.alloc(33).toString('hex'),
+    resolutions: [],
+    settled_balance: '1',
+    time_locked_balance: '1',
+  };
+
+  Object.keys(overrides).forEach(k => closedChannel[k] = overrides[k]);
+
+  const data = {closed_channel: closedChannel, type: 'closed_channel'};
+
+  return {lnd: makeLnd({data})};
+};
+
+const makeClosedExpected = overrides => {
+  const data = {
+    capacity: 1,
+    close_balance_spent_by: undefined,
+    close_balance_vout: undefined,
+    close_confirm_height: 1,
+    close_payments: [],
+    close_transaction_id: undefined,
+    final_local_balance: 1,
+    final_time_locked_balance: 1,
+    id: '0x0x1',
+    is_breach_close: false,
+    is_cooperative_close: true,
+    is_funding_cancel: false,
+    is_local_force_close: false,
+    is_partner_closed: undefined,
+    is_partner_initiated: undefined,
+    is_remote_force_close: false,
+    other_ids: [],
+    partner_public_key: Buffer.alloc(33).toString('hex'),
+    transaction_id: '00',
+    transaction_vout: 0,
+  };
+
+  Object.keys(overrides).forEach(k => data[k] = overrides[k]);
+
+  return {events: [{data, event: 'channel_closed'}]};
 };
 
 const tests = [
@@ -268,6 +321,36 @@ const tests = [
         },
       ],
     },
+  },
+  {
+    args: makeClosedArgs({close_initiator: 'INITIATOR_LOCAL'}),
+    description: 'Local cooperative close event is not partner closed',
+    expected: makeClosedExpected({is_partner_closed: false}),
+  },
+  {
+    args: makeClosedArgs({close_initiator: 'INITIATOR_REMOTE'}),
+    description: 'Remote cooperative close event is partner closed',
+    expected: makeClosedExpected({is_partner_closed: true}),
+  },
+  {
+    args: makeClosedArgs({close_initiator: 'INITIATOR_BOTH'}),
+    description: 'Cooperative close event by both sides has undefined closer',
+    expected: makeClosedExpected({is_partner_closed: undefined}),
+  },
+  {
+    args: makeClosedArgs({close_initiator: 'INITIATOR_UNKNOWN'}),
+    description: 'Cooperative close event by unknown side has undefined closer',
+    expected: makeClosedExpected({is_partner_closed: undefined}),
+  },
+  {
+    args: makeClosedArgs({open_initiator: 'INITIATOR_LOCAL'}),
+    description: 'Close event for a local open is not partner initiated',
+    expected: makeClosedExpected({is_partner_initiated: false}),
+  },
+  {
+    args: makeClosedArgs({open_initiator: 'INITIATOR_REMOTE'}),
+    description: 'Close event for a remote open is partner initiated',
+    expected: makeClosedExpected({is_partner_initiated: true}),
   },
 ];
 

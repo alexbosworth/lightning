@@ -148,7 +148,6 @@ module.exports = (args, cbk) => {
             .filter(n => n !== chan.zero_conf_confirmed_scid)
             .map(number => chanFormat({number}));
 
-          const closer = chan.close_initiator;
           const finalTimeLock = Number(chan.time_locked_balance);
           const hasCloseTx = chan.closing_tx_hash !== emptyTxId;
           const hasId = chan.chan_id !== '0';
@@ -159,8 +158,6 @@ module.exports = (args, cbk) => {
           const zeroConfId = chan.zero_conf_confirmed_scid;
 
           const closeTxId = !hasCloseTx ? undefined : chan.closing_tx_hash;
-          const isLocalCooperativeClose = closer === 'INITIATOR_LOCAL';
-          const isRemoteCooperativeClose = closer === 'INITIATOR_REMOTE';
           const number = !!Number(zeroConfId) ? zeroConfId : chan.chan_id;
 
           const chanId = !hasId ? null : chanFormat({number});

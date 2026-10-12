@@ -64,5 +64,5 @@
     "unit-tests": "node --test && npm run test:types"
   },
   "types": "index.d.ts",
-  "version": "13.1.5"
+  "version": "13.1.6"
 }

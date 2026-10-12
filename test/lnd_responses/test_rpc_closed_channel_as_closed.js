@@ -60,7 +60,7 @@ const makeExpected = overrides => {
     is_funding_cancel: false,
     is_local_force_close: true,
     is_partner_closed: false,
-    is_partner_initiated: undefined,
+    is_partner_initiated: true,
     is_remote_force_close: false,
     other_ids: [],
     partner_public_key: Buffer.alloc(33).toString('hex'),
@@ -139,9 +139,9 @@ const tests = [
   },
   {
     args: makeArgs({
-      close_initiator: 'REMOTE',
+      close_initiator: 'INITIATOR_REMOTE',
       close_type: 'REMOTE_FORCE_CLOSE',
-      open_initiator: 'LOCAL',
+      open_initiator: 'INITIATOR_LOCAL',
     }),
     description: 'Local channel close remote close maps to closed channel',
     expected: makeExpected({
@@ -152,7 +152,10 @@ const tests = [
     }),
   },
   {
-    args: makeArgs({close_initiator: 'LOCAL', open_initiator: 'REMOTE'}),
+    args: makeArgs({
+      close_initiator: 'INITIATOR_LOCAL',
+      open_initiator: 'INITIATOR_REMOTE',
+    }),
     description: 'Local channel close with remote open but local close maps',
     expected: makeExpected({is_partner_initiated: true}),
   },
@@ -160,8 +163,10 @@ const tests = [
     args: makeArgs({
       chan_id: '0',
       close_height: 0,
-      close_type: 'UNKNOWN',
+      close_initiator: 'INITIATOR_UNKNOWN',
+      close_type: 'FUNDING_CANCELED',
       closing_tx_hash: Buffer.alloc(32).toString('hex'),
+      open_initiator: 'INITIATOR_UNKNOWN',
       resolutions: undefined,
     }),
     description: 'Empty values map to undefined attributes',
@@ -170,9 +175,86 @@ const tests = [
       close_payments: [],
       close_transaction_id: undefined,
       id: undefined,
+      is_funding_cancel: true,
+      is_local_force_close: false,
+      is_partner_closed: undefined,
+      is_partner_initiated: undefined,
+    }),
+  },
+  {
+    args: makeArgs({
+      close_initiator: 'INITIATOR_LOCAL',
+      close_type: 'COOPERATIVE_CLOSE',
+    }),
+    description: 'Cooperative close initiated locally is not partner closed',
+    expected: makeExpected({
+      is_cooperative_close: true,
+      is_local_force_close: false,
+      is_partner_closed: false,
+    }),
+  },
+  {
+    args: makeArgs({
+      close_initiator: 'INITIATOR_REMOTE',
+      close_type: 'COOPERATIVE_CLOSE',
+    }),
+    description: 'Cooperative close initiated by the peer is partner closed',
+    expected: makeExpected({
+      is_cooperative_close: true,
+      is_local_force_close: false,
+      is_partner_closed: true,
+    }),
+  },
+  {
+    args: makeArgs({
+      close_initiator: 'INITIATOR_BOTH',
+      close_type: 'COOPERATIVE_CLOSE',
+    }),
+    description: 'Cooperative close by both initiators has undefined closer',
+    expected: makeExpected({
+      is_cooperative_close: true,
       is_local_force_close: false,
       is_partner_closed: undefined,
     }),
+  },
+  {
+    args: makeArgs({
+      close_initiator: 'INITIATOR_UNKNOWN',
+      close_type: 'COOPERATIVE_CLOSE',
+    }),
+    description: 'Cooperative close by unknown initiator has undefined closer',
+    expected: makeExpected({
+      is_cooperative_close: true,
+      is_local_force_close: false,
+      is_partner_closed: undefined,
+    }),
+  },
+  {
+    args: makeArgs({close_initiator: 'INITIATOR_REMOTE'}),
+    description: 'Local force close type overrides a remote close initiator',
+    expected: makeExpected({is_partner_closed: false}),
+  },
+  {
+    args: makeArgs({
+      close_initiator: 'INITIATOR_LOCAL',
+      close_type: 'REMOTE_FORCE_CLOSE',
+    }),
+    description: 'Remote force close type overrides a local close initiator',
+    expected: makeExpected({
+      is_local_force_close: false,
+      is_partner_closed: true,
+      is_remote_force_close: true,
+    }),
+  },
+  {
+    args: makeArgs({open_initiator: 'INITIATOR_LOCAL'}),
+    description: 'Channel opened locally is not partner initiated',
+    expected: makeExpected({is_partner_initiated: false}),
+  },
+  {
+    args: makeArgs({open_initiator: 'INITIATOR_REMOTE'}),
+    description: 'Channel opened by the peer is partner initiated',
+    expected: makeExpected({is_partner_initiated: true}),
   },
 ];
 
