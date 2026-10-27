@@ -21,7 +21,7 @@
     "bolt07": "2.0.0",
     "bolt09": "3.0.0",
     "invoices": "6.3.3",
-    "psbt": "7.0.0",
+    "psbt": "7.0.1",
     "type-fest": "5.10.0"
   },
   "description": "Lightning Network client library",
@@ -64,5 +64,5 @@
     "unit-tests": "node --test && npm run test:types"
   },
   "types": "index.d.ts",
-  "version": "13.1.8"
+  "version": "13.1.9"
 }
