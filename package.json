@@ -20,7 +20,7 @@
     "bolt04": "1.3.0",
     "bolt07": "2.0.0",
     "bolt09": "3.0.0",
-    "invoices": "6.3.0",
+    "invoices": "6.3.3",
     "psbt": "7.0.0",
     "type-fest": "5.10.0"
   },
@@ -64,5 +64,5 @@
     "unit-tests": "node --test && npm run test:types"
   },
   "types": "index.d.ts",
-  "version": "13.1.7"
+  "version": "13.1.8"
 }
