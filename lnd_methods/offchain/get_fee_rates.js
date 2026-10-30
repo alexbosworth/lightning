@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -62,15 +63,13 @@ module.exports = ({lnd}, cbk) => {
       }],
 
       // Map fee report into fee rates and check response data
-      feesForChannels: ['getFeeReport', ({getFeeReport}, cbk) => {
+      feesForChannels: ['getFeeReport', asyncify(({getFeeReport}) => {
         try {
-          const channels = getFeeReport.map(n => rpcFeesAsChannelFees(n));
-
-          return cbk(null, {channels});
+          return {channels: getFeeReport.map(n => rpcFeesAsChannelFees(n))};
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
     },
     returnResult({reject, resolve, of: 'feesForChannels'}, cbk));
   });

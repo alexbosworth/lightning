@@ -1,6 +1,6 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncRetry = require('async/retry');
-const {chanNumber} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 
 const {blocksBuffer} = require('./constants');
@@ -12,13 +12,12 @@ const {ignoreAsIgnoredNodes} = require('./../../lnd_requests');
 const {ignoreAsIgnoredPairs} = require('./../../lnd_requests');
 const {isLnd} = require('./../../lnd_requests');
 const {mtokensAmount} = require('./../../bolt00');
-const {pathNotFoundErrors} = require('./constants');
+const {outgoingChannelIds} = require('./../../lnd_requests');
 const {routeHintFromRoute} = require('./../../lnd_requests');
 const {routesFromQueryRoutes} = require('./../../lnd_responses');
 
 const asTimePreference = n => n === undefined ? n : ((n * 2) - 1e6) / 1e6;
 const bufFromHex = hex => !hex ? null : Buffer.from(hex, 'hex');
-const {concat} = Buffer;
 const defaultRetryInterval = retryCount => 50 * Math.pow(2, retryCount);
 const defaultMaxFee = Number.MAX_SAFE_INTEGER;
 const errorFilter = err => Array.isArray(err) && err.slice().shift() === 429;
@@ -26,15 +25,12 @@ const internalServerError = /internal.server.error/i;
 const {isArray} = Array;
 const isConfidence = n => !isNaN(n) && n >= 0 && n <= 1e6;
 const isHex = n => !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
-const mtokensByteLength = 8;
 const networkBusyError = /device.or.resource.busy/;
 const noRouteErrorDetails = 'unable to find a path to destination';
-const paymentFromMppRecord = n => n.value.slice(0, 64);
 const paymentTooLargeError = /is.too.large/;
 const targetNotFoundError = 'target not found';
 const defaultRetryTimes = 9;
 const tokensAsMtokens = n => (BigInt(n) * BigInt(1e3)).toString();
-const trimByte = 0;
 
 /** Get a route to a destination.
 
@@ -127,26 +123,6 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedLndApiObjectToGetRouteToDestination']);
         }
 
-        if (!!args.outgoing_channel) {
-          try {
-            chanNumber({channel: args.outgoing_channel});
-          } catch (err) {
-            return cbk([400, 'ExpectedStandardFormatChannelIdForOutChannel']);
-          }
-        }
-
-        if (!!args.outgoing_channels && !isArray(args.outgoing_channels)) {
-          return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToGetRoute']);
-        }
-
-        if (!!args.outgoing_channels) {
-          try {
-            args.outgoing_channels.forEach(channel => chanNumber({channel}));
-          } catch (err) {
-            return cbk([400, 'ExpectedStandardFormatChannelIdsForOutChannels']);
-          }
-        }
-
         if (!!args.total_mtokens && !args.payment) {
           return cbk([400, 'ExpectedTotalMtokensWithPaymentIdentifier']);
         }
@@ -155,18 +131,18 @@ module.exports = (args, cbk) => {
       },
 
       // Derive the amount in millitokens
-      amountMillitokens: ['validate', ({}, cbk) => {
+      amountMillitokens: ['validate', asyncify(({}) => {
         try {
           const {mtokens} = mtokensAmount({
             mtokens: args.mtokens,
             tokens: args.tokens,
           });
 
-          return cbk(null, mtokens || tokensAsMtokens(defaultTokens));
+          return mtokens || tokensAsMtokens(defaultTokens);
         } catch (err) {
-          return cbk([400, err.message]);
+          throw [400, err.message];
         }
-      }],
+      })],
 
       // Get destination messages
       destinationCustomRecords: ['validate', ({}, cbk) => {
@@ -190,18 +166,18 @@ module.exports = (args, cbk) => {
       }],
 
       // Determine the fee limit
-      feeLimitMillitokens: ['validate', ({}, cbk) => {
+      feeLimitMillitokens: ['validate', asyncify(({}) => {
         try {
           const {mtokens} = mtokensAmount({
             mtokens: args.max_fee_mtokens,
             tokens: args.max_fee,
           });
 
-          return cbk(null, mtokens || tokensAsMtokens(defaultMaxFee));
+          return mtokens || tokensAsMtokens(defaultMaxFee);
         } catch (err) {
-          return cbk([400, err.message]);
+          throw [400, err.message];
         }
-      }],
+      })],
 
       // Get the current height to adjust timeout height to a delta
       getHeight: ['validate', ({}, cbk) => {
@@ -213,21 +189,31 @@ module.exports = (args, cbk) => {
         return getHeight({lnd: args.lnd}, cbk);
       }],
 
-      // Determine the outgoing channels
-      outgoingChans: ['validate', ({}, cbk) => {
-        const channels = args.outgoing_channels || [];
-        const single = [args.outgoing_channel].filter(n => !!n);
-
-        // Multiple outgoing channels take precedence over a single channel
-        const outgoing = !!channels.length ? channels : single;
-
-        // Exit early when there is no outgoing channel constraint
-        if (!outgoing.length) {
-          return cbk();
+      // Derive the nodes and channel pairs to ignore when finding a route
+      ignored: ['validate', asyncify(({}) => {
+        try {
+          return {
+            nodes: ignoreAsIgnoredNodes({ignore: args.ignore}).ignored,
+            pairs: ignoreAsIgnoredPairs({ignore: args.ignore}).ignored,
+          };
+        } catch (err) {
+          throw [400, err.message];
         }
+      })],
 
-        return cbk(null, outgoing.map(n => chanNumber({channel: n}).number));
-      }],
+      // Determine the outgoing channels
+      outgoingChans: ['validate', asyncify(({}) => {
+        try {
+          const {ids} = outgoingChannelIds({
+            outgoing_channel: args.outgoing_channel,
+            outgoing_channels: args.outgoing_channels,
+          });
+
+          return ids;
+        } catch (err) {
+          throw [400, err.message];
+        }
+      })],
 
       // Derive hop hints in RPC format
       routeHints: ['validate', ({}, cbk) => {
@@ -262,6 +248,7 @@ module.exports = (args, cbk) => {
         'destinationCustomRecords',
         'destinationFeatures',
         'feeLimitMillitokens',
+        'ignored',
         'outgoingChans',
         'routeHints',
         ({
@@ -270,12 +257,12 @@ module.exports = (args, cbk) => {
           destinationFeatures,
           feeLimitMillitokens,
           cltvLimit,
+          ignored,
           outgoingChans,
           routeHints,
         },
         cbk) =>
       {
-        const {ignore} = args;
         const interval = defaultRetryInterval;
         const times = defaultRetryTimes;
 
@@ -287,8 +274,8 @@ module.exports = (args, cbk) => {
             dest_features: destinationFeatures || undefined,
             fee_limit: {fixed_msat: feeLimitMillitokens},
             final_cltv_delta: (args.cltv_delta || defaultCltv) + blocksBuffer,
-            ignored_nodes: ignoreAsIgnoredNodes({ignore}).ignored || undefined,
-            ignored_pairs: ignoreAsIgnoredPairs({ignore}).ignored || undefined,
+            ignored_nodes: ignored.nodes || undefined,
+            ignored_pairs: ignored.pairs || undefined,
             last_hop_pubkey: bufFromHex(args.incoming_peer) || undefined,
             outgoing_chan_ids: outgoingChans,
             pub_key: args.destination,
@@ -338,20 +325,18 @@ module.exports = (args, cbk) => {
       }],
 
       // Derived routes from query routes response
-      routes: ['query', ({query}, cbk) => {
+      routes: ['query', asyncify(({query}) => {
         // Exit early when there are no routes
         if (!query.response.routes.length) {
-          return cbk(null, query.response.routes);
+          return query.response.routes;
         }
 
         try {
-          const {routes} = routesFromQueryRoutes({response: query.response});
-
-          return cbk(null, routes);
+          return routesFromQueryRoutes({response: query.response}).routes;
         } catch (err) {
-          return cbk([503, 'UnexpectedResultFromQueryRoutes', {err}]);
+          throw [503, 'UnexpectedResultFromQueryRoutes', {err}];
         }
-      }],
+      })],
 
       // Final route result
       route: ['routes', ({routes}, cbk) => {

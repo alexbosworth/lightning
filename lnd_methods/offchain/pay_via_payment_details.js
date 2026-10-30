@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const finishedPayment = require('./finished_payment');
@@ -105,10 +106,10 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
-      // Pay
-      pay: ['validate', ({}, cbk) => {
+      // Subscribe to the payment
+      subscribe: ['validate', asyncify(({}) => {
         try {
-          const sub = subscribeToPayViaDetails({
+          return subscribeToPayViaDetails({
             cltv_delta: args.cltv_delta,
             confidence: args.confidence,
             destination: args.destination,
@@ -130,25 +131,30 @@ module.exports = (args, cbk) => {
             routes: args.routes,
             tokens: args.tokens,
           });
-
-          const finished = (err, res) => {
-            if (!!err) {
-              return cbk(err);
-            }
-
-            return finishedPayment({
-              confirmed: res.confirmed,
-              failed: res.failed,
-            },
-            cbk);
-          };
-
-          sub.once('confirmed', confirmed => finished(null, {confirmed}));
-          sub.once('error', err => finished(err));
-          sub.once('failed', failed => finished(null, {failed}));
         } catch (err) {
-          return cbk([400, err.message]);
+          throw [400, err.message];
         }
+      })],
+
+      // Pay
+      pay: ['subscribe', ({subscribe}, cbk) => {
+        const sub = subscribe;
+
+        const finished = (err, res) => {
+          if (!!err) {
+            return cbk(err);
+          }
+
+          return finishedPayment({
+            confirmed: res.confirmed,
+            failed: res.failed,
+          },
+          cbk);
+        };
+
+        sub.once('confirmed', confirmed => finished(null, {confirmed}));
+        sub.once('error', err => finished(err));
+        sub.once('failed', failed => finished(null, {failed}));
 
         return;
       }],

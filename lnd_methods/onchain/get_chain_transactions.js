@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -75,16 +76,19 @@ module.exports = ({after, before, lnd}, cbk) => {
             return cbk([503, 'ExpectedTransactionsList', res]);
           }
 
-          try {
-            const transactions = res.transactions.map(rpcTxAsTransaction);
-
-            return cbk(null, {transactions});
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res.transactions);
         });
       }],
+
+      // Map the transactions into the final format
+      transactions: ['getTransactions', asyncify(({getTransactions}) => {
+        try {
+          return {transactions: getTransactions.map(rpcTxAsTransaction)};
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getTransactions'}, cbk));
+    returnResult({reject, resolve, of: 'transactions'}, cbk));
   });
 };

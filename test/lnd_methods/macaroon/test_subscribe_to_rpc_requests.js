@@ -1,49 +1,51 @@
-const EventEmitter = require('events');
-const {promisify} = require('util');
 const {deepStrictEqual} = require('node:assert').strict;
 const {rejects} = require('node:assert').strict;
 const test = require('node:test');
 
-const nextTick = promisify(process.nextTick);
 const {subscribeToRpcRequests} = require('./../../../lnd_methods');
+const {subscriptionEvents} = require('./../macros');
 
+const cancelled = {details: 'Cancelled on client'};
+const listenerFailure = {event: 'error', data: [503, 'ListenerFailure']};
 const makeArgs = overrides => {
-  const args = {
-    lnd: {
-      default: {
-        RegisterRPCMiddleware: ({}) => {
-          const emitter = new EventEmitter();
-
-          emitter.cancel = () => {};
-          emitter.write = ({}, cbk) => cbk();
-
-          process.nextTick(() => {
-            emitter.emit('data', {
-              msg_id: '1',
-              request_id: '1',
-              raw_macaroon: Buffer.alloc(0),
-              custom_caveat_condition: '',
-              stream_auth: {method_full_uri: 'method_full_uri'},
-              intercept_type: 'stream_auth',
-            });
-
-            emitter.emit('data', {});
-
-            emitter.emit('status', {status: 'status'});
-            emitter.emit('end', {});
-            emitter.emit('error', {details: 'Cancelled on client'});
-          });
-
-          return emitter;
-        },
-      },
-    },
-  };
+  const args = {lnd: {default: {}}};
 
   Object.keys(overrides).forEach(k => args[k] = overrides[k]);
 
   return args;
 };
+const openChannelUpdate = {
+  msg_id: '1',
+  request_id: '1',
+  raw_macaroon: Buffer.alloc(0),
+  custom_caveat_condition: '',
+  request: {
+    method_full_uri: '/lnrpc.Lightning/OpenChannel',
+    serialized: Buffer.alloc(0),
+    stream_rpc: false,
+    type_name: '',
+  },
+  intercept_type: 'request',
+};
+const request = {
+  event: 'request',
+  data: {call: 1, id: 1, macaroon: undefined, uri: 'method_full_uri'},
+};
+const streamAuth = {
+  msg_id: '1',
+  request_id: '1',
+  raw_macaroon: Buffer.alloc(0),
+  custom_caveat_condition: '',
+  stream_auth: {method_full_uri: 'method_full_uri'},
+  intercept_type: 'stream_auth',
+};
+
+// Intercepted requests carry accept and reject functions, note their presence
+const asIntercept = ({accept, reject, ...intercept}) => ({
+  ...intercept,
+  accept: !!accept,
+  reject: !!reject,
+});
 
 const tests = [
   {
@@ -67,73 +69,47 @@ const tests = [
         },
       },
     }),
-    description: 'RPC write errors are passed back',
+    description: 'RPC registration write errors are passed back',
     error: [503, 'UnexpectedErrInterceptingRpcRequests', {err: 'err'}],
   },
   {
-    args: makeArgs({
-      lnd: {
-        default: {
-          RegisterRPCMiddleware: ({}) => {
-            const emitter = new EventEmitter();
-
-            emitter.cancel = () => {};
-            emitter.write = (args, cbk) => {
-              if (!!args.feedback) {
-                return cbk('err');
-              }
-
-              return cbk();
-            };
-
-            process.nextTick(() => {
-              emitter.emit('data', {
-                msg_id: '1',
-                request_id: '1',
-                raw_macaroon: Buffer.alloc(0),
-                custom_caveat_condition: '',
-                stream_auth: {method_full_uri: 'method_full_uri'},
-                intercept_type: 'stream_auth',
-              });
-            });
-
-            return emitter;
-          },
-        },
-      },
-    }),
-    description: 'RPC write errors are passed back',
+    args: makeArgs({}),
+    description: 'RPC accept write errors are emitted',
     expected: {
+      cancels: ['cancel'],
       events: [
-        {call: 1, id: 1, macaroon: undefined, uri: 'method_full_uri'},
-        [503, 'UnexpectedErrorAcceptingRpcRequest', {err: 'err'}],
+        request,
+        {
+          event: 'error',
+          data: [503, 'UnexpectedErrorAcceptingRpcRequest', {err: 'err'}],
+        },
       ],
     },
+    write_errors: {feedback: 'err'},
   },
   {
     args: makeArgs({}),
     description: 'RPC request subscription is returned',
     expected: {
+      cancels: ['cancel', 'cancel'],
       events: [
-        {call: 1, id: 1, macaroon: undefined, uri: 'method_full_uri'},
-        [503, 'ExpectedCustomCaveatConditionInRpcRequestUpdate'],
-        {details: 'Cancelled on client'},
+        request,
+        {
+          event: 'error',
+          data: [503, 'ExpectedCustomCaveatConditionInRpcRequestUpdate'],
+        },
+        {event: 'status', data: {status: 'status'}},
+        {event: 'end', data: undefined},
+        {event: 'error', data: cancelled},
       ],
     },
-  },
-  {
-    args: makeArgs({
-      lnd: {
-        default: {
-          RegisterRPCMiddleware: ({}) => ({
-            on: (event, cbk) => {},
-            write: ({}, cbk) => cbk('err'),
-          }),
-        },
-      },
-    }),
-    description: 'RPC write errors are passed back',
-    error: [503, 'UnexpectedErrInterceptingRpcRequests', {err: 'err'}],
+    stream: [
+      ['data', streamAuth],
+      ['data', {}],
+      ['status', {status: 'status'}],
+      ['end', {}],
+      ['error', cancelled],
+    ],
   },
   {
     args: makeArgs({
@@ -156,94 +132,87 @@ const tests = [
               target_conf: 1,
             }),
           },
-          RegisterRPCMiddleware: ({}) => {
-            const emitter = new EventEmitter();
-
-            emitter.cancel = () => {};
-            emitter.write = ({}, cbk) => cbk();
-
-            process.nextTick(() => {
-              emitter.emit('data', {
-                msg_id: '1',
-                request_id: '1',
-                raw_macaroon: Buffer.alloc(0),
-                custom_caveat_condition: '',
-                request: {
-                  method_full_uri: '/lnrpc.Lightning/OpenChannel',
-                  serialized: Buffer.alloc(0),
-                  stream_rpc: false,
-                  type_name: '',
-                },
-                intercept_type: 'request',
-              });
-            });
-
-            return emitter;
-          },
         },
       },
     }),
     description: 'An open channel request is intercepted',
     expected: {
-      events: [],
-      intercepts: [{
-        accept: true,
-        id: 1,
-        macaroon: undefined,
-        reject: true,
-        request: {
-          base_fee_mtokens: undefined,
-          chain_fee_tokens_per_vbyte: 1,
-          cooperative_close_address: 'close_address',
-          description: undefined,
-          fee_rate: undefined,
-          give_tokens: 1,
-          is_max_funding: undefined,
-          is_private: undefined,
-          local_tokens: 1,
-          min_confirmations: 0,
-          min_htlc_mtokens: '1',
-          partner_public_key: '030303030303030303030303030303030303030303030303030303030303030303',
-          partner_csv_delay: 1,
+      events: [{
+        event: 'open_channel_request',
+        data: {
+          accept: true,
+          id: 1,
+          macaroon: undefined,
+          reject: true,
+          request: {
+            base_fee_mtokens: undefined,
+            chain_fee_tokens_per_vbyte: 1,
+            cooperative_close_address: 'close_address',
+            description: undefined,
+            fee_rate: undefined,
+            give_tokens: 1,
+            is_max_funding: undefined,
+            is_private: undefined,
+            local_tokens: 1,
+            min_confirmations: 0,
+            min_htlc_mtokens: '1',
+            partner_public_key: Buffer.alloc(33, 3).toString('hex'),
+            partner_csv_delay: 1,
+          },
+          uri: '/lnrpc.Lightning/OpenChannel',
         },
-        uri: '/lnrpc.Lightning/OpenChannel',
       }],
+      writes: ['register'],
     },
+    stream: [['data', openChannelUpdate]],
+  },
+  {
+    args: makeArgs({}),
+    description: 'A throwing listener is reported without ending the stream',
+    expected: {events: [request, listenerFailure]},
+    stream: [['data', {intercept_type: 'reg_complete'}], ['data', streamAuth]],
+    throwing: ['request'],
   },
 ];
 
-tests.forEach(({args, description, error, expected}) => {
+tests.forEach(({args, description, error, expected, ...scenario}) => {
   return test(description, async () => {
     if (!!error) {
       await rejects(() => subscribeToRpcRequests(args), error, 'Got err');
-    } else {
-      const events = [];
-      const intercepts = [];
-      const res = await subscribeToRpcRequests(args);
 
-      res.subscription.on('error', event => events.push(event));
-      res.subscription.on('request', event => events.push(event));
-
-      res.subscription.on('open_channel_request', openRequest => {
-        return intercepts.push({
-          accept: !!openRequest.accept,
-          id: openRequest.id,
-          macaroon: openRequest.macaroon,
-          reject: !!openRequest.reject,
-          uri: openRequest.uri,
-          request: openRequest.request,
-        });
-      });
-
-      await nextTick();
-
-      if (!!expected.intercepts) {
-        deepStrictEqual(intercepts, expected.intercepts, 'Got intercepts');
-      }
-
-      deepStrictEqual(events, expected.events, 'Got expected events');
-      deepStrictEqual(!!res.subscription, true, 'Got subscription');
+      return;
     }
+
+    const writes = [];
+
+    const got = await subscriptionEvents({
+      ...scenario,
+      events: ['end', 'error', 'open_channel_request', 'request', 'status'],
+      handling: {open_channel_request: asIntercept},
+      stream: scenario.stream || [['data', streamAuth]],
+      subscribe: stream => {
+        const errors = scenario.write_errors || {};
+
+        // Writes are recorded by their type and fail when the case says so
+        stream.write = (data, cbk) => {
+          const [type] = Object.keys(data);
+
+          writes.push(type);
+
+          return cbk(errors[type]);
+        };
+
+        args.lnd.default.RegisterRPCMiddleware = () => stream;
+
+        return subscribeToRpcRequests(args).then(n => n.subscription);
+      },
+    });
+
+    deepStrictEqual(
+      {...got, writes},
+      {cancels: [], writes: ['register', 'feedback'], ...expected},
+      'Got expected events'
+    );
 
     return;
   });

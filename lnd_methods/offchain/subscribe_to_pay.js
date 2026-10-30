@@ -1,25 +1,19 @@
-const {createHash} = require('crypto');
 const EventEmitter = require('events');
 
 const asyncAuto = require('async/auto');
-const {chanFormat} = require('bolt07');
+const asyncify = require('async/asyncify');
 const {chanNumber} = require('bolt07');
 const {parsePaymentRequest} = require('invoices');
 
-const {confirmedFromPayment} = require('./../../lnd_responses');
-const {confirmedFromPaymentStatus} = require('./../../lnd_responses');
 const emitPayment = require('./emit_payment');
-const {failureFromPayment} = require('./../../lnd_responses');
 const {getHeight} = require('./../generic');
 const {isLnd} = require('./../../lnd_requests');
 const {paymentAmounts} = require('./../../bolt00');
 const {routeHintFromRoute} = require('./../../lnd_requests');
-const {safeTokens} = require('./../../bolt00');
-const {states} = require('./payment_states');
 
 const asTimePreference = n => n === undefined ? n : ((n * 2) - 1e6) / 1e6;
 const cltvBuf = 3;
-const cltvLimit = (limit, height) => !limit ? undefined : limit - height;
+const cltvLimit = (limit, height) => limit - height;
 const cltvLimitErr = /cltv limit \d+ should be greater than \d+/;
 const defaultCltvDelta = 43;
 const defaultMaxPaths = 1;
@@ -31,13 +25,10 @@ const isHex = n => !!n && !(n.length % 2) && /^[0-9A-F]*$/i.test(n);
 const maxTokens = '4294967296';
 const method = 'sendPaymentV2';
 const msPerSec = 1000;
-const mtokensPerToken = BigInt(1e3);
 const {nextTick} = process;
 const numberFromChannel = channel => chanNumber({channel}).number;
 const {round} = Math;
-const sha256 = preimage => createHash('sha256').update(preimage).digest();
 const type = 'router';
-const unknownServiceErr = 'unknown service verrpc.Versioner';
 const unsupportedFeatures = [30, 31];
 
 /** Initiate and subscribe to the outcome of a payment
@@ -333,9 +324,9 @@ module.exports = args => {
     },
 
     // Determine channel id restrictions if applicable
-    outgoingChannelIds: cbk => {
+    outgoingChannelIds: asyncify(() => {
       if (!!args.outgoing_channels && !isArray(args.outgoing_channels)) {
-        return cbk([400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay']);
+        throw [400, 'ExpectedArrayOfOutgoingChannelIdsToSubscribeToPay'];
       }
 
       const channels = args.outgoing_channels || [];
@@ -346,15 +337,15 @@ module.exports = args => {
 
       // Exit early when there is no outgoing channel constraint
       if (!outgoing.length) {
-        return cbk();
+        return;
       }
 
       try {
-        return cbk(null, outgoing.map(n => numberFromChannel(n)));
+        return outgoing.map(n => numberFromChannel(n));
       } catch (err) {
-        return cbk([400, 'ExpectedStandardFormatOutgoingChannelIdsToPay']);
+        throw [400, 'ExpectedStandardFormatOutgoingChannelIdsToPay'];
       }
-    },
+    }),
 
     // Validate the payment request features
     checkFeatures: ['aspects', ({aspects}, cbk) => {

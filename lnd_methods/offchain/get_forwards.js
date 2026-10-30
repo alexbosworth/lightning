@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {chanFormat} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 
@@ -61,21 +62,25 @@ module.exports = ({after, before, limit, lnd, token}, cbk) => {
           return cbk([400, 'UnexpectedLimitWhenPagingForwardsWithToken']);
         }
 
-        if (!!token) {
-          try {
-            parse(token);
-          } catch (err) {
-            return cbk([400, 'ExpectedValidPagingToken', {err}]);
-          }
-        }
-
         return cbk();
       },
 
-      // Get the list of forwards
-      listForwards: ['validate', ({}, cbk) => {
-        const paging = !!token ? parse(token) : {};
+      // Determine the paging details for the forwards query
+      paging: ['validate', asyncify(({}) => {
+        // Exit early when there is no token to derive the paging details from
+        if (!token) {
+          return {};
+        }
 
+        try {
+          return parse(token);
+        } catch (err) {
+          throw [400, 'ExpectedValidPagingToken', {err}];
+        }
+      })],
+
+      // Get the list of forwards
+      listForwards: ['paging', ({paging}, cbk) => {
         const endTime = paging.before || before;
         const resultsLimit = paging.limit || limit || defaultLimit;
         const start = paging.after || after;
@@ -115,21 +120,21 @@ module.exports = ({after, before, limit, lnd, token}, cbk) => {
       }],
 
       // Sorted forwards
-      sortedForwards: ['listForwards', ({listForwards}, cbk) => {
+      sortedForwards: ['listForwards', asyncify(({listForwards}) => {
         try {
           const forwards = sortBy({
             array: listForwards.forwards.map(rpcForwardAsForward),
             attribute: 'created_at',
           });
 
-          return cbk(null, {
+          return {
             forwards: forwards.sorted.reverse(),
             next: !!forwards.sorted.length ? listForwards.token : undefined,
-          });
+          };
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
     },
     returnResult({reject, resolve, of: 'sortedForwards'}, cbk));
   });

@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -83,26 +84,24 @@ module.exports = (args, cbk) => {
       utxos: [
         'getLegacyUtxos',
         'getWalletUtxos',
-        ({getLegacyUtxos, getWalletUtxos}, cbk) =>
+        asyncify(({getLegacyUtxos, getWalletUtxos}) =>
       {
         const res = getWalletUtxos || getLegacyUtxos;
 
         if (!res) {
-          return cbk([503, 'ExpectedResponseForListUnspentRequest']);
+          throw [503, 'ExpectedResponseForListUnspentRequest'];
         }
 
         if (!isArray(res.utxos)) {
-          return cbk([503, 'ExpectedUtxosInListUnspentsResponse']);
+          throw [503, 'ExpectedUtxosInListUnspentsResponse'];
         }
 
         try {
-          const utxos = res.utxos.map(utxo => rpcUtxoAsUtxo(utxo));
-
-          return cbk(null, {utxos});
+          return {utxos: res.utxos.map(utxo => rpcUtxoAsUtxo(utxo))};
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
     },
     returnResult({reject, resolve, of: 'utxos'}, cbk));
   });

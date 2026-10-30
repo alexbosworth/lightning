@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncMapLimit = require('async/mapLimit');
 const {featureFlagDetails} = require('bolt09');
 const {returnResult} = require('asyncjs-util');
@@ -100,13 +101,18 @@ module.exports = (args, cbk) => {
             return cbk([503, 'FailedToRetrieveNodeDetails', {err}]);
           }
 
-          try {
-            return cbk(null, nodeInfoAsNode(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the node info into the final format
+      nodeDetails: ['getNode', asyncify(({getNode}) => {
+        try {
+          return nodeInfoAsNode(getNode);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
 
       // Get version
       getVersion: ['validate', ({}, cbk) => {
@@ -121,13 +127,17 @@ module.exports = (args, cbk) => {
       }],
 
       // Get channels
-      getChannels: ['getNode', 'getVersion', ({getNode, getVersion}, cbk) => {
+      getChannels: [
+        'getVersion',
+        'nodeDetails',
+        ({getVersion, nodeDetails}, cbk) =>
+      {
         // In LND 0.13.0 and after the returned channel data is accurate
         if (!!getVersion && !badVers.includes(getVersion.version)) {
-          return cbk(null, getNode.channels);
+          return cbk(null, nodeDetails.channels);
         }
 
-        const channelIds = getNode.channels.map(n => n.id);
+        const channelIds = nodeDetails.channels.map(n => n.id);
 
         // Fetch the channels directly as getNode gives back wrong policies
         return asyncMapLimit(channelIds, getChannelLimit, (id, cbk) => {
@@ -137,16 +147,20 @@ module.exports = (args, cbk) => {
       }],
 
       // Final node details
-      node: ['getChannels', 'getNode', ({getChannels, getNode}, cbk) => {
+      node: [
+        'getChannels',
+        'nodeDetails',
+        ({getChannels, nodeDetails}, cbk) =>
+      {
         return cbk(null, {
-          alias: getNode.alias,
-          capacity: getNode.capacity,
-          channel_count: getNode.channel_count,
+          alias: nodeDetails.alias,
+          capacity: nodeDetails.capacity,
+          channel_count: nodeDetails.channel_count,
           channels: getChannels,
-          color: getNode.color,
-          features: getNode.features,
-          sockets: getNode.sockets,
-          updated_at: getNode.updated_at,
+          color: nodeDetails.color,
+          features: nodeDetails.features,
+          sockets: nodeDetails.sockets,
+          updated_at: nodeDetails.updated_at,
         });
       }],
     },

@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {parsePaymentRequest} = require('invoices');
 const {returnResult} = require('asyncjs-util');
 
@@ -17,7 +18,6 @@ const method = 'addInvoice';
 const msPerSec = 1e3;
 const {parse} = Date;
 const {round} = Math;
-const tokensAsMtok = tokens => (BigInt(tokens) * BigInt(1e3)).toString();
 const type = 'default';
 
 /** Create a Lightning invoice.
@@ -87,14 +87,6 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedLndToCreateNewInvoice']);
         }
 
-        if (!!args.mtokens || args.tokens !== undefined) {
-          try {
-            mtokensAmount({mtokens: args.mtokens, tokens: args.tokens});
-          } catch (err) {
-            return cbk([400, err.message]);
-          }
-        }
-
         if (!!args.routes && !isArray(args.routes)) {
           return cbk([400, 'ExpectedArrayOfHopHintPathsForRoutes']);
         }
@@ -103,7 +95,7 @@ module.exports = (args, cbk) => {
       },
 
       // Add address for the fallback address
-      addAddress: ['validate', ({}, cbk) => {
+      addAddress: ['mtokens', ({}, cbk) => {
         // Exit early when no fallback address is needed
         if (!args.is_fallback_included) {
           return cbk();
@@ -129,19 +121,23 @@ module.exports = (args, cbk) => {
       }],
 
       // Determine the value of the invoice
-      mtokens: ['validate', ({}, cbk) => {
+      mtokens: ['validate', asyncify(({}) => {
         // Exit early when there are no mtokens
         if (!args.mtokens && args.tokens === undefined) {
-          return cbk(null, Number().toString());
+          return Number().toString();
         }
 
-        const {mtokens} =  mtokensAmount({
-          mtokens: args.mtokens,
-          tokens: args.tokens,
-        });
+        try {
+          const {mtokens} = mtokensAmount({
+            mtokens: args.mtokens,
+            tokens: args.tokens,
+          });
 
-        return cbk(null, mtokens);
-      }],
+          return mtokens;
+        } catch (err) {
+          throw [400, err.message];
+        }
+      })],
 
       // Add invoice
       addInvoice: [
@@ -186,49 +182,54 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedPaymentRequestForCreatedInvoice']);
           }
 
-          try {
-            parsePaymentRequest({request: response.payment_request});
-          } catch (err) {
-            return cbk([503, 'ExpectedValidPaymentRequestForInvoice']);
-          }
-
-          const payment = response.payment_addr.toString('hex');
-          const req = parsePaymentRequest({request: response.payment_request});
-
-          return cbk(null, {
-            created_at: req.created_at,
-            description: args.description,
-            id: req.id,
-            mtokens: req.mtokens,
-            payment: payment || undefined,
-            request: response.payment_request,
-            tokens: req.tokens,
-          });
+          return cbk(null, response);
         });
       }],
 
+      // Derive the details of the added invoice
+      added: ['addInvoice', asyncify(({addInvoice}) => {
+        try {
+          parsePaymentRequest({request: addInvoice.payment_request});
+        } catch (err) {
+          throw [503, 'ExpectedValidPaymentRequestForInvoice'];
+        }
+
+        const payment = addInvoice.payment_addr.toString('hex');
+        const req = parsePaymentRequest({request: addInvoice.payment_request});
+
+        return {
+          created_at: req.created_at,
+          description: args.description,
+          id: req.id,
+          mtokens: req.mtokens,
+          payment: payment || undefined,
+          request: addInvoice.payment_request,
+          tokens: req.tokens,
+        };
+      })],
+
       // Get the invoice
-      getInvoice: ['addInvoice', ({addInvoice}, cbk) => {
-        return getInvoice({lnd: args.lnd, id: addInvoice.id}, cbk);
+      getInvoice: ['added', ({added}, cbk) => {
+        return getInvoice({lnd: args.lnd, id: added.id}, cbk);
       }],
 
       // Final invoice
       invoice: [
         'addAddress',
-        'addInvoice',
+        'added',
         'getInvoice',
-        ({addAddress, addInvoice, getInvoice}, cbk) =>
+        ({addAddress, added, getInvoice}, cbk) =>
       {
         return cbk(null, {
           chain_address: !addAddress ? undefined : addAddress.address,
           created_at: getInvoice.created_at,
-          description: addInvoice.description || undefined,
-          id: addInvoice.id,
+          description: added.description || undefined,
+          id: added.id,
           mtokens: getInvoice.mtokens || Number().toString(),
-          payment: addInvoice.payment || undefined,
-          request: addInvoice.request,
+          payment: added.payment || undefined,
+          request: added.request,
           secret: getInvoice.secret,
-          tokens: addInvoice.tokens || Number(),
+          tokens: added.tokens || Number(),
         });
       }],
     },

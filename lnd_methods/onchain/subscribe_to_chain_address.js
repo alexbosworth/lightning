@@ -1,10 +1,10 @@
 const EventEmitter = require('events');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcConfAsConfirmation} = require('./../../lnd_responses');
 const scriptFromChainAddress = require('./script_from_chain_address');
 
-const bufferAsHex = buffer => buffer.toString('hex');
 const defaultMinConfirmations = 1;
 const dummyTxId = Buffer.alloc(32).toString('hex');
 const events = ['confirmation', 'reorg'];
@@ -101,6 +101,15 @@ module.exports = args => {
     return;
   });
 
+  const emitError = err => {
+    // Exit early when there are no error listeners
+    if (!eventEmitter.listenerCount('error')) {
+      return;
+    }
+
+    return eventEmitter.emit('error', err);
+  };
+
   sub.on('end', () => eventEmitter.emit('end'));
   sub.on('status', n => eventEmitter.emit('status', n));
 
@@ -109,25 +118,26 @@ module.exports = args => {
       sub.removeAllListeners();
     }
 
-    if (!eventEmitter.listenerCount('error')) {
-      return;
-    }
-
-    eventEmitter.emit('error', err);
-
-    return;
+    return emitError(err);
   });
 
   sub.on('data', data => {
     try {
       const event = rpcConfAsConfirmation(data);
 
-      return !event.type ? null : eventEmitter.emit(event.type, event.data);
-    } catch (err) {
-      return eventEmitter.emit('error', err);
-    }
+      // Exit early when there is no event to emit
+      if (!event.type) {
+        return;
+      }
 
-    return;
+      return emitSubscriptionEvent({
+        data: event.data,
+        emitter: eventEmitter,
+        event: event.type,
+      });
+    } catch (err) {
+      return emitError(err);
+    }
   });
 
   return eventEmitter;

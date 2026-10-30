@@ -1,5 +1,5 @@
 const asyncAuto = require('async/auto');
-const asyncMapSeries = require('async/mapSeries');
+const asyncify = require('async/asyncify');
 const {chanFormat} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 
@@ -106,42 +106,42 @@ module.exports = (args, cbk) => {
       }],
 
       // Map channels
-      mapChannels: ['getClosedChannels', ({getClosedChannels}, cbk) => {
-        return asyncMapSeries(getClosedChannels, (chan, cbk) => {
+      mapChannels: ['getClosedChannels', asyncify(({getClosedChannels}) => {
+        return getClosedChannels.map(chan => {
           if (!isArray(chan.alias_scids)) {
-            return cbk([503, 'ExpectedArrayOfAliasShortChannelIds']);
+            throw [503, 'ExpectedArrayOfAliasShortChannelIds'];
           }
 
           if (!chan.capacity) {
-            return cbk([503, 'ExpectedCloseChannelCapacity']);
+            throw [503, 'ExpectedCloseChannelCapacity'];
           }
 
           if (!chan.chan_id) {
-            return cbk([503, 'ExpectedChannelIdOfClosedChannel']);
+            throw [503, 'ExpectedChannelIdOfClosedChannel'];
           }
 
           if (!chan.channel_point) {
-            return cbk([503, 'ExpectedCloseChannelOutpoint']);
+            throw [503, 'ExpectedCloseChannelOutpoint'];
           }
 
           if (chan.close_height === undefined) {
-            return cbk([503, 'ExpectedChannelCloseHeight']);
+            throw [503, 'ExpectedChannelCloseHeight'];
           }
 
           if (!chan.closing_tx_hash) {
-            return cbk([503, 'ExpectedClosingTransactionId']);
+            throw [503, 'ExpectedClosingTransactionId'];
           }
 
           if (!chan.remote_pubkey) {
-            return cbk([503, 'ExpectedCloseRemotePublicKey']);
+            throw [503, 'ExpectedCloseRemotePublicKey'];
           }
 
           if (!chan.settled_balance) {
-            return cbk([503, 'ExpectedFinalSettledBalance']);
+            throw [503, 'ExpectedFinalSettledBalance'];
           }
 
           if (!chan.time_locked_balance) {
-            return cbk([503, 'ExpectedFinalTimeLockedBalanceForClosedChan']);
+            throw [503, 'ExpectedFinalTimeLockedBalanceForClosedChan'];
           }
 
           const otherIds = chan.alias_scids
@@ -187,7 +187,7 @@ module.exports = (args, cbk) => {
           try {
             chanResolutions.map(rpcResolutionAsResolution);
           } catch (err) {
-            return cbk([503, err.message]);
+            throw [503, err.message];
           }
 
           const resolutions = chanResolutions.map(rpcResolutionAsResolution);
@@ -196,7 +196,7 @@ module.exports = (args, cbk) => {
           const {balance} = resolutions.find(n => n.balance) || {balance: {}};
           const payments = resolutions.map(n => n.payment).filter(n => !!n);
 
-          return cbk(null, {
+          return {
             anchor_is_confirmed: anchor.is_confirmed,
             anchor_is_pending: anchor.is_pending,
             anchor_spent_by: anchor.spent_by,
@@ -221,10 +221,9 @@ module.exports = (args, cbk) => {
             partner_public_key: chan.remote_pubkey,
             transaction_id: txId,
             transaction_vout: Number(vout),
-          });
-        },
-        cbk);
-      }],
+          };
+        });
+      })],
 
       // Closed channels
       closedChannels: ['mapChannels', ({mapChannels}, cbk) => {

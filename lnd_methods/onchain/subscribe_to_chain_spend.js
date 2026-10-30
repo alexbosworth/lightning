@@ -1,13 +1,13 @@
 const EventEmitter = require('events');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
+const {rpcSpendAsConfirmation} = require('./../../lnd_responses');
 const scriptFromChainAddress = require('./script_from_chain_address');
 
-const bufferAsHex = buffer => buffer.toString('hex');
 const dummyTxId = Buffer.alloc(32).toString('hex');
 const events = ['confirmation', 'reorg'];
 const hexAsBuffer = hex => Buffer.from(hex, 'hex');
-const {isBuffer} = Buffer;
 const method = 'registerSpendNtfn';
 const shutDownMessage = 'chain notifier shutting down';
 const sumOf = arr => arr.reduce((sum, n) => sum + n, Number());
@@ -96,6 +96,15 @@ module.exports = args => {
     return;
   });
 
+  const emitError = err => {
+    // Exit early when there are no error listeners
+    if (!eventEmitter.listenerCount('error')) {
+      return;
+    }
+
+    return eventEmitter.emit('error', err);
+  };
+
   subscription.on('end', () => eventEmitter.emit('end'));
   subscription.on('status', n => eventEmitter.emit('status', n));
 
@@ -104,55 +113,21 @@ module.exports = args => {
       subscription.removeAllListeners();
     }
 
-    if (!eventEmitter.listenerCount('error')) {
-      return;
-    }
-
-    eventEmitter.emit('error', err);
-
-    return;
+    return emitError(err);
   });
 
   subscription.on('data', data => {
-    if (!data) {
-      return eventEmitter.emit('error', new Error('ExpectedSpendConfEvent'));
-    }
+    try {
+      const event = rpcSpendAsConfirmation(data);
 
-    switch (!!data.spend) {
-    case false:
-      if (!data.reorg) {
-        eventEmitter.emit('error', new Error('ExpectedSpendTxReorgEvent'));
-        break;
-      }
-
-      eventEmitter.emit('reorg');
-      break;
-
-    case true:
-      if (!isBuffer(data.spend.raw_spending_tx)) {
-        eventEmitter.emit('error', new Error('ExpectedRawTxInSpendConf'));
-        break;
-      }
-
-      if (data.spend.spending_height === undefined) {
-        eventEmitter.emit('error', new Error('ExpectedHeightInSpendConf'));
-        break;
-      }
-
-      if (data.spend.spending_input_index === undefined) {
-        eventEmitter.emit('error', new Error('ExpectedVinInSpendConf'));
-        break;
-      }
-
-      eventEmitter.emit('confirmation', {
-        height: data.spend.spending_height,
-        transaction: bufferAsHex(data.spend.raw_spending_tx),
-        vin: data.spend.spending_input_index,
+      return emitSubscriptionEvent({
+        data: event.data,
+        emitter: eventEmitter,
+        event: event.type,
       });
-      break;
+    } catch (err) {
+      return emitError(err);
     }
-
-    return;
   });
 
   return eventEmitter;

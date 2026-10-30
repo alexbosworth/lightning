@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -73,14 +74,19 @@ module.exports = ({lnd, request}, cbk) => {
             return cbk([503, 'ExpectedResponseFromDecodePaymentRequest']);
           }
 
-          try {
-            return cbk(null, paymentRequestDetails(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the decoded payment request into the final format
+      details: ['decode', asyncify(({decode}) => {
+        try {
+          return paymentRequestDetails(decode);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'decode'}, cbk));
+    returnResult({reject, resolve, of: 'details'}, cbk));
   });
 };

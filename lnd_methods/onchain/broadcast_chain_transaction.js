@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {idForTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
 
@@ -35,17 +36,20 @@ module.exports = ({description, lnd, transaction}, cbk) => {
           return cbk([400, 'ExpectedWalletRpcLndToSendRawTransaction']);
         }
 
-        try {
-          idForTransaction({transaction});
-        } catch (err) {
-          return cbk([400, 'ExpectedTransactionHexStringToBroadcastToPeers']);
-        }
-
         return cbk();
       },
 
+      // Derive the id of the transaction to broadcast
+      transactionId: ['validate', asyncify(({}) => {
+        try {
+          return idForTransaction({transaction}).id;
+        } catch (err) {
+          throw [400, 'ExpectedTransactionHexStringToBroadcastToPeers'];
+        }
+      })],
+
       // Publish transaction
-      broadcast: ['validate', ({}, cbk) => {
+      broadcast: ['transactionId', ({transactionId}, cbk) => {
         return lnd[type][method]({
           label: description || undefined,
           tx_hex: bufFromHex(transaction),
@@ -76,7 +80,7 @@ module.exports = ({description, lnd, transaction}, cbk) => {
             return cbk([503, 'FailedToBroadcastRawTransaction', {res}]);
           }
 
-          return cbk(null, {id: idForTransaction({transaction}).id});
+          return cbk(null, {id: transactionId});
         });
       }],
     },

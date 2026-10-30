@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcTxAsTransaction} = require('./../../lnd_responses');
 
@@ -83,7 +84,11 @@ module.exports = ({lnd}) => {
 
   subscription.on('data', tx => {
     try {
-      return eventEmitter.emit('chain_transaction', rpcTxAsTransaction(tx));
+      return emitSubscriptionEvent({
+        data: rpcTxAsTransaction(tx),
+        emitter: eventEmitter,
+        event: 'chain_transaction',
+      });
     } catch (err) {
       return emitErr([503, err.message]);
     }

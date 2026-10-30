@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -79,19 +80,17 @@ module.exports = (args, cbk) => {
       },
 
       // Derive URI permissions
-      uris: ['validate', ({}, cbk) => {
+      uris: ['validate', asyncify(({}) => {
         try {
           const uris = (args.methods || []).map(method => {
             return urisForMethod({method}).uris;
           });
 
-          const permissions = uniq(flatten(uris)).map(uriAsPermission);
-
-          return cbk(null, permissions);
+          return uniq(flatten(uris)).map(uriAsPermission);
         } catch (err) {
-          return cbk([400, err.message]);
+          throw [400, err.message];
         }
-      }],
+      })],
 
       // Permissions to grant
       permissions: ['uris', ({uris}, cbk) => {

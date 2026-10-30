@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {chanNumber} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 
@@ -107,14 +108,19 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedGetChannelResponse']);
           }
 
-          try {
-            return cbk(null, channelEdgeAsChannel(response));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, response);
         });
       }],
+
+      // Map the channel edge into the final format
+      channel: ['getChannel', asyncify(({getChannel}) => {
+        try {
+          return channelEdgeAsChannel(getChannel);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getChannel'}, cbk));
+    returnResult({reject, resolve, of: 'channel'}, cbk));
   });
 };

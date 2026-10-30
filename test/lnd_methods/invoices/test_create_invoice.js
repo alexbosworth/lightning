@@ -54,6 +54,13 @@ const makeArgs = override => {
   return args;
 };
 
+const makeUnexpectedLnd = () => ({
+  default: {
+    addInvoice: () => { throw new Error('UnexpectedAddInvoice'); },
+    newAddress: () => { throw new Error('UnexpectedNewAddress'); },
+  },
+});
+
 const tests = [
   {
     args: makeArgs({expires_at: new Date().toISOString()}),
@@ -74,6 +81,21 @@ const tests = [
     args: makeArgs({mtokens: '1'}),
     description: 'Millitokens and tokens must agree',
     error: [400, 'ExpectedEqualValuesForTokensAndMtokens'],
+  },
+  {
+    args: makeArgs({
+      is_fallback_included: true,
+      lnd: makeUnexpectedLnd(),
+      mtokens: undefined,
+      tokens: 'tokens',
+    }),
+    description: 'Tokens are validated before any address or invoice is made',
+    error: [400, 'ExpectedEitherTokensNumberOrMtokensStringForAmountValue'],
+  },
+  {
+    args: makeArgs({routes: 'routes'}),
+    description: 'Routes must be an array',
+    error: [400, 'ExpectedArrayOfHopHintPathsForRoutes'],
   },
   {
     args: makeArgs({lnd: makeLnd({err: 'err'})}),
@@ -135,6 +157,32 @@ const tests = [
     expected: {
       request,
       chain_address: undefined,
+      created_at: '1970-01-01T00:00:01.000Z',
+      description: 'description',
+      id: '0001020304050607080900010203040506070809000102030405060708090102',
+      mtokens: '0',
+      payment: undefined,
+      secret: Buffer.alloc(32).toString('hex'),
+      tokens: 0,
+    },
+  },
+  {
+    args: makeArgs({
+      routes: [[
+        {public_key: Buffer.alloc(33, 1).toString('hex')},
+        {
+          base_fee_mtokens: '1',
+          channel: '66051x263430x1800',
+          cltv_delta: 3,
+          fee_rate: 20,
+          public_key: Buffer.alloc(33, 2).toString('hex'),
+        },
+      ]],
+    }),
+    description: 'An invoice is created with route hints',
+    expected: {
+      request,
+      chain_address: 'address',
       created_at: '1970-01-01T00:00:01.000Z',
       description: 'description',
       id: '0001020304050607080900010203040506070809000102030405060708090102',

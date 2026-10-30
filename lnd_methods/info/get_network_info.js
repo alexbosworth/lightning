@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -46,14 +47,19 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'UnexpectedGetNetworkInfoError', {err}]);
           }
 
-          try {
-            return cbk(null, rpcNetworkAsNetworkInfo(networkInfo));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, networkInfo);
         });
       }],
+
+      // Map the network info into the final format
+      networkInfo: ['getInfo', asyncify(({getInfo}) => {
+        try {
+          return rpcNetworkAsNetworkInfo(getInfo);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getInfo'}, cbk));
+    returnResult({reject, resolve, of: 'networkInfo'}, cbk));
   });
 };

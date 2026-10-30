@@ -1,6 +1,7 @@
 const {ECDH} = require('crypto');
 
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncWhilst = require('async/whilst');
 const {decryptBlindedPath} = require('bolt04');
 
@@ -109,10 +110,10 @@ module.exports = ({id, lnd, mtokens, path}, cbk) => {
         },
 
         // Read the payment relay and the next hop out of the data of the hop
-        readHop: ['getSecret', ({getSecret}, cbk) => {
+        readHop: ['getSecret', asyncify(({getSecret}) => {
           // Exit early when there is no secret to decrypt the hop data with
           if (!getSecret.secret) {
-            return cbk(null, {});
+            return {};
           }
 
           const data = {};
@@ -125,7 +126,7 @@ module.exports = ({id, lnd, mtokens, path}, cbk) => {
             });
           } catch (err) {
             // Exit early when the data of the hop cannot be decrypted
-            return cbk(null, {});
+            return {};
           }
 
           const relay = data.hop.records.find(n => n.type === typePaymentRelay);
@@ -134,12 +135,12 @@ module.exports = ({id, lnd, mtokens, path}, cbk) => {
 
           // Exit early when there is no payment relay data for the hop
           if (relayLength < minRelayByteLength) {
-            return cbk(null, {});
+            return {};
           }
 
           // Exit early when the payment relay base fee is beyond a u32
           if (relayLength > maxRelayByteLength) {
-            return cbk(null, {});
+            return {};
           }
 
           // Payment relay data is a CLTV delta, a fee rate and a base fee
@@ -154,14 +155,14 @@ module.exports = ({id, lnd, mtokens, path}, cbk) => {
 
           // Exit early when the hop CLTV delta is beyond the path CLTV delta
           if (cltvDelta > stepped.path.cltv_delta) {
-            return cbk(null, {});
+            return {};
           }
 
           const arriving = BigInt(stepped.mtokens);
 
           // Exit early when the arriving amount does not cover the base fee
           if (arriving < baseFee) {
-            return cbk(null, {});
+            return {};
           }
 
           // A hop forwards what arrives less its fee on the forwarded amount
@@ -170,14 +171,14 @@ module.exports = ({id, lnd, mtokens, path}, cbk) => {
             feeRateDenominator + BigInt(feeRate)
           );
 
-          return cbk(null, {
+          return {
             cltv_delta: cltvDelta,
             mtokens: forward.toString(),
             next_channel_id: data.hop.next_channel_id,
             next_node_id: data.hop.next_node_id,
             next_path_key: data.hop.next_path_key,
-          });
-        }],
+          };
+        })],
 
         // Get the next node, which is given or is the peer of the next channel
         getNextNode: ['readHop', ({readHop}, cbk) => {

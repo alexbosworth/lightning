@@ -7,15 +7,21 @@ const {openChannel} = require('./../../../lnd_methods');
 
 const makeLnd = ({err, data}) => {
   const lnd = {
+    requests: [],
     default: {
-      openChannel: ({}) => {
+      openChannel: options => {
         const emitter = new EventEmitter();
+
+        lnd.requests.push(options);
 
         emitter.cancel = () => {};
 
         process.nextTick(() => {
+          // A stream error is ignored, the failure arrives as a status
           if (!!err) {
-            return emitter.emit('error', err);
+            emitter.emit('error', err);
+
+            return emitter.emit('status', {details: err});
           }
 
           emitter.emit('data', {update: 'chan_close'});
@@ -55,7 +61,9 @@ const makeLnd = ({err, data}) => {
           bytes_recv: '0',
           bytes_sent: '0',
           features: {},
+          flap_count: 0,
           inbound: false,
+          last_flap_ns: '0',
           ping_time: '0',
           pub_key: Buffer.alloc(33).toString('hex'),
           sat_recv: '0',
@@ -72,7 +80,6 @@ const makeLnd = ({err, data}) => {
 const makeArgs = overrides => {
   const args = {
     chain_fee_tokens_per_vbyte: 1,
-    close_address: 'close_address',
     lnd: makeLnd({}),
     give_tokens: 1,
     local_tokens: 1e6,
@@ -128,10 +135,7 @@ const tests = [
     error: [400, 'ExpectedArrayOfTransactionOutpointsAsInputs'],
   },
   {
-    args: makeArgs({
-      public_key: Buffer.alloc(33).toString('hex'),
-      socket: 'socket',
-    }),
+    args: makeArgs({partner_socket: 'socket'}),
     description: 'A peer is connected before opening',
     expected: {transaction_id: '04030201', transaction_vout: 0},
   },
@@ -149,6 +153,86 @@ const tests = [
     args: makeArgs({}),
     description: 'A channel is opened',
     expected: {transaction_id: '04030201', transaction_vout: 0},
+    request: {
+      base_fee: undefined,
+      close_address: undefined,
+      commitment_type: undefined,
+      fee_rate: undefined,
+      fund_max: undefined,
+      local_funding_amount: 1e6,
+      memo: undefined,
+      min_confs: 1,
+      min_htlc_msat: '1',
+      node_pubkey: Buffer.alloc(33),
+      outpoints: undefined,
+      private: false,
+      push_sat: 1,
+      remote_chan_reserve_sat: 354,
+      remote_csv_delay: undefined,
+      sat_per_vbyte: 1,
+      spend_unconfirmed: false,
+      target_conf: undefined,
+      use_base_fee: false,
+      use_fee_rate: false,
+      zero_conf: undefined,
+    },
+  },
+  {
+    args: makeArgs({
+      base_fee_mtokens: '1000',
+      chain_fee_tokens_per_vbyte: undefined,
+      cooperative_close_address: 'close_address',
+      description: 'description',
+      fee_rate: 1,
+      is_allowing_minimal_reserve: false,
+      is_max_funding: true,
+      is_private: true,
+      min_confirmations: 0,
+      min_htlc_mtokens: '2',
+      partner_csv_delay: 144,
+    }),
+    description: 'Channel open options are derived from the arguments',
+    expected: {transaction_id: '04030201', transaction_vout: 0},
+    request: {
+      base_fee: '1000',
+      close_address: 'close_address',
+      fee_rate: 1,
+      fund_max: true,
+      memo: 'description',
+      min_confs: 0,
+      min_htlc_msat: '2',
+      private: true,
+      remote_chan_reserve_sat: undefined,
+      remote_csv_delay: 144,
+      sat_per_vbyte: undefined,
+      spend_unconfirmed: true,
+      target_conf: 6,
+      use_base_fee: true,
+      use_fee_rate: true,
+    },
+  },
+  {
+    args: makeArgs({is_trusted_funding: true}),
+    description: 'A trusted funding channel uses anchors and zero conf',
+    expected: {transaction_id: '04030201', transaction_vout: 0},
+    request: {commitment_type: 'ANCHORS', zero_conf: true},
+  },
+  {
+    args: makeArgs({is_simplified_taproot: true}),
+    description: 'A simplified taproot channel sets its commitment type',
+    expected: {transaction_id: '04030201', transaction_vout: 0},
+    request: {commitment_type: 'SIMPLE_TAPROOT'},
+  },
+  {
+    args: makeArgs({is_standard_taproot: true}),
+    description: 'A standard taproot channel sets its commitment type',
+    expected: {transaction_id: '04030201', transaction_vout: 0},
+    request: {commitment_type: 'TAPROOT'},
+  },
+  {
+    args: makeStatus('provided memo (memo) is of length 600, exceeds 500'),
+    description: 'A description that is too long is an error',
+    error: [400, 'MaxChannelDescriptionLengthExceeded', {max: 500}],
   },
   {
     args: makeStatus(''),
@@ -212,17 +296,31 @@ const tests = [
     description: 'A random error is returned',
     error: [503, 'FailedToOpenChannel', {err: 'err'}],
   },
+  {
+    args: makeArgs({lnd: makeLnd({err: 'err'})}),
+    description: 'A stream error is ignored until a status arrives',
+    error: [503, 'FailedToOpenChannel', {err: 'err'}],
+  },
 ];
 
-tests.forEach(({args, description, error, expected}) => {
+tests.forEach(({args, description, error, expected, request}) => {
   return test(description, async () => {
     if (!!error) {
       await rejects(openChannel(args), error, 'Got expected error');
-    } else {
-      const res = await openChannel(args);
 
-      deepStrictEqual(res, expected, 'Got expected result');
+      return;
     }
+
+    const res = await openChannel(args);
+
+    deepStrictEqual(res, expected, 'Got expected result');
+
+    // The options sent to LND are checked when the case specifies them
+    const [sent] = args.lnd.requests;
+
+    Object.keys(request || {}).forEach(key => {
+      return deepStrictEqual(sent[key], request[key], `Got expected ${key}`);
+    });
 
     return;
   });

@@ -5,6 +5,7 @@ const asyncDoUntil = require('async/doUntil');
 const {chanFormat} = require('bolt07');
 
 const {emitSubscriptionError} = require('./../../grpc');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {forwardFromHtlcEvent} = require('./../../lnd_responses');
 const getPayment = require('./get_payment');
 const {isLnd} = require('./../../lnd_requests');
@@ -112,7 +113,7 @@ module.exports = ({lnd}) => {
         }
 
         // Emit payment details
-        return emitter.emit(event, res.payment);
+        return emitSubscriptionEvent({emitter, event, data: res.payment});
       });
     } catch (err) {
       return emitErr([503, err.message]);

@@ -4,6 +4,7 @@ const asyncAuto = require('async/auto');
 const asyncMapSeries = require('async/mapSeries');
 const asyncWhilst = require('async/whilst');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {getRouteToDestination} = require('./../info');
 const {getIdentity} = require('./../info');
 const isBlindedPath = require('./is_blinded_path');
@@ -303,7 +304,11 @@ module.exports = args => {
   const emitSuccess = ({route, target}) => {
     // Exit early when the probe was to the destination directly
     if (!target.path) {
-      return emitter.emit('probe_success', {route});
+      return emitSubscriptionEvent({
+        emitter,
+        data: {route},
+        event: 'probe_success',
+      });
     }
 
     // The route to the introduction node is continued into the blinded path
@@ -315,7 +320,11 @@ module.exports = args => {
         total_mtokens: args.total_mtokens,
       });
 
-      return emitter.emit('probe_success', {route: extended.route});
+      return emitSubscriptionEvent({
+        emitter,
+        data: {route: extended.route},
+        event: 'probe_success',
+      });
     } catch (err) {
       return emitError([503, 'FailedToExtendRouteIntoBlindedPath', {err}]);
     }

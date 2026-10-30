@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -152,16 +153,19 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedFailedUpdateArrayInUpdateResponse']);
           }
 
-          try {
-            const failures = res.failed_updates.map(rpcFailedPolicyAsFail);
-
-            return cbk(null, {failures});
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res.failed_updates);
         });
       }],
+
+      // Map the failed updates into the final format
+      failures: ['updateFees', asyncify(({updateFees}) => {
+        try {
+          return {failures: updateFees.map(rpcFailedPolicyAsFail)};
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'updateFees'}, cbk));
+    returnResult({reject, resolve, of: 'failures'}, cbk));
   });
 };

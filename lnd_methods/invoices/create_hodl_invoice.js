@@ -2,6 +2,7 @@ const {createHash} = require('crypto');
 const {randomBytes} = require('crypto');
 
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {parsePaymentRequest} = require('invoices');
 const {returnResult} = require('asyncjs-util');
 
@@ -80,8 +81,19 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
+      // Determine the value of the invoice
+      mtokens: ['validate', asyncify(({}) => {
+        try {
+          const mtokens = !args.tokens ? undefined : tokensAsMtok(args.tokens);
+
+          return mtokens || args.mtokens || noTokens.toString();
+        } catch (err) {
+          throw [400, 'ExpectedIntegerTokensValueForHodlInvoice'];
+        }
+      })],
+
       // Add address for the fallback address
-      addAddress: ['validate', ({}, cbk) => {
+      addAddress: ['mtokens', ({}, cbk) => {
         // Exit early when no fallback address is needed
         if (!args.is_fallback_included) {
           return cbk();
@@ -125,16 +137,14 @@ module.exports = (args, cbk) => {
         'addAddress',
         'hints',
         'invoiceId',
+        'mtokens',
         ({addAddress, hints, invoiceId}, cbk) =>
       {
         const fallbackAddress = !addAddress ? undefined : addAddress.address;
         const createdAt = new Date();
         const expireAt = !args.expires_at ? null : parse(args.expires_at);
-        const mtokens = !args.tokens ? undefined : tokensAsMtok(args.tokens);
 
         const expiryMs = !expireAt ? null : expireAt - createdAt.getTime();
-
-        const invoiceMtok = mtokens || args.mtokens || noTokens.toString();
 
         return args.lnd.invoices.addHoldInvoice({
           cltv_expiry: !args.cltv_delta ? undefined : args.cltv_delta,
@@ -161,43 +171,51 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedPaymentRequestForCreatedInvoice']);
           }
 
-          try {
-            parsePaymentRequest({request: response.payment_request});
-          } catch (err) {
-            return cbk([503, 'ExpectedValidPaymentRequestForHodlInvoice']);
-          }
-
-          const request = response.payment_request;
-
-          const parsed = parsePaymentRequest({request});
-
-          return cbk(null, {
-            created_at: parsePaymentRequest({request}).created_at,
-            description: args.description || undefined,
-            id: invoiceId.id,
-            mtokens: invoiceMtok,
-            request: response.payment_request,
-            tokens: mtokensAsTokens(invoiceMtok),
-          });
+          return cbk(null, response);
         });
       }],
+
+      // Derive the details of the added invoice
+      added: [
+        'addInvoice',
+        'invoiceId',
+        'mtokens',
+        asyncify(({addInvoice, invoiceId, mtokens}) =>
+      {
+        const request = addInvoice.payment_request;
+
+        try {
+          parsePaymentRequest({request});
+        } catch (err) {
+          throw [503, 'ExpectedValidPaymentRequestForHodlInvoice'];
+        }
+
+        return {
+          mtokens,
+          request,
+          created_at: parsePaymentRequest({request}).created_at,
+          description: args.description || undefined,
+          id: invoiceId.id,
+          tokens: mtokensAsTokens(mtokens),
+        };
+      })],
 
       // Final invoice
       invoice: [
         'addAddress',
-        'addInvoice',
+        'added',
         'invoiceId',
-        ({addAddress, addInvoice, invoiceId}, cbk) =>
+        ({addAddress, added, invoiceId}, cbk) =>
       {
         return cbk(null, {
           chain_address: !addAddress ? undefined : addAddress.address,
-          created_at: addInvoice.created_at,
-          description: addInvoice.description,
+          created_at: added.created_at,
+          description: added.description,
           id: invoiceId.id,
-          mtokens: addInvoice.mtokens,
-          request: addInvoice.request,
+          mtokens: added.mtokens,
+          request: added.request,
           secret: invoiceId.secret || undefined,
-          tokens: addInvoice.tokens,
+          tokens: added.tokens,
         });
       }],
     },

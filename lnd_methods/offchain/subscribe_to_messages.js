@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 
 const {emitSubscriptionError} = require('./../../grpc');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {handleRemoveListener} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcOnionMessageAsMessage} = require('./../../lnd_responses');
@@ -78,7 +79,11 @@ module.exports = ({lnd}) => {
     }
 
     try {
-      return emitter.emit('message_received', rpcOnionMessageAsMessage(data));
+      return emitSubscriptionEvent({
+        emitter,
+        data: rpcOnionMessageAsMessage(data),
+        event: 'message_received',
+      });
     } catch (err) {
       return errored([503, err.message]);
     }

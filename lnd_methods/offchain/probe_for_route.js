@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncTimeout = require('async/timeout');
 const {returnResult} = require('asyncjs-util');
 
@@ -135,15 +136,10 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
-      // Start probe and return a successful route if found
-      probe: ['validate', ({}, cbk) => {
-        const result = {};
-        let isFinished = false;
-        let sub;
-        let timeout;
-
+      // Subscribe to the probe
+      subscribe: ['validate', asyncify(({}) => {
         try {
-          sub = subscribeToProbeForRoute({
+          return subscribeToProbeForRoute({
             cltv_delta: args.cltv_delta,
             confidence: args.confidence,
             destination: args.destination,
@@ -167,8 +163,14 @@ module.exports = (args, cbk) => {
             total_mtokens: args.total_mtokens,
           });
         } catch (err) {
-          return cbk([400, err.message]);
+          throw [400, err.message];
         }
+      })],
+
+      // Start probe and return a successful route if found
+      probe: ['subscribe', ({subscribe}, cbk) => {
+        const sub = subscribe;
+        let timeout;
 
         const finished = (err, res) => {
           sub.removeAllListeners();

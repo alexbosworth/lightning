@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {idForTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
 
@@ -90,27 +91,30 @@ module.exports = (args, cbk) => {
             return cbk([500, 'ExpectedResponseForSendToChainOutputsRequest']);
           }
 
-          try {
-            idForTransaction({transaction: bufferAsHex(res.raw_tx)});
-          } catch (err) {
-            return cbk([500, 'ExpectedRawTransactionInSendToOutputsResponse']);
-          }
-
-          const transaction = bufferAsHex(res.raw_tx);
-
-          const row = {
-            transaction,
-            confirmation_count: initialConfirmationCount,
-            id: idForTransaction({transaction}).id,
-            is_confirmed: false,
-            is_outgoing: true,
-            tokens: args.send_to.reduce((sum, n) => sum + n.tokens, Number()),
-          };
-
-          return cbk(null, row);
+          return cbk(null, res);
         });
       }],
+
+      // Map the send response into the final format
+      sent: ['send', asyncify(({send}) => {
+        try {
+          idForTransaction({transaction: bufferAsHex(send.raw_tx)});
+        } catch (err) {
+          throw [500, 'ExpectedRawTransactionInSendToOutputsResponse'];
+        }
+
+        const transaction = bufferAsHex(send.raw_tx);
+
+        return {
+          transaction,
+          confirmation_count: initialConfirmationCount,
+          id: idForTransaction({transaction}).id,
+          is_confirmed: false,
+          is_outgoing: true,
+          tokens: args.send_to.reduce((sum, n) => sum + n.tokens, Number()),
+        };
+      })],
     },
-    returnResult({reject, resolve, of: 'send'}, cbk));
+    returnResult({reject, resolve, of: 'sent'}, cbk));
   });
 };

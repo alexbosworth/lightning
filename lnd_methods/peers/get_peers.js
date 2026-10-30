@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -73,13 +74,13 @@ module.exports = ({lnd}, cbk) => {
       }],
 
       // Check the list of peers and map into final format
-      peers: ['listPeers', ({listPeers}, cbk) => {
+      peers: ['listPeers', asyncify(({listPeers}) => {
         try {
-          return cbk(null, listPeers.map(rpcPeerAsPeer));
+          return listPeers.map(rpcPeerAsPeer);
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
 
       // Final set of peers
       finalPeers: ['peers', ({peers}, cbk) => cbk(null, {peers})],

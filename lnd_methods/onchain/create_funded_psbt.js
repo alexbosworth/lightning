@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {componentsOfTransaction} = require('@alexbosworth/blockchain');
 const {createPsbt} = require('psbt');
 const {extendPsbt} = require('psbt');
@@ -187,7 +188,7 @@ module.exports = (args, cbk) => {
       }],
 
       // Construct the PSBT that is needed for coin select type funding
-      funding: ['validate', ({}, cbk) => {
+      funding: ['validate', asyncify(({}) => {
         try {
           const {psbt} = createPsbt({
             outputs: args.outputs || [],
@@ -202,7 +203,7 @@ module.exports = (args, cbk) => {
 
           // Exit early when there is no UTXO or key info to add to inputs
           if (!(args.inputs || []).find(hasInputInfo)) {
-            return cbk(null, hexAsBuffer(psbt));
+            return hexAsBuffer(psbt);
           }
 
           // LND 0.21.4 and below need UTXO info for inputs from other wallets
@@ -222,11 +223,11 @@ module.exports = (args, cbk) => {
             }),
           });
 
-          return cbk(null, hexAsBuffer(extended.psbt));
+          return hexAsBuffer(extended.psbt);
         } catch (err) {
-          return cbk([400, 'FailedToCreatePsbtToFund', {err: err.message}]);
+          throw [400, 'FailedToCreatePsbtToFund', {err: err.message}];
         }
-      }],
+      })],
 
       // Determine the lock to use for the inputs added to fund the PSBT
       lock: ['validate', ({}, cbk) => {
@@ -316,7 +317,7 @@ module.exports = (args, cbk) => {
       }],
 
       // Derive the raw transaction from the funded PSBT
-      tx: ['fund', ({fund}, cbk) => {
+      tx: ['fund', asyncify(({fund}) => {
         const {psbt} = fund;
 
         try {
@@ -324,11 +325,11 @@ module.exports = (args, cbk) => {
 
           const {inputs, outputs} = componentsOfTransaction({transaction: tx});
 
-          return cbk(null, {inputs, outputs});
+          return {inputs, outputs};
         } catch (err) {
-          return cbk([503, 'FailedToDecodeFundedPsbt', {err: err.message}]);
+          throw [503, 'FailedToDecodeFundedPsbt', {err: err.message}];
         }
-      }],
+      })],
 
       // Derive the final funding inputs for the transaction
       fundingInputs: ['fund', 'tx', ({fund, tx}, cbk) => {

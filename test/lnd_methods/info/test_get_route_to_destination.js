@@ -8,7 +8,10 @@ const {getRouteToDestination} = require('./../../../');
 
 const customRecords = {};
 
-const makeLnd = ({custom, err, outgoing, res}) => {
+const makeLnd = ({custom, err, ignored, outgoing, pref, res, retry}) => {
+  // Retryable errors are returned once, on the first query only
+  const retries = [];
+
   const response = {
     routes: [{
       hops: [{
@@ -47,6 +50,24 @@ const makeLnd = ({custom, err, outgoing, res}) => {
 
         if (!!outgoing && outgoingIds !== JSON.stringify(outgoing)) {
           return cbk('UnexpectedOutgoingChannelIdsInQueryRoutes');
+        }
+
+        if (pref !== undefined && args.time_pref !== pref) {
+          return cbk('UnexpectedTimePreferenceInQueryRoutes');
+        }
+
+        const ignores = {nodes: args.ignored_nodes, pairs: args.ignored_pairs};
+
+        if (!!ignored && JSON.stringify(ignores) !== JSON.stringify(ignored)) {
+          return cbk('UnexpectedIgnoredNodesOrPairsInQueryRoutes');
+        }
+
+        // Return a retryable error on the first attempt only
+        // Exit early with a retryable error on the first query only
+        if (!!retry && !retries.length) {
+          retries.push(retry);
+
+          return cbk({details: retry});
         }
 
         return cbk(err, res !== undefined ? res : response);
@@ -125,17 +146,17 @@ const tests = [
   {
     args: makeArgs({outgoing_channel: 12345}),
     description: 'Outgoing channel is expected in standard format',
-    error: [400, 'ExpectedStandardFormatChannelIdForOutChannel'],
+    error: [400, 'ExpectedStandardFormatOutgoingChannelIds'],
   },
   {
     args: makeArgs({outgoing_channels: 'channels'}),
     description: 'Outgoing channels are expected as an array',
-    error: [400, 'ExpectedArrayOfOutgoingChannelIdsToGetRoute'],
+    error: [400, 'ExpectedArrayOfOutgoingChannelIds'],
   },
   {
     args: makeArgs({outgoing_channels: [12345]}),
     description: 'Outgoing channels are expected in standard format',
-    error: [400, 'ExpectedStandardFormatChannelIdsForOutChannels'],
+    error: [400, 'ExpectedStandardFormatOutgoingChannelIds'],
   },
   {
     args: makeArgs({payment: undefined}),
@@ -193,6 +214,45 @@ const tests = [
     args: makeArgs({lnd: makeLnd({res: {routes: []}})}),
     description: 'No route is found',
     expected: {},
+  },
+  {
+    args: makeArgs({confidence: 1e6, lnd: makeLnd({pref: 1})}),
+    description: 'A confidence is sent as a time preference',
+    expected: expectedRoute,
+  },
+  {
+    args: makeArgs({ignore: 'ignore'}),
+    description: 'Ignores are expected as an array',
+    error: [400, 'ExpectedArrayOfIgnoresForIgnoredNodes'],
+  },
+  {
+    args: makeArgs({
+      ignore: [
+        {from_public_key: '00'},
+        {from_public_key: '01', to_public_key: '02'},
+      ],
+      lnd: makeLnd({
+        ignored: {
+          nodes: [Buffer.from('00', 'hex')],
+          pairs: [{
+            from: Buffer.from('01', 'hex'),
+            to: Buffer.from('02', 'hex'),
+          }],
+        },
+      }),
+    }),
+    description: 'Ignored nodes and pairs are sent with the query',
+    expected: expectedRoute,
+  },
+  {
+    args: makeArgs({lnd: makeLnd({retry: 'device or resource busy'})}),
+    description: 'A busy network error is retried',
+    expected: expectedRoute,
+  },
+  {
+    args: makeArgs({lnd: makeLnd({retry: 'internal server error'})}),
+    description: 'An internal server error is retried',
+    expected: expectedRoute,
   },
   {
     args: makeArgs({

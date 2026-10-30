@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -64,16 +65,19 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'ExpectedArrayOfPendingSweepsInSweepsResponse']);
           }
 
-          try {
-            const sweeps = res.pending_sweeps.map(rpcSweepAsSweep);
-
-            return cbk(null, {sweeps});
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res.pending_sweeps);
         });
       }],
+
+      // Map the pending sweeps into the final format
+      sweeps: ['getSweeps', asyncify(({getSweeps}) => {
+        try {
+          return {sweeps: getSweeps.map(rpcSweepAsSweep)};
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getSweeps'}, cbk));
+    returnResult({reject, resolve, of: 'sweeps'}, cbk));
   });
 };

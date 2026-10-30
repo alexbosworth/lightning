@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {componentsOfTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
 const {unsignedTxFromPsbt} = require('@alexbosworth/blockchain');
@@ -216,7 +217,7 @@ module.exports = (args, cbk) => {
       }],
 
       // Derive the raw transaction from the funded PSBT
-      tx: ['fund', ({fund}, cbk) => {
+      tx: ['fund', asyncify(({fund}) => {
         const {psbt} = fund;
 
         try {
@@ -224,11 +225,11 @@ module.exports = (args, cbk) => {
 
           const {inputs, outputs} = componentsOfTransaction({transaction: tx});
 
-          return cbk(null, {inputs, outputs});
+          return {inputs, outputs};
         } catch (err) {
-          return cbk([503, 'FailedToDecodePsbtInFundPsbtResponse', {err}]);
+          throw [503, 'FailedToDecodePsbtInFundPsbtResponse', {err}];
         }
-      }],
+      })],
 
       // Derive the final funding inputs for the transaction
       fundingInputs: ['fund', 'tx', ({fund, tx}, cbk) => {

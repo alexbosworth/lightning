@@ -165,6 +165,40 @@ const tests = [
   },
   {
     args: {
+      lnd: makeLnd({}),
+      messages: [{type: '1', value: '00'}],
+      payment: '00',
+      public_keys: ['a'],
+      total_mtokens: '1',
+    },
+    description: 'A valid route response is expected with payment details',
+    expected: {
+      route: {
+        confidence: undefined,
+        fee: 0,
+        fee_mtokens: '1',
+        hops: [{
+          channel: '0x0x1',
+          fee: 0,
+          fee_mtokens: '1',
+          forward: 0,
+          forward_mtokens: '1',
+          public_key: 'b',
+          timeout: 1,
+        }],
+        messages: [{type: '1', value: '00'}],
+        mtokens: '1',
+        payment: '00',
+        safe_fee: 1,
+        safe_tokens: 1,
+        timeout: 1,
+        tokens: 0,
+        total_mtokens: '1',
+      },
+    },
+  },
+  {
+    args: {
       cltv_delta: 1,
       lnd: {
         router: {

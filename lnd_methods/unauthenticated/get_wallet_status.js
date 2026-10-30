@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {rpcWalletStateAsState} = require('./../../lnd_responses');
@@ -57,14 +58,19 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'UnexpectedGetWalletStatusError', {err}]);
           }
 
-          try {
-            return cbk(null, rpcWalletStateAsState(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the wallet state into the final format
+      status: ['getState', asyncify(({getState}) => {
+        try {
+          return rpcWalletStateAsState(getState);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getState'}, cbk));
+    returnResult({reject, resolve, of: 'status'}, cbk));
   });
 };

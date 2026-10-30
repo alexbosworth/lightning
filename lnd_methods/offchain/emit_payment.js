@@ -1,4 +1,5 @@
 const {confirmedFromPayment} = require('./../../lnd_responses');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {failureFromPayment} = require('./../../lnd_responses');
 const {pendingFromPayment} = require('./../../lnd_responses');
 const {routingFailureFromHtlc} = require('./../../lnd_responses');
@@ -20,10 +21,18 @@ module.exports = ({data, emitter}) => {
   try {
     switch (data.status) {
     case states.confirmed:
-      return emitter.emit('confirmed', confirmedFromPayment(data));
+      return emitSubscriptionEvent({
+        emitter,
+        data: confirmedFromPayment(data),
+        event: 'confirmed',
+      });
 
     case states.failed:
-      return emitter.emit('failed', failureFromPayment(data));
+      return emitSubscriptionEvent({
+        emitter,
+        data: failureFromPayment(data),
+        event: 'failed',
+      });
 
     case states.paying:
       const hasHtlcs = !!data && isArray(data.htlcs) && !!data.htlcs.length;
@@ -35,7 +44,11 @@ module.exports = ({data, emitter}) => {
 
       // Emit routing failures
       data.htlcs.filter(n => n.status === failedStatus).forEach(htlc => {
-        return emitter.emit('routing_failure', routingFailureFromHtlc(htlc));
+        return emitSubscriptionEvent({
+          emitter,
+          data: routingFailureFromHtlc(htlc),
+          event: 'routing_failure',
+        });
       });
 
       // Exit early when the HTLCs have no pending payments
@@ -43,7 +56,11 @@ module.exports = ({data, emitter}) => {
         return;
       }
 
-      return emitter.emit('paying', pendingFromPayment(data));
+      return emitSubscriptionEvent({
+        emitter,
+        data: pendingFromPayment(data),
+        event: 'paying',
+      });
 
     default:
       break;

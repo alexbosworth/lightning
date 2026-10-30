@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 
 const {backupsFromSnapshot} = require('./../../lnd_responses');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 
 const cancelError = 'Cancelled on client';
@@ -70,7 +71,11 @@ module.exports = ({lnd}) => {
 
   subscription.on('data', snapshot => {
     try {
-      return eventEmitter.emit('backup', backupsFromSnapshot(snapshot));
+      return emitSubscriptionEvent({
+        data: backupsFromSnapshot(snapshot),
+        emitter: eventEmitter,
+        event: 'backup',
+      });
     } catch (err) {
       return emitError([503, err.message]);
     }

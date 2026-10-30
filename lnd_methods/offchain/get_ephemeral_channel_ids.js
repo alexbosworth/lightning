@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {chanFormat} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 
@@ -54,33 +55,38 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedChannelMapsArray']);
           }
 
-          try {
-            const channels = res.alias_maps.map(map => {
-              if (!isArray(map.aliases)) {
-                throw new Error('ExpectedArrayOfAliasesInAliasMap');
-              }
-
-              if (!map.base_scid) {
-                throw new Error('ExpectedBaseScidInAliasMap');
-              }
-
-              const otherIds = map.aliases
-                .filter(n => n !== map.base_scid)
-                .map(number => chanFormat({number}).channel);
-
-              return {
-                other_ids: otherIds,
-                reference_id: chanFormat({number: map.base_scid}).channel,
-              };
-            });
-
-            return cbk(null, {channels});
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res.alias_maps);
         });
       }],
+
+      // Map the alias maps into the final format
+      channels: ['getChannelIds', asyncify(({getChannelIds}) => {
+        try {
+          const channels = getChannelIds.map(map => {
+            if (!isArray(map.aliases)) {
+              throw new Error('ExpectedArrayOfAliasesInAliasMap');
+            }
+
+            if (!map.base_scid) {
+              throw new Error('ExpectedBaseScidInAliasMap');
+            }
+
+            const otherIds = map.aliases
+              .filter(n => n !== map.base_scid)
+              .map(number => chanFormat({number}).channel);
+
+            return {
+              other_ids: otherIds,
+              reference_id: chanFormat({number: map.base_scid}).channel,
+            };
+          });
+
+          return {channels};
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getChannelIds'}, cbk));
+    returnResult({reject, resolve, of: 'channels'}, cbk));
   });
 };

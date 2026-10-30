@@ -94,6 +94,7 @@ module.exports = ({lnd}) => {
         });
       }
 
+      // A throwing listener fails the HTLC back rather than leaving it held
       return emitter.emit(event, {
         accept: async () => await sub.write({
           action: forwardPaymentActions.accept,

@@ -4,6 +4,7 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const {emitSubscriptionError} = require('./../../grpc');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {handleRemoveListener} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcPeerMessageAsMessage} = require('./../../lnd_responses');
@@ -53,7 +54,11 @@ module.exports = ({lnd}) => {
   subscription.on('data', message => {
     try {
       // Notify listeners of the message
-      emitter.emit('message_received', rpcPeerMessageAsMessage(message));
+      return emitSubscriptionEvent({
+        emitter,
+        data: rpcPeerMessageAsMessage(message),
+        event: 'message_received',
+      });
     } catch (err) {
       return errored([503, err.message]);
     }

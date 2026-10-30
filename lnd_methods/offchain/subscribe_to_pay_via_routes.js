@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 const {randomBytes} = require('crypto');
 
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncMapSeries = require('async/mapSeries');
 const {chanFormat} = require('bolt07');
 const {chanNumber} = require('bolt07');
@@ -253,13 +254,13 @@ module.exports = args => {
       waitForSubscribers: cbk => nextTick(cbk),
 
       // Derive the route in RPC format
-      rpcRoute: ['waitForSubscribers', ({}, cbk) => {
+      rpcRoute: ['waitForSubscribers', asyncify(({}) => {
         try {
-          return cbk(null, rpcRouteFromRoute(route));
+          return rpcRouteFromRoute(route);
         } catch (err) {
-          return cbk([400, 'ExpectedValidRouteToPayViaRoutes', {err}]);
+          throw [400, 'ExpectedValidRouteToPayViaRoutes', {err}];
         }
-      }],
+      })],
 
       // Try paying
       attempt: ['rpcRoute', ({rpcRoute}, cbk) => {

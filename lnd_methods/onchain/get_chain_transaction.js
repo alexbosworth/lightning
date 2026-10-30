@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -68,14 +69,19 @@ module.exports = ({id, lnd}, cbk) => {
             return cbk([503, 'UnexpectedGetChainTransactionError', {err}]);
           }
 
-          try {
-            return cbk(null, rpcTxAsTransaction(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the transaction into the final format
+      transaction: ['getTransaction', asyncify(({getTransaction}) => {
+        try {
+          return rpcTxAsTransaction(getTransaction);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getTransaction'}, cbk));
+    returnResult({reject, resolve, of: 'transaction'}, cbk));
   });
 };

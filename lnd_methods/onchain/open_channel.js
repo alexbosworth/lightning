@@ -217,7 +217,6 @@ module.exports = (args, cbk) => {
               transaction_id: chan.chan_pending.txid.reverse().toString('hex'),
               transaction_vout: chan.chan_pending.output_index,
             });
-            break;
 
           case 'confirmation':
             break;

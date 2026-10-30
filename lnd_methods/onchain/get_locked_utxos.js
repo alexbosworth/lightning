@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -73,23 +74,28 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'ExpectedPkScriptForLockedUtxosInResponse']);
           }
 
-          try {
-            const utxos = res.locked_utxos.map(lock => ({
-              lock_expires_at: new Date(asMs(lock.expiration)).toISOString(),
-              lock_id: bufferAsHex(lock.id),
-              output_script: bufferAsHex(lock.pk_script) || undefined,
-              tokens: Number(lock.value) || undefined,
-              transaction_id: lock.outpoint.txid_str,
-              transaction_vout: lock.outpoint.output_index,
-            }));
-
-            return cbk(null, {utxos});
-          } catch (err) {
-            return cbk([503, 'UnexpectedErrorParsingLockedUtxosResponse']);
-          }
+          return cbk(null, res.locked_utxos);
         });
       }],
+
+      // Map the leases into the final format
+      utxos: ['getLockedUtxos', asyncify(({getLockedUtxos}) => {
+        try {
+          const utxos = getLockedUtxos.map(lock => ({
+            lock_expires_at: new Date(asMs(lock.expiration)).toISOString(),
+            lock_id: bufferAsHex(lock.id),
+            output_script: bufferAsHex(lock.pk_script) || undefined,
+            tokens: Number(lock.value) || undefined,
+            transaction_id: lock.outpoint.txid_str,
+            transaction_vout: lock.outpoint.output_index,
+          }));
+
+          return {utxos};
+        } catch (err) {
+          throw [503, 'UnexpectedErrorParsingLockedUtxosResponse'];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getLockedUtxos'}, cbk));
+    returnResult({reject, resolve, of: 'utxos'}, cbk));
   });
 };

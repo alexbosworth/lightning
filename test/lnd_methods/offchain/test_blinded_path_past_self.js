@@ -109,6 +109,9 @@ const noBaseFeeRelayRecord = {type: '10', value: '002800000064'};
 // Payment relay data that stops after the CLTV delta
 const shortRelayRecord = {type: '10', value: '0028'};
 
+// Payment relay data with a base fee that is longer than a u32
+const longRelayRecord = {type: '10', value: '0028000000640000000001'};
+
 // Encrypt hop data records for the node at a path key
 const encryptForSelf = ({key, records}) => {
   // Hop data is a stream of type, length and value records, ordered by type
@@ -335,6 +338,18 @@ const tests = [
     args: {
       id: self,
       lnd: makeLnd(),
+      mtokens: '2000',
+      path: Object.assign(throughSelf([[nodeRecord(peer), relayRecord(40)]]), {
+        introduction_node: undefined,
+      }),
+    },
+    description: 'A path with no introduction node starts at the first hop',
+    expected: pastSelf('1000'),
+  },
+  {
+    args: {
+      id: self,
+      lnd: makeLnd(),
       mtokens: '3000',
       path: throughSelf([
         [nodeRecord(self), relayRecord(40)],
@@ -405,6 +420,16 @@ const tests = [
       path: throughSelf([[nodeRecord(peer), shortRelayRecord]]),
     },
     description: 'A path is left out when the hop payment relay is too short',
+    expected: {},
+  },
+  {
+    args: {
+      id: self,
+      lnd: makeLnd(),
+      mtokens: '2000',
+      path: throughSelf([[nodeRecord(peer), longRelayRecord]]),
+    },
+    description: 'A path is left out when the hop payment relay is too long',
     expected: {},
   },
   {

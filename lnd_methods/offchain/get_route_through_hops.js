@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {chanNumber} = require('bolt07');
 const {returnResult} = require('asyncjs-util');
 
@@ -119,22 +120,27 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedRouteWhenGettingRouteForHops']);
           }
 
-          const response = {routes: [res.route]};
-
-          try {
-            const [route] = routesFromQueryRoutes({response}).routes;
-
-            route.messages = args.messages || [];
-            route.payment = args.payment;
-            route.total_mtokens = args.total_mtokens;
-
-            return cbk(null, {route});
-          } catch (err) {
-            return cbk([503, 'UnexpectedErrorParsingRouteForHops', {err}]);
-          }
+          return cbk(null, res.route);
         });
       }],
+
+      // Map the route into the final format
+      route: ['getRoute', asyncify(({getRoute}) => {
+        const response = {routes: [getRoute]};
+
+        try {
+          const [route] = routesFromQueryRoutes({response}).routes;
+
+          route.messages = args.messages || [];
+          route.payment = args.payment;
+          route.total_mtokens = args.total_mtokens;
+
+          return {route};
+        } catch (err) {
+          throw [503, 'UnexpectedErrorParsingRouteForHops', {err}];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getRoute'}, cbk));
+    returnResult({reject, resolve, of: 'route'}, cbk));
   });
 };

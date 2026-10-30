@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 
 const {featureFlagDetails} = require('bolt09');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const getNode = require('./get_node');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcChannelClosedAsClosed} = require('./../../lnd_responses');
@@ -126,9 +127,11 @@ module.exports = ({lnd}) => {
     // Emit channel updates
     update.channel_updates.forEach(update => {
       try {
-        const channelUpdated = rpcChannelUpdateAsUpdate(update);
-
-        return eventEmitter.emit('channel_updated', channelUpdated);
+        return emitSubscriptionEvent({
+          data: rpcChannelUpdateAsUpdate(update),
+          emitter: eventEmitter,
+          event: 'channel_updated',
+        });
       } catch (err) {
         return emitError(err);
       }
@@ -137,9 +140,11 @@ module.exports = ({lnd}) => {
     // Emit closed channel updates
     update.closed_chans.forEach(update => {
       try {
-        const channelClosed = rpcChannelClosedAsClosed(update);
-
-        return eventEmitter.emit('channel_closed', channelClosed);
+        return emitSubscriptionEvent({
+          data: rpcChannelClosedAsClosed(update),
+          emitter: eventEmitter,
+          event: 'channel_closed',
+        });
       } catch (err) {
         return emitError(err);
       }
@@ -157,18 +162,22 @@ module.exports = ({lnd}) => {
 
       // LND 0.11.1 and below don't support features, but above do: exit early
       if (!!node.features && !!keys(node.features).length) {
-        return eventEmitter.emit('node_updated', {
-          alias: node.alias,
-          color: node.color,
-          features: keys(node.features).map(bit => ({
-            bit: Number(bit),
-            is_known: node.features[bit].is_known,
-            is_required: node.features[bit].is_required,
-            type: featureFlagDetails({bit: Number(bit)}).type,
-          })),
-          public_key: node.identity_key,
-          sockets: node.addresses,
-          updated_at: new Date().toISOString(),
+        return emitSubscriptionEvent({
+          data: {
+            alias: node.alias,
+            color: node.color,
+            features: keys(node.features).map(bit => ({
+              bit: Number(bit),
+              is_known: node.features[bit].is_known,
+              is_required: node.features[bit].is_required,
+              type: featureFlagDetails({bit: Number(bit)}).type,
+            })),
+            public_key: node.identity_key,
+            sockets: node.addresses,
+            updated_at: new Date().toISOString(),
+          },
+          emitter: eventEmitter,
+          event: 'node_updated',
         });
       }
 
@@ -183,13 +192,17 @@ module.exports = ({lnd}) => {
           return emitError(err);
         }
 
-        return eventEmitter.emit('node_updated', {
-          alias: res.alias,
-          color: res.color,
-          features: res.features,
-          public_key: node.identity_key,
-          sockets: res.sockets.map(n => n.socket),
-          updated_at: res.updated_at || new Date().toISOString(),
+        return emitSubscriptionEvent({
+          data: {
+            alias: res.alias,
+            color: res.color,
+            features: res.features,
+            public_key: node.identity_key,
+            sockets: res.sockets.map(n => n.socket),
+            updated_at: res.updated_at || new Date().toISOString(),
+          },
+          emitter: eventEmitter,
+          event: 'node_updated',
         });
       });
     });

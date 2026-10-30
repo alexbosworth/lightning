@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 const asyncDoUntil = require('async/doUntil');
 const {chanFormat} = require('bolt07');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {forwardFromHtlcEvent} = require('./../../lnd_responses');
 const {handleRemoveListener} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
@@ -86,7 +87,11 @@ module.exports = ({lnd}) => {
     }
 
     try {
-      emitter.emit(event, forwardFromHtlcEvent(data));
+      emitSubscriptionEvent({
+        emitter,
+        event,
+        data: forwardFromHtlcEvent(data),
+      });
     } catch (err) {
       emitErr([503, err.message]);
     }
@@ -110,7 +115,11 @@ module.exports = ({lnd}) => {
 
       subscription.on('data', data => {
         try {
-          emitter.emit(event, forwardFromHtlcEvent(data));
+          emitSubscriptionEvent({
+            emitter,
+            event,
+            data: forwardFromHtlcEvent(data),
+          });
         } catch (err) {
           emitErr([503, err.message]);
         }

@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncRetry = require('async/retry');
 const {returnResult} = require('asyncjs-util');
 
@@ -108,32 +109,36 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
-      // Get the list of invoices
-      listInvoices: ['validate', ({}, cbk) => {
-        let after = asStart(args.created_after);
-        let before = asEnd(args.created_before);
-        let limit = args.limit || defaultLimit;
-        let offset;
+      // Determine the paging details for the invoices query
+      paging: ['validate', asyncify(({}) => {
+        // Exit early when there is no token to derive the paging details from
+        if (!args.token) {
+          return {
+            after: asStart(args.created_after),
+            before: asEnd(args.created_before),
+            limit: args.limit || defaultLimit,
+          };
+        }
 
         // When there is a token, parse it out into an offset and a limit
-        if (!!args.token) {
-          try {
-            const pagingToken = parse(args.token);
+        try {
+          const {after, before, limit, offset} = parse(args.token);
 
-            after = pagingToken.after;
-            before = pagingToken.before;
-            offset = pagingToken.offset;
-            limit = pagingToken.limit;
-          } catch (err) {
-            return cbk([400, 'ExpectedValidPagingTokenForInvoicesReq', {err}]);
-          }
+          return {after, before, limit, offset};
+        } catch (err) {
+          throw [400, 'ExpectedValidPagingTokenForInvoicesReq', {err}];
         }
+      })],
+
+      // Get the list of invoices
+      listInvoices: ['paging', ({paging}, cbk) => {
+        const {after, before, limit} = paging;
 
         return asyncRetry({}, cbk => {
           return args.lnd[type][method]({
             creation_date_start: after,
             creation_date_end: before,
-            index_offset: offset || Number(),
+            index_offset: paging.offset || Number(),
             num_max_invoices: limit,
             pending_only: args.is_unconfirmed === true || undefined,
             reversed: true,
@@ -173,13 +178,13 @@ module.exports = (args, cbk) => {
       }],
 
       // Mapped invoices
-      mapped: ['listInvoices', ({listInvoices}, cbk) => {
+      mapped: ['listInvoices', asyncify(({listInvoices}) => {
         try {
-          return cbk(null, listInvoices.invoices.map(rpcInvoiceAsInvoice));
+          return listInvoices.invoices.map(rpcInvoiceAsInvoice);
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
 
       // Sorted invoices
       sorted: ['listInvoices', 'mapped', ({listInvoices, mapped}, cbk) => {

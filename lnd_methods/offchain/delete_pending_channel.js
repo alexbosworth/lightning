@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {componentsOfTransaction} = require('@alexbosworth/blockchain');
 const {idForTransaction} = require('@alexbosworth/blockchain');
 const {returnResult} = require('asyncjs-util');
@@ -34,12 +35,6 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedConfirmedConflictingTxToDeleteChannel']);
         }
 
-        try {
-          txComponents(args.confirmed_transaction);
-        } catch (err) {
-          return cbk([400, 'ExpectedValidConfirmedTxToDeleteChannel']);
-        }
-
         if (args.confirmed_transaction === args.pending_transaction) {
           return cbk([400, 'ExpectedConflictingTransactionToDeleteChannel']);
         }
@@ -52,12 +47,6 @@ module.exports = (args, cbk) => {
           return cbk([400, 'ExpectedPendingTransactionToDeleteChannel']);
         }
 
-        try {
-          txComponents(args.pending_transaction);
-        } catch (err) {
-          return cbk([400, 'ExpectedValidPendingTxToDeleteChannel']);
-        }
-
         if (args.pending_transaction_vout === undefined) {
           return cbk([400, 'ExpectedPendingChannelTxVoutToDeleteChannel']);
         }
@@ -65,11 +54,26 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
-      // Check for a conflicting input between the confirmed and pending txs
-      transactionId: ['validate', ({}, cbk) => {
-        const confirmed = txComponents(args.confirmed_transaction);
-        const pending = txComponents(args.pending_transaction);
+      // Parse the confirmed transaction
+      confirmed: ['validate', asyncify(({}) => {
+        try {
+          return txComponents(args.confirmed_transaction);
+        } catch (err) {
+          throw [400, 'ExpectedValidConfirmedTxToDeleteChannel'];
+        }
+      })],
 
+      // Parse the pending transaction
+      pending: ['validate', asyncify(({}) => {
+        try {
+          return txComponents(args.pending_transaction);
+        } catch (err) {
+          throw [400, 'ExpectedValidPendingTxToDeleteChannel'];
+        }
+      })],
+
+      // Check for a conflicting input between the confirmed and pending txs
+      transactionId: ['confirmed', 'pending', ({confirmed, pending}, cbk) => {
         const conflictingInput = pending.inputs.find(pendingInput => {
           return confirmed.inputs.find(confirmedInput => {
             if (confirmedInput.id !== pendingInput.id) {

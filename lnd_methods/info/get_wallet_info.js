@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {infoAsWalletInfo} = require('./../../lnd_responses');
@@ -66,14 +67,19 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'GetWalletInfoErr', {err}]);
           }
 
-          try {
-            return cbk(null, infoAsWalletInfo(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the wallet info into the final format
+      walletInfo: ['getWalletInfo', asyncify(({getWalletInfo}) => {
+        try {
+          return infoAsWalletInfo(getWalletInfo);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getWalletInfo'}, cbk));
+    returnResult({reject, resolve, of: 'walletInfo'}, cbk));
   });
 };

@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {chanFormat} = require('bolt07');
 const {featureFlagDetails} = require('bolt09');
 const {returnResult} = require('asyncjs-util');
@@ -95,7 +96,7 @@ module.exports = ({lnd}, cbk) => {
       }],
 
       // Derive the set of channels
-      mapChannels: ['getGraph', ({getGraph}, cbk) => {
+      mapChannels: ['getGraph', asyncify(({getGraph}) => {
         const connected = {};
 
         try {
@@ -106,24 +107,24 @@ module.exports = ({lnd}, cbk) => {
             return channelEdgeAsChannel(edge);
           });
 
-          return cbk(null, {channels, connected});
+          return {channels, connected};
         } catch (err) {
-          return cbk([503, 'UnexpectedErrorParsingChannelsInGraph', {err}]);
+          throw [503, 'UnexpectedErrorParsingChannelsInGraph', {err}];
         }
-      }],
+      })],
 
       // Derive the set of nodes
-      mapNodes: ['getGraph', ({getGraph}, cbk) => {
+      mapNodes: ['getGraph', asyncify(({getGraph}) => {
         try {
           const nodes = getGraph.nodes
             .filter(n => !!n.last_update)
             .map(rpcNodeAsNode);
 
-          return cbk(null, {nodes});
+          return {nodes};
         } catch (err) {
-          return cbk([503, 'UnexpectedErrorParsingNodesInGraph', {err}]);
+          throw [503, 'UnexpectedErrorParsingNodesInGraph', {err}];
         }
-      }],
+      })],
 
       // Network graph
       graph: ['mapChannels', 'mapNodes', ({mapChannels, mapNodes}, cbk) => {

@@ -91,6 +91,8 @@ const route = {
   total_mtokens: undefined,
 };
 
+const events = ['confirmed', 'error', 'failed', 'paying', 'routing_failure'];
+
 const tests = [
   {
     args: {data: makePayment({status: 'UNKNOWN'})},
@@ -235,26 +237,66 @@ const tests = [
     args: {data: makePayment({htlcs: [makeHtlc({route: undefined})]})},
     description: 'A payment that cannot be mapped without a listener is quiet',
     expected: {events: []},
-    is_unlistened: true,
+    listening: ['confirmed', 'failed', 'paying', 'routing_failure'],
+  },
+  {
+    args: {data: makePayment({htlcs: [failedHtlc, makeHtlc({})]})},
+    description: 'A throwing listener is reported and later events still emit',
+    expected: {
+      events: [
+        {
+          event: 'routing_failure',
+          payload: {
+            route,
+            channel: undefined,
+            index: 1,
+            mtokens: '1000',
+            public_key: publicKey,
+            reason: 'TemporaryChannelFailure',
+          },
+        },
+        {event: 'error', payload: [503, 'ListenerFailure']},
+        {
+          event: 'paying',
+          payload: {
+            id,
+            created_at: '1970-01-01T00:00:00.000Z',
+            destination: publicKey,
+            index: '1',
+            mtokens: '2000',
+            paths: [route],
+            request: undefined,
+            safe_tokens: 2,
+            timeout: 1,
+            tokens: 2,
+          },
+        },
+      ],
+    },
+    throwing: ['routing_failure'],
   },
 ];
 
-tests.forEach(({args, description, expected, is_unlistened}) => {
+tests.forEach(({args, description, expected, ...scenario}) => {
   return test(description, (t, end) => {
     const emitter = new EventEmitter();
-    const events = [];
+    const got = [];
 
-    ['confirmed', 'failed', 'paying', 'routing_failure'].forEach(event => {
-      return emitter.on(event, payload => events.push({event, payload}));
+    // Listen for every event, unless the case only listens for some of them
+    (scenario.listening || events).forEach(event => {
+      return emitter.on(event, payload => got.push({event, payload}));
     });
 
-    if (!is_unlistened) {
-      emitter.on('error', payload => events.push({event: 'error', payload}));
-    }
+    // A throwing listener is a consumer defect and must not stop later events
+    (scenario.throwing || []).forEach(event => {
+      return emitter.on(event, () => {
+        throw new Error('ListenerFailure');
+      });
+    });
 
     emitPayment({emitter, data: args.data});
 
-    deepStrictEqual(events, expected.events, 'Got expected events');
+    deepStrictEqual(got, expected.events, 'Got expected events');
 
     return end();
   });

@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 
 const asyncDoUntil = require('async/doUntil');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const getResumeCursors = require('./get_resume_cursors');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcInvoiceAsInvoice} = require('./../../lnd_responses');
@@ -271,12 +272,12 @@ module.exports = args => {
           return;
         }
 
-        try {
-          return eventEmitter.emit(updateEvent, updated);
-        } catch (err) {
-          // A throwing listener is not a broken stream: report, don't restart
-          return emitError([503, err.message]);
-        }
+        // A throwing listener is not a broken stream: report, don't restart
+        return emitSubscriptionEvent({
+          data: updated,
+          emitter: eventEmitter,
+          event: updateEvent,
+        });
       });
 
       // Subscription finished will trigger a re-subscribe

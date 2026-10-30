@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 const {rpcChannelAsChannel} = require('./../../lnd_responses');
 const {rpcClosedChannelAsClosed} = require('./../../lnd_responses');
@@ -186,33 +187,53 @@ module.exports = ({lnd}) => {
     try {
       switch (updateType) {
       case updateActive:
-        eventEmitter.emit(eventActive, {
-          is_active: true,
-          transaction_id: rpcOutpointAsUpdate(details).transaction_id,
-          transaction_vout: rpcOutpointAsUpdate(details).transaction_vout,
+        emitSubscriptionEvent({
+          data: {
+            is_active: true,
+            transaction_id: rpcOutpointAsUpdate(details).transaction_id,
+            transaction_vout: rpcOutpointAsUpdate(details).transaction_vout,
+          },
+          emitter: eventEmitter,
+          event: eventActive,
         });
         break;
 
       case updateClosed:
-        eventEmitter.emit(eventClosed, rpcClosedChannelAsClosed(details));
+        emitSubscriptionEvent({
+          data: rpcClosedChannelAsClosed(details),
+          emitter: eventEmitter,
+          event: eventClosed,
+        });
         break;
 
       case updateInactive:
-        eventEmitter.emit(eventActive, {
-          is_active: false,
-          transaction_id: rpcOutpointAsUpdate(details).transaction_id,
-          transaction_vout: rpcOutpointAsUpdate(details).transaction_vout,
+        emitSubscriptionEvent({
+          data: {
+            is_active: false,
+            transaction_id: rpcOutpointAsUpdate(details).transaction_id,
+            transaction_vout: rpcOutpointAsUpdate(details).transaction_vout,
+          },
+          emitter: eventEmitter,
+          event: eventActive,
         });
         break;
 
       case updateOpened:
-        eventEmitter.emit(eventOpen, rpcChannelAsChannel(details));
+        emitSubscriptionEvent({
+          data: rpcChannelAsChannel(details),
+          emitter: eventEmitter,
+          event: eventOpen,
+        });
         break;
 
       case updateOpening:
-        eventEmitter.emit(eventOpening, {
-          transaction_id: rpcOutpointAsUpdate(details).transaction_id,
-          transaction_vout: rpcOutpointAsUpdate(details).transaction_vout,
+        emitSubscriptionEvent({
+          data: {
+            transaction_id: rpcOutpointAsUpdate(details).transaction_id,
+            transaction_vout: rpcOutpointAsUpdate(details).transaction_vout,
+          },
+          emitter: eventEmitter,
+          event: eventOpening,
         });
         break;
 

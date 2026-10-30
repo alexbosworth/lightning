@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -118,31 +119,41 @@ module.exports = (args, cbk) => {
         return cbk();
       },
 
-      // Get all payments
-      listPayments: ['validate', ({}, cbk) => {
-        let after = asStart(args.created_after);
-        let before = asEnd(args.created_before);
-        let limit = args.limit || defaultLimit;
-        let offset;
-
-        if (!!args.token) {
-          try {
-            const pagingToken = parse(args.token);
-
-            after = pagingToken.after;
-            before = pagingToken.before;
-            limit = pagingToken.limit;
-            offset = pagingToken.offset;
-          } catch (err) {
-            return cbk([400, 'ExpectedValidPagingTokenForPaymentReq', {err}]);
-          }
+      // Derive the paging parameters for the payments request
+      paging: ['validate', asyncify(({}) => {
+        // Exit early when there is no paging token to continue from
+        if (!args.token) {
+          return {
+            after: asStart(args.created_after),
+            before: asEnd(args.created_before),
+            limit: args.limit || defaultLimit,
+            offset: undefined,
+          };
         }
+
+        try {
+          const pagingToken = parse(args.token);
+
+          return {
+            after: pagingToken.after,
+            before: pagingToken.before,
+            limit: pagingToken.limit,
+            offset: pagingToken.offset,
+          };
+        } catch (err) {
+          throw [400, 'ExpectedValidPagingTokenForPaymentReq', {err}];
+        }
+      })],
+
+      // Get all payments
+      listPayments: ['paging', ({paging}, cbk) => {
+        const {after, before, limit} = paging;
 
         return args.lnd[type][method]({
           creation_date_start: after,
           creation_date_end: before,
           include_incomplete: !!args.is_failed || !!args.is_pending,
-          index_offset: offset || Number(),
+          index_offset: paging.offset || Number(),
           max_payments: limit,
           reversed: true,
         },
@@ -171,9 +182,9 @@ module.exports = (args, cbk) => {
       }],
 
       // Check and map payments
-      foundPayments: ['listPayments', ({listPayments}, cbk) => {
+      foundPayments: ['listPayments', asyncify(({listPayments}) => {
         try {
-          const payments = listPayments.payments
+          return listPayments.payments
             .filter(payment => {
               // Exit early when looking for failed payments only
               if (!!args.is_failed) {
@@ -188,12 +199,10 @@ module.exports = (args, cbk) => {
               return true;
             })
             .map(rpcPaymentAsPayment);
-
-          return cbk(null, payments);
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
 
       // Final found payments
       payments: [

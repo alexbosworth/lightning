@@ -1,11 +1,13 @@
 const {deepStrictEqual} = require('node:assert').strict;
-const EventEmitter = require('node:events');
-const {strictEqual} = require('node:assert').strict;
 const test = require('node:test');
+const {throws} = require('node:assert').strict;
 
 const {subscribeToTransactions} = require('./../../../lnd_methods');
+const {subscriptionEvents} = require('./../macros');
 
-const makeLnd = overrides => {
+const cancelError = {details: 'Cancelled on client'};
+const listenerFailure = {event: 'error', data: [503, 'ListenerFailure']};
+const makeData = overrides => {
   const data = {
     amount: '1',
     block_hash: Buffer.alloc(32).toString('hex'),
@@ -21,126 +23,130 @@ const makeLnd = overrides => {
 
   Object.keys(overrides).forEach(k => data[k] = overrides[k]);
 
-  return {
-    default: {
-      subscribeTransactions: ({}) => {
-        const emitter = new EventEmitter();
-
-        emitter.cancel = () => {};
-
-        process.nextTick(() => emitter.emit('data', data));
-
-        return emitter;
-      },
-    },
-  };
+  return data;
+};
+const transaction = {
+  event: 'chain_transaction',
+  data: {
+    block_id: Buffer.alloc(32).toString('hex'),
+    confirmation_count: 1,
+    confirmation_height: 1,
+    created_at: '1970-01-01T00:00:01.000Z',
+    description: undefined,
+    fee: 1,
+    id: Buffer.alloc(32).toString('hex'),
+    inputs: [],
+    is_confirmed: true,
+    is_outgoing: false,
+    output_addresses: ['address'],
+    tokens: 1,
+    transaction: '00',
+  },
 };
 
 const tests = [
   {
-    args: {
-      lnd: {
-        default: {
-          subscribeTransactions: ({}) => {
-            const emitter = new EventEmitter();
-
-            emitter.cancel = () => {};
-
-            process.nextTick(() => emitter.emit('error', 'err'));
-
-            return emitter;
-          },
-        },
-      },
-    },
+    args: {},
+    description: 'Removing the last transaction listener cancels the stream',
+    expected: {cancels: ['cancel'], events: [{event: 'end', data: undefined}]},
+    removing: ['error', 'chain_transaction'],
+    stream: [['end']],
+  },
+  {
+    args: {},
+    description: 'Lnd is required to subscribe to transactions',
+    error: 'ExpectedAuthenticatedLndToSubscribeToTransactions',
+  },
+  {
+    args: {},
     description: 'Errors are returned',
-    error: [503, 'UnexpectedChainTxSubErr', {err: 'err'}],
-  },
-  {
-    args: {
-      lnd: {
-        default: {
-          subscribeTransactions: ({}) => {
-            const emitter = new EventEmitter();
-
-            emitter.cancel = () => {};
-
-            process.nextTick(() => emitter.emit('error', {
-              details: 'Cancelled on client',
-            }));
-
-            return emitter;
-          },
-        },
-      },
-    },
-    description: 'Errors are returned',
-    error: [
-      503,
-      'UnexpectedChainTxSubErr',
-      {err: {details: 'Cancelled on client'}},
-    ],
-  },
-  {
-    args: {lnd: makeLnd({amount: undefined})},
-    description: 'Transaction data is expected',
-    error: [503, 'ExpectedTransactionAmountInChainTransaction'],
-  },
-  {
-    args: {lnd: makeLnd({})},
-    description: 'Transaction data emitted',
     expected: {
-      block_id: '0000000000000000000000000000000000000000000000000000000000000000',
-      confirmation_count: 1,
-      confirmation_height: 1,
-      created_at: '1970-01-01T00:00:01.000Z',
-      description: undefined,
-      fee: 1,
-      id: '0000000000000000000000000000000000000000000000000000000000000000',
-      inputs: [],
-      is_confirmed: true,
-      is_outgoing: false,
-      output_addresses: ['address'],
-      tokens: 1,
-      transaction: '00',
+      events: [
+        {event: 'error', data: [503, 'UnexpectedChainTxSubErr', {err: 'err'}]},
+      ],
     },
+    stream: [['error', 'err']],
+  },
+  {
+    args: {},
+    description: 'A cancel error stops relaying from the stream',
+    expected: {
+      events: [
+        {
+          event: 'error',
+          data: [503, 'UnexpectedChainTxSubErr', {err: cancelError}],
+        },
+      ],
+    },
+    stream: [['error', cancelError], ['data', makeData({})]],
+  },
+  {
+    args: {},
+    description: 'Stream errors are ignored without an error listener',
+    expected: {events: []},
+    listening: ['chain_transaction'],
+    stream: [['error', 'err']],
+  },
+  {
+    args: {},
+    description: 'Transaction data is expected',
+    expected: {
+      events: [
+        {
+          event: 'error',
+          data: [503, 'ExpectedTransactionAmountInChainTransaction'],
+        },
+      ],
+    },
+    stream: [['data', makeData({amount: undefined})]],
+  },
+  {
+    args: {},
+    description: 'Transaction data emitted',
+    expected: {events: [transaction]},
+  },
+  {
+    args: {},
+    description: 'A throwing listener is reported without ending the stream',
+    expected: {
+      events: [transaction, listenerFailure, transaction, listenerFailure],
+    },
+    stream: [['data', makeData({})], ['data', makeData({})]],
+    throwing: ['chain_transaction'],
+  },
+  {
+    args: {},
+    description: 'Status and end events are relayed',
+    expected: {
+      events: [
+        {event: 'status', data: 'status'},
+        {event: 'end', data: undefined},
+      ],
+    },
+    stream: [['status', 'status'], ['end']],
   },
 ];
 
-tests.forEach(({args, description, error, expected}) => {
-  return test(description, (t, end) => {
-    try {
-      subscribeToTransactions({});
-    } catch (err) {
-      deepStrictEqual(
-        err,
-        new Error('ExpectedAuthenticatedLndToSubscribeToTransactions'),
-        'Requires lnd'
-      );
-    }
-
-    const sub = subscribeToTransactions(args);
-
+tests.forEach(({args, description, error, expected, ...scenario}) => {
+  return test(description, async () => {
     if (!!error) {
-      sub.once('chain_transaction', () => {});
-      sub.once('error', err => {
-        deepStrictEqual(err, error, 'Got expected error');
+      throws(() => subscribeToTransactions(args), new Error(error), 'Got err');
 
-        subscribeToTransactions(args);
-
-        process.nextTick(() => {
-          sub.removeAllListeners();
-
-          return end();
-        });
-      });
-    } else {
-      sub.once('chain_transaction', tx => {
-        deepStrictEqual(tx, expected, 'Got expected chain tx details');
-
-        return end();
-      });
+      return;
     }
+
+    const got = await subscriptionEvents({
+      ...scenario,
+      events: ['chain_transaction', 'end', 'error', 'status'],
+      stream: scenario.stream || [['data', makeData({})]],
+      subscribe: stream => {
+        args.lnd = {default: {subscribeTransactions: ({}) => stream}};
+
+        return subscribeToTransactions(args);
+      },
+    });
+
+    deepStrictEqual(got, {cancels: [], ...expected}, 'Got expected events');
 
     return;
   });

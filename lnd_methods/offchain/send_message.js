@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {onionForPath} = require('bolt04');
 const {returnResult} = require('asyncjs-util');
 
@@ -84,18 +85,18 @@ module.exports = ({inbound, key, lnd, message, outbound, reply}, cbk) => {
       },
 
       // Encode the onion packet to transmit to the peer
-      encodeOnion: ['validate', ({}, cbk) => {
+      encodeOnion: ['validate', asyncify(({}) => {
         // The message is the single payload record of the final hop
         const records = [message].filter(n => !!n);
 
         try {
           const path = onionForPath({inbound, key, outbound, records, reply});
 
-          return cbk(null, {key: path.key, onion: path.onion, reply: path.id});
+          return {key: path.key, onion: path.onion, reply: path.id};
         } catch (err) {
-          return cbk([400, 'ExpectedValidHopsAndMessageToSendMessage', {err}]);
+          throw [400, 'ExpectedValidHopsAndMessageToSendMessage', {err}];
         }
-      }],
+      })],
 
       // Send the message
       send: ['encodeOnion', ({encodeOnion}, cbk) => {

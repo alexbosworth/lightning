@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -66,17 +67,17 @@ module.exports = ({lnd}, cbk) => {
       }],
 
       // Map the accounts to a list of addresses
-      addresses: ['getAddresses', ({getAddresses}, cbk) => {
+      addresses: ['getAddresses', asyncify(({getAddresses}) => {
         try {
           const {addresses} = rpcAddressesAsAddresses({
             accounts: getAddresses,
           });
 
-          return cbk(null, {addresses});
+          return {addresses};
         } catch (err) {
-          return cbk([503, err.message]);
+          throw [503, err.message];
         }
-      }],
+      })],
     },
     returnResult({reject, resolve, of: 'addresses'}, cbk));
   });

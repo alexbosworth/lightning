@@ -341,6 +341,84 @@ const tests = [
     description: 'A payment attempt is in flight',
     error: [503, 'ExpectedPaymentCreationDateToDerivePaymentDetails'],
   },
+  {
+    args: makeArgs({
+      lnd: makeLnd({
+        data: makePaymentData({
+          failure_reason: 'FAILURE_REASON_NONE',
+          htlcs: [{
+            attempt_time_ns: '1000000',
+            preimage: Buffer.alloc(32),
+            resolve_time_ns: '1000000',
+            route: {
+              hops: [{
+                amt_to_forward_msat: '1000',
+                chan_id: '1',
+                expiry: 1,
+                fee_msat: '1000',
+                mpp_record: {
+                  payment_addr: Buffer.alloc(32),
+                  total_amt_msat: '1000',
+                },
+                pub_key: Buffer.alloc(33).toString('hex'),
+                tlv_payload: true,
+              }],
+              total_amt: '1',
+              total_amt_msat: '1000',
+              total_fees: '1',
+              total_fees_msat: '1000',
+              total_time_lock: 1,
+            },
+            status: 'SUCCEEDED',
+          }],
+          status: 'SUCCEEDED',
+        }),
+      }),
+    }),
+    description: 'A payment is confirmed',
+    expected: {
+      payment: {
+        confirmed_at: '1970-01-01T00:00:00.001Z',
+        fee: 1,
+        fee_mtokens: '1000',
+        hops: [{
+          channel: '0x0x1',
+          fee: 1,
+          fee_mtokens: '1000',
+          forward: 1,
+          forward_mtokens: '1000',
+          public_key: Buffer.alloc(33).toString('hex'),
+          timeout: 1,
+        }],
+        id: Buffer.alloc(32).toString('hex'),
+        index: '1',
+        mtokens: '2000',
+        paths: [{
+          fee: 1,
+          fee_mtokens: '1000',
+          hops: [{
+            channel: '0x0x1',
+            fee: 1,
+            fee_mtokens: '1000',
+            forward: 1,
+            forward_mtokens: '1000',
+            public_key: Buffer.alloc(33).toString('hex'),
+            timeout: 1,
+          }],
+          mtokens: '1000',
+          payment: Buffer.alloc(32).toString('hex'),
+          timeout: 1,
+          tokens: 1,
+          total_mtokens: '1000',
+        }],
+        secret: Buffer.alloc(32).toString('hex'),
+        safe_fee: 1,
+        safe_tokens: 2,
+        timeout: 1,
+        tokens: 2,
+      },
+    },
+  },
 ];
 
 tests.forEach(({args, description, error, expected}) => {

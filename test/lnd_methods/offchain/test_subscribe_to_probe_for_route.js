@@ -641,7 +641,6 @@ const tests = [
     args: {
       destination: Buffer.alloc(33).toString('hex'),
       lnd: makeLnd({getInfo: ({}, cbk) => cbk('err')}),
-      suppress_errors: true,
       tokens: 1,
     },
     description: 'Non-listening errors are not emitted',
@@ -649,6 +648,7 @@ const tests = [
       failures: [],
       routes: [],
     },
+    listening: ['probe_success', 'probing', 'routing_failure'],
   },
   {
     args: {
@@ -700,6 +700,30 @@ const tests = [
       routes: [expectedRoute],
       success: expectedRoute,
     },
+  },
+  {
+    args: {
+      destination: Buffer.alloc(33).toString('hex'),
+      lnd: makeLnd({
+        sendToRouteV2: ({}, cbk) => cbk(null, {
+          failure: {
+            chan_id: '1',
+            code: 'UNKNOWN_FAILURE',
+            failure_source_index: 1,
+          },
+          preimage: Buffer.alloc(Number()),
+        }),
+      }),
+      tokens: 1,
+    },
+    description: 'A throwing success listener is reported and the probe ends',
+    expected: {
+      error: [503, 'ListenerFailure'],
+      failures: [],
+      routes: [expectedRoute],
+      success: expectedRoute,
+    },
+    throwing: ['probe_success'],
   },
   {
     args: {
@@ -1301,72 +1325,68 @@ test('A probe to blinded paths looks up the node identity once', (t, end) => {
   });
 });
 
-tests.forEach(({args, description, error, expected}) => {
+tests.forEach(({args, description, error, expected, ...scenario}) => {
   return test(description, (t, end) => {
     if (!!error) {
       throws(() => subscribeToProbeForRoute(args), new Error(error), 'Error');
 
       return end();
-    } else {
-      const failures = [];
-      let gotError;
-      const routes = [];
-      let gotSuccess;
-      const sub = subscribeToProbeForRoute(args);
-
-      sub.on('error', err => gotError = err);
-      sub.on('probe_success', ({route}) => gotSuccess = route);
-      sub.on('probing', ({route}) => routes.push(route));
-      sub.on('routing_failure', failure => failures.push(failure));
-
-      if (!!args.suppress_errors) {
-        sub.removeAllListeners('error');
-      }
-
-      sub.on('end', () => {
-        deepStrictEqual(failures, expected.failures, 'Got expected failures');
-        deepStrictEqual(gotError, expected.error, 'Got expected error');
-        deepStrictEqual(gotSuccess, expected.success, 'Got expected success');
-        deepStrictEqual(routes, expected.routes, 'Got expected routes');
-
-        // Check the ignored pairs of route queries when they are expected
-        if (!!expected.ignored) {
-          const ignored = args.lnd.requests.map(request => {
-            return (request.ignored_pairs || []).map(pair => ({
-              from: pair.from,
-              to: pair.to,
-            }));
-          });
-
-          deepStrictEqual(ignored, expected.ignored, 'Got expected ignores');
-        }
-
-        // Check the route queries that were made when they are expected
-        if (!!expected.requests) {
-          const requests = args.lnd.requests.map(request => {
-            const query = {
-              amt_msat: request.amt_msat,
-              dest_features: request.dest_features,
-              final_cltv_delta: request.final_cltv_delta,
-              pub_key: request.pub_key,
-            };
-
-            if (!!expected.requests.find(n => !!n.fee_limit)) {
-              query.fee_limit = request.fee_limit;
-            }
-
-            if (!!expected.requests.find(n => !!n.outgoing_chan_ids)) {
-              query.outgoing_chan_ids = request.outgoing_chan_ids;
-            }
-
-            return query;
-          });
-
-          deepStrictEqual(requests, expected.requests, 'Got expected queries');
-        }
-
-        return end();
-      });
     }
+
+    const errors = [];
+    const failures = [];
+    const routes = [];
+    const successes = [];
+    const sub = subscribeToProbeForRoute(args);
+
+    const collectors = {
+      error: err => errors.push(err),
+      probe_success: ({route}) => successes.push(route),
+      probing: ({route}) => routes.push(route),
+      routing_failure: failure => failures.push(failure),
+    };
+
+    // Listen for every event, unless the case only listens for some of them
+    (scenario.listening || Object.keys(collectors)).forEach(event => {
+      return sub.on(event, collectors[event]);
+    });
+
+    // A throwing listener is a consumer defect and must not end the probe
+    (scenario.throwing || []).forEach(event => {
+      return sub.on(event, () => {
+        throw new Error('ListenerFailure');
+      });
+    });
+
+    sub.on('end', () => {
+      deepStrictEqual(failures, expected.failures, 'Got expected failures');
+      deepStrictEqual(errors.pop(), expected.error, 'Got expected error');
+      deepStrictEqual(successes.pop(), expected.success, 'Got success');
+      deepStrictEqual(routes, expected.routes, 'Got expected routes');
+
+      // Route queries are checked on the attributes each expected query has
+      const queries = (expected.requests || []).map((query, i) => {
+        const request = args.lnd.requests[i];
+
+        return Object.fromEntries(Object.keys(query).map(key => {
+          return [key, request[key]];
+        }));
+      });
+
+      // Ignored pairs are checked for each route query expected to have them
+      const ignores = (expected.ignored || []).map((pairs, i) => {
+        return (args.lnd.requests[i].ignored_pairs || []).map(pair => ({
+          from: pair.from,
+          to: pair.to,
+        }));
+      });
+
+      deepStrictEqual(queries, expected.requests || [], 'Got queries');
+      deepStrictEqual(ignores, expected.ignored || [], 'Got expected ignores');
+
+      return end();
+    });
+
+    return;
   });
 });

@@ -5,6 +5,7 @@ const asyncAuto = require('async/auto');
 const {returnResult} = require('asyncjs-util');
 
 const {emitSubscriptionError} = require('./../../grpc');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {handleRemoveListener} = require('./../../grpc');
 const handleRpcRequestUpdate = require('./handle_rpc_request_update');
 const {isLnd} = require('./../../lnd_requests');
@@ -188,7 +189,7 @@ module.exports = (args, cbk) => {
             });
 
             // Notify listeners of the RPC update
-            emitter.emit(event, data);
+            emitSubscriptionEvent({data, emitter, event});
 
             // Exit early when accepting/rejecting is left to the caller
             if (!accept) {

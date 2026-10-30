@@ -1,5 +1,6 @@
 const {defaultSocket} = require('./grpc_services');
 const emitSubscriptionError = require('./emit_subscription_error');
+const emitSubscriptionEvent = require('./emit_subscription_event');
 const {grpcSslCipherSuites} = require('./grpc_services');
 const handleRemoveListener = require('./handle_remove_listener');
 const {keepaliveTimeMs} = require('./grpc_services');
@@ -15,6 +16,7 @@ const {unauthenticatedServiceTypes} = require('./grpc_services');
 module.exports = {
   defaultSocket,
   emitSubscriptionError,
+  emitSubscriptionEvent,
   grpcSslCipherSuites,
   handleRemoveListener,
   keepaliveTimeMs,

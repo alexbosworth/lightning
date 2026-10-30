@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -93,14 +94,19 @@ module.exports = ({id, lnd}, cbk) => {
             return cbk([503, 'UnexpectedLookupInvoiceErr', {err}]);
           }
 
-          try {
-            return cbk(null, rpcInvoiceAsInvoice(response));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, response);
         });
       }],
+
+      // Map the invoice into the final format
+      invoice: ['getInvoice', asyncify(({getInvoice}) => {
+        try {
+          return rpcInvoiceAsInvoice(getInvoice);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getInvoice'}, cbk));
+    returnResult({reject, resolve, of: 'invoice'}, cbk));
   });
 };

@@ -39,6 +39,7 @@ const rpcPeerMessageAsMessage = require('./rpc_peer_message_as_message');
 const rpcRequestUpdateAsEvent = require('./rpc_request_update_as_event');
 const rpcResolutionAsResolution = require('./rpc_resolution_as_resolution');
 const rpcRouteAsRoute = require('./rpc_route_as_route');
+const rpcSpendAsConfirmation = require('./rpc_spend_as_confirmation');
 const rpcSweepAsSweep = require('./rpc_sweep_as_sweep');
 const rpcTxAsTransaction = require('./rpc_tx_as_transaction');
 const rpcUtxoAsUtxo = require('./rpc_utxo_as_utxo');
@@ -86,6 +87,7 @@ module.exports = {
   rpcRequestUpdateAsEvent,
   rpcResolutionAsResolution,
   rpcRouteAsRoute,
+  rpcSpendAsConfirmation,
   rpcSweepAsSweep,
   rpcTxAsTransaction,
   rpcUtxoAsUtxo,

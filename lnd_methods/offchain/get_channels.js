@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
@@ -116,25 +117,30 @@ module.exports = (args, cbk) => {
             return cbk([503, 'ExpectedChannelsArray']);
           }
 
-          try {
-            const channels = res.channels
-              .map(rpcChannelAsChannel)
-              .filter(channel => {
-                // Exit early when a partner public key is not specified
-                if (!args.partner_public_key) {
-                  return true;
-                }
-
-                return channel.partner_public_key === args.partner_public_key
-              });
-
-            return cbk(null, {channels});
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res.channels);
         });
       }],
+
+      // Map the channels into the final format and filter by partner
+      channels: ['getChannels', asyncify(({getChannels}) => {
+        try {
+          const channels = getChannels
+            .map(rpcChannelAsChannel)
+            .filter(channel => {
+              // Exit early when a partner public key is not specified
+              if (!args.partner_public_key) {
+                return true;
+              }
+
+              return channel.partner_public_key === args.partner_public_key
+            });
+
+          return {channels};
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getChannels'}, cbk));
+    returnResult({reject, resolve, of: 'channels'}, cbk));
   });
 };

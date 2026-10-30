@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 
 const {channelAcceptAsOpenRequest} = require('./../../lnd_responses');
+const {emitSubscriptionEvent} = require('./../../grpc');
 const {isLnd} = require('./../../lnd_requests');
 
 const channelRequestEvent = 'channel_request';
@@ -89,7 +90,7 @@ module.exports = ({lnd}) => {
 
       const id = data.pending_chan_id;
 
-      return emitter.emit(channelRequestEvent, ({
+      const openRequest = {
         accept: (params) => {
           if (!params) {
             return sub.write({accept: true, pending_chan_id: id});
@@ -134,7 +135,13 @@ module.exports = ({lnd}) => {
           });
         },
         type: request.type,
-      }));
+      };
+
+      return emitSubscriptionEvent({
+        emitter,
+        data: openRequest,
+        event: channelRequestEvent,
+      });
     } catch (err) {
       return emitError([503, err.message]);
     }

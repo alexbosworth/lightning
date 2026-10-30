@@ -1,12 +1,13 @@
 const {deepStrictEqual} = require('node:assert').strict;
-const EventEmitter = require('node:events');
 const test = require('node:test');
 const {throws} = require('node:assert').strict;
 
 const {subscribeToForwardRequests} = require('./../../../');
+const {subscriptionEvents} = require('./../macros');
 
 const circuitKey = {chan_id: '1', htlc_id: '0'};
-
+const fail = {action: 'FAIL', incoming_circuit_key: circuitKey};
+const forwardRequest = 'forward_request';
 const makeForwardRequest = overrides => {
   const request = {
     custom_records: {},
@@ -20,19 +21,38 @@ const makeForwardRequest = overrides => {
     payment_hash: Buffer.alloc(32),
   };
 
-  Object.keys(overrides || {}).forEach(k => request[k] = overrides[k]);
+  Object.keys(overrides).forEach(k => request[k] = overrides[k]);
 
   return request;
 };
+const request = {
+  cltv_delta: 10,
+  fee: 1,
+  fee_mtokens: '1000',
+  hash: Buffer.alloc(32).toString('hex'),
+  in_channel: '0x0x1',
+  in_payment: 0,
+  messages: [],
+  mtokens: '1999000',
+  onion: '00',
+  out_channel: '0x0x2',
+  timeout: 100,
+  tokens: 1999,
+};
+const resume = {action: 'RESUME', incoming_circuit_key: circuitKey};
+const settle = {
+  action: 'SETTLE',
+  incoming_circuit_key: circuitKey,
+  preimage: Buffer.alloc(32),
+};
 
-const makeLnd = () => {
-  const emitter = new EventEmitter();
+// Accept, reject and settle a received request, leaving the request details
+const handleRequest = ({accept, reject, settle, ...request}) => {
+  accept();
+  reject();
+  settle({secret: Buffer.alloc(32).toString('hex')});
 
-  emitter.cancel = () => emitter.is_cancelled = true;
-  emitter.write = args => emitter.writes.push(args);
-  emitter.writes = [];
-
-  return {emitter, lnd: {router: {htlcInterceptor: ({}) => emitter}}};
+  return request;
 };
 
 const tests = [
@@ -42,108 +62,100 @@ const tests = [
     error: 'ExpectedAuthenticatedLndToSubscribeToForwardRequests',
   },
   {
-    data: makeForwardRequest({}),
+    args: {},
     description: 'A forward request is emitted',
     expected: {
-      errors: [],
-      request: {
-        cltv_delta: 10,
-        fee: 1,
-        fee_mtokens: '1000',
-        hash: Buffer.alloc(32).toString('hex'),
-        in_channel: '0x0x1',
-        in_payment: 0,
-        messages: [],
-        mtokens: '1999000',
-        onion: '00',
-        out_channel: '0x0x2',
-        timeout: 100,
-        tokens: 1999,
-      },
-      writes: [
-        {action: 'RESUME', incoming_circuit_key: circuitKey},
-        {action: 'FAIL', incoming_circuit_key: circuitKey},
-        {
-          action: 'SETTLE',
-          incoming_circuit_key: circuitKey,
-          preimage: Buffer.alloc(32),
-        },
+      events: [
+        {event: forwardRequest, data: request},
+        {event: 'error', data: 'err'},
       ],
+      writes: [resume, fail, settle],
     },
+    stream: [['data', makeForwardRequest({})], ['error', 'err']],
   },
   {
-    data: makeForwardRequest({outgoing_amount_msat: '2000500'}),
+    args: {},
     description: 'A request to forward more than received is left to LND',
-    expected: {
-      errors: [],
-      request: undefined,
-      writes: [{action: 'RESUME', incoming_circuit_key: circuitKey}],
-    },
+    expected: {events: [], writes: [resume]},
+    stream: [['data', makeForwardRequest({outgoing_amount_msat: '2000500'})]],
   },
   {
-    data: makeForwardRequest({outgoing_expiry: 101}),
+    args: {},
     description: 'A request with an outbound CLTV past inbound is left to LND',
-    expected: {
-      errors: [],
-      request: undefined,
-      writes: [{action: 'RESUME', incoming_circuit_key: circuitKey}],
-    },
+    expected: {events: [], writes: [resume]},
+    stream: [['data', makeForwardRequest({outgoing_expiry: 101})]],
   },
   {
-    data: {incoming_circuit_key: circuitKey},
+    args: {},
     description: 'An invalid forward request is rejected with an error',
     expected: {
-      errors: [[503, 'ExpectedCustomRecordsInRpcForwardRequest']],
-      request: undefined,
-      writes: [{action: 'FAIL', incoming_circuit_key: circuitKey}],
+      events: [{
+        event: 'error',
+        data: [503, 'ExpectedCustomRecordsInRpcForwardRequest'],
+      }],
+      writes: [fail],
     },
+    stream: [['data', {incoming_circuit_key: circuitKey}]],
+  },
+  {
+    args: {},
+    description: 'An invalid forward request is rejected without a listener',
+    expected: {events: [], writes: [fail]},
+    listening: [forwardRequest],
+    stream: [['data', {incoming_circuit_key: circuitKey}], ['error', 'err']],
+  },
+  {
+    args: {},
+    description: 'A throwing listener fails the HTLC back and is reported',
+    expected: {
+      events: [
+        {event: forwardRequest, data: request},
+        {event: 'error', data: [503, 'ListenerFailure']},
+        {event: forwardRequest, data: request},
+        {event: 'error', data: [503, 'ListenerFailure']},
+      ],
+      writes: [resume, fail, settle, fail, resume, fail, settle, fail],
+    },
+    stream: [
+      ['data', makeForwardRequest({})],
+      ['data', makeForwardRequest({})],
+    ],
+    throwing: [forwardRequest],
+  },
+  {
+    args: {},
+    description: 'Removing the last request listener cancels the stream',
+    expected: {cancels: ['cancel'], events: [], writes: []},
+    removing: ['error', forwardRequest],
+    stream: [],
   },
 ];
 
-tests.forEach(({args, data, description, error, expected}) => {
-  return test(description, (t, end) => {
+tests.forEach(({args, description, error, expected, ...scenario}) => {
+  return test(description, async () => {
     if (!!error) {
       throws(() => subscribeToForwardRequests(args), new Error(error));
 
-      return end();
+      return;
     }
 
-    const {emitter, lnd} = makeLnd();
+    const writes = [];
 
-    const errors = [];
-    let gotRequest;
+    const got = await subscriptionEvents({
+      ...scenario,
+      events: ['error', forwardRequest],
+      handling: {[forwardRequest]: handleRequest},
+      subscribe: stream => {
+        stream.write = write => writes.push(write);
 
-    const sub = subscribeToForwardRequests({lnd});
+        args.lnd = {router: {htlcInterceptor: () => stream}};
 
-    sub.on('error', err => errors.push(err));
-    sub.on('forward_request', request => gotRequest = request);
+        return subscribeToForwardRequests(args);
+      },
+    });
 
-    emitter.emit('data', data);
+    deepStrictEqual({...got, writes}, {cancels: [], ...expected}, 'Events');
 
-    if (!!gotRequest) {
-      const {accept, reject, settle} = gotRequest;
-
-      delete gotRequest.accept;
-      delete gotRequest.reject;
-      delete gotRequest.settle;
-
-      accept();
-      reject();
-      settle({secret: Buffer.alloc(32).toString('hex')});
-    }
-
-    deepStrictEqual(gotRequest, expected.request, 'Got expected request');
-    deepStrictEqual(emitter.writes, expected.writes, 'Got expected writes');
-    deepStrictEqual(errors, expected.errors, 'Got expected errors');
-
-    emitter.emit('error', 'err');
-
-    deepStrictEqual(errors.pop(), 'err', 'Subscription errors are emitted');
-
-    sub.removeAllListeners();
-
-    deepStrictEqual(emitter.is_cancelled, true, 'Subscription is cancelled');
-
-    return end();
+    return;
   });
 });

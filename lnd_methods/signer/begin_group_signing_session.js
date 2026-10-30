@@ -1,4 +1,5 @@
 const asyncAuto = require('async/auto');
+const asyncify = require('async/asyncify');
 const asyncReflect = require('async/reflect');
 const {returnResult} = require('asyncjs-util');
 
@@ -133,11 +134,7 @@ module.exports = (args, cbk) => {
             return cbk([503, 'UnexpectedErrorCreatingMuSig2Session', {err}]);
           }
 
-          try {
-            return cbk(null, rpcGroupSessionAsSession(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       })],
 
@@ -182,14 +179,19 @@ module.exports = (args, cbk) => {
             return cbk([503, 'UnexpectedErrorCreatingMuSig2Session', {err}]);
           }
 
-          try {
-            return cbk(null, rpcGroupSessionAsSession(res));
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the created session into the final format
+      session: ['finalCreate', asyncify(({finalCreate}) => {
+        try {
+          return rpcGroupSessionAsSession(finalCreate);
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'finalCreate'}, cbk));
+    returnResult({reject, resolve, of: 'session'}, cbk));
   });
 };

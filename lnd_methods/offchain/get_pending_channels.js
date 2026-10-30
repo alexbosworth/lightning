@@ -1,13 +1,11 @@
 const asyncAuto = require('async/auto');
-const asyncMap = require('async/map');
+const asyncify = require('async/asyncify');
 const {returnResult} = require('asyncjs-util');
 
 const {isLnd} = require('./../../lnd_requests');
 const {pendingAsPendingChannels} = require('./../../lnd_responses');
 
-const {isArray} = Array;
 const method = 'pendingChannels';
-const outpointSeparator = ':';
 const type = 'default';
 
 /** Get pending channels.
@@ -94,16 +92,21 @@ module.exports = ({lnd}, cbk) => {
             return cbk([503, 'UnexpectedPendingChannelsErr', {err}]);
           }
 
-          try {
-            const pending = pendingAsPendingChannels(res).pending_channels;
-
-            return cbk(null, {pending_channels: pending});
-          } catch (err) {
-            return cbk([503, err.message]);
-          }
+          return cbk(null, res);
         });
       }],
+
+      // Map the pending channels into the final format
+      pending: ['getPending', asyncify(({getPending}) => {
+        try {
+          const {pending_channels} = pendingAsPendingChannels(getPending);
+
+          return {pending_channels};
+        } catch (err) {
+          throw [503, err.message];
+        }
+      })],
     },
-    returnResult({reject, resolve, of: 'getPending'}, cbk));
+    returnResult({reject, resolve, of: 'pending'}, cbk));
   });
 };
